@@ -26,7 +26,7 @@ public class Preventiva extends Accion implements Serializable{
     
     // Constructores
     public Preventiva(){this.Actividades = new ArrayList<>();}
-    public Preventiva(String Descripcion, Date FechaDeteccion){
+    public Preventiva(Date FechaDeteccion, String Descripcion ){
         super(FechaDeteccion, Descripcion);
         this.Actividades = new ArrayList<>();
     }

@@ -56,6 +56,11 @@ public class ManejadorCodificacion extends ManejadorPersistencia {
         return -1;
     }
     
+    public Codificacion GetCodificacion(int IdCodificacion){
+        Codificacion codificacion = em.find(Codificacion.class, IdCodificacion);
+        return codificacion;
+    }
+    
     public List<Codificacion> ListarCodificaciones(){
         List<Codificacion> codificaciones = new ArrayList<>();
         TypedQuery<Codificacion> query = em.createQuery("SELECT c FROM Codificacion c", Codificacion.class);

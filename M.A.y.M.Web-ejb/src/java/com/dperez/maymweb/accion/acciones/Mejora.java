@@ -9,6 +9,7 @@ import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.medida.medidas.ActividadMejora;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import javax.persistence.Entity;
@@ -24,6 +25,10 @@ public class Mejora extends Accion implements Serializable {
     private List<ActividadMejora> Actividades;
     
     // Constructores
+    public Mejora(Date FechaDeteccion, String Descripcion){
+        super(FechaDeteccion, Descripcion);        
+        this.Actividades = new ArrayList<>();
+    }
     public Mejora(){this.Actividades = new ArrayList<>();}
     
     // Getters

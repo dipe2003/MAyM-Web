@@ -39,11 +39,12 @@ public class Correctiva extends Accion implements Serializable {
         this.MedidasPreventivas = new ArrayList<>();
         this.ProductosAfectados = new ArrayList<>();
     }
-    public Correctiva(Date FechaDeteccion, String Descripcion) {
+    public Correctiva(Date FechaDeteccion, String Descripcion, EnumTipoDesvio TipoDesvio) {
         super(FechaDeteccion, Descripcion);
         this.MedidasCorrectivas = new ArrayList<>();
         this.MedidasPreventivas = new ArrayList<>();
         this.ProductosAfectados = new ArrayList<>();
+        this.Tipo = TipoDesvio;
     }
     
     //  Getters

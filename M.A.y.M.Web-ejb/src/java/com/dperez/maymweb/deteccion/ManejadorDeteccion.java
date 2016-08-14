@@ -56,6 +56,11 @@ public class ManejadorDeteccion extends ManejadorPersistencia {
         return -1;
     }
     
+    public Deteccion GetDeteccion(int IdDeteccion){
+        Deteccion deteccion = em.find(Deteccion.class, IdDeteccion);
+        return deteccion;
+    }
+    
     public List<Deteccion> ListarDetecciones(){
         List<Deteccion> detecciones = new ArrayList<>();
         TypedQuery<Deteccion> query = em.createQuery("SELECT d FROM Deteccion d", Deteccion.class);
