@@ -8,6 +8,7 @@ package com.dperez.maymweb.accion.acciones;
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.medida.medidas.MedidaCorrectiva;
 import com.dperez.maymweb.accion.medida.medidas.MedidaPreventiva;
+import com.dperez.maymweb.estado.EnumEstado;
 import java.util.List;
 
 import com.dperez.maymweb.producto.Producto;

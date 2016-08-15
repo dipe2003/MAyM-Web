@@ -9,7 +9,7 @@ import com.dperez.maymweb.accion.adjunto.Adjunto;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
-import com.dperez.maymweb.estado.Estado;
+import com.dperez.maymweb.estado.EnumEstado;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,7 +28,6 @@ public class AccionTest {
     private final Adjunto adjunto = new Adjunto("Titulo Adjunto", "Ubicacion Adjunto");
     private final Area area = new Area("Nombre Del Area", "Correo@Area.com");
     private final Codificacion codificacion = new Codificacion("Nombre Codificacion");
-    private final Estado estado = new Estado("Estado Actual", "Es el estado actual de la accion.");
     private final Deteccion GeneradaPor = new Deteccion("Aud. Ejemplo");
     
     public AccionTest() {
@@ -191,8 +190,8 @@ public class AccionTest {
     public void testGetEstadoActualAccion() {
         System.out.println("getEstadoActualAccion");
         Accion instance = new AccionImpl();
-        Estado expResult = null;
-        Estado result = instance.getEstadoActualAccion();
+        EnumEstado expResult = EnumEstado.PENDIENTE;
+        EnumEstado result = instance.getEstadoAccion();
         assertEquals(expResult, result);
     }
 
@@ -332,10 +331,7 @@ public class AccionTest {
     public void testSetEstadoActualAccion() {
         System.out.println("setEstadoActualAccion");
         Accion instance = new AccionImpl();
-        instance.setEstadoActualAccion(estado);
-        instance.setEstadoActualAccion(null);
-        if(estado.getAccionesConEstado().contains(instance))
-            fail("El motodo setEstado no es bidireccional");
+        instance.setEstadoAccion(EnumEstado.CERRADA);
     }
 
     /**

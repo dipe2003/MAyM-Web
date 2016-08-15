@@ -54,6 +54,11 @@ public class ManejadorAccion extends ManejadorPersistencia {
         return -1;
     }
     
+    public Accion GetAccion(int IdAccion){
+        Accion accion = em.find(Accion.class, IdAccion);
+        return accion;
+    }
+    
     public List<Accion> ListarAcciones(){
         List<Accion> acciones = new ArrayList<>();
         TypedQuery<Accion> query = em.createQuery("SELECT a FROM Accion a", Accion.class);

@@ -7,6 +7,7 @@ package com.dperez.maymweb.accion.medida.medidas;
 
 import com.dperez.maymweb.accion.acciones.Mejora;
 import com.dperez.maymweb.accion.medida.Medida;
+import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
@@ -21,6 +22,9 @@ public class ActividadMejora extends Medida {
     
     // Constructores
     public ActividadMejora(){}
+    public ActividadMejora(Date FechaEstimadaDeImplementacion, String Descripcion){
+        super(FechaEstimadaDeImplementacion,  Descripcion);
+    }
     
     // Getters
     public Mejora getAccionMejora() {return AccionMejora;}

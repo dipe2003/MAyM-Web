@@ -17,7 +17,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.dperez.maymweb.deteccion.Deteccion;
-import com.dperez.maymweb.estado.Estado;
+import com.dperez.maymweb.estado.EnumEstado;
 import com.dperez.maymweb.usuario.Usuario;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -45,6 +45,7 @@ public abstract class Accion implements Serializable{
     private String Descripcion  = new String();
     private String AnalisisCausa = new String();
     private String ObservacionVerificacion = new String();
+    private EnumEstado EstadoAccion;
     
     @OneToMany(mappedBy = "AccionAdjunto")
     private List<Adjunto> Adjuntos;
@@ -59,15 +60,16 @@ public abstract class Accion implements Serializable{
     private Codificacion CodificacionAccion;
     
     @ManyToOne
-    private Estado EstadoActualAccion;
-    
-    @ManyToOne
     private Usuario ResponsableVerificacion;
     
     // Constructores
-    public Accion(){this.Adjuntos = new ArrayList<>();}
+    public Accion(){
+        this.EstadoAccion = EnumEstado.PENDIENTE;
+        this.Adjuntos = new ArrayList<>();
+    }
     
     public Accion(Date FechaDeteccion, String Descripcion) {
+        this.EstadoAccion = EstadoAccion.PENDIENTE;
         this.FechaDeteccion = FechaDeteccion;
         this.Descripcion = Descripcion;
         this.Adjuntos = new ArrayList<>();
@@ -81,6 +83,7 @@ public abstract class Accion implements Serializable{
     public String getDescripcion() {return this.Descripcion;}
     public String getAnalisisCausa() {return this.AnalisisCausa;}
     public String getObservacionVerificacion() {return this.ObservacionVerificacion;}
+    public EnumEstado getEstadoAccion() {return EstadoAccion;}
     
     public List<Adjunto> getAdjuntos() {return this.Adjuntos;}
     
@@ -89,8 +92,6 @@ public abstract class Accion implements Serializable{
     public Area getAreaSectorAccion() {return this.AreaSectorAccion;}
     
     public Codificacion getCodificacionAccion() {return CodificacionAccion;}
-    
-    public Estado getEstadoActualAccion() {return EstadoActualAccion;}
     
     public Usuario getResponsableVerificacion() {return ResponsableVerificacion;}
     
@@ -102,6 +103,7 @@ public abstract class Accion implements Serializable{
     public void setDescripcion(String Descripcion) {this.Descripcion = Descripcion;}
     public void setAnalisisCausa(String AnalisisCausa) {this.AnalisisCausa = AnalisisCausa;}
     public void setObservacionVerificacion(String ObservacionVerificacion) {this.ObservacionVerificacion = ObservacionVerificacion;}
+    public void setEstadoAccion(EnumEstado EstadoAccion) {this.EstadoAccion = EstadoAccion;}
     
     public void setAdjuntos(List<Adjunto> Adjuntos) {
         this.Adjuntos = Adjuntos;
@@ -147,20 +149,7 @@ public abstract class Accion implements Serializable{
                     CodificacionAccion.addAccionCodificacion(this);
             }
         }
-    }
-    
-    public void setEstadoActualAccion(Estado EstadoActualAccion) {
-        if(EstadoActualAccion == null && this.EstadoActualAccion != null){
-            this.EstadoActualAccion.getAccionesConEstado().remove(this);
-            this.EstadoActualAccion = null;
-        }else{
-            if(EstadoActualAccion != null){
-                this.EstadoActualAccion = EstadoActualAccion;
-                if( !EstadoActualAccion.getAccionesConEstado().contains(this))
-                    EstadoActualAccion.addAccionAEstado(this);
-            }
-        }
-    }
+    }    
     
     public void setResponsableVerificacion(Usuario ResponsableVerificacion) {
         if(ResponsableVerificacion == null && this.ResponsableVerificacion !=null){

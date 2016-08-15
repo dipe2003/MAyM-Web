@@ -7,6 +7,7 @@ package com.dperez.maymweb.accion.medida.medidas;
 
 import com.dperez.maymweb.accion.acciones.Preventiva;
 import com.dperez.maymweb.accion.medida.Medida;
+import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
@@ -21,6 +22,9 @@ public class ActividadPreventiva extends Medida {
     
     // Constructores
     public ActividadPreventiva(){}
+    public ActividadPreventiva(Date FechaEstimadaImplementacion, String Descripcion){
+        super(FechaEstimadaImplementacion, Descripcion);        
+    }
     
     // Getters
     public Preventiva getAccionPreventiva() {return AccionPreventiva;}

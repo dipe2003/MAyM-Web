@@ -37,9 +37,8 @@ public abstract class Medida implements Serializable {
     
     // Constructores
     public Medida(){}
-    public Medida(Date FechaEstimadaDeImplementacion, Date FechaImplementacion, String Descripcion){
+    public Medida(Date FechaEstimadaDeImplementacion, String Descripcion){
         this.FechaEstimadaImplementacion = FechaEstimadaDeImplementacion;
-        this.FechaImplementacion = FechaImplementacion;
         this.Descripcion = Descripcion;
     }
     

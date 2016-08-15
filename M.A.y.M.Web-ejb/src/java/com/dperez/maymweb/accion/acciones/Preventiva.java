@@ -7,6 +7,7 @@ package com.dperez.maymweb.accion.acciones;
 
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.medida.medidas.ActividadPreventiva;
+import com.dperez.maymweb.estado.EnumEstado;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,7 +27,7 @@ public class Preventiva extends Accion implements Serializable{
     
     // Constructores
     public Preventiva(){this.Actividades = new ArrayList<>();}
-    public Preventiva(Date FechaDeteccion, String Descripcion ){
+    public Preventiva(Date FechaDeteccion, String Descripcion){
         super(FechaDeteccion, Descripcion);
         this.Actividades = new ArrayList<>();
     }
