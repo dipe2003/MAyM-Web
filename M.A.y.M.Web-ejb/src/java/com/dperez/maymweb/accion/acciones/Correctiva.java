@@ -95,7 +95,7 @@ public class Correctiva extends Accion implements Serializable {
         Iterator<MedidaCorrectiva> it = this.MedidasCorrectivas.iterator() ;
         while(it.hasNext()){
             MedidaCorrectiva mc = it.next();
-            if(mc.getId()==IdMedidaCorrectiva){                
+            if(mc.getId()==IdMedidaCorrectiva){
                 it.remove();
                 if(mc.getAccionCorrectivaMedidaCorrectiva()!=null && mc.getAccionCorrectivaMedidaCorrectiva().equals(this))
                     mc.setAccionCorrectivaMedidaCorrectiva(null);
@@ -119,8 +119,8 @@ public class Correctiva extends Accion implements Serializable {
     public void removeMedidaPreventiva(int IdMedidaPreventiva){
         Iterator<MedidaPreventiva> it = this.MedidasPreventivas.iterator() ;
         while(it.hasNext()){
-           MedidaPreventiva mp = it.next();
-            if(mp.getId()==IdMedidaPreventiva){                
+            MedidaPreventiva mp = it.next();
+            if(mp.getId()==IdMedidaPreventiva){
                 it.remove();
                 if(mp.getAccionCorrectivaMedidaPreventiva()!=null && mp.getAccionCorrectivaMedidaPreventiva().equals(this))
                     mp.setAccionCorrectivaMedidaPreventiva(null);
@@ -145,10 +145,43 @@ public class Correctiva extends Accion implements Serializable {
         Iterator<Producto> it = this.ProductosAfectados.iterator() ;
         while(it.hasNext()){
             Producto p = it.next();
-            if(p.getId()==IdProductoAfectado){                
+            if(p.getId()==IdProductoAfectado){
                 it.remove();
                 if(p.getAccionCorrectivaConProductoAfectado()!=null && p.getAccionCorrectivaConProductoAfectado().equals(this))
                     p.setAccionCorrectivaConProductoAfectado(null);
+            }
+        }
+    }
+    
+    @Override
+    protected void CambiarEstado() {
+        if(this.getEstadoAccion()!= EnumEstado.DESESTIMADA && this.getEstadoAccion()!= EnumEstado.CERRADA){
+            boolean medCorrectivaImp = true;
+            // chequear implementacion de todas las medidas correctivas
+            for(MedidaCorrectiva medida: this.MedidasCorrectivas){
+                if(medida.getFechaImplementacion()!=null) medCorrectivaImp = false;
+            }
+            boolean medPreventivaImp = true;
+            // chequear implementacion de todas las medidas preventivas
+            for(MedidaPreventiva medida: this.MedidasPreventivas){
+                if(medida.getFechaImplementacion()!=null) medPreventivaImp = false;
+            }
+            
+            // comparar resultados de chequeos y setear nuevo estado
+            if(medCorrectivaImp == true && medPreventivaImp == true){
+                if(this.getFechaVerificacion()!=null) {
+                    this.setEstadoAccion(EnumEstado.CERRADA);
+                }else{
+                    this.setEstadoAccion(EnumEstado.PROCESO_VER);
+                }
+            }else{
+                if(medCorrectivaImp == true && medPreventivaImp != true){
+                    this.setEstadoAccion(EnumEstado.PROCESO_IMP);
+                }else{
+                    if(medCorrectivaImp != true && medPreventivaImp != true){
+                        this.setEstadoAccion(EnumEstado.PENDIENTE);
+                    }
+                }
             }
         }
     }

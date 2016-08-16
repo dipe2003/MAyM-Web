@@ -5,6 +5,10 @@
 */
 package com.dperez.maymweb.accion.medida;
 
+import com.dperez.maymweb.accion.medida.medidas.ActividadMejora;
+import com.dperez.maymweb.accion.medida.medidas.ActividadPreventiva;
+import com.dperez.maymweb.accion.medida.medidas.MedidaCorrectiva;
+import com.dperez.maymweb.accion.medida.medidas.MedidaPreventiva;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -68,5 +72,26 @@ public class ManejadorMedida extends ManejadorPersistencia{
         medidas = query.getResultList();
         em.close();
         return medidas;
+    }
+    
+    /*
+        Medidas
+    */
+    
+    public MedidaCorrectiva GetMedidaCorrectiva(int IdMedidaCorrectiva){
+        MedidaCorrectiva medida = em.find(MedidaCorrectiva.class, IdMedidaCorrectiva);
+        return medida;
+    }
+    public MedidaPreventiva GetMedidaPreventiva(int IdMedidaPreventiva){
+        MedidaPreventiva medida = em.find(MedidaPreventiva.class, IdMedidaPreventiva);
+        return medida;
+    }
+    public ActividadMejora GetActividadMejora(int IdActividadMejora){
+        ActividadMejora medida = em.find(ActividadMejora.class, IdActividadMejora);
+        return medida;
+    }
+    public ActividadPreventiva GetActividadPreventiva(int IdActividadPreventiva){
+        ActividadPreventiva medida = em.find(ActividadPreventiva.class, IdActividadPreventiva);
+        return medida;
     }
 }

@@ -189,4 +189,9 @@ public abstract class Accion implements Serializable{
         }
     }
     
+    /***
+     * Chequea las Medidas y cambia el estado de la accion de acuerdo a su implementacion.
+     */
+    protected abstract void CambiarEstado();
+    
 }

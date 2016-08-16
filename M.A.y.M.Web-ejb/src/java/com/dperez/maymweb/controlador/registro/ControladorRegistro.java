@@ -186,4 +186,12 @@ public class ControladorRegistro {
         return res;
     }
     
+    public int AgregarFechaImplementacionCorrectiva(Date FechaImplementacion, int IdMedidaCorrectiva){
+        Medida medida = mMedida.GetMedidaCorrectiva(IdMedidaCorrectiva);
+        medida.setFechaImplementacion(FechaImplementacion);
+        int res = mMedida.ActualizarMedida(medida);
+        if(res!=-1){
+            
+        }
+    }
 }
