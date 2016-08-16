@@ -191,7 +191,10 @@ public class ControladorRegistro {
         medida.setFechaImplementacion(FechaImplementacion);
         int res = mMedida.ActualizarMedida(medida);
         if(res!=-1){
-            
+            Accion AccionCorrectiva = mAccion.GetAccion(((MedidaCorrectiva)medida).getAccionCorrectivaMedidaCorrectiva().getId());
+            AccionCorrectiva.CambiarEstado();
+            res = mAccion.ActualizarAccion(AccionCorrectiva);
         }
+        return res;
     }
 }

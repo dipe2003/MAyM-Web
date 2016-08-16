@@ -154,7 +154,7 @@ public class Correctiva extends Accion implements Serializable {
     }
     
     @Override
-    protected void CambiarEstado() {
+    public void CambiarEstado() {
         if(this.getEstadoAccion()!= EnumEstado.DESESTIMADA && this.getEstadoAccion()!= EnumEstado.CERRADA){
             boolean medCorrectivaImp = true;
             // chequear implementacion de todas las medidas correctivas
