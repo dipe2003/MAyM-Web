@@ -159,12 +159,12 @@ public class Correctiva extends Accion implements Serializable {
             boolean medCorrectivaImp = true;
             // chequear implementacion de todas las medidas correctivas
             for(MedidaCorrectiva medida: this.MedidasCorrectivas){
-                if(medida.getFechaImplementacion()!=null) medCorrectivaImp = false;
+                if(medida.getFechaImplementacion()==null) medCorrectivaImp = false;
             }
             boolean medPreventivaImp = true;
             // chequear implementacion de todas las medidas preventivas
             for(MedidaPreventiva medida: this.MedidasPreventivas){
-                if(medida.getFechaImplementacion()!=null) medPreventivaImp = false;
+                if(medida.getFechaImplementacion()==null) medPreventivaImp = false;
             }
             
             // comparar resultados de chequeos y setear nuevo estado

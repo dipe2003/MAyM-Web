@@ -7,6 +7,7 @@ package com.dperez.maymweb.accion.acciones;
 
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.medida.medidas.ActividadMejora;
+import com.dperez.maymweb.estado.EnumEstado;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,7 +27,7 @@ public class Mejora extends Accion implements Serializable {
     
     // Constructores
     public Mejora(Date FechaDeteccion, String Descripcion){
-        super(FechaDeteccion, Descripcion);        
+        super(FechaDeteccion, Descripcion);
         this.Actividades = new ArrayList<>();
     }
     public Mejora(){this.Actividades = new ArrayList<>();}
@@ -45,13 +46,13 @@ public class Mejora extends Accion implements Serializable {
     // Listas
     public void addActividad(ActividadMejora Actividad){
         this.Actividades.add(Actividad);
-        if(Actividad.getAccionMejora() == null || !Actividad.getAccionMejora().equals(this)) 
+        if(Actividad.getAccionMejora() == null || !Actividad.getAccionMejora().equals(this))
             Actividad.setAccionMejora(this);
     }
     
     public void removeActividad(ActividadMejora Actividad){
         this.Actividades.remove(Actividad);
-        if(Actividad.getAccionMejora()!=null && Actividad.getAccionMejora().equals(this)) 
+        if(Actividad.getAccionMejora()!=null && Actividad.getAccionMejora().equals(this))
             Actividad.setAccionMejora(null);
     }
     
@@ -64,6 +65,33 @@ public class Mejora extends Accion implements Serializable {
                 if(ac.getAccionMejora()!=null && ac.getAccionMejora().equals(this))
                     ac.setAccionMejora(null);
             }
+        }
+    }
+    
+    @Override
+    public void CambiarEstado() {
+        if(this.getEstadoAccion()!= EnumEstado.DESESTIMADA && this.getEstadoAccion()!= EnumEstado.CERRADA){
+            boolean actividadesImp = true;
+            int numActividadesImp = 0;
+            // chequear implementacion de todas las actividades
+            for(ActividadMejora actividad: this.Actividades){
+                if(actividad.getFechaImplementacion()==null) {
+                    actividadesImp = false;
+                }else{
+                    numActividadesImp ++;
+                }
+            }
+            if(actividadesImp == true && this.getFechaVerificacion()!=null){
+                this.setEstadoAccion(EnumEstado.CERRADA);
+            }else{
+                if(actividadesImp == true && this.getFechaVerificacion() == null){
+                    this.setEstadoAccion(EnumEstado.PROCESO_VER);
+                }else{
+                    if(actividadesImp != true && numActividadesImp >= 0){
+                        this.setEstadoAccion(EnumEstado.PROCESO_IMP);
+                    }
+                }
+            }            
         }
     }
 }
