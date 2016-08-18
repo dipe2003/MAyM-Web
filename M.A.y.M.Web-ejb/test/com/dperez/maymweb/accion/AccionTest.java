@@ -345,6 +345,8 @@ public class AccionTest {
     }
 
     public class AccionImpl extends Accion {
+        @Override
+        public void CambiarEstado(){}
     }
     
 }

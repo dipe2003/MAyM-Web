@@ -67,4 +67,31 @@ public class Preventiva extends Accion implements Serializable{
             }
         }
     }
+    
+    @Override
+    public void CambiarEstado() {
+        if(this.getEstadoAccion()!= EnumEstado.DESESTIMADA && this.getEstadoAccion()!= EnumEstado.CERRADA){
+            boolean actividadesImp = true;
+            int numActividadesImp = 0;
+            // chequear implementacion de todas las actividades
+            for(ActividadPreventiva actividad: this.Actividades){
+                if(actividad.getFechaImplementacion()==null) {
+                    actividadesImp = false;
+                }else{
+                    numActividadesImp ++;
+                }
+            }
+            if(actividadesImp == true && this.getFechaVerificacion()!=null){
+                this.setEstadoAccion(EnumEstado.CERRADA);
+            }else{
+                if(actividadesImp == true && this.getFechaVerificacion() == null){
+                    this.setEstadoAccion(EnumEstado.PROCESO_VER);
+                }else{
+                    if(actividadesImp != true && numActividadesImp >= 0){
+                        this.setEstadoAccion(EnumEstado.PROCESO_IMP);
+                    }
+                }
+            }            
+        }
+    }
 }
