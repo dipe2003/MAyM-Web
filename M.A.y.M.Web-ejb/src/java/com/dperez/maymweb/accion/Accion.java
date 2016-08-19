@@ -144,18 +144,16 @@ public abstract class Accion implements Serializable{
         }
     }
     
-    public void setComprobacionEficacia(Comprobacion ComprobacionEficacia) {
+    public void setComprobacionEficacia(Comprobacion ComprobacionEficacia) {        
         if(ComprobacionEficacia != null){
-            if(!this.ComprobacionEficacia.equals(ComprobacionEficacia))
-                ComprobacionEficacia.setAccionEficacia(this);
+            ComprobacionEficacia.setAccionEficacia(this);
         }
         this.ComprobacionEficacia = ComprobacionEficacia;
     }
     
-    public void setComprobacionImplantacion(Comprobacion ComprobacionImplantacion) {
-        if(ComprobacionImplantacion != null){
-            if(!this.ComprobacionImplantacion.equals(ComprobacionImplantacion))
-                ComprobacionImplantacion.setAccionEficacia(this);
+    public void setComprobacionImplantacion(Comprobacion ComprobacionImplantacion) {        
+        if(this.ComprobacionImplantacion != null && ComprobacionImplantacion != null){
+            ComprobacionImplantacion.setAccionImplantacion(this);
         }
         this.ComprobacionImplantacion = ComprobacionImplantacion;
     }

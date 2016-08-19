@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package com.dperez.maymweb.accion;
 
 import com.dperez.maymweb.accion.adjunto.Adjunto;
@@ -10,6 +10,7 @@ import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.estado.EnumEstado;
+import com.dperez.maymweb.usuario.Usuario;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +30,7 @@ public class AccionTest {
     private final Area area = new Area("Nombre Del Area", "Correo@Area.com");
     private final Codificacion codificacion = new Codificacion("Nombre Codificacion");
     private final Deteccion GeneradaPor = new Deteccion("Aud. Ejemplo");
+    private final Comprobacion comprobacion = new Comprobacion(new Date(), new Usuario());
     
     public AccionTest() {
     }
@@ -48,7 +50,7 @@ public class AccionTest {
     @After
     public void tearDown() {
     }
-
+    
     /**
      * Test of getId method, of class Accion.
      */
@@ -60,7 +62,7 @@ public class AccionTest {
         int result = instance.getId();
         assertEquals(expResult, result);
     }
-
+    
     /**
      * Test of getFechaDeteccion method, of class Accion.
      */
@@ -72,7 +74,7 @@ public class AccionTest {
         Date result = instance.getFechaDeteccion();
         assertEquals(expResult, result);
     }
-
+    
     /**
      * Test of getDescripcion method, of class Accion.
      */
@@ -84,7 +86,7 @@ public class AccionTest {
         String result = instance.getDescripcion();
         assertEquals(expResult, result);
     }
-
+    
     /**
      * Test of getAnalisisCausa method, of class Accion.
      */
@@ -96,7 +98,7 @@ public class AccionTest {
         String result = instance.getAnalisisCausa();
         assertEquals(expResult, result);
     }
-
+    
     /**
      * Test of getAdjuntos method, of class Accion.
      */
@@ -110,7 +112,7 @@ public class AccionTest {
         List<Adjunto> result = instance.getAdjuntos();
         assertEquals(expResult, result);
     }
-
+    
     /**
      * Test of getGeneradaPor method, of class Accion.
      */
@@ -122,7 +124,7 @@ public class AccionTest {
         Deteccion result = instance.getGeneradaPor();
         assertEquals(expResult, result);
     }
-
+    
     /**
      * Test of getAreaSector method, of class Accion.
      */
@@ -134,7 +136,7 @@ public class AccionTest {
         Area result = instance.getAreaSectorAccion();
         assertEquals(expResult, result);
     }
-
+    
     /**
      * Test of getCodificacionAccion method, of class Accion.
      */
@@ -146,7 +148,7 @@ public class AccionTest {
         Codificacion result = instance.getCodificacionAccion();
         assertEquals(expResult, result);
     }
-
+    
     /**
      * Test of getEstadoActualAccion method, of class Accion.
      */
@@ -158,7 +160,33 @@ public class AccionTest {
         EnumEstado result = instance.getEstadoAccion();
         assertEquals(expResult, result);
     }
-
+    
+    /**
+     * Test of getComprobacionImplantacion method, of class Accion.
+     */
+    @Test
+    public void testGetComprobacionImplantacion() {
+        System.out.println("getComprobacionImplantacion");
+        Accion instance = new AccionImpl();
+        instance.setComprobacionImplantacion(comprobacion);
+        Comprobacion expResult = comprobacion;
+        Comprobacion result = instance.getComprobacionImplantacion();
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of ComprobacionEficacia method, of class Accion.
+     */
+    @Test
+    public void testGetComprobacionEficacia() {
+        System.out.println("getComprobacionEficacia");
+        Accion instance = new AccionImpl();
+        instance.setComprobacionEficacia(comprobacion);
+        Comprobacion expResult = comprobacion;
+        Comprobacion result = instance.getComprobacionEficacia();
+        assertEquals(expResult, result);
+    }
+    
     /**
      * Test of setId method, of class Accion.
      */
@@ -169,7 +197,7 @@ public class AccionTest {
         Accion instance = new AccionImpl();
         instance.setId(Id);
     }
-
+    
     /**
      * Test of setFechaDeteccion method, of class Accion.
      */
@@ -180,7 +208,7 @@ public class AccionTest {
         Accion instance = new AccionImpl();
         instance.setFechaDeteccion(FechaDeteccion);
     }
-
+    
     /**
      * Test of setDescripcion method, of class Accion.
      */
@@ -191,7 +219,7 @@ public class AccionTest {
         Accion instance = new AccionImpl();
         instance.setDescripcion(Descripcion);
     }
-
+    
     /**
      * Test of setAnalisisCausa method, of class Accion.
      */
@@ -202,7 +230,7 @@ public class AccionTest {
         Accion instance = new AccionImpl();
         instance.setAnalisisCausa(AnalisisCausa);
     }
-
+    
     /**
      * Test of setAdjuntos method, of class Accion.
      */
@@ -215,7 +243,7 @@ public class AccionTest {
         Accion instance = new AccionImpl();
         instance.setAdjuntos(Adjuntos);
     }
-
+    
     /**
      * Test of setGeneradaPor method, of class Accion.
      */
@@ -225,10 +253,10 @@ public class AccionTest {
         Accion instance = new AccionImpl();
         instance.setGeneradaPor(GeneradaPor);
         instance.setGeneradaPor(null);
-        if(GeneradaPor.getAccionesDetectadas().contains(instance)) 
+        if(GeneradaPor.getAccionesDetectadas().contains(instance))
             fail(" El emetodo de setGeneredaPor no es bidireccional");
     }
-
+    
     /**
      * Test of setAreaSector method, of class Accion.
      */
@@ -241,7 +269,7 @@ public class AccionTest {
         if(area.getAccionesEnAreaSector().contains(instance))
             fail("El metodo setArea no es bidireccional");
     }
-
+    
     /**
      * Test of setCodificacionAccion method, of class Accion.
      */
@@ -251,10 +279,10 @@ public class AccionTest {
         Accion instance = new AccionImpl();
         instance.setCodificacionAccion(codificacion);
         instance.setCodificacionAccion(null);
-        if(codificacion.getAccionesConCodificacion().contains(instance)) 
+        if(codificacion.getAccionesConCodificacion().contains(instance))
             fail ("El metodo setCodificaicon no es bidireccional");
     }
-
+    
     /**
      * Test of setEstadoActualAccion method, of class Accion.
      */
@@ -264,7 +292,27 @@ public class AccionTest {
         Accion instance = new AccionImpl();
         instance.setEstadoAccion(EnumEstado.CERRADA);
     }
-
+    
+    /**
+     * Test of setComprobacionImplantacion method, of class Accion.
+     */
+    @Test
+    public void testSetComprobacionImplantacion() {
+        System.out.println("setComprobacionImplantacion");
+        Accion instance = new AccionImpl();
+        instance.setComprobacionImplantacion(comprobacion);
+    }
+    
+    /**
+     * Test of setComprobacionEficacia method, of class Accion.
+     */
+    @Test
+    public void testSetComprobacionEficacia() {
+        System.out.println("setComprobacionEficacia");
+        Accion instance = new AccionImpl();
+        instance.setComprobacionEficacia(comprobacion);
+    }
+    
     /**
      * Test of addAdjunto method, of class Accion.
      */
@@ -274,7 +322,7 @@ public class AccionTest {
         Accion instance = new AccionImpl();
         instance.addAdjunto(adjunto);
     }
-
+    
     public class AccionImpl extends Accion {
         @Override
         public void CambiarEstado(){}

@@ -32,7 +32,7 @@ public class Comprobacion implements Serializable{
     @Temporal(TemporalType.DATE)
     private Date FechaComprobacion;
     private EnumComprobacion Resultado;
-    private String Observaciones;
+    private String Observaciones = new String();
     
     @OneToOne
     private Accion AccionEficacia;
@@ -44,7 +44,9 @@ public class Comprobacion implements Serializable{
     private Usuario Responsable;
     
     //  Constructores
-    public Comprobacion(){}
+    public Comprobacion(){
+        this.Resultado = EnumComprobacion.NO_COMPROBADA;
+    }
     public Comprobacion(Date FechaEstimada, Usuario ResponsableComprobacion){
         this.Resultado = EnumComprobacion.NO_COMPROBADA;
         this.Responsable = ResponsableComprobacion;
@@ -72,19 +74,19 @@ public class Comprobacion implements Serializable{
     public void setFechaEstimada(Date FechaEstimada) {this.FechaEstimada = FechaEstimada;}
     
     public void setAccionEficacia(Accion AccionEficacia) {
+        this.AccionEficacia = AccionEficacia;
         if(AccionEficacia != null){
             if(!this.AccionEficacia.equals(AccionEficacia))
                 AccionEficacia.setComprobacionEficacia(this);
         }
-        this.AccionEficacia = AccionEficacia;
+        
     }
     
     public void setAccionImplantacion(Accion AccionImplantacion) {
+        this.AccionImplantacion = AccionImplantacion;
         if(AccionImplantacion != null){
             if(!this.AccionImplantacion.equals(AccionImplantacion))
-            AccionImplantacion.setComprobacionImplantacion(this);
-        }
-        this.AccionImplantacion = AccionImplantacion;
-    }
-    
+                AccionImplantacion.setComprobacionImplantacion(this);
+        }        
+    }    
 }

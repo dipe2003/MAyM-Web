@@ -101,7 +101,7 @@ public class UsuarioTest {
      * Test of getPasswordKey method, of class Usuario.
      */
     @Test
-    public void testGetCredncialUsuario() {
+    public void testGetCredencialUsuario() {
         System.out.println("getPasswordKey");
         Usuario instance = new Usuario();
         Credencial expResult = null;

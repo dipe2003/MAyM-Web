@@ -6,6 +6,7 @@
 package com.dperez.maymweb.controlador.registro;
 
 import com.dperez.maymweb.accion.Accion;
+import com.dperez.maymweb.accion.Comprobacion;
 import com.dperez.maymweb.accion.EnumComprobacion;
 import com.dperez.maymweb.accion.ManejadorAccion;
 import com.dperez.maymweb.accion.acciones.Correctiva;
@@ -25,6 +26,8 @@ import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.codificacion.ManejadorCodificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.ManejadorDeteccion;
+import com.dperez.maymweb.usuario.ManejadorUsuario;
+import com.dperez.maymweb.usuario.Usuario;
 import java.security.InvalidParameterException;
 import java.util.Date;
 import javax.inject.Inject;
@@ -44,6 +47,8 @@ public class ControladorRegistro {
     private ManejadorDeteccion mDeteccion;
     @Inject
     private ManejadorMedida mMedida;
+    @Inject
+    private ManejadorUsuario mUsuario;
     
     /**
      * Crea una nueva accion en estado pendiente y la persiste en la base de datos.
@@ -259,10 +264,70 @@ public class ControladorRegistro {
         return res;
     }
     
-    public int SetVerificacionEficaciaAccion(Date FechaVerificacionEficacia, String ComentariosVerificacion, EnumComprobacion Comprobacion, int IdAccion){
+    /***
+     * Setea la comprobacion de implementacion estimada con responsable y fecha estimada. Actualiza la base de datos.
+     * @param FechaEstimada
+     * @param IdUsuarioResponsableImplementacion
+     * @param IdAccion
+     * @return -1 si no se actualizo. IdAccion si correcto.
+     */
+    public int SetEstimadoComprobacionImplementacion(Date FechaEstimada, int IdUsuarioResponsableImplementacion, int IdAccion){
+        Usuario usuario = mUsuario.GetUsuario(IdUsuarioResponsableImplementacion);
+        Comprobacion comprobacionImplementacion = new Comprobacion(FechaEstimada, usuario);
         Accion accion = mAccion.GetAccion(IdAccion);
-        return -1;
+        accion.setComprobacionImplantacion(comprobacionImplementacion);
+        return mAccion.ActualizarAccion(accion);
     }
     
-   
+    /***
+     * Setea la comprobacion de eficacia estimada con responsable y fecha estimada. Actualiza la base de datos.
+     * @param FechaEstimada
+     * @param IdUsuarioResponsableComprobacion
+     * @param IdAccion
+     * @return -1 si no se actualizo. IdAccion si correcto.
+     */
+    public int SetEstimadoComprobacionEficacia(Date FechaEstimada, int IdUsuarioResponsableComprobacion, int IdAccion){
+        Usuario usuario = mUsuario.GetUsuario(IdUsuarioResponsableComprobacion);
+        Comprobacion comprobacionEficacia = new Comprobacion(FechaEstimada, usuario);
+        Accion accion = mAccion.GetAccion(IdAccion);
+        accion.setComprobacionImplantacion(comprobacionEficacia);
+        return mAccion.ActualizarAccion(accion);
+    }
+    
+    /***
+     * Setea la comprobacion de implementacion de la accion, cambia el estado segun corresponda y actualiza la base de datos.
+     * @param FechaComprobacionImplementacion
+     * @param ComentariosImplementacion
+     * @param Comprobacion
+     * @param IdAccion
+     * @return -1 si no se actualizo
+     */
+    public int SetComprobacionImplementacionAccion(Date FechaComprobacionImplementacion, String ComentariosImplementacion, EnumComprobacion Comprobacion,
+            int IdAccion){
+        Accion accion = mAccion.GetAccion(IdAccion);
+        accion.getComprobacionImplantacion().setFechaComprobacion(FechaComprobacionImplementacion);
+        accion.getComprobacionImplantacion().setObservaciones(ComentariosImplementacion);
+        accion.getComprobacionImplantacion().setResultado(Comprobacion);
+        accion.CambiarEstado();
+        return mAccion.ActualizarAccion(accion);
+    }
+    
+    /***
+     * Setea la verificacion de eficacia de la accion, deja en estado cerrado y actualiza la base de datos.
+     * @param FechaVerificacionEficacia
+     * @param ComentariosVerificacion
+     * @param Comprobacion
+     * @param IdAccion
+     * @return -1 si no se actualizo
+     */
+    public int SetVerificacionEficaciaAccion(Date FechaVerificacionEficacia, String ComentariosVerificacion, EnumComprobacion Comprobacion,
+            int IdAccion){
+        Accion accion = mAccion.GetAccion(IdAccion);
+        accion.getComprobacionEficacia().setFechaComprobacion(FechaVerificacionEficacia);
+        accion.getComprobacionEficacia().setObservaciones(ComentariosVerificacion);
+        accion.getComprobacionEficacia().setResultado(Comprobacion);
+        accion.CambiarEstado();
+        return mAccion.ActualizarAccion(accion);
+    }
+    
 }
