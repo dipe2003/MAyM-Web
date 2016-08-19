@@ -18,13 +18,13 @@ import javax.persistence.TemporalType;
 
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.estado.EnumEstado;
-import com.dperez.maymweb.usuario.Usuario;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -38,13 +38,8 @@ public abstract class Accion implements Serializable{
     private int Id;
     @Temporal(TemporalType.DATE)
     private Date FechaDeteccion;
-    @Temporal(TemporalType.DATE)
-    private Date FechaEstimadaVerificacion;
-    @Temporal(TemporalType.DATE)
-    private Date FechaVerificacion;
     private String Descripcion  = new String();
     private String AnalisisCausa = new String();
-    private String ObservacionVerificacion = new String();
     private EnumEstado EstadoAccion;
     
     @OneToMany(mappedBy = "AccionAdjunto")
@@ -59,8 +54,11 @@ public abstract class Accion implements Serializable{
     @ManyToOne
     private Codificacion CodificacionAccion;
     
-    @ManyToOne
-    private Usuario ResponsableVerificacion;
+    @OneToOne
+    private Comprobacion ComprobacionEficacia;
+    
+    @OneToOne
+    private Comprobacion ComprobacionImplantacion;
     
     // Constructores
     public Accion(){
@@ -69,20 +67,17 @@ public abstract class Accion implements Serializable{
     }
     
     public Accion(Date FechaDeteccion, String Descripcion) {
-        this.EstadoAccion = EstadoAccion.PENDIENTE;
+        this.EstadoAccion = EnumEstado.PENDIENTE;
         this.FechaDeteccion = FechaDeteccion;
         this.Descripcion = Descripcion;
         this.Adjuntos = new ArrayList<>();
-    }    
+    }
     
     // Getters
     public int getId() {return this.Id;}
     public Date getFechaDeteccion() {return this.FechaDeteccion;}
-    public Date getFechaEstimadaVerificacion() {return this.FechaEstimadaVerificacion;}
-    public Date getFechaVerificacion() {return this.FechaVerificacion;}
     public String getDescripcion() {return this.Descripcion;}
     public String getAnalisisCausa() {return this.AnalisisCausa;}
-    public String getObservacionVerificacion() {return this.ObservacionVerificacion;}
     public EnumEstado getEstadoAccion() {return EstadoAccion;}
     
     public List<Adjunto> getAdjuntos() {return this.Adjuntos;}
@@ -93,22 +88,20 @@ public abstract class Accion implements Serializable{
     
     public Codificacion getCodificacionAccion() {return CodificacionAccion;}
     
-    public Usuario getResponsableVerificacion() {return ResponsableVerificacion;}
+    public Comprobacion getComprobacionEficacia() {return ComprobacionEficacia;}
+    public Comprobacion getComprobacionImplantacion() {return ComprobacionImplantacion;}
     
     // Setters
     public void setId(int Id) {this.Id = Id;}
     public void setFechaDeteccion(Date FechaDeteccion) {this.FechaDeteccion = FechaDeteccion;}
-    public void setFechaEstimadaVerificacion(Date FechaEstimadaVerificacion) {this.FechaEstimadaVerificacion = FechaEstimadaVerificacion;}
-    public void setFechaVerificacion(Date FechaVerificacion) {this.FechaVerificacion = FechaVerificacion;}
     public void setDescripcion(String Descripcion) {this.Descripcion = Descripcion;}
     public void setAnalisisCausa(String AnalisisCausa) {this.AnalisisCausa = AnalisisCausa;}
-    public void setObservacionVerificacion(String ObservacionVerificacion) {this.ObservacionVerificacion = ObservacionVerificacion;}
     public void setEstadoAccion(EnumEstado EstadoAccion) {this.EstadoAccion = EstadoAccion;}
     
     public void setAdjuntos(List<Adjunto> Adjuntos) {
         this.Adjuntos = Adjuntos;
         for(Adjunto adj: this.Adjuntos){
-            adj.setAccionAdjunto(this);            
+            adj.setAccionAdjunto(this);
         }
     }
     
@@ -149,19 +142,22 @@ public abstract class Accion implements Serializable{
                     CodificacionAccion.addAccionCodificacion(this);
             }
         }
-    }    
+    }
     
-    public void setResponsableVerificacion(Usuario ResponsableVerificacion) {
-        if(ResponsableVerificacion == null && this.ResponsableVerificacion !=null){
-            this.ResponsableVerificacion.getAccionesVerificacion().remove(this);
-            this.ResponsableVerificacion = null;
-        }else{
-            if(ResponsableVerificacion != null){
-                this.ResponsableVerificacion = ResponsableVerificacion;
-                if(!ResponsableVerificacion.getAccionesVerificacion().contains(this))
-                    ResponsableVerificacion.addAccionVerificacion(this);
-            }
+    public void setComprobacionEficacia(Comprobacion ComprobacionEficacia) {
+        if(ComprobacionEficacia != null){
+            if(!this.ComprobacionEficacia.equals(ComprobacionEficacia))
+                ComprobacionEficacia.setAccionEficacia(this);
         }
+        this.ComprobacionEficacia = ComprobacionEficacia;
+    }
+    
+    public void setComprobacionImplantacion(Comprobacion ComprobacionImplantacion) {
+        if(ComprobacionImplantacion != null){
+            if(!this.ComprobacionImplantacion.equals(ComprobacionImplantacion))
+                ComprobacionImplantacion.setAccionEficacia(this);
+        }
+        this.ComprobacionImplantacion = ComprobacionImplantacion;
     }
     
     // Listas

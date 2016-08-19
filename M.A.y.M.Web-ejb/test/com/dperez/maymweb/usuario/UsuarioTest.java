@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package com.dperez.maymweb.usuario;
 
 import com.dperez.maymweb.accion.Accion;
@@ -39,7 +39,7 @@ public class UsuarioTest {
     private final Accion accionCorrectiva = new Correctiva();
     private final Accion accionPreventiva = new Preventiva();
     private final Accion accionMejora = new Mejora();
-    private final Credencial credencial = new Credencial();    
+    private final Credencial credencial = new Credencial();
     private final Empresa empresaUsuario = new Empresa("Nombre Empresa");
     
     public UsuarioTest() {
@@ -60,7 +60,7 @@ public class UsuarioTest {
     @After
     public void tearDown() {
     }
-
+    
     /**
      * Test of getId method, of class Usuario.
      */
@@ -72,7 +72,7 @@ public class UsuarioTest {
         int result = instance.getId();
         assertEquals(expResult, result);
     }
-
+    
     /**
      * Test of getNombre method, of class Usuario.
      */
@@ -84,7 +84,7 @@ public class UsuarioTest {
         String result = instance.getNombre();
         assertEquals(expResult, result);
     }
-
+    
     /**
      * Test of getApellido method, of class Usuario.
      */
@@ -96,7 +96,7 @@ public class UsuarioTest {
         String result = instance.getApellido();
         assertEquals(expResult, result);
     }
-
+    
     /**
      * Test of getPasswordKey method, of class Usuario.
      */
@@ -113,7 +113,7 @@ public class UsuarioTest {
         result = instance.getCredencialUsuario();
         assertEquals(expResult, result);
     }
-
+    
     /**
      * Test of getCorreo method, of class Usuario.
      */
@@ -125,7 +125,7 @@ public class UsuarioTest {
         String result = instance.getCorreo();
         assertEquals(expResult, result);
     }
-
+    
     /**
      * Test of isRecibeAlertas method, of class Usuario.
      */
@@ -137,7 +137,7 @@ public class UsuarioTest {
         boolean result = instance.isRecibeAlertas();
         assertEquals(expResult, result);
     }
-
+    
     /**
      * Test of getPermisoUsuario method, of class Usuario.
      */
@@ -153,7 +153,7 @@ public class UsuarioTest {
         result = instance.getPermisoUsuario();
         assertEquals(permiso, result);
     }
-
+    
     /**
      * Test of getMedidasResponsableImplementacion method, of class Usuario.
      */
@@ -172,33 +172,11 @@ public class UsuarioTest {
         instance.addMedidaResponsableImplementacion(actividadMejora);
         instance.addMedidaResponsableImplementacion(actividadPreventiva);
         instance.addMedidaResponsableImplementacion(medidaCorrectiva);
-        instance.addMedidaResponsableImplementacion(medidaPreventiva);        
+        instance.addMedidaResponsableImplementacion(medidaPreventiva);
         result = instance.getMedidasResponsableImplementacion();
-        assertEquals(expResult, result);        
+        assertEquals(expResult, result);
     }
-
     /**
-     * Test of getAccionesVerificacion method, of class Usuario.
-     */
-    @Test
-    public void testGetAccionesVerificacion() {
-        System.out.println("getAccionesVerificacion");
-        Usuario instance = new Usuario();
-        List<Accion> expResult = new ArrayList<>();
-        List<Accion> result = instance.getAccionesVerificacion();
-        assertEquals(expResult, result);
-        
-        expResult.add(accionMejora);
-        expResult.add(accionPreventiva);
-        expResult.add(accionCorrectiva);
-        instance.addAccionVerificacion(accionMejora);
-        instance.addAccionVerificacion(accionPreventiva);
-        instance.addAccionVerificacion(accionCorrectiva);        
-        result = instance.getAccionesVerificacion();
-        assertEquals(expResult, result);
-    }
-    
-       /**
      * Test of getEmpresa method, of class Usuario.
      */
     @Test
@@ -209,7 +187,7 @@ public class UsuarioTest {
         Empresa result = instance.getEmpresaUsuario();
         assertEquals(empresaUsuario, result);
     }
-
+    
     /**
      * Test of setId method, of class Usuario.
      */
@@ -220,7 +198,7 @@ public class UsuarioTest {
         Usuario instance = new Usuario();
         instance.setId(Id);
     }
-
+    
     /**
      * Test of setNombre method, of class Usuario.
      */
@@ -231,7 +209,7 @@ public class UsuarioTest {
         Usuario instance = new Usuario();
         instance.setNombre(Nombre);
     }
-
+    
     /**
      * Test of setApellido method, of class Usuario.
      */
@@ -242,7 +220,7 @@ public class UsuarioTest {
         Usuario instance = new Usuario();
         instance.setApellido(Apellido);
     }
-
+    
     /**
      * Test of setPasswordKey method, of class Usuario.
      */
@@ -252,7 +230,7 @@ public class UsuarioTest {
         Usuario instance = new Usuario();
         instance.setCredencialUsuario(credencial);
     }
-
+    
     /**
      * Test of setCorreo method, of class Usuario.
      */
@@ -263,7 +241,7 @@ public class UsuarioTest {
         Usuario instance = new Usuario();
         instance.setCorreo(Correo);
     }
-
+    
     /**
      * Test of setRecibeAlertas method, of class Usuario.
      */
@@ -274,7 +252,7 @@ public class UsuarioTest {
         Usuario instance = new Usuario();
         instance.setRecibeAlertas(RecibeAlertas);
     }
-
+    
     /**
      * Test of setPermisoUsuario method, of class Usuario.
      */
@@ -283,10 +261,10 @@ public class UsuarioTest {
         System.out.println("setPermisoUsuario");
         Permiso PermisoUsuario = null;
         Usuario instance = new Usuario();
-        instance.setPermisoUsuario(PermisoUsuario);        
-        instance.setPermisoUsuario(permiso);        
+        instance.setPermisoUsuario(PermisoUsuario);
+        instance.setPermisoUsuario(permiso);
     }
-
+    
     /**
      * Test of setMedidasResponsableImplementacion method, of class Usuario.
      */
@@ -297,19 +275,7 @@ public class UsuarioTest {
         Usuario instance = new Usuario();
         instance.setMedidasResponsableImplementacion(MedidasResponsableImplementacion);
     }
-
     /**
-     * Test of setAccionesVerificacion method, of class Usuario.
-     */
-    @Test
-    public void testSetAccionesVerificacion() {
-        System.out.println("setAccionesVerificacion");
-        List<Accion> AccionesVerificacion = new ArrayList<>();
-        Usuario instance = new Usuario();
-        instance.setAccionesVerificacion(AccionesVerificacion);
-    }
-    
-        /**
      * Test of setEmpresaUsuario method, of class Usuario.
      */
     @Test
@@ -318,7 +284,7 @@ public class UsuarioTest {
         Usuario instance = new Usuario();
         instance.setEmpresaUsuario(empresaUsuario);
     }
-
+    
     /**
      * Test of addMedidaResponsableImplementacion method, of class Usuario.
      */
@@ -329,7 +295,7 @@ public class UsuarioTest {
         Usuario instance = new Usuario();
         instance.addMedidaResponsableImplementacion(MedidaResponsableImplementacion);
     }
-
+    
     /**
      * Test of removeMedidaResponsableImplementacion method, of class Usuario.
      */
@@ -340,7 +306,7 @@ public class UsuarioTest {
         Usuario instance = new Usuario();
         instance.removeMedidaResponsableImplementacion(MedidaResponsableImplementacion);
     }
-
+    
     /**
      * Test of removeMedidaResponsableImplementacion method, of class Usuario.
      */
@@ -351,40 +317,7 @@ public class UsuarioTest {
         Usuario instance = new Usuario();
         instance.removeMedidaResponsableImplementacion(IdMedidaResponsableImplementacion);
     }
-
-    /**
-     * Test of addAccionVerificacion method, of class Usuario.
-     */
-    @Test
-    public void testAddAccionVerificacion() {
-        System.out.println("addAccionVerificacion");
-        Accion AccionVerificacion = null;
-        Usuario instance = new Usuario();
-        instance.addAccionVerificacion(AccionVerificacion);
-    }
-
-    /**
-     * Test of removeAccionVerificacon method, of class Usuario.
-     */
-    @Test
-    public void testRemoveAccionVerificacon() {
-        System.out.println("removeAccionVerificacon");
-        Accion AccionVerificacion = null;
-        Usuario instance = new Usuario();
-        instance.removeAccionVerificacon(AccionVerificacion);
-    }
-
-    /**
-     * Test of removeAccionVerificacion method, of class Usuario.
-     */
-    @Test
-    public void testRemoveAccionVerificacion() {
-        System.out.println("removeAccionVerificacion");
-        int IdAccionVerificacion = 0;
-        Usuario instance = new Usuario();
-        instance.removeAccionVerificacion(IdAccionVerificacion);
-    }
-
+    
     /**
      * Test of GetNombreCompleto method, of class Usuario.
      */

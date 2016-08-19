@@ -6,6 +6,7 @@
 package com.dperez.maymweb.accion.acciones;
 
 import com.dperez.maymweb.accion.Accion;
+import com.dperez.maymweb.accion.EnumComprobacion;
 import com.dperez.maymweb.accion.medida.medidas.MedidaCorrectiva;
 import com.dperez.maymweb.accion.medida.medidas.MedidaPreventiva;
 import com.dperez.maymweb.estado.EnumEstado;
@@ -169,7 +170,7 @@ public class Correctiva extends Accion implements Serializable {
             
             // comparar resultados de chequeos y setear nuevo estado
             if(medCorrectivaImp == true && medPreventivaImp == true){
-                if(this.getFechaVerificacion()!=null) {
+                if(this.getComprobacionEficacia().getResultado()!= EnumComprobacion.NO_COMPROBADA) {
                     this.setEstadoAccion(EnumEstado.CERRADA);
                 }else{
                     this.setEstadoAccion(EnumEstado.PROCESO_VER);

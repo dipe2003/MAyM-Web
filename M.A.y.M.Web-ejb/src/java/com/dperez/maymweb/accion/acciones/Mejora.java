@@ -6,6 +6,7 @@
 package com.dperez.maymweb.accion.acciones;
 
 import com.dperez.maymweb.accion.Accion;
+import com.dperez.maymweb.accion.EnumComprobacion;
 import com.dperez.maymweb.accion.medida.medidas.ActividadMejora;
 import com.dperez.maymweb.estado.EnumEstado;
 import java.io.Serializable;
@@ -81,10 +82,10 @@ public class Mejora extends Accion implements Serializable {
                     numActividadesImp ++;
                 }
             }
-            if(actividadesImp == true && this.getFechaVerificacion()!=null){
+            if(actividadesImp == true && this.getComprobacionEficacia().getResultado()!= EnumComprobacion.NO_COMPROBADA){
                 this.setEstadoAccion(EnumEstado.CERRADA);
             }else{
-                if(actividadesImp == true && this.getFechaVerificacion() == null){
+                if(actividadesImp == true && this.getComprobacionEficacia().getResultado()== EnumComprobacion.NO_COMPROBADA){
                     this.setEstadoAccion(EnumEstado.PROCESO_VER);
                 }else{
                     if(actividadesImp != true && numActividadesImp >= 0){

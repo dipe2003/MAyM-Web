@@ -74,30 +74,6 @@ public class AccionTest {
     }
 
     /**
-     * Test of getFechaEstimadaVerificacion method, of class Accion.
-     */
-    @Test
-    public void testGetFechaEstimadaVerificacion() {
-        System.out.println("getFechaEstimadaVerificacion");
-        Accion instance = new AccionImpl();
-        Date expResult = null;
-        Date result = instance.getFechaEstimadaVerificacion();
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of getFechaVerificacion method, of class Accion.
-     */
-    @Test
-    public void testGetFechaVerificacion() {
-        System.out.println("getFechaVerificacion");
-        Accion instance = new AccionImpl();
-        Date expResult = null;
-        Date result = instance.getFechaVerificacion();
-        assertEquals(expResult, result);
-    }
-
-    /**
      * Test of getDescripcion method, of class Accion.
      */
     @Test
@@ -118,18 +94,6 @@ public class AccionTest {
         Accion instance = new AccionImpl();
         String expResult = "";
         String result = instance.getAnalisisCausa();
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of getObservacionVerificacion method, of class Accion.
-     */
-    @Test
-    public void testGetObservacionVerificacion() {
-        System.out.println("getObservacionVerificacion");
-        Accion instance = new AccionImpl();
-        String expResult = "";
-        String result = instance.getObservacionVerificacion();
         assertEquals(expResult, result);
     }
 
@@ -218,28 +182,6 @@ public class AccionTest {
     }
 
     /**
-     * Test of setFechaEstimadaVerificacion method, of class Accion.
-     */
-    @Test
-    public void testSetFechaEstimadaVerificacion() {
-        System.out.println("setFechaEstimadaVerificacion");
-        Date FechaEstimadaVerificacion = null;
-        Accion instance = new AccionImpl();
-        instance.setFechaEstimadaVerificacion(FechaEstimadaVerificacion);
-    }
-
-    /**
-     * Test of setFechaVerificacion method, of class Accion.
-     */
-    @Test
-    public void testSetFechaVerificacion() {
-        System.out.println("setFechaVerificacion");
-        Date FechaVerificacion = null;
-        Accion instance = new AccionImpl();
-        instance.setFechaVerificacion(FechaVerificacion);
-    }
-
-    /**
      * Test of setDescripcion method, of class Accion.
      */
     @Test
@@ -259,17 +201,6 @@ public class AccionTest {
         String AnalisisCausa = "";
         Accion instance = new AccionImpl();
         instance.setAnalisisCausa(AnalisisCausa);
-    }
-
-    /**
-     * Test of setObservacionVerificacion method, of class Accion.
-     */
-    @Test
-    public void testSetObservacionVerificacion() {
-        System.out.println("setObservacionVerificacion");
-        String ObservacionVerificacion = "";
-        Accion instance = new AccionImpl();
-        instance.setObservacionVerificacion(ObservacionVerificacion);
     }
 
     /**

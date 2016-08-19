@@ -6,6 +6,7 @@
 package com.dperez.maymweb.usuario;
 
 import com.dperez.maymweb.accion.Accion;
+import com.dperez.maymweb.accion.Comprobacion;
 import com.dperez.maymweb.accion.medida.Medida;
 import com.dperez.maymweb.persistencia.Empresa;
 import javax.persistence.Id;
@@ -47,13 +48,13 @@ public class Usuario implements Serializable {
     @OneToMany(mappedBy = "ResponsableImplementacion")
     private List<Medida> MedidasResponsableImplementacion;
     
-    @OneToMany(mappedBy ="ResponsableVerificacion")
-    private List<Accion> AccionesVerificacion;
+    @OneToMany(mappedBy = "Responsable")
+    private List<Comprobacion> Comprobaciones;
     
     // Constructores
     public Usuario(){
         this.MedidasResponsableImplementacion = new ArrayList<>();
-        this.AccionesVerificacion = new ArrayList<>();
+        this.Comprobaciones = new ArrayList<>();
     }
     public Usuario(String NombreUsuario, String ApellidoUsuario, String CorreoUsuario, boolean RecibeAlertas){
         this.Nombre = NombreUsuario;
@@ -61,7 +62,7 @@ public class Usuario implements Serializable {
         this.Correo = CorreoUsuario;
         this.RecibeAlertas = RecibeAlertas;
         this.MedidasResponsableImplementacion = new ArrayList<>();
-        this.AccionesVerificacion = new ArrayList<>();
+        this.Comprobaciones = new ArrayList<>();
     }
     
     // Getters
@@ -76,10 +77,10 @@ public class Usuario implements Serializable {
     public Credencial getCredencialUsuario() {return CredencialUsuario;}
     
     public List<Medida> getMedidasResponsableImplementacion() {return MedidasResponsableImplementacion;}
-    
-    public List<Accion> getAccionesVerificacion() {return AccionesVerificacion;}
 
     public Empresa getEmpresaUsuario() {return EmpresaUsuario;}    
+
+    public List<Comprobacion> getComprobaciones() {return Comprobaciones;}    
     
     // Setters
     public void setId(int Id) {this.Id = Id;}
@@ -115,15 +116,15 @@ public class Usuario implements Serializable {
             med.setResponsableImplementacion(this);
         }
     }
-    
-    public void setAccionesVerificacion(List<Accion> AccionesVerificacion) {
-        this.AccionesVerificacion = AccionesVerificacion;
-        for(Accion acc: AccionesVerificacion){
-            acc.setResponsableVerificacion(this);
-        }
-    }
 
     public void setEmpresaUsuario(Empresa EmpresaUsuario) {this.EmpresaUsuario = EmpresaUsuario;}    
+
+    public void setComprobaciones(List<Comprobacion> Comprobaciones) {
+        this.Comprobaciones = Comprobaciones;
+        for(Comprobacion comprobacion: this.Comprobaciones){
+            comprobacion.setResponsable(this);
+        }
+    }    
     
     // Listas
     public void addMedidaResponsableImplementacion(Medida MedidaResponsableImplementacion){
@@ -155,30 +156,30 @@ public class Usuario implements Serializable {
         }
     }
     
-    public void addAccionVerificacion(Accion AccionVerificacion){
-        if(AccionVerificacion != null){
-            this.AccionesVerificacion.add(AccionVerificacion);
-            if(AccionVerificacion.getResponsableVerificacion() != null && !AccionVerificacion.getResponsableVerificacion().equals(this))
-                AccionVerificacion.setResponsableVerificacion(this);
+    public void addComprobacion(Comprobacion comprobacion){
+        if(comprobacion != null){
+            this.Comprobaciones.add(comprobacion);
+            if(comprobacion.getResponsable() != null && !comprobacion.getResponsable().equals(this))
+                comprobacion.setResponsable(this);
         }
     }
     
-    public void removeAccionVerificacon(Accion AccionVerificacion){
-        if(AccionVerificacion != null){
-            this.AccionesVerificacion.remove(AccionVerificacion);
-            if(AccionVerificacion.getResponsableVerificacion() != null && AccionVerificacion.getResponsableVerificacion().equals(this))
-                AccionVerificacion.setResponsableVerificacion(null);
+    public void removeComprobacion(Comprobacion comprobacion){
+        if(comprobacion != null){
+            this.Comprobaciones.remove(comprobacion);
+            if(comprobacion.getResponsable() != null && comprobacion.getResponsable().equals(this))
+                comprobacion.setResponsable(null);
         }
     }
     
-    public void removeAccionVerificacion(int IdAccionVerificacion){
-        Iterator<Accion> it = this.AccionesVerificacion.iterator() ;
+    public void removeComprobacion(int IdComprobacion){
+        Iterator<Comprobacion> it = this.Comprobaciones.iterator();
         while(it.hasNext()){
-            Accion a = it.next();
-            if(a.getId()== IdAccionVerificacion){
+            Comprobacion c = it.next();
+            if(c.getId() == IdComprobacion){
                 it.remove();
-                if(a.getResponsableVerificacion()!=null && a.getResponsableVerificacion().equals(this))
-                    a.setResponsableVerificacion(null);
+                if(c.getResponsable() != null && c.getResponsable().equals(this))
+                    c.setResponsable(null);
             }
         }
     }
