@@ -58,7 +58,7 @@ public abstract class Accion implements Serializable{
     private Comprobacion ComprobacionEficacia;
     
     @OneToOne
-    private Comprobacion ComprobacionImplantacion;
+    private Comprobacion ComprobacionImplementacion;
     
     // Constructores
     public Accion(){
@@ -89,7 +89,7 @@ public abstract class Accion implements Serializable{
     public Codificacion getCodificacionAccion() {return CodificacionAccion;}
     
     public Comprobacion getComprobacionEficacia() {return ComprobacionEficacia;}
-    public Comprobacion getComprobacionImplantacion() {return ComprobacionImplantacion;}
+    public Comprobacion getComprobacionImplementacion() {return ComprobacionImplementacion;}
     
     // Setters
     public void setId(int Id) {this.Id = Id;}
@@ -151,11 +151,11 @@ public abstract class Accion implements Serializable{
         this.ComprobacionEficacia = ComprobacionEficacia;
     }
     
-    public void setComprobacionImplantacion(Comprobacion ComprobacionImplantacion) {        
-        if(this.ComprobacionImplantacion != null && ComprobacionImplantacion != null){
-            ComprobacionImplantacion.setAccionImplantacion(this);
+    public void setComprobacionImplementacion(Comprobacion ComprobacionImplementacion) {        
+        if(this.ComprobacionImplementacion != null && ComprobacionImplementacion != null){
+            ComprobacionImplementacion.setAccionImplementacion(this);
         }
-        this.ComprobacionImplantacion = ComprobacionImplantacion;
+        this.ComprobacionImplementacion = ComprobacionImplementacion;
     }
     
     // Listas

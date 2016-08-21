@@ -126,14 +126,14 @@ public class ComprobacionTest {
     }
     
     /**
-     * Test of getAccionImplantacion method, of class Comprobacion.
+     * Test of getAccionImplementacion method, of class Comprobacion.
      */
     @Test
-    public void testGetAccionImplantacion() {
-        System.out.println("getAccionImplantacion");
+    public void testGetAccionImplementacion() {
+        System.out.println("getAccionImplementacion");
         Comprobacion instance = new Comprobacion();
         Accion expResult = null;
-        Accion result = instance.getAccionImplantacion();
+        Accion result = instance.getAccionImplementacion();
         assertEquals(expResult, result);
     }
     
@@ -215,14 +215,14 @@ public class ComprobacionTest {
     }
     
     /**
-     * Test of setAccionImplantacion method, of class Comprobacion.
+     * Test of setAccionImplementacion method, of class Comprobacion.
      */
     @Test
-    public void testSetAccionImplantacion() {
-        System.out.println("setAccionImplantacion");
-        Accion AccionImplantacion = null;
+    public void testSetAccionImplementacion() {
+        System.out.println("setAccionImplementacion");
+        Accion AccionImplementacion = null;
         Comprobacion instance = new Comprobacion();
-        instance.setAccionImplantacion(AccionImplantacion);
+        instance.setAccionImplementacion(AccionImplementacion);
     }
     
     public class AccionImpl extends Accion {

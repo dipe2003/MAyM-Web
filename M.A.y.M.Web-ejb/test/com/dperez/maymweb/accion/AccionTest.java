@@ -162,15 +162,15 @@ public class AccionTest {
     }
     
     /**
-     * Test of getComprobacionImplantacion method, of class Accion.
+     * Test of getComprobacionImplementacion method, of class Accion.
      */
     @Test
-    public void testGetComprobacionImplantacion() {
-        System.out.println("getComprobacionImplantacion");
+    public void testGetComprobacionImplementacion() {
+        System.out.println("getComprobacionImplementacion");
         Accion instance = new AccionImpl();
-        instance.setComprobacionImplantacion(comprobacion);
+        instance.setComprobacionImplementacion(comprobacion);
         Comprobacion expResult = comprobacion;
-        Comprobacion result = instance.getComprobacionImplantacion();
+        Comprobacion result = instance.getComprobacionImplementacion();
         assertEquals(expResult, result);
     }
     
@@ -294,13 +294,13 @@ public class AccionTest {
     }
     
     /**
-     * Test of setComprobacionImplantacion method, of class Accion.
+     * Test of setComprobacionImplementacion method, of class Accion.
      */
     @Test
-    public void testSetComprobacionImplantacion() {
-        System.out.println("setComprobacionImplantacion");
+    public void testSetComprobacionImplementacion() {
+        System.out.println("setComprobacionImplementacion");
         Accion instance = new AccionImpl();
-        instance.setComprobacionImplantacion(comprobacion);
+        instance.setComprobacionImplementacion(comprobacion);
     }
     
     /**

@@ -177,7 +177,8 @@ public class Correctiva extends Accion implements Serializable {
                 }
             }else{
                 if(medCorrectivaImp == true && medPreventivaImp != true){
-                    this.setEstadoAccion(EnumEstado.PROCESO_IMP);
+                    if(this.getComprobacionImplementacion().getResultado() == EnumComprobacion.NO_COMPROBADA)
+                        this.setEstadoAccion(EnumEstado.PROCESO_IMP);
                 }else{
                     if(medCorrectivaImp != true && medPreventivaImp != true){
                         this.setEstadoAccion(EnumEstado.PENDIENTE);

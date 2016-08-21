@@ -91,38 +91,7 @@ public class ControladorRegistro {
         }else{
             return null;
         }
-    }
-    
-    /***
-     * Crea una nueva area/sector y la persiste en la base de datos.
-     * @param NombreArea
-     * @param CorreoArea
-     * @return null si no se creo.
-     */
-    public Area NuevaArea(String NombreArea, String CorreoArea){
-        Area area = new Area(NombreArea, CorreoArea);
-        area.setId(mArea.CrearArea(area));
-        if(area.getId()!=-1){
-            return area;
-        }else{
-            return null;
-        }
-    }
-    
-    /***
-     * Crea una nueva codificacion y la persiste en la base de datos.
-     * @param NombreCodificacion
-     * @return null si no se creo.
-     */
-    public Codificacion NuevaCodificacion(String NombreCodificacion){
-        Codificacion codificacion = new Codificacion(NombreCodificacion);
-        codificacion.setId(mCodificacion.CrearCodificacion(codificacion));
-        if(codificacion.getId()!=-1){
-            return codificacion;
-        }else{
-            return null;
-        }
-    }
+    }  
     
     /**
      * Crea una nueva actividad de mejora, la persiste en la base de datos y se asocia a la mejora.
@@ -275,7 +244,7 @@ public class ControladorRegistro {
         Usuario usuario = mUsuario.GetUsuario(IdUsuarioResponsableImplementacion);
         Comprobacion comprobacionImplementacion = new Comprobacion(FechaEstimada, usuario);
         Accion accion = mAccion.GetAccion(IdAccion);
-        accion.setComprobacionImplantacion(comprobacionImplementacion);
+        accion.setComprobacionImplementacion(comprobacionImplementacion);
         return mAccion.ActualizarAccion(accion);
     }
     
@@ -290,7 +259,7 @@ public class ControladorRegistro {
         Usuario usuario = mUsuario.GetUsuario(IdUsuarioResponsableComprobacion);
         Comprobacion comprobacionEficacia = new Comprobacion(FechaEstimada, usuario);
         Accion accion = mAccion.GetAccion(IdAccion);
-        accion.setComprobacionImplantacion(comprobacionEficacia);
+        accion.setComprobacionImplementacion(comprobacionEficacia);
         return mAccion.ActualizarAccion(accion);
     }
     
@@ -305,9 +274,9 @@ public class ControladorRegistro {
     public int SetComprobacionImplementacionAccion(Date FechaComprobacionImplementacion, String ComentariosImplementacion, EnumComprobacion Comprobacion,
             int IdAccion){
         Accion accion = mAccion.GetAccion(IdAccion);
-        accion.getComprobacionImplantacion().setFechaComprobacion(FechaComprobacionImplementacion);
-        accion.getComprobacionImplantacion().setObservaciones(ComentariosImplementacion);
-        accion.getComprobacionImplantacion().setResultado(Comprobacion);
+        accion.getComprobacionImplementacion().setFechaComprobacion(FechaComprobacionImplementacion);
+        accion.getComprobacionImplementacion().setObservaciones(ComentariosImplementacion);
+        accion.getComprobacionImplementacion().setResultado(Comprobacion);
         accion.CambiarEstado();
         return mAccion.ActualizarAccion(accion);
     }

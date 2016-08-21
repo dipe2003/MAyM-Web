@@ -38,7 +38,7 @@ public class Comprobacion implements Serializable{
     private Accion AccionEficacia;
     
     @OneToOne
-    private Accion AccionImplantacion;
+    private Accion AccionImplementacion;
     
     @ManyToOne
     private Usuario Responsable;
@@ -62,7 +62,7 @@ public class Comprobacion implements Serializable{
     public Date getFechaEstimada() {return FechaEstimada;}
     
     public Accion getAccionEficacia() {return AccionEficacia;}
-    public Accion getAccionImplantacion() {return AccionImplantacion;}
+    public Accion getAccionImplementacion() {return AccionImplementacion;}
     
     //  Setters
     
@@ -82,11 +82,11 @@ public class Comprobacion implements Serializable{
         
     }
     
-    public void setAccionImplantacion(Accion AccionImplantacion) {
-        this.AccionImplantacion = AccionImplantacion;
-        if(AccionImplantacion != null){
-            if(!this.AccionImplantacion.equals(AccionImplantacion))
-                AccionImplantacion.setComprobacionImplantacion(this);
+    public void setAccionImplementacion(Accion AccionImplementacion) {
+        this.AccionImplementacion = AccionImplementacion;
+        if(AccionImplementacion != null){
+            if(!this.AccionImplementacion.equals(AccionImplementacion))
+                AccionImplementacion.setComprobacionImplementacion(this);
         }        
     }    
 }
