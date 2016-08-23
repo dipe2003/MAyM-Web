@@ -45,8 +45,9 @@ public class Deteccion implements Serializable {
         this.AccionesDetectadas = new ArrayList<>();
         this.FortalezasDetectadas = new ArrayList<>();
     }
-    public Deteccion(String NombreDeteccion){
+    public Deteccion(String NombreDeteccion, TipoDeteccion tipoDeteccion){
         this.Nombre = NombreDeteccion;
+        this.Tipo = tipoDeteccion;
         this.AccionesDetectadas = new ArrayList<>();
         this.FortalezasDetectadas = new ArrayList<>();
     }

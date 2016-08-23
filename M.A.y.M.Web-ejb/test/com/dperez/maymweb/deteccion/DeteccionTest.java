@@ -51,19 +51,19 @@ public class DeteccionTest {
     }
 
     /**
-     * Test of getId method, of class Deteccion.
+     * Test of getId method, of class TipoDeteccion.
      */
     @Test
     public void testGetId() {
         System.out.println("getId");
-        Deteccion instance = new Deteccion();
+        TipoDeteccion instance = new TipoDeteccion();
         int expResult = 0;
         int result = instance.getId();
         assertEquals(expResult, result);
     }
 
     /**
-     * Test of getNombre method, of class Deteccion.
+     * Test of getNombre method, of class TipoDeteccion.
      */
     @Test
     public void testGetNombre() {
@@ -75,7 +75,7 @@ public class DeteccionTest {
     }
 
     /**
-     * Test of getTipo method, of class Deteccion.
+     * Test of getTipo method, of class TipoDeteccion.
      */
     @Test
     public void testGetTipo() {
@@ -91,7 +91,7 @@ public class DeteccionTest {
     }
 
     /**
-     * Test of getAccionesDetectadas method, of class Deteccion.
+     * Test of getAccionesDetectadas method, of class TipoDeteccion.
      */
     @Test
     public void testGetAccionesDetectadas() {
@@ -112,7 +112,7 @@ public class DeteccionTest {
     }
 
     /**
-     * Test of getFortalezasDetectadas method, of class Deteccion.
+     * Test of getFortalezasDetectadas method, of class TipoDeteccion.
      */
     @Test
     public void testGetFortalezasDetectadas() {
@@ -129,29 +129,29 @@ public class DeteccionTest {
     }
 
     /**
-     * Test of setId method, of class Deteccion.
+     * Test of setId method, of class TipoDeteccion.
      */
     @Test
     public void testSetId() {
         System.out.println("setId");
         int Id = 0;
-        Deteccion instance = new Deteccion();
+        TipoDeteccion instance = new TipoDeteccion();
         instance.setId(Id);
     }
 
     /**
-     * Test of setNombre method, of class Deteccion.
+     * Test of setNombre method, of class TipoDeteccion.
      */
     @Test
     public void testSetNombre() {
         System.out.println("setNombre");
         String Nombre = "Nombre";
-        Deteccion instance = new Deteccion();
+        TipoDeteccion instance = new TipoDeteccion();
         instance.setNombre(Nombre);
     }
 
     /**
-     * Test of setTipo method, of class Deteccion.
+     * Test of setTipo method, of class TipoDeteccion.
      */
     @Test
     public void testSetTipo() {
@@ -161,7 +161,7 @@ public class DeteccionTest {
     }
 
     /**
-     * Test of setAccionesDetectadas method, of class Deteccion.
+     * Test of setAccionesDetectadas method, of class TipoDeteccion.
      */
     @Test
     public void testSetAccionesDetectadas() {
@@ -178,7 +178,7 @@ public class DeteccionTest {
     }
 
     /**
-     * Test of setFortalezasDetectadas method, of class Deteccion.
+     * Test of setFortalezasDetectadas method, of class TipoDeteccion.
      */
     @Test
     public void testSetFortalezasDetectadas() {
@@ -192,7 +192,7 @@ public class DeteccionTest {
     }
 
     /**
-     * Test of addAccionDetectada method, of class Deteccion.
+     * Test of addAccionDetectada method, of class TipoDeteccion.
      */
     @Test
     public void testAddAccionDetectada() {
@@ -204,7 +204,7 @@ public class DeteccionTest {
     }
 
     /**
-     * Test of removeAccionDetectada method, of class Deteccion.
+     * Test of removeAccionDetectada method, of class TipoDeteccion.
      */
     @Test
     public void testRemoveAccionDetectada_Accion() {
@@ -219,7 +219,7 @@ public class DeteccionTest {
     }
 
     /**
-     * Test of removeAccionDetectada method, of class Deteccion.
+     * Test of removeAccionDetectada method, of class TipoDeteccion.
      */
     @Test
     public void testRemoveAccionDetectada_int() {
@@ -236,7 +236,7 @@ public class DeteccionTest {
     }
 
     /**
-     * Test of addFortalezaDetectada method, of class Deteccion.
+     * Test of addFortalezaDetectada method, of class TipoDeteccion.
      */
     @Test
     public void testAddFortalezaDetectada() {
@@ -246,7 +246,7 @@ public class DeteccionTest {
     }
 
     /**
-     * Test of removeFortalezaDetectada method, of class Deteccion.
+     * Test of removeFortalezaDetectada method, of class TipoDeteccion.
      */
     @Test
     public void testRemoveFortalezaDetectada_Fortaleza() {
@@ -256,7 +256,7 @@ public class DeteccionTest {
     }
 
     /**
-     * Test of removeFortalezaDetectada method, of class Deteccion.
+     * Test of removeFortalezaDetectada method, of class TipoDeteccion.
      */
     @Test
     public void testRemoveFortalezaDetectada_int() {

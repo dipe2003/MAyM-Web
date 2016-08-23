@@ -9,6 +9,8 @@ import com.dperez.maymweb.accion.adjunto.Adjunto;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
+import com.dperez.maymweb.deteccion.TipoDeteccion;
+import com.dperez.maymweb.deteccion.TipoDeteccion;
 import com.dperez.maymweb.estado.EnumEstado;
 import com.dperez.maymweb.usuario.Usuario;
 import java.util.ArrayList;
@@ -29,7 +31,7 @@ public class AccionTest {
     private final Adjunto adjunto = new Adjunto("Titulo Adjunto", "Ubicacion Adjunto");
     private final Area area = new Area("Nombre Del Area", "Correo@Area.com");
     private final Codificacion codificacion = new Codificacion("Nombre Codificacion");
-    private final Deteccion GeneradaPor = new Deteccion("Aud. Ejemplo");
+    private final Deteccion GeneradaPor = new Deteccion("Aud. Ejemplo", new TipoDeteccion("Tipo","DescripcionTipo"));
     private final Comprobacion comprobacion = new Comprobacion(new Date(), new Usuario());
     
     public AccionTest() {
