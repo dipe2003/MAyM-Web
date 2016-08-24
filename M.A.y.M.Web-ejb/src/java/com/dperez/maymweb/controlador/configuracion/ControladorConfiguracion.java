@@ -13,6 +13,8 @@ import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.TipoDeteccion;
 import com.dperez.maymweb.deteccion.ManejadorDeteccion;
 import com.dperez.maymweb.deteccion.ManejadorTipoDeteccion;
+import com.dperez.maymweb.usuario.ManejadorUsuario;
+import com.dperez.maymweb.usuario.Usuario;
 import javax.inject.Inject;
 
 /**
@@ -29,6 +31,8 @@ public class ControladorConfiguracion {
     private ManejadorDeteccion mDeteccion;
     @Inject
     private ManejadorTipoDeteccion mTipoDeteccion;
+    @Inject
+    private ManejadorUsuario mUsuario;
     
     /***
      * Crea una nueva area/sector y la persiste en la base de datos.
@@ -87,6 +91,27 @@ public class ControladorConfiguracion {
         tipoDeteccion.setId(mTipoDeteccion.CrearTipoDeteccion(tipoDeteccion));
         if(tipoDeteccion.getId()!=-1){
             return tipoDeteccion;
+        }else{
+            return null;
+        }
+    }
+    
+    /**
+     * Crea un nuevo usuario y lo persiste en la base de datos. El usuario creado no recibe alertas.
+     * @param NombreUsuario
+     * @param ApellidoUsuario
+     * @param CorreoUsuario
+     * @param Password
+     * @return null si no se creo.
+     */
+    public Usuario NuevoUsuario(String NombreUsuario, String ApellidoUsuario, String CorreoUsuario, String Password){
+        Usuario usuario = new Usuario(NombreUsuario, ApellidoUsuario, CorreoUsuario, false);
+        /*
+        TODO: Crear salt y hashed password y agregarlo al usuario antes de persistir.
+        */
+        usuario.setId(mUsuario.CrearUsuario(usuario));
+        if(usuario.getId()!=-1){
+            return usuario;
         }else{
             return null;
         }

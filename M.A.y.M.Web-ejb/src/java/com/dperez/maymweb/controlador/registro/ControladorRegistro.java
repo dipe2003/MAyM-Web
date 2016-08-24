@@ -14,6 +14,7 @@ import com.dperez.maymweb.accion.acciones.EnumAccion;
 import com.dperez.maymweb.accion.acciones.EnumTipoDesvio;
 import com.dperez.maymweb.accion.acciones.Mejora;
 import com.dperez.maymweb.accion.acciones.Preventiva;
+import com.dperez.maymweb.accion.adjunto.Adjunto;
 import com.dperez.maymweb.accion.medida.ManejadorMedida;
 import com.dperez.maymweb.accion.medida.Medida;
 import com.dperez.maymweb.accion.medida.medidas.ActividadMejora;
@@ -27,10 +28,12 @@ import com.dperez.maymweb.codificacion.ManejadorCodificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.TipoDeteccion;
 import com.dperez.maymweb.deteccion.ManejadorDeteccion;
+import com.dperez.maymweb.producto.Producto;
 import com.dperez.maymweb.usuario.ManejadorUsuario;
 import com.dperez.maymweb.usuario.Usuario;
 import java.security.InvalidParameterException;
 import java.util.Date;
+import java.util.List;
 import javax.inject.Inject;
 
 /**
@@ -92,7 +95,37 @@ public class ControladorRegistro {
         }else{
             return null;
         }
-    }  
+    }
+    
+    /**
+     * Crea el/los productos involucrados en el desvio, los agrega a la accion correctiva y actualiza la base de datos.
+     * @param AccionCorrectiva
+     * @param productos
+     * @return -1 si no se creo.
+     */
+    public int AgregarProductoInvolucrado(int AccionCorrectiva, List<Producto> productos){
+        Correctiva correctiva = (Correctiva) mAccion.GetAccion(AccionCorrectiva);
+        for(Producto producto: productos){
+            Producto ProductoInvolucrado = new Producto(producto.getNombre(), producto.getDatos());
+            correctiva.addProductoAfectado(ProductoInvolucrado);
+        }
+        return mAccion.ActualizarAccion(correctiva);
+    }
+    
+    /**
+     * Crea el/los adjuntos, los agrega a la accion y actualiza la base de datos.
+     * @param IdAccion
+     * @param adjuntos
+     * @return -1 si no se creo.
+     */
+    public int AgregarArchivoAdjunto(int IdAccion, List<Adjunto> adjuntos){
+        Accion accion = mAccion.GetAccion(IdAccion);
+        for(Adjunto adjunto: adjuntos){
+            Adjunto AdjuntoAccion = new Adjunto(adjunto.getTitulo(), adjunto.getUbicacion());
+            accion.addAdjunto(adjunto);
+        }
+        return mAccion.ActualizarAccion(accion);
+    }
     
     /**
      * Crea una nueva actividad de mejora, la persiste en la base de datos y se asocia a la mejora.
@@ -162,7 +195,7 @@ public class ControladorRegistro {
         return res;
     }
     
-    /***
+    /**
      * Setea la fecha de implementacion de la Medida correctiva, cambia el estado de la accion (si corresponde) y persiste los cambios en la base de deatos.
      * @param FechaImplementacion
      * @param IdMedidaCorrectiva
@@ -180,7 +213,7 @@ public class ControladorRegistro {
         return res;
     }
     
-    /***
+    /**
      * Setea la fecha de implementacion de la Medida Preventiva, cambia el estado de la accion (si corresponde) y persiste los cambios en la base de deatos.
      * @param FechaImplementacion
      * @param IdMedidaPreventiva
@@ -198,7 +231,7 @@ public class ControladorRegistro {
         return res;
     }
     
-    /***
+    /**
      * Setea la fecha de implementacion de la Actividad Preventiva, cambia el estado de la accion (si corresponde) y persiste los cambios en la base de deatos.
      * @param FechaImplementacion
      * @param IdActividadPreventiva
@@ -216,7 +249,7 @@ public class ControladorRegistro {
         return res;
     }
     
-    /***
+    /**
      * Setea la fecha de implementacion de la Actividad de Mejora, cambia el estado de la accion (si corresponde) y persiste los cambios en la base de deatos.
      * @param FechaImplementacion
      * @param IdActividadMejora
@@ -234,7 +267,7 @@ public class ControladorRegistro {
         return res;
     }
     
-    /***
+    /**
      * Setea la comprobacion de implementacion estimada con responsable y fecha estimada. Actualiza la base de datos.
      * @param FechaEstimada
      * @param IdUsuarioResponsableImplementacion
@@ -249,7 +282,7 @@ public class ControladorRegistro {
         return mAccion.ActualizarAccion(accion);
     }
     
-    /***
+    /**
      * Setea la comprobacion de eficacia estimada con responsable y fecha estimada. Actualiza la base de datos.
      * @param FechaEstimada
      * @param IdUsuarioResponsableComprobacion
@@ -264,7 +297,7 @@ public class ControladorRegistro {
         return mAccion.ActualizarAccion(accion);
     }
     
-    /***
+    /**
      * Setea la comprobacion de implementacion de la accion, cambia el estado segun corresponda y actualiza la base de datos.
      * @param FechaComprobacionImplementacion
      * @param ComentariosImplementacion
@@ -282,7 +315,7 @@ public class ControladorRegistro {
         return mAccion.ActualizarAccion(accion);
     }
     
-    /***
+    /**
      * Setea la verificacion de eficacia de la accion, deja en estado cerrado y actualiza la base de datos.
      * @param FechaVerificacionEficacia
      * @param ComentariosVerificacion
