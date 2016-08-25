@@ -13,6 +13,8 @@ import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.TipoDeteccion;
 import com.dperez.maymweb.deteccion.ManejadorDeteccion;
 import com.dperez.maymweb.deteccion.ManejadorTipoDeteccion;
+import com.dperez.maymweb.usuario.ControladorSeguridad;
+import com.dperez.maymweb.usuario.Credencial;
 import com.dperez.maymweb.usuario.ManejadorUsuario;
 import com.dperez.maymweb.usuario.Usuario;
 import javax.inject.Inject;
@@ -33,6 +35,8 @@ public class ControladorConfiguracion {
     private ManejadorTipoDeteccion mTipoDeteccion;
     @Inject
     private ManejadorUsuario mUsuario;
+    @Inject
+    private ControladorSeguridad cSeg;
     
     /***
      * Crea una nueva area/sector y la persiste en la base de datos.
@@ -106,9 +110,10 @@ public class ControladorConfiguracion {
      */
     public Usuario NuevoUsuario(String NombreUsuario, String ApellidoUsuario, String CorreoUsuario, String Password){
         Usuario usuario = new Usuario(NombreUsuario, ApellidoUsuario, CorreoUsuario, false);
-        /*
-        TODO: Crear salt y hashed password y agregarlo al usuario antes de persistir.
-        */
+        String[] pass = cSeg.getPasswordSeguro(Password);
+        // pass[0] corresponde al password | pass[1] corresponde al salt
+        Credencial credencial = new Credencial(pass[1], pass[0]);
+        usuario.setCredencialUsuario(credencial);
         usuario.setId(mUsuario.CrearUsuario(usuario));
         if(usuario.getId()!=-1){
             return usuario;

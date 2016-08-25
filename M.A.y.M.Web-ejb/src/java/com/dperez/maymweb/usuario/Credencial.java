@@ -30,9 +30,9 @@ public class Credencial implements Serializable{
     
     //  Constructores
     public Credencial(){}
-    public Credencial(String Password, String Key){
+    public Credencial(String Password, String SaltKey){
         this.Password = Password;
-        this.SaltKey = Key;
+        this.SaltKey = SaltKey;
     }
     
     //  Getters
