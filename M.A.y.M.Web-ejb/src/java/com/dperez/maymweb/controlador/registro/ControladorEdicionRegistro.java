@@ -48,6 +48,7 @@ public class ControladorEdicionRegistro {
     public int EditarAccion(int IdAccion, EnumAccion TipoAccion, Date FechaDeteccion, String Descripcion, EnumTipoDesvio TipoDesvio,
             int IdAreaSector, int IdDeteccion, int IdCodificacion){
         Accion accion = mAccion.GetAccion(IdAccion);
+        //  Comprobar si hay cambio en el valor para "ahorrar" llamada a la base de datos.
         if(accion.getAreaSectorAccion().getId()!=IdAreaSector){
             Area areaSector = mArea.GetArea(IdAreaSector);
             accion.setAreaSectorAccion(areaSector);
@@ -65,6 +66,18 @@ public class ControladorEdicionRegistro {
         if(TipoAccion == EnumAccion.CORRECTIVA){
             ((Correctiva)accion).setTipo(TipoDesvio);
         }
+        return mAccion.ActualizarAccion(accion);
+    }
+    
+    /**
+     * Setea el analisis de causa de la desviacion y actualiza la base de datos.
+     * @param AnalisisDeCausa
+     * @param IdAccion
+     * @return 
+     */
+    public int SetAnalisisDeCausa(String AnalisisDeCausa, int IdAccion){
+        Accion accion = mAccion.GetAccion(IdAccion);
+        accion.setAnalisisCausa(AnalisisDeCausa);
         return mAccion.ActualizarAccion(accion);
     }
     
