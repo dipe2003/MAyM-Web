@@ -23,7 +23,7 @@ public class Credencial implements Serializable{
     @Id@GeneratedValue(strategy = GenerationType.AUTO)
     private int Id;
     private String Password = new String();
-    private String SaltKey = new String();
+    private String PasswordKey = new String();
     
     @OneToOne
     private Usuario UsuarioCredencial;
@@ -32,14 +32,14 @@ public class Credencial implements Serializable{
     public Credencial(){}
     public Credencial(String Password, String SaltKey){
         this.Password = Password;
-        this.SaltKey = SaltKey;
+        this.PasswordKey = SaltKey;
     }
     
     //  Getters
     
     public int getId() {return Id;}
     public String getPassword() {return Password;}
-    public String getSaltKey() {return SaltKey;}
+    public String getPasswordKey() {return PasswordKey;}
     
     public Usuario getUsuarioCredencial() {return UsuarioCredencial;}
     
@@ -47,7 +47,7 @@ public class Credencial implements Serializable{
     
     public void setId(int Id) {this.Id = Id;}
     public void setPassword(String Password) {this.Password = Password;}
-    public void setSaltKey(String SaltKey) {this.SaltKey = SaltKey;}
+    public void setPasswordKey(String PasswordKey) {this.PasswordKey = PasswordKey;}
     
     public void setUsuarioCredencial(Usuario UsuarioCredencial) {
         this.UsuarioCredencial = UsuarioCredencial;

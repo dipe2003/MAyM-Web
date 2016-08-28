@@ -16,6 +16,12 @@ import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.codificacion.ManejadorCodificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.ManejadorDeteccion;
+import com.dperez.maymweb.estado.EnumEstado;
+import com.dperez.maymweb.usuario.ControladorSeguridad;
+import com.dperez.maymweb.usuario.Credencial;
+import com.dperez.maymweb.usuario.ManejadorUsuario;
+import com.dperez.maymweb.usuario.Usuario;
+import com.dperez.maymweb.usuario.permiso.EnumPermiso;
 import java.util.Date;
 import javax.inject.Inject;
 
@@ -32,6 +38,10 @@ public class ControladorEdicionRegistro {
     private ManejadorDeteccion mDeteccion;
     @Inject
     private ManejadorCodificacion mCodificacion;
+    @Inject
+    private ManejadorUsuario mUsuario;
+    @Inject
+    private ControladorSeguridad cSeg;
     
     /**
      * Edita una accion con los mismos parametros que se creo. Actualiza la base de datos.
@@ -73,7 +83,7 @@ public class ControladorEdicionRegistro {
      * Setea el analisis de causa de la desviacion y actualiza la base de datos.
      * @param AnalisisDeCausa
      * @param IdAccion
-     * @return 
+     * @return -1 si no se actualizo.
      */
     public int SetAnalisisDeCausa(String AnalisisDeCausa, int IdAccion){
         Accion accion = mAccion.GetAccion(IdAccion);
@@ -81,4 +91,37 @@ public class ControladorEdicionRegistro {
         return mAccion.ActualizarAccion(accion);
     }
     
+    /**
+     * Setea el estado de la accion como desestimada y actualiza la base de datos.
+     * @param Observaciones
+     * @param IdAccion
+     * @return 
+     */
+    public int DesestimarAccion(String Observaciones, int IdAccion){
+        Accion accion = mAccion.GetAccion(IdAccion);
+        accion.setEstadoAccion(EnumEstado.DESESTIMADA);
+        return mAccion.ActualizarAccion(accion);
+    }
+    
+    /**
+     * Setea los datos del usuario y actualiza la base de datos. No se realiza comprobacion de password.
+     * Para cambiar password utilizar metodo cambiarPasswordUsuario().
+     * @param IdUsuario
+     * @param NombreUsuario
+     * @param ApellidoUsuario
+     * @param CorreoUsuario
+     * @param PermisoUsuario
+     * @param RecibeAlertas
+     * @return -1 si no se actualizo.
+     */
+    public int CambiarDatosUsuario(int IdUsuario, String NombreUsuario, String ApellidoUsuario, String CorreoUsuario, 
+            EnumPermiso PermisoUsuario, boolean RecibeAlertas){
+        Usuario usuario = mUsuario.GetUsuario(IdUsuario);
+        usuario.setNombre(NombreUsuario);
+        usuario.setApellido(ApellidoUsuario);
+        usuario.setCorreo(CorreoUsuario);
+        usuario.setPermisoUsuario(PermisoUsuario);
+        usuario.setRecibeAlertas(RecibeAlertas);
+        return mUsuario.ActualizarUsuario(usuario);
+    }
 }

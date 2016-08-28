@@ -69,7 +69,7 @@ public class CredencialTest {
         System.out.println("getKey");
         Credencial instance = new Credencial();
         String expResult = "";
-        String result = instance.getSaltKey();
+        String result = instance.getPasswordKey();
         assertEquals(expResult, result);
     }
 
@@ -115,7 +115,7 @@ public class CredencialTest {
         System.out.println("setKey");
         String Key = "";
         Credencial instance = new Credencial();
-        instance.setSaltKey(Key);
+        instance.setPasswordKey(Key);
     }
 
     /**
