@@ -21,7 +21,6 @@
     <class>com.dperez.maymweb.producto.Producto</class>
     <class>com.dperez.maymweb.usuario.Credencial</class>
     <class>com.dperez.maymweb.usuario.Usuario</class>
-    <class>com.dperez.maymweb.usuario.permiso.Permiso</class>
     <class>com.dperez.maymweb.persistencia.Empresa</class>
     <class>com.dperez.maymweb.accion.medida.medidas.ActividadMejora</class>
     <class>com.dperez.maymweb.accion.medida.medidas.ActividadPreventiva</class>

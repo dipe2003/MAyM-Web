@@ -5,13 +5,11 @@
 */
 package com.dperez.maymweb.usuario;
 
-import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.Comprobacion;
 import com.dperez.maymweb.accion.medida.Medida;
 import com.dperez.maymweb.persistencia.Empresa;
+import com.dperez.maymweb.usuario.permiso.EnumPermiso;
 import javax.persistence.Id;
-
-import com.dperez.maymweb.usuario.permiso.Permiso;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -40,7 +38,7 @@ public class Usuario implements Serializable {
     private Empresa EmpresaUsuario;
     
     @ManyToOne
-    private Permiso PermisoUsuario;
+    private EnumPermiso PermisoUsuario;
     
     @OneToOne
     private Credencial CredencialUsuario;
@@ -56,11 +54,12 @@ public class Usuario implements Serializable {
         this.MedidasResponsableImplementacion = new ArrayList<>();
         this.Comprobaciones = new ArrayList<>();
     }
-    public Usuario(String NombreUsuario, String ApellidoUsuario, String CorreoUsuario, boolean RecibeAlertas){
+    public Usuario(String NombreUsuario, String ApellidoUsuario, String CorreoUsuario, boolean RecibeAlertas, EnumPermiso PermisoUsuario){
         this.Nombre = NombreUsuario;
         this.Apellido = ApellidoUsuario;
         this.Correo = CorreoUsuario;
         this.RecibeAlertas = RecibeAlertas;
+        this.PermisoUsuario = PermisoUsuario;
         this.MedidasResponsableImplementacion = new ArrayList<>();
         this.Comprobaciones = new ArrayList<>();
     }
@@ -72,15 +71,15 @@ public class Usuario implements Serializable {
     public String getCorreo() {return this.Correo;}
     public boolean isRecibeAlertas() {return this.RecibeAlertas;}
     
-    public Permiso getPermisoUsuario() {return PermisoUsuario;}
+    public EnumPermiso getPermisoUsuario() {return PermisoUsuario;}
     
     public Credencial getCredencialUsuario() {return CredencialUsuario;}
     
     public List<Medida> getMedidasResponsableImplementacion() {return MedidasResponsableImplementacion;}
-
-    public Empresa getEmpresaUsuario() {return EmpresaUsuario;}    
-
-    public List<Comprobacion> getComprobaciones() {return Comprobaciones;}    
+    
+    public Empresa getEmpresaUsuario() {return EmpresaUsuario;}
+    
+    public List<Comprobacion> getComprobaciones() {return Comprobaciones;}
     
     // Setters
     public void setId(int Id) {this.Id = Id;}
@@ -89,20 +88,11 @@ public class Usuario implements Serializable {
     public void setCorreo(String Correo) {this.Correo = Correo;}
     public void setRecibeAlertas(boolean RecibeAlertas) {this.RecibeAlertas = RecibeAlertas;}
     
-    public void setPermisoUsuario(Permiso PermisoUsuario) {
-        if(PermisoUsuario == null && this.PermisoUsuario != null){
-            this.PermisoUsuario.getUsuariosPermiso().remove(this);
-            this.PermisoUsuario = null;
-        }else{
-            if(PermisoUsuario != null){
-                this.PermisoUsuario = PermisoUsuario;
-                if(!PermisoUsuario.getUsuariosPermiso().contains(this))
-                    PermisoUsuario.addUsuarioPermiso(this);
-            }
-        }
+    public void setPermisoUsuario(EnumPermiso PermisoUsuario) {
+        this.PermisoUsuario = PermisoUsuario;
     }
     
-    public void setCredencialUsuario(Credencial CredencialUsuario) {    
+    public void setCredencialUsuario(Credencial CredencialUsuario) {
         this.CredencialUsuario = CredencialUsuario;
         if(CredencialUsuario != null){
             if(CredencialUsuario.getUsuarioCredencial()!=null)
@@ -116,15 +106,15 @@ public class Usuario implements Serializable {
             med.setResponsableImplementacion(this);
         }
     }
-
-    public void setEmpresaUsuario(Empresa EmpresaUsuario) {this.EmpresaUsuario = EmpresaUsuario;}    
-
+    
+    public void setEmpresaUsuario(Empresa EmpresaUsuario) {this.EmpresaUsuario = EmpresaUsuario;}
+    
     public void setComprobaciones(List<Comprobacion> Comprobaciones) {
         this.Comprobaciones = Comprobaciones;
         for(Comprobacion comprobacion: this.Comprobaciones){
             comprobacion.setResponsable(this);
         }
-    }    
+    }
     
     // Listas
     public void addMedidaResponsableImplementacion(Medida MedidaResponsableImplementacion){

@@ -17,6 +17,7 @@ import com.dperez.maymweb.usuario.ControladorSeguridad;
 import com.dperez.maymweb.usuario.Credencial;
 import com.dperez.maymweb.usuario.ManejadorUsuario;
 import com.dperez.maymweb.usuario.Usuario;
+import com.dperez.maymweb.usuario.permiso.EnumPermiso;
 import javax.inject.Inject;
 
 /**
@@ -37,6 +38,8 @@ public class ControladorConfiguracion {
     private ManejadorUsuario mUsuario;
     @Inject
     private ControladorSeguridad cSeg;
+    
+    public ControladorConfiguracion(){}
     
     /***
      * Crea una nueva area/sector y la persiste en la base de datos.
@@ -106,10 +109,11 @@ public class ControladorConfiguracion {
      * @param ApellidoUsuario
      * @param CorreoUsuario
      * @param Password
+     * @param PermisoUsuario
      * @return null si no se creo.
      */
-    public Usuario NuevoUsuario(String NombreUsuario, String ApellidoUsuario, String CorreoUsuario, String Password){
-        Usuario usuario = new Usuario(NombreUsuario, ApellidoUsuario, CorreoUsuario, false);
+    public Usuario NuevoUsuario(String NombreUsuario, String ApellidoUsuario, String CorreoUsuario, String Password, EnumPermiso PermisoUsuario){
+        Usuario usuario = new Usuario(NombreUsuario, ApellidoUsuario, CorreoUsuario, false, PermisoUsuario);
         String[] pass = cSeg.getPasswordSeguro(Password);
         // pass[0] corresponde al password | pass[1] corresponde al salt
         Credencial credencial = new Credencial(pass[1], pass[0]);

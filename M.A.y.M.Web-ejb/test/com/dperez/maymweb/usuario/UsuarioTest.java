@@ -15,7 +15,7 @@ import com.dperez.maymweb.accion.medida.medidas.ActividadPreventiva;
 import com.dperez.maymweb.accion.medida.medidas.MedidaCorrectiva;
 import com.dperez.maymweb.accion.medida.medidas.MedidaPreventiva;
 import com.dperez.maymweb.persistencia.Empresa;
-import com.dperez.maymweb.usuario.permiso.Permiso;
+import com.dperez.maymweb.usuario.permiso.EnumPermiso;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;
@@ -31,7 +31,7 @@ import static org.junit.Assert.*;
  */
 public class UsuarioTest {
     
-    private final Permiso permiso = new Permiso("NombrePermiso", "DescripcionPermioso");
+    private final EnumPermiso permiso = EnumPermiso.LECTURA;
     private final Medida medidaPreventiva = new MedidaPreventiva();
     private final Medida medidaCorrectiva = new MedidaCorrectiva();
     private final Medida actividadMejora = new ActividadMejora();
@@ -145,8 +145,8 @@ public class UsuarioTest {
     public void testGetPermisoUsuario() {
         System.out.println("getPermisoUsuario");
         Usuario instance = new Usuario();
-        Permiso expResult = null;
-        Permiso result = instance.getPermisoUsuario();
+        EnumPermiso expResult = null;
+        EnumPermiso result = instance.getPermisoUsuario();
         assertEquals(expResult, result);
         
         instance.setPermisoUsuario(permiso);
@@ -259,7 +259,7 @@ public class UsuarioTest {
     @Test
     public void testSetPermisoUsuario() {
         System.out.println("setPermisoUsuario");
-        Permiso PermisoUsuario = null;
+        EnumPermiso PermisoUsuario = EnumPermiso.LECTURA;
         Usuario instance = new Usuario();
         instance.setPermisoUsuario(PermisoUsuario);
         instance.setPermisoUsuario(permiso);
