@@ -37,7 +37,6 @@ public class Usuario implements Serializable {
     @ManyToOne
     private Empresa EmpresaUsuario;
     
-    @ManyToOne
     private EnumPermiso PermisoUsuario;
     
     @OneToOne

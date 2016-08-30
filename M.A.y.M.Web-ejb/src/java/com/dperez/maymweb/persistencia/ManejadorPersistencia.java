@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
  *
  * @author Diego
  */
+
 public abstract class ManejadorPersistencia {
     public static String NOMBRE_BD;
     
