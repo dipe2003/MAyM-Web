@@ -5,6 +5,7 @@
 */
 package com.dperez.maymweb.accion;
 
+import com.dperez.maymweb.persistencia.ConexionDB;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -13,7 +14,7 @@ import javax.ejb.TransactionManagementType;
 import javax.inject.Named;
 import javax.persistence.TypedQuery;
 
-import com.dperez.maymweb.persistencia.ManejadorPersistencia;
+import javax.persistence.EntityManager;
 
 /**
  *
@@ -22,7 +23,10 @@ import com.dperez.maymweb.persistencia.ManejadorPersistencia;
 @Named
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class ManejadorAccion extends ManejadorPersistencia {
+public class ManejadorAccion {
+    private EntityManager em;
+    
+    public ManejadorAccion(){ em = ConexionDB.getInstancia().getEntityManager("maym_example");}
     
     public int CrearAccion(Accion accion){
         try{

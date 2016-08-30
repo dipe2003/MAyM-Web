@@ -5,6 +5,7 @@
 */
 package com.dperez.maymweb.deteccion;
 
+import com.dperez.maymweb.persistencia.ConexionDB;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -13,7 +14,7 @@ import javax.ejb.TransactionManagementType;
 import javax.inject.Named;
 import javax.persistence.TypedQuery;
 
-import com.dperez.maymweb.persistencia.ManejadorPersistencia;
+import javax.persistence.EntityManager;
 
 /**
  *
@@ -22,9 +23,10 @@ import com.dperez.maymweb.persistencia.ManejadorPersistencia;
 @Named
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class ManejadorTipoDeteccion extends ManejadorPersistencia {
+public class ManejadorTipoDeteccion {
+    private EntityManager em;
     
-    public ManejadorTipoDeteccion(){}
+    public ManejadorTipoDeteccion(){ em = ConexionDB.getInstancia().getEntityManager("maym_example");}
     
     public int CrearTipoDeteccion(TipoDeteccion tipoDeteccion){
         try{

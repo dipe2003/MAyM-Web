@@ -5,6 +5,7 @@
 */
 package com.dperez.maymweb.usuario;
 
+import com.dperez.maymweb.persistencia.ConexionDB;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -13,7 +14,7 @@ import javax.ejb.TransactionManagementType;
 import javax.inject.Named;
 import javax.persistence.TypedQuery;
 
-import com.dperez.maymweb.persistencia.ManejadorPersistencia;
+import javax.persistence.EntityManager;
 
 /**
  *
@@ -22,9 +23,9 @@ import com.dperez.maymweb.persistencia.ManejadorPersistencia;
 @Named
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class ManejadorUsuario extends ManejadorPersistencia {
-    
-    public ManejadorUsuario(){};
+public class ManejadorUsuario {
+    private EntityManager em;
+    public ManejadorUsuario(){ em = ConexionDB.getInstancia().getEntityManager("maym_example");}
     
     public int CrearUsuario(Usuario usuario){
         try{
@@ -62,11 +63,13 @@ public class ManejadorUsuario extends ManejadorPersistencia {
     }
     
     public List<Usuario> ListarUsuarios(){
-        em.getTransaction();
-        List<Usuario> usuarios = new ArrayList<>();
-        TypedQuery<Usuario> query = em.createQuery("SELECT u FROM Usuario u", Usuario.class);
+    em.getTransaction();
+    List<Usuario> usuarios = new ArrayList<>();
+    TypedQuery<Usuario> query = em.createQuery("SELECT u FROM Usuario u", Usuario.class);
+    if(query.getResultList()!= null){
         usuarios = query.getResultList();
-        em.close();
-        return usuarios;
+    }
+    em.close();
+    return usuarios;
     }
 }

@@ -20,7 +20,7 @@ import javax.inject.Named;
 public class ControladorUsuario {
     @Inject
     private ManejadorUsuario mUsuario;
-    public ControladorUsuario(){};
+    public ControladorUsuario(){}
     
     public Usuario GetUsuarioEmpresa(int IdEmpresa){
         List<Usuario> usuarios = mUsuario.ListarUsuarios();
