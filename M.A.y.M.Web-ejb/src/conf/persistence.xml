@@ -5,11 +5,9 @@
     <class>com.dperez.maymweb.persistencia.Empresa</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
-      <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
     </properties>
   </persistence-unit>
-  <persistence-unit name="MAYM-Web-Datos" transaction-type="JTA">
-    <jta-data-source/>
+  <persistence-unit name="MAYM-Web-Datos" transaction-type="RESOURCE_LOCAL">
     <class>com.dperez.maymweb.accion.Accion</class>
     <class>com.dperez.maymweb.accion.acciones.Correctiva</class>
     <class>com.dperez.maymweb.accion.acciones.Mejora</class>

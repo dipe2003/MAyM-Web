@@ -17,6 +17,7 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -24,12 +25,13 @@ import javax.inject.Named;
  *
  * @author Diego
  */
-@Stateless
+
 @Named
+@ViewScoped
 public class ListarEmpresas implements Serializable {
     @Inject
     private ManejadorEmpresa mEmp;
-    
+    @Inject
     private ControladorUsuario cUsr ;
     
     private Map<String, Integer> MapEmpresas;
@@ -65,7 +67,7 @@ public class ListarEmpresas implements Serializable {
     
     @PostConstruct
     private void init(){
-        cUsr = new ControladorUsuario();
+//        cUsr = new ControladorUsuario();
         MapEmpresas = new HashMap<String, Integer>();
         List<Empresa> lista = mEmp.ListarEmpresas();
         MapEmpresas.put("--- Selecciona Una Empresa ---", 0);

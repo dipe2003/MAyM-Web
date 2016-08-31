@@ -24,14 +24,18 @@ import javax.persistence.EntityManager;
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class ManejadorProducto {
-     private EntityManager em;
+    private EntityManager em;
     public ManejadorProducto(){ em = ConexionDB.getInstancia().getEntityManager("maym_example");}
     
     public int CrearProducto(Producto producto){
         try{
+            em.getTransaction();
             em.persist(producto);
+            em.close();
             return producto.getId();
         }catch(Exception ex){
+            em.getTransaction().rollback();
+            em.close();
             System.out.println("Error al crear producto: " + ex.getMessage());
         }
         return -1;
@@ -39,9 +43,13 @@ public class ManejadorProducto {
     
     public int ActualizarProducto(Producto producto){
         try{
+            em.getTransaction();
             em.merge(producto);
+            em.close();
             return producto.getId();
         }catch(Exception ex){
+            em.getTransaction().rollback();
+            em.close();
             System.out.println("Error al actualizar producto: " + ex.getMessage());
         }
         return -1;
@@ -49,16 +57,22 @@ public class ManejadorProducto {
     
     public int BorrarProducto(Producto producto){
         try{
+            em.getTransaction();
             em.remove(producto);
+            em.close();
             return producto.getId();
         }catch(Exception ex){
+            em.getTransaction().rollback();
+            em.close();
             System.out.println("Error al borrar producto: " + ex.getMessage());
         }
         return -1;
     }
     
     public Producto GetProducto(int IdProducto){
+        em.getTransaction();
         Producto producto = em.find(Producto.class, IdProducto);
+        em.close();
         return producto;
     }
     

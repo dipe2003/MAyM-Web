@@ -45,7 +45,7 @@ public class ConexionDB {
         try {
             conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "1234");
             Statement s = conexion.createStatement();
-            res = s.executeUpdate("CREATE DATABASE IF NOT EXIST "+ NombreBaseDatos);
+            res = s.executeUpdate("CREATE DATABASE IF NOT EXISTS "+ NombreBaseDatos);
         }catch(SQLException e){
             System.out.println("Error CONNECTION: " + e.getMessage());
         }
@@ -53,19 +53,19 @@ public class ConexionDB {
     }
     
     public EntityManager getEntityManager(String NombreBaseDatos){
-//        try{
-//            Class.forName(DRIVER).newInstance();
-//        }catch(ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-//            System.out.println("Error: " + e.getMessage());
-//        }
-//        
-//        try {
-//            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "1234");
-//            Statement s = conexion.createStatement();
-//            int Result = s.executeUpdate("CREATE DATABASE IF NOT EXIST "+ "maym_web_example");
-//        }catch(SQLException e){
-//            System.out.println("Error CONNECTION: " + e.getMessage());
-//        }
+        try{
+            Class.forName(DRIVER).newInstance();
+        }catch(ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        
+        try {
+            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "1234");
+            Statement s = conexion.createStatement();
+            int Result = s.executeUpdate("CREATE DATABASE IF NOT EXISTS "+ "maym_example");
+        }catch(SQLException e){
+            System.out.println("Error CONNECTION: " + e.getMessage());
+        }
         
         Map<String, String> properties = new HashMap<>();
         properties.put("javax.persistence.jdbc.driver","com.mysql.jdbc.Driver");
