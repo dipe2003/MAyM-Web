@@ -8,14 +8,21 @@ package com.dperez.maymweb.persistencia;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+import java.io.Serializable;
+import javax.ejb.Stateless;
+import javax.inject.Named;
 
 /**
  *
  * @author Diego
  */
-public class ControladorAdministrador {
+@Named
+@Stateless
+public class ControladorAdministrador implements Serializable{
     @Inject
     private ManejadorEmpresa mEmp;
+    
+    private static ConexionDB conn = ConexionDB.getInstancia();
     
     public int CrearEmpresa(String NombreEmpresa){
         int res = 0;
@@ -29,5 +36,21 @@ public class ControladorAdministrador {
         List<Empresa> empresas = new ArrayList<>();
         empresas = mEmp.ListarEmpresas();
         return empresas;
+    }
+    
+    public int CrearBaseDeDatos(String NombreEmpresa){
+        int res = -1;
+        Empresa empresa = new Empresa(NombreEmpresa);
+        res = conn.CrearBaseDatos(empresa.getBaseDatos());
+        if(res > 0){          
+           res = mEmp.CrearEmpresa(empresa);            
+        }
+        return res;
+    }
+    
+    public boolean ExisteEmpresa(String NombreEmpresa){
+        Empresa empresa = new Empresa(NombreEmpresa);
+        int res = conn.ExisteBaseDatos(empresa.getNombreEmpresa());
+        return res > 0;
     }
 }

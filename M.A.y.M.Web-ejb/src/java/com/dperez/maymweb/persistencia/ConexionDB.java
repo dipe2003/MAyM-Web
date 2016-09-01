@@ -34,6 +34,24 @@ public class ConexionDB {
     
     private ConexionDB(){}
     
+    public int ExisteBaseDatos(String NombreBaseDatos){
+        int res = -1;
+        try{
+            Class.forName(DRIVER).newInstance();
+        }catch(ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        
+        try {
+            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "1234");
+            Statement s = conexion.createStatement();
+            res = s.executeUpdate("SELECT * FROM "+ NombreBaseDatos);
+        }catch(SQLException e){
+            System.out.println("Error CONNECTION: " + e.getMessage());
+        }
+        return res;
+    }
+    
     public int CrearBaseDatos(String NombreBaseDatos){
         int res = -1;
         try{
@@ -53,26 +71,13 @@ public class ConexionDB {
     }
     
     public EntityManager getEntityManager(String NombreBaseDatos){
-        try{
-            Class.forName(DRIVER).newInstance();
-        }catch(ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-        
-        try {
-            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "1234");
-            Statement s = conexion.createStatement();
-            int Result = s.executeUpdate("CREATE DATABASE IF NOT EXISTS "+ "maym_example");
-        }catch(SQLException e){
-            System.out.println("Error CONNECTION: " + e.getMessage());
-        }
-        
         Map<String, String> properties = new HashMap<>();
         properties.put("javax.persistence.jdbc.driver","com.mysql.jdbc.Driver");
         properties.put("javax.persistence.jdbc.url","jdbc:mysql://localhost:3306/" + NombreBaseDatos);
         properties.put("javax.persistence.jdbc.user", "root");
         properties.put("javax.persistence.jdbc.password", "1234");
-        properties.put("javax.persistence.schema-generation.database.action", "drop-and-create");      
+        properties.put("javax.persistence.schema-generation.database.action", "drop-and-create");     
+        properties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
       
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("MAYM-Web-Datos", properties);
         EntityManager entitymanager = emf.createEntityManager( );

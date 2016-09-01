@@ -7,6 +7,7 @@ package com.dperez.maymweb.persistencia;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -23,14 +24,24 @@ import javax.persistence.TypedQuery;
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class ManejadorEmpresa {
-    @PersistenceContext(unitName = "MAYM_WEB_EMPRESAS_PU")
+//    @PersistenceContext(unitName = "MAYM_WEB_EMPRESAS_PU")
     private EntityManager em;
+
+    
+    public void setNombreBaseDatos(String NombreBaseDatos){
+        em = ConexionDB.getInstancia().getEntityManager(NombreBaseDatos);
+    }
     
     public int CrearEmpresa(Empresa empresa){
         try{
+            em.getTransaction().begin();
             em.persist(empresa);
+            em.getTransaction().commit();
+            em.close();
             return empresa.getId();
         }catch(Exception ex){
+            em.getTransaction().rollback();
+            em.close();
             System.out.println("Error al crear empresa: " + ex.getMessage());
         }
         return -1;

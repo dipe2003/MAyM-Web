@@ -43,4 +43,14 @@ public class ControladorUsuario {
         }
         return usuarios;
     }
+    
+    public boolean ExisteUsuario(String NombreUsuario){
+        boolean existe = false;
+        List<Usuario> usuarios = mUsuario.ListarUsuarios();
+        for(Usuario usr: usuarios){
+            if(usr.getNombre().equalsIgnoreCase(NombreUsuario))
+                existe = true;
+        }
+        return existe;
+    }
 }

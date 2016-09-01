@@ -38,7 +38,10 @@ public class Empresa implements Serializable {
     
     //  Setters
     public void setId(int Id) {this.Id = Id;}
-    public void setNombreEmpresa(String NombreEmpresa) {this.NombreEmpresa = NombreEmpresa;}
+    public void setNombreEmpresa(String NombreEmpresa) {
+        this.NombreEmpresa = NombreEmpresa;
+        this.BaseDatos = GenerarNombreBaseDeDatos(BaseDatos.toLowerCase());
+    }
     public void setBaseDatos(String BaseDatos) {
         this.BaseDatos = GenerarNombreBaseDeDatos(BaseDatos.toLowerCase());
     }
