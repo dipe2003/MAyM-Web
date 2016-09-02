@@ -6,16 +6,10 @@
 package com.dperez.maym.web.empresa;
 
 import com.dperez.maymweb.persistencia.ControladorAdministrador;
-import com.dperez.maymweb.persistencia.Empresa;
 import com.dperez.maymweb.persistencia.ManejadorEmpresa;
 import com.dperez.maymweb.usuario.ControladorUsuario;
-import com.dperez.maymweb.usuario.Usuario;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -72,22 +66,16 @@ public class IngresoUsuario implements Serializable {
         }
     }
     
-    public void CrearBaseDatos(String NombreEmpresa){
+    public void CrearBaseDatos(){
         int res = cAdmin.CrearBaseDeDatos(NombreEmpresa);
         if(res>0){
-            res = cAdmin.CrearEmpresa(NombreEmpresa);
+            FacesContext.getCurrentInstance().addMessage("frmIngreso:inputUsuario", new FacesMessage("Base de Datos y Empresa Creadas"));
+            FacesContext.getCurrentInstance().renderResponse();
         }
-        if(res!=-1){
-            FacesContext.getCurrentInstance().addMessage("frmIngreso:inputUsuario", new FacesMessage("Creada"));
-                FacesContext.getCurrentInstance().renderResponse();
+        if(res==-1){
+            FacesContext.getCurrentInstance().addMessage("frmIngreso:inputUsuario", new FacesMessage("No Creadas"));
+            FacesContext.getCurrentInstance().renderResponse();
         }
     }
-    
-    @PostConstruct
-    private void init(){
-//        cUsr = new ControladorUsuario();
-
-    }
-    
     
 }

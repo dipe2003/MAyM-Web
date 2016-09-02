@@ -24,15 +24,24 @@ import javax.persistence.EntityManager;
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class ManejadorTipoDeteccion {
-    private EntityManager em;
+    private static EntityManager em;
     
-    public ManejadorTipoDeteccion(){ em = ConexionDB.getInstancia().getEntityManager("maym_example");}
+    public ManejadorTipoDeteccion(){}
+    
+    public ManejadorTipoDeteccion(String NombreBaseDatos){ em = ConexionDB.getInstancia().getEntityManager(NombreBaseDatos);}
     
     public int CrearTipoDeteccion(TipoDeteccion tipoDeteccion){
         try{
+            em.getTransaction().begin();
             em.persist(tipoDeteccion);
+            em.getTransaction().commit();
+            em.close();
             return tipoDeteccion.getId();
         }catch(Exception ex){
+            if(em.isOpen()){
+                em.getTransaction().rollback();
+                em.close();
+            }
             System.out.println("Error al crear tipoDeteccion: " + ex.getMessage());
         }
         return -1;
@@ -40,9 +49,16 @@ public class ManejadorTipoDeteccion {
     
     public int ActualizarTipoDeteccion(TipoDeteccion tipoDeteccion){
         try{
+            em.getTransaction().begin();
             em.merge(tipoDeteccion);
+            em.getTransaction().commit();
+            em.close();
             return tipoDeteccion.getId();
         }catch(Exception ex){
+            if(em.isOpen()){
+                em.getTransaction().rollback();
+                em.close();
+            }
             System.out.println("Error al actualizar tipoDeteccion: " + ex.getMessage());
         }
         return -1;
@@ -50,9 +66,16 @@ public class ManejadorTipoDeteccion {
     
     public int BorrarTipoDeteccion(TipoDeteccion tipoDeteccion){
         try{
+            em.getTransaction().begin();
             em.remove(tipoDeteccion);
+            em.getTransaction().commit();
+            em.close();
             return tipoDeteccion.getId();
         }catch(Exception ex){
+            if(em.isOpen()){
+                em.getTransaction().rollback();
+                em.close();
+            }
             System.out.println("Error al borrar tipoDeteccion: " + ex.getMessage());
         }
         return -1;

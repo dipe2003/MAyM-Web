@@ -24,18 +24,24 @@ import javax.persistence.EntityManager;
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class ManejadorUsuario {
-    private EntityManager em;
-    public ManejadorUsuario(){ em = ConexionDB.getInstancia().getEntityManager("maym_example");}
+    private static EntityManager em;
+    
+    public ManejadorUsuario(){}
+    
+    public ManejadorUsuario(String NombreBaseDatos){ em = ConexionDB.getInstancia().getEntityManager(NombreBaseDatos);}
     
     public int CrearUsuario(Usuario usuario){
         try{
-//            em.getTransaction();
+            em.getTransaction().begin();
             em.persist(usuario);
-//            em.close();
+            em.getTransaction().commit();
+            em.close();
             return usuario.getId();
         }catch(Exception ex){
-//            em.getTransaction().rollback();
-//            em.close();
+            if(em.isOpen()){
+                em.getTransaction().rollback();
+                em.close();
+            }
             System.out.println("Error al crear usuario: " + ex.getMessage());
         }
         return -1;
@@ -43,13 +49,16 @@ public class ManejadorUsuario {
     
     public int ActualizarUsuario(Usuario usuario){
         try{
-//            em.getTransaction();
+            em.getTransaction().begin();
             em.merge(usuario);
-//            em.close();
+            em.getTransaction().commit();
+            em.close();
             return usuario.getId();
         }catch(Exception ex){
-//            em.getTransaction().rollback();
-//            em.close();
+            if(em.isOpen()){
+                em.getTransaction().rollback();
+                em.close();
+            }
             System.out.println("Error al actualizar usuario: " + ex.getMessage());
         }
         return -1;
@@ -57,33 +66,32 @@ public class ManejadorUsuario {
     
     public int BorrarUsuario(Usuario usuario){
         try{
-//            em.getTransaction();
+            em.getTransaction().begin();
             em.remove(usuario);
-//            em.close();
+            em.getTransaction().commit();
+            em.close();
             return usuario.getId();
         }catch(Exception ex){
-//            em.getTransaction().rollback();
-//            em.close();
+            if(em.isOpen()){
+                em.getTransaction().rollback();
+                em.close();
+            }
             System.out.println("Error al borrar usuario: " + ex.getMessage());
         }
         return -1;
     }
     
     public Usuario GetUsuario(int IdUsuario){
-//        em.getTransaction();
         Usuario usuario = em.find(Usuario.class, IdUsuario);
-//        em.close();
         return usuario;
     }
     
     public List<Usuario> ListarUsuarios(){
-//        em.getTransaction();
         List<Usuario> usuarios = new ArrayList<>();
         TypedQuery<Usuario> query = em.createQuery("SELECT u FROM Usuario u", Usuario.class);
         if(query.getResultList()!= null){
             usuarios = query.getResultList();
         }
-//        em.close();
         return usuarios;
     }
 }

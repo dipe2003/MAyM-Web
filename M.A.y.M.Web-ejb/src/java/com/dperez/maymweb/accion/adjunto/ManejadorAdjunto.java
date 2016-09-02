@@ -24,15 +24,24 @@ import javax.persistence.EntityManager;
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class ManejadorAdjunto {
-    private EntityManager em;
+    private static EntityManager em;
     
-    public ManejadorAdjunto(){ em = ConexionDB.getInstancia().getEntityManager("maym_example");};
+    public ManejadorAdjunto(){}
+    
+    public ManejadorAdjunto(String NombreBaseDatos){ em = ConexionDB.getInstancia().getEntityManager(NombreBaseDatos);};
     
     public int CrearAdjunto(Adjunto adjunto){
         try{
+            em.getTransaction().begin();
             em.persist(adjunto);
+            em.getTransaction().commit();
+            em.close();
             return adjunto.getId();
         }catch(Exception ex){
+            if(em.isOpen()){
+                em.getTransaction().rollback();
+                em.close();
+            }
             System.out.println("Error al crear adjunto: " + ex.getMessage());
         }
         return -1;
@@ -40,9 +49,16 @@ public class ManejadorAdjunto {
     
     public int ActualizarAdjunto(Adjunto adjunto){
         try{
+            em.getTransaction().begin();
             em.merge(adjunto);
+            em.getTransaction().commit();
+            em.close();
             return adjunto.getId();
         }catch(Exception ex){
+            if(em.isOpen()){
+                em.getTransaction().rollback();
+                em.close();
+            }
             System.out.println("Error al actualizar adjunto: " + ex.getMessage());
         }
         return -1;
@@ -50,9 +66,16 @@ public class ManejadorAdjunto {
     
     public int BorrarAdjunto(Adjunto adjunto){
         try{
+            em.getTransaction().begin();
             em.remove(adjunto);
+            em.getTransaction().commit();
+            em.close();
             return adjunto.getId();
         }catch(Exception ex){
+            if(em.isOpen()){
+                em.getTransaction().rollback();
+                em.close();
+            }
             System.out.println("Error al borrar adjunto: " + ex.getMessage());
         }
         return -1;
@@ -64,11 +87,9 @@ public class ManejadorAdjunto {
     }
     
     public List<Adjunto> ListarAdjuntos(){
-        em.getTransaction();
         List<Adjunto> adjuntos = new ArrayList<>();
         TypedQuery<Adjunto> query = em.createQuery("SELECT a FROM Adjunto a", Adjunto.class);
         adjuntos = query.getResultList();
-        em.close();
         return adjuntos;
     }
 }

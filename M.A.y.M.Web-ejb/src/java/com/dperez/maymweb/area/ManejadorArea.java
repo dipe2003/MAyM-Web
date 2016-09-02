@@ -25,17 +25,26 @@ import javax.persistence.EntityManager;
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class ManejadorArea{
     
-    private EntityManager em;
+    private static EntityManager em;
     
-    public ManejadorArea(){
-        em = ConexionDB.getInstancia().getEntityManager("maym_example");
+    public ManejadorArea(){}
+    
+    public ManejadorArea(String NombreBaseDatos){
+        em = ConexionDB.getInstancia().getEntityManager(NombreBaseDatos);
     }
     
     public int CrearArea(Area area){
         try{
+            em.getTransaction().begin();
             em.persist(area);
+            em.getTransaction().commit();
+            em.close();
             return area.getId();
         }catch(Exception ex){
+            if(em.isOpen()){
+                em.getTransaction().rollback();
+                em.close();
+            }
             System.out.println("Error al crear area: " + ex.getMessage());
         }
         return -1;
@@ -43,9 +52,16 @@ public class ManejadorArea{
     
     public int ActualizarArea(Area area){
         try{
+            em.getTransaction().begin();
             em.merge(area);
+            em.getTransaction().commit();
+            em.close();
             return area.getId();
         }catch(Exception ex){
+            if(em.isOpen()){
+                em.getTransaction().rollback();
+                em.close();
+            }
             System.out.println("Error al actualizar area: " + ex.getMessage());
         }
         return -1;
@@ -53,9 +69,16 @@ public class ManejadorArea{
     
     public int BorrarArea(Area area){
         try{
+            em.getTransaction().begin();
             em.remove(area);
+            em.getTransaction().commit();
+            em.close();
             return area.getId();
         }catch(Exception ex){
+            if(em.isOpen()){
+                em.getTransaction().rollback();
+                em.close();
+            }
             System.out.println("Error al borrar area: " + ex.getMessage());
         }
         return -1;
@@ -67,11 +90,9 @@ public class ManejadorArea{
     }
     
     public List<Area> ListarAreas(){
-        em.getTransaction();
         List<Area> areas = new ArrayList<>();
         TypedQuery<Area> query = em.createQuery("SELECT a FROM Area a", Area.class);
         areas = query.getResultList();
-        em.close();
         return areas;
     }
 }

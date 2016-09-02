@@ -24,15 +24,24 @@ import javax.persistence.EntityManager;
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class ManejadorFortaleza {
-    private EntityManager em;
+    private static EntityManager em;
     
-    public ManejadorFortaleza(){em =  ConexionDB.getInstancia().getEntityManager("maym_example");}
+    public ManejadorFortaleza(){}
+    
+    public ManejadorFortaleza(String NombreBaseDatos){em =  ConexionDB.getInstancia().getEntityManager(NombreBaseDatos);}
     
     public int CrearFortaleza(Fortaleza fortaleza){
         try{
+            em.getTransaction().begin();
             em.persist(fortaleza);
+            em.getTransaction().commit();
+            em.close();
             return fortaleza.getId();
         }catch(Exception ex){
+            if(em.isOpen()){
+                em.getTransaction().rollback();
+                em.close();
+            }
             System.out.println("Error al crear fortaleza: " + ex.getMessage());
         }
         return -1;
@@ -40,9 +49,16 @@ public class ManejadorFortaleza {
     
     public int ActualizarFortaleza(Fortaleza fortaleza){
         try{
+            em.getTransaction().begin();
             em.merge(fortaleza);
+            em.getTransaction().commit();
+            em.close();
             return fortaleza.getId();
         }catch(Exception ex){
+            if(em.isOpen()){
+                em.getTransaction().rollback();
+                em.close();
+            }
             System.out.println("Error al actualizar fortaleza: " + ex.getMessage());
         }
         return -1;
@@ -50,9 +66,16 @@ public class ManejadorFortaleza {
     
     public int BorrarFortaleza(Fortaleza fortaleza){
         try{
+            em.getTransaction().begin();
             em.remove(fortaleza);
+            em.getTransaction().commit();
+            em.close();
             return fortaleza.getId();
         }catch(Exception ex){
+            if(em.isOpen()){
+                em.getTransaction().rollback();
+                em.close();
+            }
             System.out.println("Error al borrar fortaleza: " + ex.getMessage());
         }
         return -1;
@@ -64,11 +87,9 @@ public class ManejadorFortaleza {
     }
     
     public List<Fortaleza> ListarFortalezas(){
-        em.getTransaction();
         List<Fortaleza> fortalezas = new ArrayList<>();
         TypedQuery<Fortaleza> query = em.createQuery("SELECT f FROM Fortaleza f", Fortaleza.class);
         fortalezas = query.getResultList();
-        em.close();
         return fortalezas;
     }
 }

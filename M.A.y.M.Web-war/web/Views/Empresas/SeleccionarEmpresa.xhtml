@@ -23,10 +23,9 @@
                 <h:message for="inputUsuario"/>
             </h:panelGroup>
             
-            <h:inputText id="nombreEmpresa" value="#{ingresoUsuario.nombreEmpresa}" >                
-            </h:inputText>
-            
-            <h:commandButton action="#{ingresoUsuario.CrearBaseDatos(ingresoUsuario.nombreEmpresa)}" value="Crear Empresa" ></h:commandButton>
+            <h:inputText id="nombreEmpresa" value="#{ingresoUsuario.nombreEmpresa}" />
+
+            <h:commandButton action="#{ingresoUsuario.CrearBaseDatos()}" value="Crear Empresa" />
             
         </h:form>
     </h:body>

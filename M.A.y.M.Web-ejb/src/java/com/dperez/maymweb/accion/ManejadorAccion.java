@@ -24,15 +24,26 @@ import javax.persistence.EntityManager;
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class ManejadorAccion {
-    private EntityManager em;
+    private static EntityManager em;
     
-    public ManejadorAccion(){ em = ConexionDB.getInstancia().getEntityManager("maym_example");}
+    public ManejadorAccion(){}
+    
+    public ManejadorAccion(String NombreBaseDatos){
+        em = ConexionDB.getInstancia().getEntityManager(NombreBaseDatos);
+    }
     
     public int CrearAccion(Accion accion){
         try{
+            em.getTransaction().begin();
             em.persist(accion);
+            em.getTransaction().commit();
+            em.close();
             return accion.getId();
         }catch(Exception ex){
+            if(em.isOpen()){
+                em.getTransaction().rollback();
+                em.close();
+            }
             System.out.println("Error al crear accion: " + ex.getMessage());
         }
         return -1;
@@ -40,9 +51,16 @@ public class ManejadorAccion {
     
     public int ActualizarAccion(Accion accion){
         try{
+            em.getTransaction().begin();
             em.merge(accion);
+            em.getTransaction().commit();
+            em.close();
             return accion.getId();
         }catch(Exception ex){
+            if(em.isOpen()){
+                em.getTransaction().rollback();
+                em.close();
+            }
             System.out.println("Error al actualizar accion: " + ex.getMessage());
         }
         return -1;
@@ -50,9 +68,16 @@ public class ManejadorAccion {
     
     public int BorrarAccion(Accion accion){
         try{
+            em.getTransaction().begin();
             em.remove(accion);
+            em.getTransaction().commit();
+            em.close();
             return accion.getId();
         }catch(Exception ex){
+            if(em.isOpen()){
+                em.getTransaction().rollback();
+                em.close();
+            }
             System.out.println("Error al borrar accion: " + ex.getMessage());
         }
         return -1;

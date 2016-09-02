@@ -28,15 +28,21 @@ import javax.persistence.EntityManager;
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class ManejadorMedida{
-  private EntityManager em;
-  
-    public ManejadorMedida(){em =  ConexionDB.getInstancia().getEntityManager("maym_example");};
+    private static EntityManager em;
+    
+    public ManejadorMedida(){}
+    
+    public ManejadorMedida(String NombreBaseDatos){em =  ConexionDB.getInstancia().getEntityManager(NombreBaseDatos);};
     
     public int CrearMedida(Medida medida){
         try{
             em.persist(medida);
             return medida.getId();
         }catch(Exception ex){
+            if(em.isOpen()){
+                em.getTransaction().rollback();
+                em.close();
+            }
             System.out.println("Error al crear medida: " + ex.getMessage());
         }
         return -1;
@@ -47,6 +53,10 @@ public class ManejadorMedida{
             em.merge(medida);
             return medida.getId();
         }catch(Exception ex){
+            if(em.isOpen()){
+                em.getTransaction().rollback();
+                em.close();
+            }
             System.out.println("Error al actualizar medida: " + ex.getMessage());
         }
         return -1;
@@ -57,6 +67,10 @@ public class ManejadorMedida{
             em.remove(medida);
             return medida.getId();
         }catch(Exception ex){
+            if(em.isOpen()){
+                em.getTransaction().rollback();
+                em.close();
+            }
             System.out.println("Error al borrar medida: " + ex.getMessage());
         }
         return -1;
@@ -68,16 +82,14 @@ public class ManejadorMedida{
     }
     
     public List<Medida> ListarMedidas(){
-        em.getTransaction();
         List<Medida> medidas = new ArrayList<>();
         TypedQuery<Medida> query = em.createQuery("SELECT m FROM Medida m", Medida.class);
         medidas = query.getResultList();
-        em.close();
         return medidas;
     }
     
     /*
-        Medidas
+    Medidas
     */
     
     public MedidaCorrectiva GetMedidaCorrectiva(int IdMedidaCorrectiva){

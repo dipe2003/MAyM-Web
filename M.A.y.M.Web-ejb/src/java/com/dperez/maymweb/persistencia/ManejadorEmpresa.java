@@ -1,19 +1,18 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package com.dperez.maymweb.persistencia;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 /**
@@ -23,12 +22,12 @@ import javax.persistence.TypedQuery;
 @Named
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class ManejadorEmpresa {
-//    @PersistenceContext(unitName = "MAYM_WEB_EMPRESAS_PU")
-    private EntityManager em;
-
+public class ManejadorEmpresa  implements Serializable{
+    private static EntityManager em;
     
-    public void setNombreBaseDatos(String NombreBaseDatos){
+    public ManejadorEmpresa(){}
+    
+    public ManejadorEmpresa(String NombreBaseDatos){
         em = ConexionDB.getInstancia().getEntityManager(NombreBaseDatos);
     }
     
@@ -40,8 +39,10 @@ public class ManejadorEmpresa {
             em.close();
             return empresa.getId();
         }catch(Exception ex){
-            em.getTransaction().rollback();
-            em.close();
+            if(em.isOpen()){
+                em.getTransaction().rollback();
+                em.close();
+            }
             System.out.println("Error al crear empresa: " + ex.getMessage());
         }
         return -1;
@@ -49,9 +50,16 @@ public class ManejadorEmpresa {
     
     public int ActualizarEmpresa(Empresa empresa){
         try{
+            em.getTransaction().begin();
             em.merge(empresa);
+            em.getTransaction().commit();
+            em.close();
             return empresa.getId();
         }catch(Exception ex){
+            if(em.isOpen()){
+                em.getTransaction().rollback();
+                em.close();
+            }
             System.out.println("Error al actualizar empresa: " + ex.getMessage());
         }
         return -1;
@@ -59,9 +67,16 @@ public class ManejadorEmpresa {
     
     public int BorrarEmpresa(Empresa empresa){
         try{
+            em.getTransaction().begin();
             em.remove(empresa);
+            em.getTransaction().commit();
+            em.close();
             return empresa.getId();
         }catch(Exception ex){
+            if(em.isOpen()){
+                em.getTransaction().rollback();
+                em.close();
+            }
             System.out.println("Error al borrar empresa: " + ex.getMessage());
         }
         return -1;

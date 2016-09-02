@@ -34,8 +34,13 @@ public class ConexionDB {
     
     private ConexionDB(){}
     
-    public int ExisteBaseDatos(String NombreBaseDatos){
-        int res = -1;
+    /**
+     * Compruba la existencia de una base de datos con el nombre especificado.
+     * @param NombreBaseDatos
+     * @return Retorna <b>False</b> si no existe. Retorna <b>True</b> si existe.
+     */
+    public boolean ExisteBaseDatos(String NombreBaseDatos){
+        boolean res = false;
         try{
             Class.forName(DRIVER).newInstance();
         }catch(ClassNotFoundException | InstantiationException | IllegalAccessException e) {
@@ -45,13 +50,19 @@ public class ConexionDB {
         try {
             conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "1234");
             Statement s = conexion.createStatement();
-            res = s.executeUpdate("SELECT * FROM "+ NombreBaseDatos);
+            res = s.execute("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '"+ NombreBaseDatos +"'");
         }catch(SQLException e){
             System.out.println("Error CONNECTION: " + e.getMessage());
         }
         return res;
     }
     
+    /**
+     * Crea la base de dartos con el nombre especificado.
+     * Se comprueba la existencia de una base de datos con el mismo nombre antes de crearla.
+     * @param NombreBaseDatos
+     * @return Retorna -1 si no se pudo crear. Retorna 1 si se creo.
+     */
     public int CrearBaseDatos(String NombreBaseDatos){
         int res = -1;
         try{
@@ -63,7 +74,9 @@ public class ConexionDB {
         try {
             conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "1234");
             Statement s = conexion.createStatement();
-            res = s.executeUpdate("CREATE DATABASE IF NOT EXISTS "+ NombreBaseDatos);
+            if(!ExisteBaseDatos(NombreBaseDatos)){
+                res = s.executeUpdate("CREATE DATABASE IF NOT EXISTS "+ NombreBaseDatos);
+            }
         }catch(SQLException e){
             System.out.println("Error CONNECTION: " + e.getMessage());
         }
@@ -76,9 +89,10 @@ public class ConexionDB {
         properties.put("javax.persistence.jdbc.url","jdbc:mysql://localhost:3306/" + NombreBaseDatos);
         properties.put("javax.persistence.jdbc.user", "root");
         properties.put("javax.persistence.jdbc.password", "1234");
-        properties.put("javax.persistence.schema-generation.database.action", "drop-and-create");     
+        properties.put("javax.persistence.schema-generation.database.action", "drop-and-create");
         properties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-      
+        properties.put("hibernate.ejb.entitymanager_factory_name", "emf_"+NombreBaseDatos);
+        
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("MAYM-Web-Datos", properties);
         EntityManager entitymanager = emf.createEntityManager( );
         return entitymanager;

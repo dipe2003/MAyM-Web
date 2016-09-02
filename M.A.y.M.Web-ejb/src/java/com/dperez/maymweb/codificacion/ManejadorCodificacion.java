@@ -24,15 +24,24 @@ import javax.persistence.EntityManager;
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class ManejadorCodificacion {
-    private EntityManager em;
+    private static EntityManager em;
     
-    public ManejadorCodificacion(){ em = ConexionDB.getInstancia().getEntityManager("maym_example");}
+    public ManejadorCodificacion(){}
+    
+    public ManejadorCodificacion(String NombreBaseDatos){ em = ConexionDB.getInstancia().getEntityManager(NombreBaseDatos);}
     
     public int CrearCodificacion(Codificacion codificacion){
         try{
+            em.getTransaction().begin();
             em.persist(codificacion);
+            em.getTransaction().commit();
+            em.close();
             return codificacion.getId();
         }catch(Exception ex){
+            if(em.isOpen()){
+                em.getTransaction().rollback();
+                em.close();
+            }
             System.out.println("Error al crear codificacion: " + ex.getMessage());
         }
         return -1;
@@ -40,9 +49,16 @@ public class ManejadorCodificacion {
     
     public int ActualizarCodificacion(Codificacion codificacion){
         try{
+            em.getTransaction().begin();
             em.merge(codificacion);
+            em.getTransaction().commit();
+            em.close();
             return codificacion.getId();
         }catch(Exception ex){
+            if(em.isOpen()){
+                em.getTransaction().rollback();
+                em.close();
+            }
             System.out.println("Error al actualizar codificacion: " + ex.getMessage());
         }
         return -1;
@@ -50,9 +66,16 @@ public class ManejadorCodificacion {
     
     public int BorrarCodificacion(Codificacion codificacion){
         try{
+            em.getTransaction().begin();
             em.remove(codificacion);
+            em.getTransaction().commit();
+            em.close();
             return codificacion.getId();
         }catch(Exception ex){
+            if(em.isOpen()){
+                em.getTransaction().rollback();
+                em.close();
+            }
             System.out.println("Error al borrar codificacion: " + ex.getMessage());
         }
         return -1;

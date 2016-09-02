@@ -24,15 +24,24 @@ import javax.persistence.EntityManager;
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class ManejadorDeteccion {
-    private EntityManager em;
+    private static EntityManager em;
     
-    public ManejadorDeteccion(){ em = ConexionDB.getInstancia().getEntityManager("maym_example");}
+    public ManejadorDeteccion(){}
+    
+    public ManejadorDeteccion(String NombreBaseDatos){ em = ConexionDB.getInstancia().getEntityManager(NombreBaseDatos);}
     
     public int CrearDeteccion(Deteccion deteccion){
         try{
+            em.getTransaction().begin();
             em.persist(deteccion);
+            em.getTransaction().commit();
+            em.close();
             return deteccion.getId();
         }catch(Exception ex){
+            if(em.isOpen()){
+                em.getTransaction().rollback();
+                em.close();
+            }
             System.out.println("Error al crear deteccion: " + ex.getMessage());
         }
         return -1;
@@ -40,9 +49,16 @@ public class ManejadorDeteccion {
     
     public int ActualizarDeteccion(Deteccion deteccion){
         try{
+            em.getTransaction().begin();
             em.merge(deteccion);
+            em.getTransaction().commit();
+            em.close();
             return deteccion.getId();
         }catch(Exception ex){
+            if(em.isOpen()){
+                em.getTransaction().rollback();
+                em.close();
+            }
             System.out.println("Error al actualizar deteccion: " + ex.getMessage());
         }
         return -1;
@@ -50,9 +66,16 @@ public class ManejadorDeteccion {
     
     public int BorrarDeteccion(Deteccion deteccion){
         try{
+            em.getTransaction().begin();
             em.remove(deteccion);
+            em.getTransaction().commit();
+            em.close();
             return deteccion.getId();
         }catch(Exception ex){
+            if(em.isOpen()){
+                em.getTransaction().rollback();
+                em.close();
+            }
             System.out.println("Error al borrar deteccion: " + ex.getMessage());
         }
         return -1;

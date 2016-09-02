@@ -24,8 +24,11 @@ import javax.persistence.EntityManager;
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class ManejadorProducto {
-    private EntityManager em;
-    public ManejadorProducto(){ em = ConexionDB.getInstancia().getEntityManager("maym_example");}
+    private static EntityManager em;
+    
+    public ManejadorProducto(){}
+    
+    public ManejadorProducto(String NombreBaseDatos){ em = ConexionDB.getInstancia().getEntityManager(NombreBaseDatos);}
     
     public int CrearProducto(Producto producto){
         try{
@@ -34,8 +37,10 @@ public class ManejadorProducto {
             em.close();
             return producto.getId();
         }catch(Exception ex){
-            em.getTransaction().rollback();
-            em.close();
+            if(em.isOpen()){
+                em.getTransaction().rollback();
+                em.close();
+            }
             System.out.println("Error al crear producto: " + ex.getMessage());
         }
         return -1;
@@ -48,8 +53,10 @@ public class ManejadorProducto {
             em.close();
             return producto.getId();
         }catch(Exception ex){
-            em.getTransaction().rollback();
-            em.close();
+            if(em.isOpen()){
+                em.getTransaction().rollback();
+                em.close();
+            }
             System.out.println("Error al actualizar producto: " + ex.getMessage());
         }
         return -1;
@@ -62,26 +69,24 @@ public class ManejadorProducto {
             em.close();
             return producto.getId();
         }catch(Exception ex){
-            em.getTransaction().rollback();
-            em.close();
+            if(em.isOpen()){
+                em.getTransaction().rollback();
+                em.close();
+            }
             System.out.println("Error al borrar producto: " + ex.getMessage());
         }
         return -1;
     }
     
     public Producto GetProducto(int IdProducto){
-        em.getTransaction();
         Producto producto = em.find(Producto.class, IdProducto);
-        em.close();
         return producto;
     }
     
     public List<Producto> ListarProductos(){
-        em.getTransaction();
         List<Producto> productos = new ArrayList<>();
         TypedQuery<Producto> query = em.createQuery("SELECT p FROM Producto p", Producto.class);
         productos = query.getResultList();
-        em.close();
         return productos;
     }
 }
