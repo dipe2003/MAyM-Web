@@ -6,7 +6,6 @@
 package com.dperez.maym.web.empresa;
 
 import com.dperez.maymweb.persistencia.ControladorAdministrador;
-import com.dperez.maymweb.persistencia.ManejadorEmpresa;
 import com.dperez.maymweb.usuario.ControladorUsuario;
 import java.io.IOException;
 import java.io.Serializable;
@@ -24,10 +23,8 @@ import javax.inject.Named;
 @Named
 @ViewScoped
 public class IngresoUsuario implements Serializable {
-    @Inject
-    private ManejadorEmpresa mEmp;
-    @Inject
-    private ControladorUsuario cUsr ;
+//    @Inject
+//    private ControladorUsuario cUsr ;
     @Inject
     private ControladorAdministrador cAdmin;
     
@@ -56,10 +53,10 @@ public class IngresoUsuario implements Serializable {
         String nombreEmpresa = res[0];
         String nombreUsuario = res[1];
         if(cAdmin.ExisteEmpresa(nombreEmpresa)){
-            if(cUsr.ExisteUsuario(nombreUsuario)){
-                FacesContext.getCurrentInstance().addMessage("frmIngreso:inputUsuario", new FacesMessage("Existe"));
-                FacesContext.getCurrentInstance().renderResponse();
-            }
+//            if(cUsr.ExisteUsuario(nombreUsuario)){
+//                FacesContext.getCurrentInstance().addMessage("frmIngreso:inputUsuario", new FacesMessage("Existe"));
+//                FacesContext.getCurrentInstance().renderResponse();
+//            }
         }else{
             FacesContext.getCurrentInstance().addMessage("frmIngreso:inputUsuario", new FacesMessage("No Existe"));
             FacesContext.getCurrentInstance().renderResponse();

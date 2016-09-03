@@ -19,13 +19,16 @@
             <input type="text"></input>
             <input type="password"></input>
             
+            <br/>
+            
+            <h:inputText id="nombreEmpresa" value="#{ingresoUsuario.nombreEmpresa}" />            
+        
+
+            <h:commandButton action="#{ingresoUsuario.CrearBaseDatos()}" value="Crear Empresa" />
+            
             <h:panelGroup id="mensaje">
                 <h:message for="inputUsuario"/>
             </h:panelGroup>
-            
-            <h:inputText id="nombreEmpresa" value="#{ingresoUsuario.nombreEmpresa}" />
-
-            <h:commandButton action="#{ingresoUsuario.CrearBaseDatos()}" value="Crear Empresa" />
             
         </h:form>
     </h:body>

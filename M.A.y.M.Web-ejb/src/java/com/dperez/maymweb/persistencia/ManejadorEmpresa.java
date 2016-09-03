@@ -8,10 +8,6 @@ package com.dperez.maymweb.persistencia;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
-import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
@@ -19,9 +15,7 @@ import javax.persistence.TypedQuery;
  *
  * @author Diego
  */
-@Named
-@Stateless
-@TransactionManagement(TransactionManagementType.CONTAINER)
+
 public class ManejadorEmpresa  implements Serializable{
     private static EntityManager em;
     

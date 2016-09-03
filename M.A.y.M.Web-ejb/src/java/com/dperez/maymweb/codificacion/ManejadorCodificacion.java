@@ -8,10 +8,6 @@ package com.dperez.maymweb.codificacion;
 import com.dperez.maymweb.persistencia.ConexionDB;
 import java.util.ArrayList;
 import java.util.List;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
-import javax.inject.Named;
 import javax.persistence.TypedQuery;
 
 import javax.persistence.EntityManager;
@@ -20,9 +16,7 @@ import javax.persistence.EntityManager;
  *
  * @author Diego
  */
-@Named
-@Stateless
-@TransactionManagement(TransactionManagementType.CONTAINER)
+
 public class ManejadorCodificacion {
     private static EntityManager em;
     

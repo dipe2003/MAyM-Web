@@ -5,10 +5,10 @@
  */
 package com.dperez.maymweb.usuario;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 import javax.inject.Named;
 
 /**
@@ -17,12 +17,9 @@ import javax.inject.Named;
  */
 @Named
 @Stateless
-public class ControladorUsuario {
-    @Inject
-    private ManejadorUsuario mUsuario;
-    public ControladorUsuario(){
-//        mUsuario = new ManejadorUsuario();
-    }
+public class ControladorUsuario implements Serializable{
+
+    private static ManejadorUsuario mUsuario;
     
     public Usuario GetUsuarioEmpresa(int IdEmpresa){
         List<Usuario> usuarios = mUsuario.ListarUsuarios();

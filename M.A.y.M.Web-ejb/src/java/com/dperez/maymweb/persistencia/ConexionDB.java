@@ -7,6 +7,7 @@ package com.dperez.maymweb.persistencia;
 
 import java.sql.DriverManager;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
@@ -14,6 +15,7 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+
 /**
  *
  * @author dperez
@@ -50,7 +52,8 @@ public class ConexionDB {
         try {
             conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "1234");
             Statement s = conexion.createStatement();
-            res = s.execute("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '"+ NombreBaseDatos +"'");
+            ResultSet resultado = s.executeQuery("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '" + NombreBaseDatos +"';" );
+            if(resultado.first()) res = true;
         }catch(SQLException e){
             System.out.println("Error CONNECTION: " + e.getMessage());
         }
