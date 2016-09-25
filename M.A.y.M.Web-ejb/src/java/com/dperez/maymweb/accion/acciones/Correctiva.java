@@ -17,6 +17,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
@@ -26,13 +27,13 @@ import javax.persistence.OneToMany;
  */
 @Entity
 public class Correctiva extends Accion implements Serializable {
-    @OneToMany(mappedBy = "AccionCorrectivaMedidaCorrectiva")
+    @OneToMany(mappedBy = "AccionCorrectivaMedidaCorrectiva", cascade = CascadeType.REMOVE)
     private List<MedidaCorrectiva> MedidasCorrectivas;
-    @OneToMany(mappedBy = "AccionCorrectivaMedidaPreventiva")
+    @OneToMany(mappedBy = "AccionCorrectivaMedidaPreventiva", cascade = CascadeType.REMOVE)
     private List<MedidaPreventiva> MedidasPreventivas;
     private EnumTipoDesvio Tipo;
     
-    @OneToMany(mappedBy = "AccionCorrectivaConProductoAfectado")
+    @OneToMany(mappedBy = "AccionCorrectivaConProductoAfectado", cascade = CascadeType.REMOVE)
     private List<Producto> ProductosAfectados;
     
     // Constructores
