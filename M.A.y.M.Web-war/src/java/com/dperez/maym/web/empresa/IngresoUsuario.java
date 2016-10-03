@@ -29,20 +29,18 @@ public class IngresoUsuario implements Serializable {
     private ControladorAdministrador cAdmin;
     
     private String UsuarioSeleccionado;
-    private String NombreEmpresa;
+    private String PasswordUsuario;
     
+    
+    //  Getters
     public String getUsuarioSeleccionado() {return UsuarioSeleccionado;}
-
-    public String getNombreEmpresa() {
-        return NombreEmpresa;
-    }
+    public void setPasswordUsuario(String PasswordUsuario) {this.PasswordUsuario = PasswordUsuario;}    
     
+    //  Setters
     public void setUsuarioSeleccionado(String UsuarioSeleccionado) {this.UsuarioSeleccionado = UsuarioSeleccionado;}
-
-    public void setNombreEmpresa(String NombreEmpresa) {
-        this.NombreEmpresa = NombreEmpresa;
-    }
+    public String getPasswordUsuario() {return PasswordUsuario;}
     
+    //  Metodos
     public void ingresar() throws IOException{
         String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
         FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");
@@ -63,16 +61,16 @@ public class IngresoUsuario implements Serializable {
         }
     }
     
-    public void CrearBaseDatos(){
-        int res = cAdmin.CrearBaseDeDatos(NombreEmpresa);
-        if(res>0){
-            FacesContext.getCurrentInstance().addMessage("frmIngreso:inputUsuario", new FacesMessage("Base de Datos y Empresa Creadas"));
-            FacesContext.getCurrentInstance().renderResponse();
-        }
-        if(res==-1){
-            FacesContext.getCurrentInstance().addMessage("frmIngreso:inputUsuario", new FacesMessage("No Creadas"));
-            FacesContext.getCurrentInstance().renderResponse();
-        }
-    }
+//    public void CrearBaseDatos(){
+//        int res = cAdmin.CrearBaseDeDatos(NombreEmpresa);
+//        if(res>0){
+//            FacesContext.getCurrentInstance().addMessage("frmIngreso:inputUsuario", new FacesMessage("Base de Datos y Empresa Creadas"));
+//            FacesContext.getCurrentInstance().renderResponse();
+//        }
+//        if(res==-1){
+//            FacesContext.getCurrentInstance().addMessage("frmIngreso:inputUsuario", new FacesMessage("No Creadas"));
+//            FacesContext.getCurrentInstance().renderResponse();
+//        }
+//    }
     
 }

@@ -15,7 +15,7 @@ public class FabricaFacadePermiso {
     private static FabricaFacadePermiso Instancia;
     private FabricaFacadePermiso(){}
     
-    public static FabricaFacadePermiso FabricaFacadePermiso(){
+    public static FabricaFacadePermiso getInstancia(){
         if(Instancia == null) Instancia = new FabricaFacadePermiso();
         return Instancia;
     }
