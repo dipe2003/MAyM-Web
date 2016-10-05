@@ -5,6 +5,7 @@
 */
 package com.dperez.maymweb.facades;
 
+import com.dperez.maymweb.controlador.configuracion.ControladorConfiguracion;
 import com.dperez.maymweb.controlador.registro.ControladorEdicionRegistro;
 import com.dperez.maymweb.usuario.Credencial;
 import com.dperez.maymweb.usuario.permiso.EnumPermiso;
@@ -13,17 +14,21 @@ import com.dperez.maymweb.usuario.permiso.EnumPermiso;
  *
  * @author Diego
  */
-public abstract class FacadeMain {
+public class FacadeMain {
     private final ControladorEdicionRegistro cSeg;
+    private final ControladorConfiguracion cConfig;
     
     private String NombreBaseDatosEmpresa;
     
     
     //  Constructores
-    public FacadeMain(){this.cSeg = new ControladorEdicionRegistro();
+    public FacadeMain(){
+        this.cSeg = new ControladorEdicionRegistro();
+        this.cConfig = new ControladorConfiguracion();
     }
     public FacadeMain(String NombreEmpresa){
         this.cSeg = new ControladorEdicionRegistro();
+        this.cConfig = new ControladorConfiguracion();
         this.NombreBaseDatosEmpresa = NombreEmpresa;
     }
     
@@ -70,6 +75,15 @@ public abstract class FacadeMain {
      */
     public Credencial CambiarCredencialUsuario(int IdUsuario, String OldPassword, String NewPassword){
         return cSeg.CambiarCredencialUsuario(IdUsuario, OldPassword, NewPassword);
+    }
+    
+    /**
+     * Comprueba si existe el usuario con el correo electronico especificado.
+     * @param NicknameUsuario
+     * @return 
+     */
+    public boolean ExisteUsuario(String NicknameUsuario){
+        return cConfig.ExisteUsuario(NicknameUsuario);
     }
     
 }

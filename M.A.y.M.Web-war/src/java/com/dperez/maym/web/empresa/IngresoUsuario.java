@@ -5,8 +5,8 @@
 */
 package com.dperez.maym.web.empresa;
 
+import com.dperez.maymweb.facades.FacadeMain;
 import com.dperez.maymweb.persistencia.ControladorAdministrador;
-import com.dperez.maymweb.usuario.ControladorUsuario;
 import java.io.IOException;
 import java.io.Serializable;
 import javax.faces.application.FacesMessage;
@@ -23,8 +23,8 @@ import javax.inject.Named;
 @Named
 @ViewScoped
 public class IngresoUsuario implements Serializable {
-//    @Inject
-//    private ControladorUsuario cUsr ;
+   
+    private FacadeMain facadeMain ;
     @Inject
     private ControladorAdministrador cAdmin;
     
@@ -49,14 +49,14 @@ public class IngresoUsuario implements Serializable {
     public void ComprobarUsuario(String EmpresaUsuario){
         String[] res = EmpresaUsuario.split("-");
         String nombreEmpresa = res[0];
-        String nombreUsuario = res[1];
+        String nickname = res[1];
         if(cAdmin.ExisteEmpresa(nombreEmpresa)){
-//            if(cUsr.ExisteUsuario(nombreUsuario)){
-//                FacesContext.getCurrentInstance().addMessage("frmIngreso:inputUsuario", new FacesMessage("Existe"));
-//                FacesContext.getCurrentInstance().renderResponse();
-//            }
+            if(cAdmin.ExisteUsuario(nickname)){
+                FacesContext.getCurrentInstance().addMessage("frmLogin:inputUsuario", new FacesMessage("Existe"));
+                FacesContext.getCurrentInstance().renderResponse();
+            }
         }else{
-            FacesContext.getCurrentInstance().addMessage("frmIngreso:inputUsuario", new FacesMessage("No Existe"));
+            FacesContext.getCurrentInstance().addMessage("frmLogin:inputUsuario", new FacesMessage("No Existe"));
             FacesContext.getCurrentInstance().renderResponse();
         }
     }

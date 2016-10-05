@@ -18,6 +18,7 @@ import com.dperez.maymweb.usuario.Credencial;
 import com.dperez.maymweb.usuario.ManejadorUsuario;
 import com.dperez.maymweb.usuario.Usuario;
 import com.dperez.maymweb.usuario.permiso.EnumPermiso;
+import java.util.List;
 import javax.inject.Inject;
 
 /**
@@ -105,6 +106,7 @@ public class ControladorConfiguracion {
     
     /**
      * Crea un nuevo usuario y lo persiste en la base de datos. El usuario creado no recibe alertas.
+     * @param Nickname
      * @param NombreUsuario
      * @param ApellidoUsuario
      * @param CorreoUsuario
@@ -112,8 +114,8 @@ public class ControladorConfiguracion {
      * @param PermisoUsuario
      * @return null si no se creo.
      */
-    public Usuario NuevoUsuario(String NombreUsuario, String ApellidoUsuario, String CorreoUsuario, String Password, EnumPermiso PermisoUsuario){
-        Usuario usuario = new Usuario(NombreUsuario, ApellidoUsuario, CorreoUsuario, false, PermisoUsuario);
+    public Usuario NuevoUsuario(String Nickname, String NombreUsuario, String ApellidoUsuario, String CorreoUsuario, String Password, EnumPermiso PermisoUsuario){
+        Usuario usuario = new Usuario(Nickname, NombreUsuario, ApellidoUsuario, CorreoUsuario, false, PermisoUsuario);
         String[] pass = cSeg.getPasswordSeguro(Password);
         // pass[0] corresponde al password | pass[1] corresponde al salt
         Credencial credencial = new Credencial(pass[1], pass[0]);
@@ -124,5 +126,21 @@ public class ControladorConfiguracion {
         }else{
             return null;
         }
+    }
+    
+    /**
+     * Comprueba si existe el usuario con el correo electronico especificado.
+     * @param Nickname
+     * @return 
+     */
+    public boolean ExisteUsuario(String Nickname){
+        List<Usuario> usuarios = mUsuario.ListarUsuarios();
+        boolean existe = false;
+        for(Usuario usr:usuarios){
+            if(usr.getNickName().equalsIgnoreCase(Nickname)){
+                existe = true;
+            }
+        }
+        return existe;
     }
 }

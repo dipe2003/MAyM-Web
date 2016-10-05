@@ -21,8 +21,8 @@ import com.dperez.maymweb.usuario.permiso.EnumPermiso;
  */
 public class FacadeAdministrador extends FacadeMain {
     
-    private ControladorConfiguracion cConfig = new ControladorConfiguracion();
-    private ControladorEdicionRegistro cEdicion = new ControladorEdicionRegistro();
+    private final ControladorConfiguracion cConfig = new ControladorConfiguracion();
+    private final ControladorEdicionRegistro cEdicion = new ControladorEdicionRegistro();
     
     public Area NuevaArea(String NombreArea, String CorreoArea){
         return cConfig.NuevaArea(NombreArea, CorreoArea);
@@ -58,6 +58,7 @@ public class FacadeAdministrador extends FacadeMain {
     
     /**
      * Crea un nuevo usuario y lo persiste en la base de datos. El usuario creado no recibe alertas.
+     * @param Nickname
      * @param NombreUsuario
      * @param ApellidoUsuario
      * @param CorreoUsuario
@@ -65,8 +66,17 @@ public class FacadeAdministrador extends FacadeMain {
      * @param PermisoUsuario
      * @return null si no se creo.
      */
-    public Usuario NuevoUsuario(String NombreUsuario, String ApellidoUsuario, String CorreoUsuario, String Password, EnumPermiso PermisoUsuario){
-        return cConfig.NuevoUsuario(NombreUsuario, ApellidoUsuario, CorreoUsuario, Password, PermisoUsuario);
+    public Usuario NuevoUsuario(String Nickname, String NombreUsuario, String ApellidoUsuario, String CorreoUsuario, String Password, EnumPermiso PermisoUsuario){
+        return cConfig.NuevoUsuario(Nickname, NombreUsuario, ApellidoUsuario, CorreoUsuario, Password, PermisoUsuario);
+    }
+    
+     /**
+     * Comprueba si existe el usuario con el correo electronico especificado.
+     * @param correoElectronico
+     * @return 
+     */
+    public boolean ExisteUsuario(String correoElectronico){
+        return cConfig.ExisteUsuario(correoElectronico);
     }
      
 }

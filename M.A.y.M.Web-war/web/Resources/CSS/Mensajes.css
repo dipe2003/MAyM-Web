@@ -1,0 +1,27 @@
+.info, .warning, .error {
+    font-family:RobotoBold; 
+    font-size:13px;
+    border: 1px solid;
+    margin: 10px 0px;
+    padding:8px 8px 8px 50px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    display: flex
+    /*width: 100%;*/
+}
+.info {
+    color: #00529B;
+    background-color: #BDE5F8;
+    background-image: url(../Images/info.png);
+}
+
+.warning {
+    color: #9F6000;
+    background-color: #FEEFB3;
+    background-image: url(../Images/Attention.png);
+}
+.error {
+    color: #D8000C;
+    background-color: #FFBABA;
+    background-image: url(../Images/Error.png);
+}
