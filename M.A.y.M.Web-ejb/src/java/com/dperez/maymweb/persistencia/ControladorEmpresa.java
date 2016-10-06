@@ -17,7 +17,7 @@ import javax.inject.Named;
  */
 @Named
 @Stateless
-public class ControladorAdministrador implements Serializable{
+public class ControladorEmpresa implements Serializable{
 
     private static ManejadorEmpresa mEmp;
     
