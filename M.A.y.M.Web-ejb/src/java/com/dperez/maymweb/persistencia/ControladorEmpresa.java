@@ -75,4 +75,5 @@ public class ControladorEmpresa implements Serializable{
         boolean existe = conn.ExisteBaseDatos(empresa.getNombreEmpresa());
         return existe;
     }
+    
 }

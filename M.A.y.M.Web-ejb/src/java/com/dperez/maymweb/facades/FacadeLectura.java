@@ -9,6 +9,6 @@ package com.dperez.maymweb.facades;
  *
  * @author Diego
  */
-public class FacadeLectura extends FacadeMain {
+public class FacadeLectura  {
     
 }

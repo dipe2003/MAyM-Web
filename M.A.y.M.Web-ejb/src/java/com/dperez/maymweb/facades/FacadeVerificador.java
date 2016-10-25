@@ -20,10 +20,16 @@ import java.util.List;
  * Contiene los metodos exclusivos para el permiso de verificador ademas de el ingreso de datos.
  * @author Diego
  */
-public class FacadeVerificador extends FacadeMain{
+public class FacadeVerificador {
     
-    private ControladorRegistro cReg = new ControladorRegistro();
-    private ControladorEdicionRegistro cEdicion = new ControladorEdicionRegistro();
+    private final ControladorRegistro cReg;
+    private final ControladorEdicionRegistro cEdicion;
+    
+    //  Constructores
+    public FacadeVerificador(String NombreBaseDatos){
+        this.cReg = new ControladorRegistro(NombreBaseDatos);
+        this.cEdicion = new ControladorEdicionRegistro(NombreBaseDatos);
+    }
     
     /**
      * Setea la comprobacion de implementacion de la accion, cambia el estado segun corresponda y actualiza la base de datos.

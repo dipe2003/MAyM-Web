@@ -18,8 +18,13 @@ import java.util.List;
  *
  * @author Diego
  */
-public class FacadeDatos extends FacadeMain {
-    private ControladorRegistro cReg = new ControladorRegistro();
+public class FacadeDatos {
+    private final ControladorRegistro cReg;
+        
+    //  Constructores
+    public FacadeDatos(String NombreBaseDatos){
+        this.cReg = new ControladorRegistro(NombreBaseDatos);
+    }
     
     /**
      * Crea una nueva accion en estado pendiente y la persiste en la base de datos.

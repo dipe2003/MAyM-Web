@@ -12,15 +12,19 @@ import com.dperez.maymweb.estado.EnumEstado;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.inject.Inject;
 
 /**
  *
  * @author Diego
  */
 public class ControladorVistaRegistros {
-    @Inject
-    private ManejadorAccion mAccion;
+
+    private final ManejadorAccion mAccion;
+    
+    //  Constructores
+    public ControladorVistaRegistros(String NombreBaseDatos){
+        this.mAccion = new ManejadorAccion(NombreBaseDatos);
+    }
     
     /**
      * Devuelve una lista con todas las acciones registradas que se encuentran en el estado especificado.

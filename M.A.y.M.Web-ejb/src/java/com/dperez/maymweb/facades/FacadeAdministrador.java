@@ -19,10 +19,15 @@ import com.dperez.maymweb.usuario.permiso.EnumPermiso;
  * No genera/edita registros.
  * @author Diego
  */
-public class FacadeAdministrador extends FacadeMain {
+public class FacadeAdministrador  {    
+    private final ControladorConfiguracion cConfig;
+    private final ControladorEdicionRegistro cEdicion;
     
-    private final ControladorConfiguracion cConfig = new ControladorConfiguracion();
-    private final ControladorEdicionRegistro cEdicion = new ControladorEdicionRegistro();
+    //  Constructores
+    public FacadeAdministrador(String NombreBaseDatos){
+        this.cConfig = new ControladorConfiguracion(NombreBaseDatos);
+        this.cEdicion = new ControladorEdicionRegistro(NombreBaseDatos);
+    }
     
     public Area NuevaArea(String NombreArea, String CorreoArea){
         return cConfig.NuevaArea(NombreArea, CorreoArea);
@@ -71,12 +76,12 @@ public class FacadeAdministrador extends FacadeMain {
     }
     
      /**
-     * Comprueba si existe el usuario con el correo electronico especificado.
-     * @param correoElectronico
+     * Comprueba si existe el usuario con el nickname especificado.
+     * @param nikckname
      * @return 
      */
-    public boolean ExisteUsuario(String correoElectronico){
-        return cConfig.ExisteUsuario(correoElectronico);
+    public boolean ExisteUsuario(String nikckname){
+        return cConfig.ExisteUsuario(nikckname);
     }
      
 }

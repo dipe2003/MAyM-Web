@@ -6,7 +6,6 @@
 package com.dperez.maymweb.facades;
 
 import com.dperez.maymweb.controlador.configuracion.ControladorConfiguracion;
-import com.dperez.maymweb.controlador.registro.ControladorEdicionRegistro;
 import com.dperez.maymweb.usuario.Credencial;
 import com.dperez.maymweb.usuario.permiso.EnumPermiso;
 
@@ -15,28 +14,12 @@ import com.dperez.maymweb.usuario.permiso.EnumPermiso;
  * @author Diego
  */
 public class FacadeMain {
-    private final ControladorEdicionRegistro cSeg;
-    private final ControladorConfiguracion cConfig;
-    
-    private String NombreBaseDatosEmpresa;
-    
-    
+    private final ControladorConfiguracion cConfig;    
+
     //  Constructores
-    public FacadeMain(){
-        this.cSeg = new ControladorEdicionRegistro();
-        this.cConfig = new ControladorConfiguracion();
+    public FacadeMain(String NombreBaseDatos){
+        this.cConfig = new ControladorConfiguracion(NombreBaseDatos);        
     }
-    public FacadeMain(String NombreEmpresa){
-        this.cSeg = new ControladorEdicionRegistro();
-        this.cConfig = new ControladorConfiguracion();
-        this.NombreBaseDatosEmpresa = NombreEmpresa;
-    }
-    
-    //  Getter
-    public String getNombreBaseDatosEmpresa() {return NombreBaseDatosEmpresa;}
-    
-    //  Setter
-    public void setNombreBaseDatosEmpresa(String NombreBaseDatosEmpresa) {this.NombreBaseDatosEmpresa = NombreBaseDatosEmpresa;}
     
     // Metodos genericos independientes del nivel de permiso del usuario.
     /**
@@ -52,7 +35,7 @@ public class FacadeMain {
      */
     public int CambiarDatosUsuario(int IdUsuario, String NombreUsuario, String ApellidoUsuario, String CorreoUsuario,
             EnumPermiso PermisoUsuario, boolean RecibeAlertas){
-        return cSeg.CambiarDatosUsuario(IdUsuario, NombreUsuario, ApellidoUsuario, CorreoUsuario, EnumPermiso.VERIFICADOR, RecibeAlertas);
+        return cConfig.CambiarDatosUsuario(IdUsuario, NombreUsuario, ApellidoUsuario, CorreoUsuario, EnumPermiso.VERIFICADOR, RecibeAlertas);
     }
     
     /**
@@ -62,7 +45,7 @@ public class FacadeMain {
      * @return True si es valido | Fales si no es valido.
      */
     public boolean ComprobarValidezPassword(int IdUsuario, String Password){
-        return cSeg.ComprobarValidezPassword(IdUsuario, Password);
+        return cConfig.ComprobarValidezPassword(IdUsuario, Password);
     }
     
     /**
@@ -74,7 +57,7 @@ public class FacadeMain {
      * @return Retorna la credencial del usuario actualizada. Retorna Null si no se pudo actualizar.
      */
     public Credencial CambiarCredencialUsuario(int IdUsuario, String OldPassword, String NewPassword){
-        return cSeg.CambiarCredencialUsuario(IdUsuario, OldPassword, NewPassword);
+        return cConfig.CambiarCredencialUsuario(IdUsuario, OldPassword, NewPassword);
     }
     
     /**

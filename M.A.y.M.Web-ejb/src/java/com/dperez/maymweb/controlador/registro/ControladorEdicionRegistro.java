@@ -25,16 +25,10 @@ import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.codificacion.ManejadorCodificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.ManejadorDeteccion;
-import com.dperez.maymweb.deteccion.ManejadorTipoDeteccion;
-import com.dperez.maymweb.deteccion.TipoDeteccion;
 import com.dperez.maymweb.estado.EnumEstado;
 import com.dperez.maymweb.producto.ManejadorProducto;
 import com.dperez.maymweb.producto.Producto;
 import com.dperez.maymweb.usuario.ControladorSeguridad;
-import com.dperez.maymweb.usuario.Credencial;
-import com.dperez.maymweb.usuario.ManejadorUsuario;
-import com.dperez.maymweb.usuario.Usuario;
-import com.dperez.maymweb.usuario.permiso.EnumPermiso;
 import java.util.Date;
 import javax.inject.Inject;
 
@@ -43,27 +37,26 @@ import javax.inject.Inject;
  * @author Diego
  */
 public class ControladorEdicionRegistro {
-    @Inject
-    private ManejadorAccion mAccion;
-    @Inject
-    private ManejadorArea mArea;
-    @Inject
-    private ManejadorDeteccion mDeteccion;
-    @Inject
-    private ManejadorTipoDeteccion mTipoDeteccion;
-    @Inject
-    private ManejadorCodificacion mCodificacion;
-    @Inject
-    private ManejadorUsuario mUsuario;
+    private final ManejadorAccion mAccion;
+    private final ManejadorArea mArea;
+    private final ManejadorDeteccion mDeteccion;
+    private final ManejadorCodificacion mCodificacion;
+    private final ManejadorProducto mProducto;
+    private final ManejadorAdjunto mAdjunto;
+    private final ManejadorMedida mMedida;
     @Inject
     private ControladorSeguridad cSeg;
-    @Inject
-    private ManejadorProducto mProducto;
-    @Inject
-    private ManejadorAdjunto mAdjunto;
-    @Inject
-    private ManejadorMedida mMedida;
     
+    //  Constructores
+    public ControladorEdicionRegistro(String NombreBaseDatos){
+        this.mAccion = new ManejadorAccion(NombreBaseDatos);
+        this.mArea = new ManejadorArea(NombreBaseDatos);
+        this.mDeteccion = new ManejadorDeteccion(NombreBaseDatos);
+        this.mCodificacion = new ManejadorCodificacion(NombreBaseDatos);
+        this.mProducto = new ManejadorProducto(NombreBaseDatos);
+        this.mAdjunto = new ManejadorAdjunto(NombreBaseDatos);
+        this.mMedida = new ManejadorMedida(NombreBaseDatos);
+    }
     
     /*
     ACCION
@@ -239,136 +232,6 @@ public class ControladorEdicionRegistro {
             mMedida.BorrarMedida(medida);
         }
         return res;
-    }
-    
-    /*
-    USUARIO
-    */
-    
-    /**
-     * Setea los datos del usuario y actualiza la base de datos. No se realiza comprobacion de password.
-     * Para cambiar password utilizar metodo cambiarPasswordUsuario().
-     * @param IdUsuario
-     * @param NombreUsuario
-     * @param ApellidoUsuario
-     * @param CorreoUsuario
-     * @param PermisoUsuario
-     * @param RecibeAlertas
-     * @return -1 si no se actualizo.
-     */
-    public int CambiarDatosUsuario(int IdUsuario, String NombreUsuario, String ApellidoUsuario, String CorreoUsuario,
-            EnumPermiso PermisoUsuario, boolean RecibeAlertas){
-        Usuario usuario = mUsuario.GetUsuario(IdUsuario);
-        usuario.setNombre(NombreUsuario);
-        usuario.setApellido(ApellidoUsuario);
-        usuario.setCorreo(CorreoUsuario);
-        usuario.setPermisoUsuario(PermisoUsuario);
-        usuario.setRecibeAlertas(RecibeAlertas);
-        return mUsuario.ActualizarUsuario(usuario);
-    }
-    
-    /**
-     * Comprueba la validez del password ingresado con el correspondiente del usuario en la base de datos.
-     * @param IdUsuario
-     * @param Password
-     * @return True si es valido | Fales si no es valido.
-     */
-    public boolean ComprobarValidezPassword(int IdUsuario, String Password){
-        Usuario usuario = mUsuario.GetUsuario(IdUsuario);
-        String PasswordStored = cSeg.getPasswordSeguro(Password, usuario.getCredencialUsuario().getPasswordKey());
-        return PasswordStored.equals(Password);
-    }
-    
-    /**
-     * Cambia la credencial (password y password key) del usuario especificado y actualiza la base de datos.
-     * Si el password ingresado no coincide con el guardado no se actualiza.
-     * @param IdUsuario
-     * @param OldPassword: password del usuario guardado en la base de datos.
-     * @param NewPassword: nuevo password para el usuario.
-     * @return Retorna la credencial del usuario actualizada. Retorna Null si no se pudo actualizar.
-     */
-    public Credencial CambiarCredencialUsuario(int IdUsuario, String OldPassword, String NewPassword){
-        int res = -1;
-        Usuario usuario = mUsuario.GetUsuario(IdUsuario);
-        String PasswordStored = cSeg.getPasswordSeguro(OldPassword, usuario.getCredencialUsuario().getPasswordKey());
-        if(PasswordStored.equals(OldPassword)){
-            String[] nuevaCredencial = cSeg.getPasswordSeguro(NewPassword);
-            usuario.getCredencialUsuario().setPassword(nuevaCredencial[1]);
-            usuario.getCredencialUsuario().setPasswordKey(nuevaCredencial[0]);
-            res = mUsuario.ActualizarUsuario(usuario);
-        }
-        if(res!=-1){
-            return usuario.getCredencialUsuario();
-        }else{
-            return null;
-        }
-    }
-    
-    /*
-    AREA
-    */
-    
-    /**
-     * Cambia los valores de area y actualiza la base de datos.
-     * @param IdArea
-     * @param NombreArea
-     * @param CorreoArea
-     * @return Retorna -1 si no se actualizo. Retorna el IdArea si se actualizo.
-     */
-    public int EditarArea(int IdArea, String NombreArea, String CorreoArea){
-        Area area = mArea.GetArea(IdArea);
-        area.setNombre(NombreArea);
-        area.setCorreo(CorreoArea);
-        return mArea.ActualizarArea(area);
-    }
-    
-    /*
-    CODIFICACION
-    */
-    
-    /**
-     * Cambia los valores de Codificacion y actualiza la base de datos.
-     * @param IdCodificacion
-     * @param NombreCodificacion
-     * @return Retorna -1 si no se actualizo. Retorna el IdCodificacion si se actualizo.
-     */
-    public int EditarCodificacion(int IdCodificacion, String NombreCodificacion){
-        Codificacion codificacion = mCodificacion.GetCodificacion(IdCodificacion);
-        codificacion.setNombre(NombreCodificacion);
-        return mCodificacion.ActualizarCodificacion(codificacion);
-    }
-    
-    /*
-    DETECCION Y TIPO DE DETECCION
-    */
-    
-    /**
-     * Cambia los valores de Deteccion y actualiza la base de datos.
-     * @param IdDteccion
-     * @param NombreDeteccion
-     * @param IdTipoDeteccion
-     * @return Retorna -1 si no se actualizo. Retorna el IdDeteccion si se actualizo.
-     */
-    public int EditarDeteccion(int IdDteccion, String NombreDeteccion, int IdTipoDeteccion){
-        Deteccion deteccion = mDeteccion.GetDeteccion(IdDteccion);
-        // comprobar si se cambia el tipo de deteccion para 'ahorrar' llamada a la base de datos.
-        if(deteccion.getTipo().getId()!= IdTipoDeteccion){
-            deteccion.setTipo(mTipoDeteccion.GetTipoDeteccion(IdTipoDeteccion));
-        }
-        deteccion.setNombre(NombreDeteccion);
-        return mDeteccion.ActualizarDeteccion(deteccion);
-    }
-    
-    /**
-     * Cambia los valores de TipoDeteccin y actualiza la base de datos.
-     * @param IdTipoDeteccion
-     * @param NombreTipoDeteccion
-     * @return Retorna -1 si no se actualizo. Retorna el IdTipoDeteccion si se actualizo.
-     */
-    public int EditarTipoDeteccion(int IdTipoDeteccion, String NombreTipoDeteccion){
-        TipoDeteccion tipo = mTipoDeteccion.GetTipoDeteccion(IdTipoDeteccion);
-        tipo.setNombre(NombreTipoDeteccion);
-        return mTipoDeteccion.ActualizarTipoDeteccion(tipo);
     }
     
     /*

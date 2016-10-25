@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package com.dperez.maymweb.usuario;
 
 import java.io.Serializable;
@@ -18,34 +18,36 @@ import javax.inject.Named;
 @Named
 @Stateless
 public class ControladorUsuario implements Serializable{
-
+    
     private static ManejadorUsuario mUsuario;
     
-    public Usuario GetUsuarioEmpresa(int IdEmpresa){
-        List<Usuario> usuarios = mUsuario.ListarUsuarios();
-        for(Usuario usr: usuarios){
-            if(usr.getEmpresaUsuario().getId()==IdEmpresa)
-                return  usr;
-        }
-        return null;
+    public Usuario GetUsuario(int IdUsuario){
+        return mUsuario.GetUsuario(IdUsuario);
     }
     
-    public List<Usuario> GetUsuariosEmpresa(int IdEmpresa){
+    /**
+     * Retorna el usuario con el nickname especificado.
+     * @param Nickname
+     * @return Retorna el usuario. Si no se encuetra retorna Null.
+     */
+    public Usuario GetUsuario(String Nickname){
         List<Usuario> usuarios = mUsuario.ListarUsuarios();
-        Iterator it = usuarios.iterator();
-        while(it.hasNext()){
-            Usuario usr = (Usuario)it.next();
-            if(usr.getEmpresaUsuario().getId()!=IdEmpresa)
-                it.remove();
+        Usuario usr = null;
+        for(Usuario usuario: usuarios){
+            if(usuario.getNickName().equalsIgnoreCase(Nickname)) usr = usuario;
         }
-        return usuarios;
+        return usr;
     }
     
-    public boolean ExisteUsuario(String NombreUsuario){
+    public List<Usuario> GetUsuariosEmpresa(){
+        return mUsuario.ListarUsuarios();
+    }
+    
+    public boolean ExisteUsuario(String NicknameUsuario){
         boolean existe = false;
         List<Usuario> usuarios = mUsuario.ListarUsuarios();
         for(Usuario usr: usuarios){
-            if(usr.getNombre().equalsIgnoreCase(NombreUsuario))
+            if(usr.getNickName().equalsIgnoreCase(NicknameUsuario))
                 existe = true;
         }
         return existe;

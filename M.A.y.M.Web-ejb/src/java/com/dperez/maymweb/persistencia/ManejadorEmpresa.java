@@ -18,8 +18,7 @@ import javax.persistence.TypedQuery;
 
 public class ManejadorEmpresa  implements Serializable{
     private static EntityManager em;
-    
-    public ManejadorEmpresa(){}
+
     
     public ManejadorEmpresa(String NombreBaseDatos){
         em = ConexionDB.getInstancia().getEntityManager(NombreBaseDatos);
