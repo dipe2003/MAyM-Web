@@ -81,8 +81,8 @@ public class CorrectivaTest {
     public void testGetTipo() {
         System.out.println("getTipo");
         Correctiva instance = new Correctiva();
-        instance.setTipo(EnumTipoDesvio.NO_CONFORMIDAD);
-        EnumTipoDesvio expResult = EnumTipoDesvio.NO_CONFORMIDAD;
+        instance.setTipo(EnumTipoDesvio.NC_MENOR_OBS);
+        EnumTipoDesvio expResult = EnumTipoDesvio.NC_MENOR_OBS;
         EnumTipoDesvio result = instance.getTipo();
         assertEquals(expResult, result);
     }
@@ -131,7 +131,7 @@ public class CorrectivaTest {
     @Test
     public void testSetTipo() {
         System.out.println("setTipo");
-        EnumTipoDesvio Tipo = EnumTipoDesvio.NO_CONFORMIDAD;
+        EnumTipoDesvio Tipo = EnumTipoDesvio.NC_MENOR_OBS;
         Correctiva instance = new Correctiva();
         instance.setTipo(Tipo);
     }

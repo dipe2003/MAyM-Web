@@ -10,8 +10,9 @@ package com.dperez.maymweb.accion.acciones;
  * @author dperez
  */
 public enum EnumTipoDesvio {
-    NO_CONFORMIDAD ("No Conformidad"),
-    OBSERVACION ("Observacion");
+    NC_CRITICA ("No Conformidad Critica"),
+    NC_MAYOR ("No Conformidad Mayor"),
+    NC_MENOR_OBS ("No Conformidad Menor/Observacion");
     
     private final String Descripcion;  
      

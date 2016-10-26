@@ -5,11 +5,10 @@
 */
 package com.dperez.maym.web.empresa;
 
+import com.dperez.maymweb.facades.FacadeBDAdministrador;
 import com.dperez.maymweb.facades.FacadeMain;
-import com.dperez.maymweb.persistencia.ControladorEmpresa;
 import com.dperez.maymweb.persistencia.Empresa;
 import com.dperez.maymweb.persistencia.administrador.Administrador;
-import com.dperez.maymweb.persistencia.administrador.ControladorAdministrador;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
@@ -31,9 +30,7 @@ public class IngresoUsuario implements Serializable {
     
     private FacadeMain facadeMain ;
     @Inject
-    private ControladorEmpresa cEmpresa;
-    @Inject
-    private ControladorAdministrador cAdmin;
+    private FacadeBDAdministrador fAdmin;
     
     private String UsuarioSeleccionado;
     private String PasswordUsuario;
@@ -59,22 +56,17 @@ public class IngresoUsuario implements Serializable {
     @PostConstruct
     public void init(){
         this.ListaEmpresa = new HashMap<>();
-        List<Empresa> empresas = cEmpresa.ListarEmpresasRegistradas();
+        List<Empresa> empresas = fAdmin.ListarEmpresasRegistradas();
         for(Empresa empresa: empresas){
             ListaEmpresa.put(empresa.getNombreEmpresa(), empresa);
         }
     }
     
-    //  Metodos
-    public void ingresar() throws IOException{
-        String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-        FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");
-    }
-    
+    //  Metodos    
     public void Ingresar() throws IOException{
         String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
         if(!EsAdministrador){
-            if(cEmpresa.ExisteEmpresa(EmpresaSeleccionada)){
+            if(fAdmin.ExisteEmpresa(EmpresaSeleccionada)){
                 if(facadeMain.ExisteUsuario(UsuarioSeleccionado)){
                     FacesContext.getCurrentInstance().addMessage("frmLogin:inputUsuario", new FacesMessage("Existe"));
                     FacesContext.getCurrentInstance().renderResponse();
@@ -85,7 +77,7 @@ public class IngresoUsuario implements Serializable {
                 FacesContext.getCurrentInstance().renderResponse();
             }
         }else{
-            Administrador admin = cAdmin.GetAdministrador(UsuarioSeleccionado, PasswordUsuario);
+            Administrador admin = fAdmin.GetBDAdministrador(UsuarioSeleccionado, PasswordUsuario);
             if(admin!=null){
                 HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();                
                 request.getSession().setAttribute("Usuario", admin);
@@ -98,7 +90,7 @@ public class IngresoUsuario implements Serializable {
     }
     
 //    public void CrearBaseDatos(){
-//        int res = cEmpresa.CrearBaseDeDatos(NombreEmpresa);
+//        int res = fAdmin.CrearBaseDeDatos(NombreEmpresa);
 //        if(res>0){
 //            FacesContext.getCurrentInstance().addMessage("frmIngreso:inputUsuario", new FacesMessage("Base de Datos y Empresa Creadas"));
 //            FacesContext.getCurrentInstance().renderResponse();
