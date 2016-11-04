@@ -5,6 +5,7 @@
  */
 package com.dperez.maymweb.persistencia;
 
+import com.dperez.maymweb.empresa.Empresa;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

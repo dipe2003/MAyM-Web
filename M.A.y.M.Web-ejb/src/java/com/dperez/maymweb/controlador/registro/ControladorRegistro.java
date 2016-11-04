@@ -33,28 +33,28 @@ import com.dperez.maymweb.usuario.Usuario;
 import java.security.InvalidParameterException;
 import java.util.Date;
 import java.util.List;
+import javax.inject.Inject;
 
 /**
  *
  * @author Diego
  */
 public class ControladorRegistro {
-    private final ManejadorAccion mAccion;
-    private final ManejadorArea mArea;
-    private final ManejadorCodificacion mCodificacion;
-    private final ManejadorDeteccion mDeteccion;
-    private final ManejadorMedida mMedida;
-    private final ManejadorUsuario mUsuario;
+    @Inject
+    private ManejadorAccion mAccion;
+    @Inject
+    private ManejadorArea mArea;
+    @Inject
+    private ManejadorCodificacion mCodificacion;
+    @Inject
+    private ManejadorDeteccion mDeteccion;
+    @Inject
+    private ManejadorMedida mMedida;
+    @Inject
+    private ManejadorUsuario mUsuario;
     
     //  Constructores
-    public ControladorRegistro(String NombreBaseDatos){
-       this.mAccion = new ManejadorAccion(NombreBaseDatos);
-       this.mArea = new ManejadorArea(NombreBaseDatos);
-       this.mCodificacion = new ManejadorCodificacion(NombreBaseDatos);
-       this.mDeteccion = new ManejadorDeteccion(NombreBaseDatos);
-       this.mMedida = new ManejadorMedida(NombreBaseDatos);
-       this.mUsuario = new ManejadorUsuario(NombreBaseDatos);
-    }
+    public ControladorRegistro(){}
     
     /**
      * Crea una nueva accion en estado pendiente y la persiste en la base de datos.

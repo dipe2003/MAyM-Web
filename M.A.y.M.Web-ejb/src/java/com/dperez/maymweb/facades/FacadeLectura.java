@@ -5,10 +5,26 @@
  */
 package com.dperez.maymweb.facades;
 
+import com.dperez.maymweb.controlador.registro.ControladorVistaRegistros;
+import com.dperez.maymweb.empresa.Empresa;
+import com.dperez.maymweb.usuario.Usuario;
+import java.util.List;
+import javax.inject.Inject;
+
 /**
  *
  * @author Diego
  */
 public class FacadeLectura  {
     
+    @Inject
+    private ControladorVistaRegistros cVista;
+    
+    public Usuario GetUsuario(int IdUsuario){
+       return cVista.GetUsuario(IdUsuario);
+    }
+    
+    public List<Empresa> ListaEmpresasRegistradas(){
+        return cVista.ListarEmpresasRegistradas();
+    }
 }

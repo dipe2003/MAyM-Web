@@ -3,12 +3,16 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
 */
-package com.dperez.maymweb.persistencia;
+package com.dperez.maymweb.empresa;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
+import javax.inject.Named;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 /**
@@ -16,26 +20,18 @@ import javax.persistence.TypedQuery;
  * @author Diego
  */
 
-public class ManejadorEmpresa  implements Serializable{
-    private static EntityManager em;
-
-    
-    public ManejadorEmpresa(String NombreBaseDatos){
-        em = ConexionDB.getInstancia().getEntityManager(NombreBaseDatos);
-    }
+@Named
+@Stateless
+@TransactionManagement(TransactionManagementType.CONTAINER)
+public class ManejadorEmpresa  {
+    @PersistenceContext(unitName = "MAYM-Web-Datos")
+    private EntityManager em;
     
     public int CrearEmpresa(Empresa empresa){
         try{
-            em.getTransaction().begin();
             em.persist(empresa);
-            em.getTransaction().commit();
-            em.close();
             return empresa.getId();
         }catch(Exception ex){
-            if(em.isOpen()){
-                em.getTransaction().rollback();
-                em.close();
-            }
             System.out.println("Error al crear empresa: " + ex.getMessage());
         }
         return -1;
@@ -43,16 +39,9 @@ public class ManejadorEmpresa  implements Serializable{
     
     public int ActualizarEmpresa(Empresa empresa){
         try{
-            em.getTransaction().begin();
             em.merge(empresa);
-            em.getTransaction().commit();
-            em.close();
             return empresa.getId();
         }catch(Exception ex){
-            if(em.isOpen()){
-                em.getTransaction().rollback();
-                em.close();
-            }
             System.out.println("Error al actualizar empresa: " + ex.getMessage());
         }
         return -1;
@@ -60,16 +49,9 @@ public class ManejadorEmpresa  implements Serializable{
     
     public int BorrarEmpresa(Empresa empresa){
         try{
-            em.getTransaction().begin();
             em.remove(empresa);
-            em.getTransaction().commit();
-            em.close();
             return empresa.getId();
         }catch(Exception ex){
-            if(em.isOpen()){
-                em.getTransaction().rollback();
-                em.close();
-            }
             System.out.println("Error al borrar empresa: " + ex.getMessage());
         }
         return -1;
@@ -80,7 +62,7 @@ public class ManejadorEmpresa  implements Serializable{
         return empresa;
     }
     
-    public List<Empresa> ListarEmpresas(){
+    public List<Empresa> ListarEmpresasRegistradas(){
         List<Empresa> empresas = new ArrayList<>();
         TypedQuery<Empresa> query = em.createQuery("SELECT e FROM Empresa e", Empresa.class);
         empresas = query.getResultList();

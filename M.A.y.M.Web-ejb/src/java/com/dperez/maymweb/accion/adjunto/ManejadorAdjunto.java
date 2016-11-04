@@ -5,37 +5,35 @@
 */
 package com.dperez.maymweb.accion.adjunto;
 
-import com.dperez.maymweb.persistencia.ConexionDB;
 import java.util.ArrayList;
 import java.util.List;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
+import javax.inject.Named;
 import javax.persistence.TypedQuery;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  *
  * @author Diego
  */
-
+@Named
+@Stateless
+@TransactionManagement(TransactionManagementType.CONTAINER)
 public class ManejadorAdjunto {
-    private static EntityManager em;
+    @PersistenceContext(unitName = "MAYM-Web-Datos")
+    private EntityManager em;
     
     public ManejadorAdjunto(){}
     
-    public ManejadorAdjunto(String NombreBaseDatos){ em = ConexionDB.getInstancia().getEntityManager(NombreBaseDatos);};
-    
     public int CrearAdjunto(Adjunto adjunto){
         try{
-            em.getTransaction().begin();
             em.persist(adjunto);
-            em.getTransaction().commit();
-            em.close();
             return adjunto.getId();
         }catch(Exception ex){
-            if(em.isOpen()){
-                em.getTransaction().rollback();
-                em.close();
-            }
             System.out.println("Error al crear adjunto: " + ex.getMessage());
         }
         return -1;
@@ -43,16 +41,9 @@ public class ManejadorAdjunto {
     
     public int ActualizarAdjunto(Adjunto adjunto){
         try{
-            em.getTransaction().begin();
             em.merge(adjunto);
-            em.getTransaction().commit();
-            em.close();
             return adjunto.getId();
         }catch(Exception ex){
-            if(em.isOpen()){
-                em.getTransaction().rollback();
-                em.close();
-            }
             System.out.println("Error al actualizar adjunto: " + ex.getMessage());
         }
         return -1;
@@ -60,16 +51,9 @@ public class ManejadorAdjunto {
     
     public int BorrarAdjunto(Adjunto adjunto){
         try{
-            em.getTransaction().begin();
             em.remove(adjunto);
-            em.getTransaction().commit();
-            em.close();
             return adjunto.getId();
         }catch(Exception ex){
-            if(em.isOpen()){
-                em.getTransaction().rollback();
-                em.close();
-            }
             System.out.println("Error al borrar adjunto: " + ex.getMessage());
         }
         return -1;

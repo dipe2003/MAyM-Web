@@ -11,22 +11,27 @@ import com.dperez.maymweb.controlador.configuracion.ControladorConfiguracion;
 import com.dperez.maymweb.controlador.registro.ControladorEdicionRegistro;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.TipoDeteccion;
+import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.usuario.Usuario;
 import com.dperez.maymweb.usuario.permiso.EnumPermiso;
+import javax.inject.Inject;
 
 /**
  * Facade con los medotos para el manejo solo de las clases que seran parte de la configuracion de la aplicacion.
  * No genera/edita registros.
  * @author Diego
  */
-public class FacadeAdministrador  {    
-    private final ControladorConfiguracion cConfig;
-    private final ControladorEdicionRegistro cEdicion;
+public class FacadeAdministrador  {
+    @Inject
+    private ControladorConfiguracion cConfig;
+    @Inject
+    private ControladorEdicionRegistro cEdicion;
     
     //  Constructores
-    public FacadeAdministrador(String NombreBaseDatos){
-        this.cConfig = new ControladorConfiguracion(NombreBaseDatos);
-        this.cEdicion = new ControladorEdicionRegistro(NombreBaseDatos);
+    public FacadeAdministrador(){}
+    
+    public Empresa NuevaEmpresa(int Id, String NombreEmpresa, String DireccionEmpresa, String TelefonoEmpresa, String CorreoEmpresa){
+        return cConfig.NuevaEmpresa(Id, NombreEmpresa, DireccionEmpresa, TelefonoEmpresa, CorreoEmpresa);
     }
     
     public Area NuevaArea(String NombreArea, String CorreoArea){
@@ -75,13 +80,22 @@ public class FacadeAdministrador  {
         return cConfig.NuevoUsuario(Nickname, NombreUsuario, ApellidoUsuario, CorreoUsuario, Password, PermisoUsuario);
     }
     
-     /**
-     * Comprueba si existe el usuario con el nickname especificado.
-     * @param nikckname
+    /**
+     * Comprueba si existe el usuario con el id especificado.
+     * @param IdUsuario
+     * @return
+     */
+    public boolean ExisteUsuario(int IdUsuario){
+        return cConfig.ExisteUsuario(IdUsuario);
+    }
+    
+    /**
+     * Comprueba si existe la empresa especificada por su nombre;
+     * @param IdEmpresa
      * @return 
      */
-    public boolean ExisteUsuario(String nikckname){
-        return cConfig.ExisteUsuario(nikckname);
+    public boolean ExisteEmpresa(int IdEmpresa){
+        return cConfig.ExisteEmpresa(IdEmpresa);
     }
-     
+    
 }

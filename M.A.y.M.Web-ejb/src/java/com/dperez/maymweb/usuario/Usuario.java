@@ -7,7 +7,7 @@ package com.dperez.maymweb.usuario;
 
 import com.dperez.maymweb.accion.Comprobacion;
 import com.dperez.maymweb.accion.medida.Medida;
-import com.dperez.maymweb.persistencia.Empresa;
+import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.usuario.permiso.EnumPermiso;
 import javax.persistence.Id;
 import java.io.Serializable;

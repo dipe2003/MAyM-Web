@@ -8,23 +8,30 @@ package com.dperez.maymweb.controlador.registro;
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.ManejadorAccion;
 import com.dperez.maymweb.accion.acciones.EnumAccion;
+import com.dperez.maymweb.empresa.Empresa;
+import com.dperez.maymweb.empresa.ManejadorEmpresa;
 import com.dperez.maymweb.estado.EnumEstado;
+import com.dperez.maymweb.usuario.ManejadorUsuario;
+import com.dperez.maymweb.usuario.Usuario;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import javax.inject.Inject;
 
 /**
  *
  * @author Diego
  */
 public class ControladorVistaRegistros {
-
-    private final ManejadorAccion mAccion;
+   @Inject
+    private ManejadorAccion mAccion;
+   @Inject
+   private ManejadorUsuario mUsuario;
+   @Inject
+   private ManejadorEmpresa mEmpresa;
     
     //  Constructores
-    public ControladorVistaRegistros(String NombreBaseDatos){
-        this.mAccion = new ManejadorAccion(NombreBaseDatos);
-    }
+    public ControladorVistaRegistros(){}
     
     /**
      * Devuelve una lista con todas las acciones registradas que se encuentran en el estado especificado.
@@ -72,6 +79,38 @@ public class ControladorVistaRegistros {
             }
         }
         return acciones;
+    }
+    
+    /**
+     * Devuelve el usuario especificado por su id
+     * @param IdUsuario
+     * @return Null si no existe el usuario.
+     */
+    public Usuario GetUsuario(int IdUsuario){
+        return mUsuario.GetUsuario(IdUsuario);
+    }
+    
+    /**
+     * Lista todos los usuarios de la empresa seleccionada por id.
+     * @param IdEmpresa
+     * @return 
+     */
+    public List<Usuario> ListarUsuarios(int IdEmpresa){
+        List<Usuario> usuarios = mUsuario.ListarUsuarios();
+        Iterator<Usuario> it = usuarios.iterator();
+        while(it.hasNext()){
+            Usuario usuario = it.next();
+            if(usuario.getEmpresaUsuario().getId()!= IdEmpresa) it.remove();
+        }
+        return usuarios;
+    }
+    
+    /**
+     * Lista todas las empresas registradas.
+     * @return 
+     */
+    public List<Empresa> ListarEmpresasRegistradas(){
+        return mEmpresa.ListarEmpresasRegistradas();
     }
     
 }

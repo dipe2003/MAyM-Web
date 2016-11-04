@@ -5,37 +5,35 @@
 */
 package com.dperez.maymweb.usuario;
 
-import com.dperez.maymweb.persistencia.ConexionDB;
 import java.util.ArrayList;
 import java.util.List;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
+import javax.inject.Named;
 import javax.persistence.TypedQuery;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  *
  * @author Diego
  */
-
+@Named
+@Stateless
+@TransactionManagement(TransactionManagementType.CONTAINER)
 public class ManejadorUsuario {
-    private static EntityManager em;
+    @PersistenceContext(unitName = "MAYM-Web-Datos")
+    private EntityManager em;
     
     public ManejadorUsuario(){}
     
-    public ManejadorUsuario(String NombreBaseDatos){ em = ConexionDB.getInstancia().getEntityManager(NombreBaseDatos);}
-    
     public int CrearUsuario(Usuario usuario){
         try{
-            em.getTransaction().begin();
             em.persist(usuario);
-            em.getTransaction().commit();
-            em.close();
             return usuario.getId();
         }catch(Exception ex){
-            if(em.isOpen()){
-                em.getTransaction().rollback();
-                em.close();
-            }
             System.out.println("Error al crear usuario: " + ex.getMessage());
         }
         return -1;
@@ -43,16 +41,9 @@ public class ManejadorUsuario {
     
     public int ActualizarUsuario(Usuario usuario){
         try{
-            em.getTransaction().begin();
             em.merge(usuario);
-            em.getTransaction().commit();
-            em.close();
             return usuario.getId();
         }catch(Exception ex){
-            if(em.isOpen()){
-                em.getTransaction().rollback();
-                em.close();
-            }
             System.out.println("Error al actualizar usuario: " + ex.getMessage());
         }
         return -1;
@@ -60,16 +51,9 @@ public class ManejadorUsuario {
     
     public int BorrarUsuario(Usuario usuario){
         try{
-            em.getTransaction().begin();
             em.remove(usuario);
-            em.getTransaction().commit();
-            em.close();
             return usuario.getId();
         }catch(Exception ex){
-            if(em.isOpen()){
-                em.getTransaction().rollback();
-                em.close();
-            }
             System.out.println("Error al borrar usuario: " + ex.getMessage());
         }
         return -1;

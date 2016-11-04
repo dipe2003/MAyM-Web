@@ -14,7 +14,7 @@ import com.dperez.maymweb.accion.medida.medidas.ActividadMejora;
 import com.dperez.maymweb.accion.medida.medidas.ActividadPreventiva;
 import com.dperez.maymweb.accion.medida.medidas.MedidaCorrectiva;
 import com.dperez.maymweb.accion.medida.medidas.MedidaPreventiva;
-import com.dperez.maymweb.persistencia.Empresa;
+import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.usuario.permiso.EnumPermiso;
 import java.util.ArrayList;
 import java.util.List;

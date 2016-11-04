@@ -13,6 +13,8 @@ import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.TipoDeteccion;
 import com.dperez.maymweb.deteccion.ManejadorDeteccion;
 import com.dperez.maymweb.deteccion.ManejadorTipoDeteccion;
+import com.dperez.maymweb.empresa.Empresa;
+import com.dperez.maymweb.empresa.ManejadorEmpresa;
 import com.dperez.maymweb.usuario.ControladorSeguridad;
 import com.dperez.maymweb.usuario.Credencial;
 import com.dperez.maymweb.usuario.ManejadorUsuario;
@@ -27,22 +29,23 @@ import javax.inject.Inject;
  * @author Diego
  */
 public class ControladorConfiguracion {
-    private final ManejadorArea mArea;
-    private final ManejadorCodificacion mCodificacion;
-    private final ManejadorDeteccion mDeteccion;
-    private final ManejadorTipoDeteccion mTipoDeteccion;
-    private final ManejadorUsuario mUsuario;
+    @Inject
+    private ManejadorArea mArea;
+    @Inject
+    private ManejadorCodificacion mCodificacion;
+    @Inject
+    private ManejadorDeteccion mDeteccion;
+    @Inject
+    private ManejadorTipoDeteccion mTipoDeteccion;
+    @Inject
+    private ManejadorUsuario mUsuario;
     @Inject
     private ControladorSeguridad cSeg;
+    @Inject
+    private ManejadorEmpresa mEmpresa;
     
     
-    public ControladorConfiguracion(String NombreBaseDatos){
-        this.mArea = new ManejadorArea(NombreBaseDatos);
-        this.mCodificacion = new ManejadorCodificacion(NombreBaseDatos);
-        this.mDeteccion = new ManejadorDeteccion(NombreBaseDatos);
-        this.mTipoDeteccion = new ManejadorTipoDeteccion(NombreBaseDatos);
-        this.mUsuario = new ManejadorUsuario(NombreBaseDatos);
-    }
+    public ControladorConfiguracion(){}
     
     /*
     USUARIO
@@ -73,19 +76,12 @@ public class ControladorConfiguracion {
     }
     
     /**
-     * Comprueba si existe el usuario con el correo electronico especificado.
-     * @param Nickname
+     * Comprueba si existe el usuario con id especificado.
+     * @param idUsuario
      * @return
      */
-    public boolean ExisteUsuario(String Nickname){
-        List<Usuario> usuarios = mUsuario.ListarUsuarios();
-        boolean existe = false;
-        for(Usuario usr:usuarios){
-            if(usr.getNickName().equalsIgnoreCase(Nickname)){
-                existe = true;
-            }
-        }
-        return existe;
+    public boolean ExisteUsuario(int idUsuario){
+        return mUsuario.GetUsuario(idUsuario)!=null;
     }
     
     /**
@@ -272,5 +268,58 @@ public class ControladorConfiguracion {
         TipoDeteccion tipo = mTipoDeteccion.GetTipoDeteccion(IdTipoDeteccion);
         tipo.setNombre(NombreTipoDeteccion);
         return mTipoDeteccion.ActualizarTipoDeteccion(tipo);
+    }
+    
+    /*
+        Empresa
+    */
+    /**
+     * Crea una empresa y la persiste en la base de datos.
+     * @param Id
+     * @param NombreEmpresa
+     * @param DireccionEmpresa
+     * @param TelefonoEmpresa
+     * @param CorreoEmpresa
+     * @return Null si no se creo la empresa.
+     */
+    public Empresa NuevaEmpresa(int Id, String NombreEmpresa, String DireccionEmpresa, String TelefonoEmpresa, String CorreoEmpresa){
+        Empresa empresa = new Empresa(Id, NombreEmpresa, DireccionEmpresa, TelefonoEmpresa, CorreoEmpresa);
+        if(mEmpresa.CrearEmpresa(empresa)!=-1){
+            return empresa;
+        }else{
+            return null;
+        }
+    }
+    
+    /**
+     * Cambia los datos de la empresa y persiste los cambios.
+     * @param Id
+     * @param NombreEmpresa
+     * @param DireccionEmpresa
+     * @param TelefonoEmpresa
+     * @param CorreoEmpresa
+     * @return Retorna -1 si no se actualizo. Retorna el id de la empresa si se actualizo.
+     */
+    public int EditarEmpresa(int Id, String NombreEmpresa, String DireccionEmpresa, String TelefonoEmpresa, String CorreoEmpresa){
+        Empresa empresa = mEmpresa.GetEmpresa(Id);
+        empresa.setId(Id);
+        empresa.setCorreoEmpresa(CorreoEmpresa);
+        empresa.setDireccionEmpresa(DireccionEmpresa);
+        empresa.setNombreEmpresa(NombreEmpresa);
+        empresa.setTelefonoEmpresa(TelefonoEmpresa);
+        if(mEmpresa.ActualizarEmpresa(empresa)!=-1){
+            return empresa.getId();
+        }else{
+            return -1;
+        }
+    }
+    
+    /**
+     * Comprueba la existencia de la empresa 
+     * @param IdEmpresa
+     * @return True si existe. Retorna False si no existe.
+     */
+    public boolean ExisteEmpresa(int IdEmpresa){
+        return mEmpresa.GetEmpresa(IdEmpresa) != null;
     }
 }

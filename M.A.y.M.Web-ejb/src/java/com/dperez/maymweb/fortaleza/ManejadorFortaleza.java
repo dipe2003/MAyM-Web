@@ -5,37 +5,35 @@
 */
 package com.dperez.maymweb.fortaleza;
 
-import com.dperez.maymweb.persistencia.ConexionDB;
 import java.util.ArrayList;
 import java.util.List;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
+import javax.inject.Named;
 import javax.persistence.TypedQuery;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  *
  * @author Diego
  */
-
+@Named
+@Stateless
+@TransactionManagement(TransactionManagementType.CONTAINER)
 public class ManejadorFortaleza {
-    private static EntityManager em;
+    @PersistenceContext(unitName = "MAYM-Web-Datos")
+    private EntityManager em;
     
     public ManejadorFortaleza(){}
     
-    public ManejadorFortaleza(String NombreBaseDatos){em =  ConexionDB.getInstancia().getEntityManager(NombreBaseDatos);}
-    
     public int CrearFortaleza(Fortaleza fortaleza){
         try{
-            em.getTransaction().begin();
             em.persist(fortaleza);
-            em.getTransaction().commit();
-            em.close();
             return fortaleza.getId();
         }catch(Exception ex){
-            if(em.isOpen()){
-                em.getTransaction().rollback();
-                em.close();
-            }
             System.out.println("Error al crear fortaleza: " + ex.getMessage());
         }
         return -1;
@@ -43,16 +41,9 @@ public class ManejadorFortaleza {
     
     public int ActualizarFortaleza(Fortaleza fortaleza){
         try{
-            em.getTransaction().begin();
             em.merge(fortaleza);
-            em.getTransaction().commit();
-            em.close();
             return fortaleza.getId();
         }catch(Exception ex){
-            if(em.isOpen()){
-                em.getTransaction().rollback();
-                em.close();
-            }
             System.out.println("Error al actualizar fortaleza: " + ex.getMessage());
         }
         return -1;
@@ -60,16 +51,9 @@ public class ManejadorFortaleza {
     
     public int BorrarFortaleza(Fortaleza fortaleza){
         try{
-            em.getTransaction().begin();
             em.remove(fortaleza);
-            em.getTransaction().commit();
-            em.close();
             return fortaleza.getId();
         }catch(Exception ex){
-            if(em.isOpen()){
-                em.getTransaction().rollback();
-                em.close();
-            }
             System.out.println("Error al borrar fortaleza: " + ex.getMessage());
         }
         return -1;

@@ -37,26 +37,25 @@ import javax.inject.Inject;
  * @author Diego
  */
 public class ControladorEdicionRegistro {
-    private final ManejadorAccion mAccion;
-    private final ManejadorArea mArea;
-    private final ManejadorDeteccion mDeteccion;
-    private final ManejadorCodificacion mCodificacion;
-    private final ManejadorProducto mProducto;
-    private final ManejadorAdjunto mAdjunto;
-    private final ManejadorMedida mMedida;
+    @Inject
+    private ManejadorAccion mAccion;
+    @Inject
+    private ManejadorArea mArea;
+    @Inject
+    private ManejadorDeteccion mDeteccion;
+    @Inject
+    private ManejadorCodificacion mCodificacion;
+    @Inject
+    private ManejadorProducto mProducto;
+    @Inject
+    private ManejadorAdjunto mAdjunto;
+    @Inject
+    private ManejadorMedida mMedida;
     @Inject
     private ControladorSeguridad cSeg;
     
     //  Constructores
-    public ControladorEdicionRegistro(String NombreBaseDatos){
-        this.mAccion = new ManejadorAccion(NombreBaseDatos);
-        this.mArea = new ManejadorArea(NombreBaseDatos);
-        this.mDeteccion = new ManejadorDeteccion(NombreBaseDatos);
-        this.mCodificacion = new ManejadorCodificacion(NombreBaseDatos);
-        this.mProducto = new ManejadorProducto(NombreBaseDatos);
-        this.mAdjunto = new ManejadorAdjunto(NombreBaseDatos);
-        this.mMedida = new ManejadorMedida(NombreBaseDatos);
-    }
+    public ControladorEdicionRegistro(){}
     
     /*
     ACCION

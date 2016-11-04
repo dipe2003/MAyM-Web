@@ -5,36 +5,35 @@
 */
 package com.dperez.maymweb.producto;
 
-import com.dperez.maymweb.persistencia.ConexionDB;
 import java.util.ArrayList;
 import java.util.List;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
+import javax.inject.Named;
 import javax.persistence.TypedQuery;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  *
  * @author Diego
  */
-
+@Named
+@Stateless
+@TransactionManagement(TransactionManagementType.CONTAINER)
 public class ManejadorProducto {
-    private static EntityManager em;
+    @PersistenceContext(unitName = "MAYM-Web-Datos")
+    private EntityManager em;
     
     public ManejadorProducto(){}
     
-    public ManejadorProducto(String NombreBaseDatos){ em = ConexionDB.getInstancia().getEntityManager(NombreBaseDatos);}
-    
     public int CrearProducto(Producto producto){
         try{
-            em.getTransaction();
             em.persist(producto);
-            em.close();
             return producto.getId();
         }catch(Exception ex){
-            if(em.isOpen()){
-                em.getTransaction().rollback();
-                em.close();
-            }
             System.out.println("Error al crear producto: " + ex.getMessage());
         }
         return -1;
@@ -42,15 +41,9 @@ public class ManejadorProducto {
     
     public int ActualizarProducto(Producto producto){
         try{
-            em.getTransaction();
             em.merge(producto);
-            em.close();
             return producto.getId();
         }catch(Exception ex){
-            if(em.isOpen()){
-                em.getTransaction().rollback();
-                em.close();
-            }
             System.out.println("Error al actualizar producto: " + ex.getMessage());
         }
         return -1;
@@ -58,15 +51,9 @@ public class ManejadorProducto {
     
     public int BorrarProducto(Producto producto){
         try{
-            em.getTransaction();
             em.remove(producto);
-            em.close();
             return producto.getId();
         }catch(Exception ex){
-            if(em.isOpen()){
-                em.getTransaction().rollback();
-                em.close();
-            }
             System.out.println("Error al borrar producto: " + ex.getMessage());
         }
         return -1;

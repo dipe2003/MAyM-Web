@@ -5,37 +5,35 @@
 */
 package com.dperez.maymweb.deteccion;
 
-import com.dperez.maymweb.persistencia.ConexionDB;
 import java.util.ArrayList;
 import java.util.List;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
+import javax.inject.Named;
 import javax.persistence.TypedQuery;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  *
  * @author Diego
  */
-
+@Named
+@Stateless
+@TransactionManagement(TransactionManagementType.CONTAINER)
 public class ManejadorTipoDeteccion {
-    private static EntityManager em;
+    @PersistenceContext(unitName = "MAYM-Web-Datos")
+    private EntityManager em;
     
     public ManejadorTipoDeteccion(){}
     
-    public ManejadorTipoDeteccion(String NombreBaseDatos){ em = ConexionDB.getInstancia().getEntityManager(NombreBaseDatos);}
-    
     public int CrearTipoDeteccion(TipoDeteccion tipoDeteccion){
         try{
-            em.getTransaction().begin();
             em.persist(tipoDeteccion);
-            em.getTransaction().commit();
-            em.close();
             return tipoDeteccion.getId();
         }catch(Exception ex){
-            if(em.isOpen()){
-                em.getTransaction().rollback();
-                em.close();
-            }
             System.out.println("Error al crear tipoDeteccion: " + ex.getMessage());
         }
         return -1;
@@ -43,16 +41,9 @@ public class ManejadorTipoDeteccion {
     
     public int ActualizarTipoDeteccion(TipoDeteccion tipoDeteccion){
         try{
-            em.getTransaction().begin();
             em.merge(tipoDeteccion);
-            em.getTransaction().commit();
-            em.close();
             return tipoDeteccion.getId();
         }catch(Exception ex){
-            if(em.isOpen()){
-                em.getTransaction().rollback();
-                em.close();
-            }
             System.out.println("Error al actualizar tipoDeteccion: " + ex.getMessage());
         }
         return -1;
@@ -60,16 +51,9 @@ public class ManejadorTipoDeteccion {
     
     public int BorrarTipoDeteccion(TipoDeteccion tipoDeteccion){
         try{
-            em.getTransaction().begin();
             em.remove(tipoDeteccion);
-            em.getTransaction().commit();
-            em.close();
             return tipoDeteccion.getId();
         }catch(Exception ex){
-            if(em.isOpen()){
-                em.getTransaction().rollback();
-                em.close();
-            }
             System.out.println("Error al borrar tipoDeteccion: " + ex.getMessage());
         }
         return -1;

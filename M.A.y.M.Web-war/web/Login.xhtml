@@ -16,6 +16,9 @@
                         <label>Usuario:</label>
                     </div>
                     <div>
+                        <h:selectOneListbox id="selectEmpresa" value="#{ingresoUsuario.listaEmpresa}" >
+                            <f:selectItem itemValue="#{ingresoUsuario.listaEmpresa.key}" itemLabel="#{ingresoUsuario.listaEmpresa.value}" />
+                        </h:selectOneListbox>
                         <h:inputText id="inputUsuario" value="#{ingresoUsuario.usuarioSeleccionado}" required="true" requiredMessage="Debe ingresar usuario">
                             <f:passThroughAttribute name="placeholder" value="Empresa-NombreUsuario"/>
                         </h:inputText>

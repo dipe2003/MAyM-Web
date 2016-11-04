@@ -9,34 +9,35 @@ import com.dperez.maymweb.accion.medida.medidas.ActividadMejora;
 import com.dperez.maymweb.accion.medida.medidas.ActividadPreventiva;
 import com.dperez.maymweb.accion.medida.medidas.MedidaCorrectiva;
 import com.dperez.maymweb.accion.medida.medidas.MedidaPreventiva;
-import com.dperez.maymweb.persistencia.ConexionDB;
 import java.util.ArrayList;
 import java.util.List;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
+import javax.inject.Named;
 import javax.persistence.TypedQuery;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  *
  * @author Diego
  */
-
+@Named
+@Stateless
+@TransactionManagement(TransactionManagementType.CONTAINER)
 public class ManejadorMedida{
-    private static EntityManager em;
+    @PersistenceContext(unitName = "MAYM-Web-Datos")
+    private EntityManager em;
     
     public ManejadorMedida(){}
-    
-    public ManejadorMedida(String NombreBaseDatos){em =  ConexionDB.getInstancia().getEntityManager(NombreBaseDatos);};
     
     public int CrearMedida(Medida medida){
         try{
             em.persist(medida);
             return medida.getId();
         }catch(Exception ex){
-            if(em.isOpen()){
-                em.getTransaction().rollback();
-                em.close();
-            }
             System.out.println("Error al crear medida: " + ex.getMessage());
         }
         return -1;
@@ -47,10 +48,6 @@ public class ManejadorMedida{
             em.merge(medida);
             return medida.getId();
         }catch(Exception ex){
-            if(em.isOpen()){
-                em.getTransaction().rollback();
-                em.close();
-            }
             System.out.println("Error al actualizar medida: " + ex.getMessage());
         }
         return -1;
@@ -61,10 +58,6 @@ public class ManejadorMedida{
             em.remove(medida);
             return medida.getId();
         }catch(Exception ex){
-            if(em.isOpen()){
-                em.getTransaction().rollback();
-                em.close();
-            }
             System.out.println("Error al borrar medida: " + ex.getMessage());
         }
         return -1;

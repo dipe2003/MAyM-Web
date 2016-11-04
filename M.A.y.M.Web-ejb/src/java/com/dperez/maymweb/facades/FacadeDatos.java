@@ -13,18 +13,18 @@ import com.dperez.maymweb.controlador.registro.ControladorRegistro;
 import com.dperez.maymweb.producto.Producto;
 import java.util.Date;
 import java.util.List;
+import javax.inject.Inject;
 
 /**
  *
  * @author Diego
  */
 public class FacadeDatos {
-    private final ControladorRegistro cReg;
+       @Inject
+    private ControladorRegistro cReg;
         
     //  Constructores
-    public FacadeDatos(String NombreBaseDatos){
-        this.cReg = new ControladorRegistro(NombreBaseDatos);
-    }
+    public FacadeDatos(){}
     
     /**
      * Crea una nueva accion en estado pendiente y la persiste en la base de datos.

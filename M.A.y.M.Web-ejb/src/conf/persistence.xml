@@ -13,7 +13,6 @@
     <class>com.dperez.maymweb.producto.Producto</class>
     <class>com.dperez.maymweb.usuario.Credencial</class>
     <class>com.dperez.maymweb.usuario.Usuario</class>
-    <class>com.dperez.maymweb.persistencia.Empresa</class>
     <class>com.dperez.maymweb.accion.medida.medidas.ActividadMejora</class>
     <class>com.dperez.maymweb.accion.medida.medidas.ActividadPreventiva</class>
     <class>com.dperez.maymweb.accion.medida.medidas.MedidaCorrectiva</class>
@@ -21,19 +20,11 @@
     <class>com.dperez.maymweb.accion.Comprobacion</class>
     <class>com.dperez.maymweb.deteccion.Deteccion</class>
     <class>com.dperez.maymweb.deteccion.TipoDeteccion</class>
+    <class>com.dperez.maymweb.empresa.Empresa</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
       <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
-    </properties>
-  </persistence-unit>
-  <persistence-unit name="M.A.y.M.Web-BD" transaction-type="JTA">
-    <jta-data-source>java:/datasources/maym_example</jta-data-source>
-    <class>com.dperez.maymweb.persistencia.Empresa</class>
-    <class>com.dperez.maymweb.persistencia.administrador.Administrador</class>
-    <exclude-unlisted-classes>true</exclude-unlisted-classes>
-    <properties>
-      <property name="javax.persistence.schema-generation.database.action" value="create"/>
     </properties>
   </persistence-unit>
 </persistence>

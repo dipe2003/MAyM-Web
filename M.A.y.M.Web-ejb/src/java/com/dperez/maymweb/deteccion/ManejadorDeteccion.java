@@ -5,7 +5,6 @@
 */
 package com.dperez.maymweb.deteccion;
 
-import com.dperez.maymweb.persistencia.ConexionDB;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -15,6 +14,7 @@ import javax.inject.Named;
 import javax.persistence.TypedQuery;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  *
@@ -24,24 +24,16 @@ import javax.persistence.EntityManager;
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class ManejadorDeteccion {
-    private static EntityManager em;
+    @PersistenceContext(unitName = "MAYM-Web-Datos")
+    private EntityManager em;
     
     public ManejadorDeteccion(){}
     
-    public ManejadorDeteccion(String NombreBaseDatos){ em = ConexionDB.getInstancia().getEntityManager(NombreBaseDatos);}
-    
     public int CrearDeteccion(Deteccion deteccion){
         try{
-            em.getTransaction().begin();
             em.persist(deteccion);
-            em.getTransaction().commit();
-            em.close();
             return deteccion.getId();
         }catch(Exception ex){
-            if(em.isOpen()){
-                em.getTransaction().rollback();
-                em.close();
-            }
             System.out.println("Error al crear deteccion: " + ex.getMessage());
         }
         return -1;
@@ -49,16 +41,9 @@ public class ManejadorDeteccion {
     
     public int ActualizarDeteccion(Deteccion deteccion){
         try{
-            em.getTransaction().begin();
             em.merge(deteccion);
-            em.getTransaction().commit();
-            em.close();
             return deteccion.getId();
         }catch(Exception ex){
-            if(em.isOpen()){
-                em.getTransaction().rollback();
-                em.close();
-            }
             System.out.println("Error al actualizar deteccion: " + ex.getMessage());
         }
         return -1;
@@ -66,16 +51,9 @@ public class ManejadorDeteccion {
     
     public int BorrarDeteccion(Deteccion deteccion){
         try{
-            em.getTransaction().begin();
             em.remove(deteccion);
-            em.getTransaction().commit();
-            em.close();
             return deteccion.getId();
         }catch(Exception ex){
-            if(em.isOpen()){
-                em.getTransaction().rollback();
-                em.close();
-            }
             System.out.println("Error al borrar deteccion: " + ex.getMessage());
         }
         return -1;

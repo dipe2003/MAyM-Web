@@ -8,18 +8,18 @@ package com.dperez.maymweb.facades;
 import com.dperez.maymweb.controlador.configuracion.ControladorConfiguracion;
 import com.dperez.maymweb.usuario.Credencial;
 import com.dperez.maymweb.usuario.permiso.EnumPermiso;
+import javax.inject.Inject;
 
 /**
  *
  * @author Diego
  */
 public class FacadeMain {
-    private final ControladorConfiguracion cConfig;    
-
+    @Inject
+    private ControladorConfiguracion cConfig;
+    
     //  Constructores
-    public FacadeMain(String NombreBaseDatos){
-        this.cConfig = new ControladorConfiguracion(NombreBaseDatos);        
-    }
+    public FacadeMain(){}
     
     // Metodos genericos independientes del nivel de permiso del usuario.
     /**
@@ -61,12 +61,22 @@ public class FacadeMain {
     }
     
     /**
-     * Comprueba si existe el usuario con el correo electronico especificado.
-     * @param NicknameUsuario
-     * @return 
+     * Comprueba si existe el usuario con el id especificado.
+     * @param IdUsuario
+     * @return
      */
-    public boolean ExisteUsuario(String NicknameUsuario){
-        return cConfig.ExisteUsuario(NicknameUsuario);
+    public boolean ExisteUsuario(int IdUsuario){
+        return cConfig.ExisteUsuario(IdUsuario);
     }
+    
+    /**
+     * Comprueba si existe la empresa especificada por su nombre;
+     * @param IdEmpresa
+     * @return
+     */
+    public boolean ExisteEmpresa(int IdEmpresa){
+        return cConfig.ExisteEmpresa(IdEmpresa);
+    }
+    
     
 }

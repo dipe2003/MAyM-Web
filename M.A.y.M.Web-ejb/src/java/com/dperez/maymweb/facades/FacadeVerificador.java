@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package com.dperez.maymweb.facades;
 
 import com.dperez.maymweb.accion.Accion;
@@ -15,21 +15,20 @@ import com.dperez.maymweb.controlador.registro.ControladorRegistro;
 import com.dperez.maymweb.producto.Producto;
 import java.util.Date;
 import java.util.List;
+import javax.inject.Inject;
 
 /**
  * Contiene los metodos exclusivos para el permiso de verificador ademas de el ingreso de datos.
  * @author Diego
  */
 public class FacadeVerificador {
-    
-    private final ControladorRegistro cReg;
-    private final ControladorEdicionRegistro cEdicion;
+    @Inject
+    private ControladorRegistro cReg;
+    @Inject
+    private ControladorEdicionRegistro cEdicion;
     
     //  Constructores
-    public FacadeVerificador(String NombreBaseDatos){
-        this.cReg = new ControladorRegistro(NombreBaseDatos);
-        this.cEdicion = new ControladorEdicionRegistro(NombreBaseDatos);
-    }
+    public FacadeVerificador(){}
     
     /**
      * Setea la comprobacion de implementacion de la accion, cambia el estado segun corresponda y actualiza la base de datos.
@@ -57,18 +56,18 @@ public class FacadeVerificador {
         return cReg.SetVerificacionEficaciaAccion(FechaVerificacionEficacia, ComentariosVerificacion, Comprobacion, IdAccion);
     }
     
-     /**
+    /**
      * Setea el estado de la accion como desestimada y actualiza la base de datos.
      * @param Observaciones
      * @param IdAccion
-     * @return 
+     * @return
      */
     public int DesestimarAccion(String Observaciones, int IdAccion){
         return cEdicion.DesestimarAccion(Observaciones, IdAccion);
     }
     
     /*
-        Por Datos
+    Por Datos
     */
     /**
      * Crea una nueva accion en estado pendiente y la persiste en la base de datos.
