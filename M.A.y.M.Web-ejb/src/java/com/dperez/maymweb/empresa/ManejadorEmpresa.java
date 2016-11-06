@@ -64,8 +64,12 @@ public class ManejadorEmpresa  {
     
     public List<Empresa> ListarEmpresasRegistradas(){
         List<Empresa> empresas = new ArrayList<>();
-        TypedQuery<Empresa> query = em.createQuery("SELECT e FROM Empresa e", Empresa.class);
-        empresas = query.getResultList();
+        TypedQuery<Empresa> query = em.createQuery("FROM Empresa e", Empresa.class);
+        try{
+            empresas = query.getResultList();
+        }catch(Exception ex){
+            System.out.println("Error: " + ex.getMessage());
+        }
         return empresas;
     }
 }

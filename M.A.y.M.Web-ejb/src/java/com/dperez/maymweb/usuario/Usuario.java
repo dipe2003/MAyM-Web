@@ -112,7 +112,14 @@ public class Usuario implements Serializable {
         }
     }
     
-    public void setEmpresaUsuario(Empresa EmpresaUsuario) {this.EmpresaUsuario = EmpresaUsuario;}
+    public void setEmpresaUsuario(Empresa EmpresaUsuario) {
+        this.EmpresaUsuario = EmpresaUsuario;
+        if(EmpresaUsuario!=null){
+            if(!EmpresaUsuario.getUsuariosEmpresa().contains(this)){
+                EmpresaUsuario.getUsuariosEmpresa().add(this);
+            }
+        }
+    }
     
     public void setComprobaciones(List<Comprobacion> Comprobaciones) {
         this.Comprobaciones = Comprobaciones;

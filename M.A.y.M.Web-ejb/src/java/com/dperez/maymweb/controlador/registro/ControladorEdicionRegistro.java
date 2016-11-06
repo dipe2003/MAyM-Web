@@ -30,12 +30,16 @@ import com.dperez.maymweb.producto.ManejadorProducto;
 import com.dperez.maymweb.producto.Producto;
 import com.dperez.maymweb.usuario.ControladorSeguridad;
 import java.util.Date;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  *
  * @author Diego
  */
+@Named
+@Stateless
 public class ControladorEdicionRegistro {
     @Inject
     private ManejadorAccion mAccion;

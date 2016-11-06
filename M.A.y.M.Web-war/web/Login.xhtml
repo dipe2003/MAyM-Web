@@ -13,15 +13,22 @@
             <div class="contenedor">
                 <h:form id="frmLogin">
                     <div>
+                        <label>Empresa:</label>
+                    </div>
+                    <div>
+                        <h:selectOneMenu id="selectEmpresa" value="#{ingresoUsuario.empresaSeleccionada}" required="true" requiredMessage="No se selecciono Empresa.">
+                            <f:selectItems value="#{ingresoUsuario.listaEmpresa}" />
+                        </h:selectOneMenu>
+                    </div>
+                    <div>
                         <label>Usuario:</label>
                     </div>
                     <div>
-                        <h:selectOneListbox id="selectEmpresa" value="#{ingresoUsuario.listaEmpresa}" >
-                            <f:selectItem itemValue="#{ingresoUsuario.listaEmpresa.key}" itemLabel="#{ingresoUsuario.listaEmpresa.value}" />
-                        </h:selectOneListbox>
                         <h:inputText id="inputUsuario" value="#{ingresoUsuario.usuarioSeleccionado}" required="true" requiredMessage="Debe ingresar usuario">
-                            <f:passThroughAttribute name="placeholder" value="Empresa-NombreUsuario"/>
+                            <f:passThroughAttribute name="placeholder" value="Id Usuario"/>
+                            <f:ajax execute="@this" listener="#{ingresoUsuario.comprobarIdUsuario}" render="outputUsuario" event="change"/>
                         </h:inputText>
+                        <h:outputText id="outputUsuario" value="#{ingresoUsuario.nombreUsuario}" />
                     </div>
                     <div>
                         <label>Password:</label>

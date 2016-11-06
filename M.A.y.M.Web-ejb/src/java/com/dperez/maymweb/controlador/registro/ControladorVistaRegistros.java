@@ -16,12 +16,16 @@ import com.dperez.maymweb.usuario.Usuario;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  *
  * @author Diego
  */
+@Named
+@Stateless
 public class ControladorVistaRegistros {
    @Inject
     private ManejadorAccion mAccion;

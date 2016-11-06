@@ -9,12 +9,16 @@ import com.dperez.maymweb.controlador.registro.ControladorVistaRegistros;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.usuario.Usuario;
 import java.util.List;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  *
  * @author Diego
  */
+@Named
+@Stateless
 public class FacadeLectura  {
     
     @Inject

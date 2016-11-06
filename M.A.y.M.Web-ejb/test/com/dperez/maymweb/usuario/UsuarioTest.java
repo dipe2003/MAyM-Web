@@ -5,10 +5,6 @@
 */
 package com.dperez.maymweb.usuario;
 
-import com.dperez.maymweb.accion.Accion;
-import com.dperez.maymweb.accion.acciones.Correctiva;
-import com.dperez.maymweb.accion.acciones.Mejora;
-import com.dperez.maymweb.accion.acciones.Preventiva;
 import com.dperez.maymweb.accion.medida.Medida;
 import com.dperez.maymweb.accion.medida.medidas.ActividadMejora;
 import com.dperez.maymweb.accion.medida.medidas.ActividadPreventiva;
@@ -36,11 +32,8 @@ public class UsuarioTest {
     private final Medida medidaCorrectiva = new MedidaCorrectiva();
     private final Medida actividadMejora = new ActividadMejora();
     private final Medida actividadPreventiva = new ActividadPreventiva();
-    private final Accion accionCorrectiva = new Correctiva();
-    private final Accion accionPreventiva = new Preventiva();
-    private final Accion accionMejora = new Mejora();
     private final Credencial credencial = new Credencial();
-    private final Empresa empresaUsuario = new Empresa("Nombre Empresa");
+    private final Empresa empresaUsuario = new Empresa();
     
     public UsuarioTest() {
     }

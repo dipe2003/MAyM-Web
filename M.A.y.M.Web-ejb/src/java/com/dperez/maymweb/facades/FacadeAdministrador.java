@@ -14,13 +14,17 @@ import com.dperez.maymweb.deteccion.TipoDeteccion;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.usuario.Usuario;
 import com.dperez.maymweb.usuario.permiso.EnumPermiso;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * Facade con los medotos para el manejo solo de las clases que seran parte de la configuracion de la aplicacion.
  * No genera/edita registros.
  * @author Diego
  */
+@Named
+@Stateless
 public class FacadeAdministrador  {
     @Inject
     private ControladorConfiguracion cConfig;

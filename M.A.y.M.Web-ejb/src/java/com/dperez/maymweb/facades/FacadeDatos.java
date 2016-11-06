@@ -13,12 +13,16 @@ import com.dperez.maymweb.controlador.registro.ControladorRegistro;
 import com.dperez.maymweb.producto.Producto;
 import java.util.Date;
 import java.util.List;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  *
  * @author Diego
  */
+@Named
+@Stateless
 public class FacadeDatos {
        @Inject
     private ControladorRegistro cReg;

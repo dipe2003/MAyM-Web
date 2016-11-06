@@ -33,12 +33,16 @@ import com.dperez.maymweb.usuario.Usuario;
 import java.security.InvalidParameterException;
 import java.util.Date;
 import java.util.List;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  *
  * @author Diego
  */
+@Named
+@Stateless
 public class ControladorRegistro {
     @Inject
     private ManejadorAccion mAccion;
