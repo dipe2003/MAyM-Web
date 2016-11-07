@@ -6,6 +6,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <link rel="stylesheet" href="Resources/CSS/Login.css" />
+        <link rel="stylesheet" href="Resources/CSS/Mensajes.css" />
         <title>Iniciar Sesion</title>
     </h:head>
     <h:body>
@@ -17,6 +18,7 @@
                     </div>
                     <div>
                         <h:selectOneMenu id="selectEmpresa" value="#{ingresoUsuario.empresaSeleccionada}" required="true" requiredMessage="No se selecciono Empresa.">
+                            <f:selectItem itemLabel="--- Seleccionar Empresa ---" noSelectionOption="true" />
                             <f:selectItems value="#{ingresoUsuario.listaEmpresa}" />
                         </h:selectOneMenu>
                     </div>
@@ -28,7 +30,9 @@
                             <f:passThroughAttribute name="placeholder" value="Id Usuario"/>
                             <f:ajax execute="@this" listener="#{ingresoUsuario.comprobarIdUsuario}" render="outputUsuario" event="change"/>
                         </h:inputText>
-                        <h:outputText id="outputUsuario" value="#{ingresoUsuario.nombreUsuario}" />
+                        <div>
+                            <h:outputText id="outputUsuario" value="#{ingresoUsuario.nombreUsuario}" />
+                        </div>                        
                     </div>
                     <div>
                         <label>Password:</label>
@@ -39,6 +43,7 @@
                     <div>
                         <button>Ingresar</button>
                     </div>
+                    <h:messages globalOnly="true" infoClass="info" fatalClass="error" warnClass="warning" id="mensajes-login" showDetail="true" showSummary="true" />
                 </h:form>
             </div>
         </section>

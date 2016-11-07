@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
+import static javax.faces.application.FacesMessage.SEVERITY_INFO;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -65,11 +67,11 @@ public class IngresoUsuario implements Serializable {
     public void Ingresar() throws IOException{
         String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
         if(facadeMain.ComprobarValidezPassword(Integer.valueOf(UsuarioSeleccionado),PasswordUsuario)){
-            FacesContext.getCurrentInstance().addMessage("frmLogin:inputUsuario", new FacesMessage("Existe"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_INFO, "Existe Usuario", "El Ususario si existe"));
             FacesContext.getCurrentInstance().renderResponse();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");
         }else{
-            FacesContext.getCurrentInstance().addMessage("frmLogin:inputUsuario", new FacesMessage("Los datos del usuario no son correctos"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No Existe Usuario", "Los datos del usuario no son correctos"));
             FacesContext.getCurrentInstance().renderResponse();
         }
     }
@@ -82,11 +84,11 @@ public class IngresoUsuario implements Serializable {
         try{
             id = Integer.valueOf(UsuarioSeleccionado);
             if(id!=0 && facadeMain.ExisteUsuario(id)){
-                UsuarioSeleccionado = fLectura.GetUsuario(Integer.valueOf(UsuarioSeleccionado)).GetNombreCompleto();
+                NombreUsuario = fLectura.GetUsuario(Integer.valueOf(UsuarioSeleccionado)).GetNombreCompleto();
             }
         }catch(NumberFormatException ex){
             System.out.println("Error: " +ex.getLocalizedMessage());
-            UsuarioSeleccionado = "";
+            NombreUsuario = "";
         }
     }
     
