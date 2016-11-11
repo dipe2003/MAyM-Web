@@ -3,7 +3,7 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
 */
-package com.dperez.maym.web.empresa;
+package com.dperez.maym.web.inicio;
 
 import com.dperez.maymweb.facades.FacadeMain;
 import com.dperez.maymweb.empresa.Empresa;
