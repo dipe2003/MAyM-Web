@@ -6,7 +6,12 @@
 package com.dperez.maym.web.empresa;
 
 import com.dperez.maymweb.facades.FacadeAdministrador;
+import java.io.IOException;
 import java.io.Serializable;
+import javax.faces.application.FacesMessage;
+import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
+import static javax.faces.application.FacesMessage.SEVERITY_INFO;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -18,7 +23,7 @@ import javax.inject.Named;
 public class CrearEmpresa implements Serializable {
     @Inject
     private FacadeAdministrador fAdmin;
-        
+    
     private int Id;
     private String NombreEmpresa;
     private String DireccionEmpresa;
@@ -26,7 +31,7 @@ public class CrearEmpresa implements Serializable {
     private String CorreoEmpresa;
     
     //  Getters
-
+    
     public int getId() {return Id;}
     public String getNombreEmpresa() {return NombreEmpresa;}
     public String getDireccionEmpresa() {return DireccionEmpresa;}
@@ -34,7 +39,7 @@ public class CrearEmpresa implements Serializable {
     public String getCorreoEmpresa() {return CorreoEmpresa;}
     
     //  Setters
-
+    
     public void setId(int Id) {this.Id = Id;}
     public void setNombreEmpresa(String NombreEmpresa) {this.NombreEmpresa = NombreEmpresa;}
     public void setDireccionEmpresa(String DireccionEmpresa) {this.DireccionEmpresa = DireccionEmpresa;}
@@ -42,12 +47,26 @@ public class CrearEmpresa implements Serializable {
     public void setCorreoEmpresa(String CorreoEmpresa) {this.CorreoEmpresa = CorreoEmpresa;}
     
     //  Metodos
-    public void comprobarDisponibilidadId(int idEmpresa){
-        
+    public boolean comprobarDisponibilidadId(int idEmpresa){
+        return fAdmin.ExisteEmpresa(idEmpresa);
     }
     
-    public void registrarEmpresa(){
-        
+    public void registrarEmpresa() throws IOException{
+        String mensaje = "";
+        if(!comprobarDisponibilidadId(Id)){
+            mensaje = "El numero de Empresa ya existe.";
+        }else{
+            //  registrar empresa
+            if(fAdmin.NuevaEmpresa(Id, NombreEmpresa, DireccionEmpresa, TelefonoEmpresa, CorreoEmpresa)==null){
+                mensaje = "No se pudo registrar la Empresa";
+            }else{
+                String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+                FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");
+                FacesContext.getCurrentInstance().responseComplete();
+            }
+        }
+        FacesContext.getCurrentInstance().addMessage("frm-datos-empresa:utton-registrar-empresa", new FacesMessage(SEVERITY_ERROR, mensaje, mensaje));
+        FacesContext.getCurrentInstance().renderResponse();
     }
     
 }
