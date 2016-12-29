@@ -8,7 +8,6 @@
     <class>com.dperez.maymweb.accion.acciones.Mejora</class>
     <class>com.dperez.maymweb.accion.acciones.Preventiva</class>
     <class>com.dperez.maymweb.accion.adjunto.Adjunto</class>
-    <class>com.dperez.maymweb.accion.medida.Medida</class>
     <class>com.dperez.maymweb.area.Area</class>
     <class>com.dperez.maymweb.codificacion.Codificacion</class>
     <class>com.dperez.maymweb.fortaleza.Fortaleza</class>
@@ -23,6 +22,7 @@
     <class>com.dperez.maymweb.deteccion.Deteccion</class>
     <class>com.dperez.maymweb.deteccion.TipoDeteccion</class>
     <class>com.dperez.maymweb.empresa.Empresa</class>
+    <class>com.dperez.maymweb.accion.actividad.Actividad</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>

@@ -6,7 +6,7 @@
 package com.dperez.maymweb.usuario;
 
 import com.dperez.maymweb.accion.Comprobacion;
-import com.dperez.maymweb.accion.medida.Medida;
+import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.usuario.permiso.EnumPermiso;
 import javax.persistence.Id;
@@ -46,7 +46,7 @@ public class Usuario implements Serializable {
     private Credencial CredencialUsuario;
     
     @OneToMany(mappedBy = "ResponsableImplementacion")
-    private List<Medida> MedidasResponsableImplementacion;
+    private List<Actividad> MedidasResponsableImplementacion;
     
     @OneToMany(mappedBy = "Responsable")
     private List<Comprobacion> Comprobaciones;
@@ -79,7 +79,7 @@ public class Usuario implements Serializable {
     
     public Credencial getCredencialUsuario() {return CredencialUsuario;}
     
-    public List<Medida> getMedidasResponsableImplementacion() {return MedidasResponsableImplementacion;}
+    public List<Actividad> getMedidasResponsableImplementacion() {return MedidasResponsableImplementacion;}
     
     public Empresa getEmpresaUsuario() {return EmpresaUsuario;}
     
@@ -105,9 +105,9 @@ public class Usuario implements Serializable {
         }
     }
     
-    public void setMedidasResponsableImplementacion(List<Medida> MedidasResponsableImplementacion) {
+    public void setMedidasResponsableImplementacion(List<Actividad> MedidasResponsableImplementacion) {
         this.MedidasResponsableImplementacion = MedidasResponsableImplementacion;
-        for(Medida med: this.MedidasResponsableImplementacion){
+        for(Actividad med: this.MedidasResponsableImplementacion){
             med.setResponsableImplementacion(this);
         }
     }
@@ -129,7 +129,7 @@ public class Usuario implements Serializable {
     }
     
     // Listas
-    public void addMedidaResponsableImplementacion(Medida MedidaResponsableImplementacion){
+    public void addMedidaResponsableImplementacion(Actividad MedidaResponsableImplementacion){
         if(MedidaResponsableImplementacion != null){
             this.MedidasResponsableImplementacion.add(MedidaResponsableImplementacion);
             if(MedidaResponsableImplementacion.getResponsableImplementacion() != null && !MedidaResponsableImplementacion.getResponsableImplementacion().equals(this))
@@ -137,7 +137,7 @@ public class Usuario implements Serializable {
         }
     }
     
-    public void removeMedidaResponsableImplementacion(Medida MedidaResponsableImplementacion){
+    public void removeMedidaResponsableImplementacion(Actividad MedidaResponsableImplementacion){
         if(MedidaResponsableImplementacion != null){
             this.MedidasResponsableImplementacion.remove(MedidaResponsableImplementacion);
             if(MedidaResponsableImplementacion.getResponsableImplementacion() != null &&
@@ -147,9 +147,9 @@ public class Usuario implements Serializable {
     }
     
     public void removeMedidaResponsableImplementacion(int IdMedidaResponsableImplementacion){
-        Iterator<Medida> it = this.MedidasResponsableImplementacion.iterator() ;
+        Iterator<Actividad> it = this.MedidasResponsableImplementacion.iterator() ;
         while(it.hasNext()){
-            Medida m = it.next();
+            Actividad m = it.next();
             if(m.getId()== IdMedidaResponsableImplementacion){
                 it.remove();
                 if(m.getResponsableImplementacion()!=null && m.getResponsableImplementacion().equals(this))

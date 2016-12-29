@@ -7,8 +7,7 @@ package com.dperez.maymweb.accion.acciones;
 
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.EnumComprobacion;
-import com.dperez.maymweb.accion.medida.medidas.MedidaCorrectiva;
-import com.dperez.maymweb.accion.medida.medidas.MedidaPreventiva;
+import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.estado.EnumEstado;
 import java.util.List;
 
@@ -28,9 +27,9 @@ import javax.persistence.OneToMany;
 @Entity
 public class Correctiva extends Accion implements Serializable {
     @OneToMany(mappedBy = "AccionCorrectivaMedidaCorrectiva", cascade = CascadeType.REMOVE)
-    private List<MedidaCorrectiva> MedidasCorrectivas;
+    private List<Actividad> MedidasCorrectivas;
     @OneToMany(mappedBy = "AccionCorrectivaMedidaPreventiva", cascade = CascadeType.REMOVE)
-    private List<MedidaPreventiva> MedidasPreventivas;
+    private List<Actividad> MedidasPreventivas;
     private EnumTipoDesvio Tipo;
     
     @OneToMany(mappedBy = "AccionCorrectivaConProductoAfectado", cascade = CascadeType.REMOVE)
@@ -51,23 +50,23 @@ public class Correctiva extends Accion implements Serializable {
     }
     
     //  Getters
-    public List<MedidaCorrectiva> getMedidasCorrectivas() {return this.MedidasCorrectivas;}
-    public List<MedidaPreventiva> getMedidasPreventivas() {return this.MedidasPreventivas;}
+    public List<Actividad> getMedidasCorrectivas() {return this.MedidasCorrectivas;}
+    public List<Actividad> getMedidasPreventivas() {return this.MedidasPreventivas;}
     public EnumTipoDesvio getTipo() {return this.Tipo;}
     
     public List<Producto> getProductosAfectados() {return this.ProductosAfectados;}
     
     // Setters
-    public void setMedidasCorrectivas(List<MedidaCorrectiva> MedidasCorrectivas) {
+    public void setMedidasCorrectivas(List<Actividad> MedidasCorrectivas) {
         this.MedidasCorrectivas = MedidasCorrectivas;
-        for(MedidaCorrectiva med: this.MedidasCorrectivas){
-            med.setAccionCorrectivaMedidaCorrectiva(this);
+        for(Actividad med: this.MedidasCorrectivas){
+            med.setAccionActividad(this);
         }
     }
-    public void setMedidasPreventivas(List<MedidaPreventiva> MedidasPreventivas) {
+    public void setMedidasPreventivas(List<Actividad> MedidasPreventivas) {
         this.MedidasPreventivas = MedidasPreventivas;
-        for(MedidaPreventiva med: this.MedidasPreventivas){
-            med.setAccionCorrectivaMedidaPreventiva(this);
+        for(Actividad med: this.MedidasPreventivas){
+            med.setAccionActividad(this);
         }
     }
     public void setTipo(EnumTipoDesvio Tipo) {this.Tipo = Tipo;}
@@ -81,51 +80,51 @@ public class Correctiva extends Accion implements Serializable {
     
     // Listas
     // Medidas Correctivas
-    public void addMedidaCorrectiva(MedidaCorrectiva MedidaCorrectiva){
+    public void addMedidaCorrectiva(Actividad MedidaCorrectiva){
         this.MedidasCorrectivas.add(MedidaCorrectiva);
-        if(MedidaCorrectiva.getAccionCorrectivaMedidaCorrectiva() == null || !MedidaCorrectiva.getAccionCorrectivaMedidaCorrectiva().equals(this))
-            MedidaCorrectiva.setAccionCorrectivaMedidaCorrectiva(this);
+        if(MedidaCorrectiva.getAccionActividad()== null || !MedidaCorrectiva.getAccionActividad().equals(this))
+            MedidaCorrectiva.setAccionActividad(this);
     }
     
-    public void removeMedidaCorrectiva(MedidaCorrectiva MedidaCorrectiva){
+    public void removeMedidaCorrectiva(Actividad MedidaCorrectiva){
         this.MedidasCorrectivas.remove(MedidaCorrectiva);
-        if(MedidaCorrectiva.getAccionCorrectivaMedidaCorrectiva()!=null && MedidaCorrectiva.getAccionCorrectivaMedidaCorrectiva().equals(this))
-            MedidaCorrectiva.setAccionCorrectivaMedidaCorrectiva(null);
+        if(MedidaCorrectiva.getAccionActividad()!=null && MedidaCorrectiva.getAccionActividad().equals(this))
+            MedidaCorrectiva.setAccionActividad(null);
     }
     
     public void removeMedidaCorrectiva(int IdMedidaCorrectiva){
-        Iterator<MedidaCorrectiva> it = this.MedidasCorrectivas.iterator() ;
+        Iterator<Actividad> it = this.MedidasCorrectivas.iterator() ;
         while(it.hasNext()){
-            MedidaCorrectiva mc = it.next();
+            Actividad mc = it.next();
             if(mc.getId()==IdMedidaCorrectiva){
                 it.remove();
-                if(mc.getAccionCorrectivaMedidaCorrectiva()!=null && mc.getAccionCorrectivaMedidaCorrectiva().equals(this))
-                    mc.setAccionCorrectivaMedidaCorrectiva(null);
+                if(mc.getAccionActividad()!=null && mc.getAccionActividad().equals(this))
+                    mc.setAccionActividad(null);
             }
         }
     }
     
 //Medidas Preventivas
-    public void addMedidaPreventiva(MedidaPreventiva MedidaPreventiva){
+    public void addMedidaPreventiva(Actividad MedidaPreventiva){
         this.MedidasPreventivas.add(MedidaPreventiva);
-        if(MedidaPreventiva.getAccionCorrectivaMedidaPreventiva() == null || !MedidaPreventiva.getAccionCorrectivaMedidaPreventiva().equals(this))
-            MedidaPreventiva.setAccionCorrectivaMedidaPreventiva(this);
+        if(MedidaPreventiva.getAccionActividad()== null || !MedidaPreventiva.getAccionActividad().equals(this))
+            MedidaPreventiva.setAccionActividad(this);
     }
     
-    public void removeMedidaPreventiva(MedidaPreventiva MedidaPreventiva){
+    public void removeMedidaPreventiva(Actividad MedidaPreventiva){
         this.MedidasPreventivas.remove(MedidaPreventiva);
-        if(MedidaPreventiva.getAccionCorrectivaMedidaPreventiva()!=null && MedidaPreventiva.getAccionCorrectivaMedidaPreventiva().equals(this))
-            MedidaPreventiva.setAccionCorrectivaMedidaPreventiva(null);
+        if(MedidaPreventiva.getAccionActividad()!=null && MedidaPreventiva.getAccionActividad().equals(this))
+            MedidaPreventiva.setAccionActividad(null);
     }
     
     public void removeMedidaPreventiva(int IdMedidaPreventiva){
-        Iterator<MedidaPreventiva> it = this.MedidasPreventivas.iterator() ;
+        Iterator<Actividad> it = this.MedidasPreventivas.iterator() ;
         while(it.hasNext()){
-            MedidaPreventiva mp = it.next();
+            Actividad mp = it.next();
             if(mp.getId()==IdMedidaPreventiva){
                 it.remove();
-                if(mp.getAccionCorrectivaMedidaPreventiva()!=null && mp.getAccionCorrectivaMedidaPreventiva().equals(this))
-                    mp.setAccionCorrectivaMedidaPreventiva(null);
+                if(mp.getAccionActividad()!=null && mp.getAccionActividad().equals(this))
+                    mp.setAccionActividad(null);
             }
         }
     }
@@ -160,12 +159,12 @@ public class Correctiva extends Accion implements Serializable {
         if(this.getEstadoAccion()!= EnumEstado.DESESTIMADA && this.getEstadoAccion()!= EnumEstado.CERRADA){
             boolean medCorrectivaImp = true;
             // chequear implementacion de todas las medidas correctivas
-            for(MedidaCorrectiva medida: this.MedidasCorrectivas){
+            for(Actividad medida: this.MedidasCorrectivas){
                 if(medida.getFechaImplementacion()==null) medCorrectivaImp = false;
             }
             boolean medPreventivaImp = true;
             // chequear implementacion de todas las medidas preventivas
-            for(MedidaPreventiva medida: this.MedidasPreventivas){
+            for(Actividad medida: this.MedidasPreventivas){
                 if(medida.getFechaImplementacion()==null) medPreventivaImp = false;
             }
             

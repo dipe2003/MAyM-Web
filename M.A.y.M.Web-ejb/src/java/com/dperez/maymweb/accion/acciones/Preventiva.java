@@ -7,7 +7,7 @@ package com.dperez.maymweb.accion.acciones;
 
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.EnumComprobacion;
-import com.dperez.maymweb.accion.medida.medidas.ActividadPreventiva;
+import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.estado.EnumEstado;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ import javax.persistence.OneToMany;
 @Entity
 public class Preventiva extends Accion implements Serializable{
     @OneToMany(mappedBy = "AccionPreventiva", cascade = CascadeType.REMOVE)
-    private List<ActividadPreventiva> Actividades;
+    private List<Actividad> Actividades;
     
     // Constructores
     public Preventiva(){this.Actividades = new ArrayList<>();}
@@ -35,37 +35,37 @@ public class Preventiva extends Accion implements Serializable{
     }
     
     // Getters
-    public List<ActividadPreventiva> getActividades() {return this.Actividades;}
+    public List<Actividad> getActividades() {return this.Actividades;}
     
     // Setters
-    public void setActividades(List<ActividadPreventiva> Actividades) {
+    public void setActividades(List<Actividad> Actividades) {
         this.Actividades = Actividades;
-        for(ActividadPreventiva actividad: this.Actividades){
-            actividad.setAccionPreventiva(this);
+        for(Actividad actividad: this.Actividades){
+            actividad.setAccionActividad(this);
         }
     }
     
     // Listas
-    public void addActividad(ActividadPreventiva Actividad){
+    public void addActividad(Actividad Actividad){
         this.Actividades.add(Actividad);
-        if(Actividad.getAccionPreventiva() == null || !Actividad.getAccionPreventiva().equals(this)) 
-            Actividad.setAccionPreventiva(this);
+        if(Actividad.getAccionActividad()== null || !Actividad.getAccionActividad().equals(this)) 
+            Actividad.setAccionActividad(this);
     }
     
-    public void removeActividad(ActividadPreventiva Actividad){
+    public void removeActividad(Actividad Actividad){
         this.Actividades.remove(Actividad);
-        if(Actividad.getAccionPreventiva()!=null && Actividad.getAccionPreventiva().equals(this))
-            Actividad.setAccionPreventiva(null);
+        if(Actividad.getAccionActividad()!=null && Actividad.getAccionActividad().equals(this))
+            Actividad.setAccionActividad(null);
     }
     
     public void removeActividad(int IdActividad){
-        Iterator<ActividadPreventiva> it = this.Actividades.iterator() ;
+        Iterator<Actividad> it = this.Actividades.iterator() ;
         while(it.hasNext()){
-            ActividadPreventiva ac = it.next();
+            Actividad ac = it.next();
             if(ac.getId()==IdActividad){
                 it.remove();
-                if(ac.getAccionPreventiva()!=null && ac.getAccionPreventiva().equals(this))
-                    ac.setAccionPreventiva(null);
+                if(ac.getAccionActividad()!=null && ac.getAccionActividad().equals(this))
+                    ac.setAccionActividad(null);
             }
         }
     }
@@ -76,7 +76,7 @@ public class Preventiva extends Accion implements Serializable{
             boolean actividadesImp = true;
             int numActividadesImp = 0;
             // chequear implementacion de todas las actividades
-            for(ActividadPreventiva actividad: this.Actividades){
+            for(Actividad actividad: this.Actividades){
                 if(actividad.getFechaImplementacion()==null) {
                     actividadesImp = false;
                 }else{

@@ -5,8 +5,7 @@
 */
 package com.dperez.maymweb.accion.acciones;
 
-import com.dperez.maymweb.accion.medida.medidas.MedidaCorrectiva;
-import com.dperez.maymweb.accion.medida.medidas.MedidaPreventiva;
+import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.producto.Producto;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +22,8 @@ import static org.junit.Assert.*;
  */
 public class CorrectivaTest {
     
-    private final MedidaCorrectiva mc = new MedidaCorrectiva();
-    private final MedidaPreventiva mp = new MedidaPreventiva();
+    private final Actividad mc = new Actividad();
+    private final Actividad mp = new Actividad();
     private final Producto prodAfectado = new Producto();
     
     public CorrectivaTest() {
@@ -53,10 +52,10 @@ public class CorrectivaTest {
     public void testGetMedidasCorrectivas() {
         System.out.println("getMedidasCorrectivas");
         Correctiva instance = new Correctiva();
-        List<MedidaCorrectiva> expResult = new ArrayList<>();
+        List<Actividad> expResult = new ArrayList<>();
         expResult.add(mc);
         instance.setMedidasCorrectivas(expResult);
-        List<MedidaCorrectiva> result = instance.getMedidasCorrectivas();
+        List<Actividad> result = instance.getMedidasCorrectivas();
         assertEquals(expResult, result);
     }
     
@@ -67,10 +66,10 @@ public class CorrectivaTest {
     public void testGetMedidasPreventivas() {
         System.out.println("getMedidasPreventivas");
         Correctiva instance = new Correctiva();
-        List<MedidaPreventiva> expResult = new ArrayList<>();
+        List<Actividad> expResult = new ArrayList<>();
         expResult.add(mp);
         instance.setMedidasPreventivas(expResult);
-        List<MedidaPreventiva> result = instance.getMedidasPreventivas();
+        List<Actividad> result = instance.getMedidasPreventivas();
         assertEquals(expResult, result);
     }
     
@@ -107,7 +106,7 @@ public class CorrectivaTest {
     @Test
     public void testSetMedidasCorrectivas() {
         System.out.println("setMedidasCorrectivas");
-        List<MedidaCorrectiva> MedidasCorrectivas = new ArrayList<>();
+        List<Actividad> MedidasCorrectivas = new ArrayList<>();
         MedidasCorrectivas.add(mc);
         Correctiva instance = new Correctiva();
         instance.setMedidasCorrectivas(MedidasCorrectivas);
@@ -119,7 +118,7 @@ public class CorrectivaTest {
     @Test
     public void testSetMedidasPreventivas() {
         System.out.println("setMedidasPreventivas");
-        List<MedidaPreventiva> MedidasPreventivas = new ArrayList<>();
+        List<Actividad> MedidasPreventivas = new ArrayList<>();
         MedidasPreventivas.add(mp);
         Correctiva instance = new Correctiva();
         instance.setMedidasPreventivas(MedidasPreventivas);

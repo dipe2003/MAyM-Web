@@ -7,7 +7,7 @@ package com.dperez.maymweb.accion.acciones;
 
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.EnumComprobacion;
-import com.dperez.maymweb.accion.medida.medidas.ActividadMejora;
+import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.estado.EnumEstado;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ import javax.persistence.OneToMany;
 @Entity
 public class Mejora extends Accion implements Serializable {
     @OneToMany(mappedBy = "AccionMejora", cascade = CascadeType.REMOVE)
-    private List<ActividadMejora> Actividades;
+    private List<Actividad> Actividades;
     
     // Constructores
     public Mejora(Date FechaDeteccion, String Descripcion){
@@ -35,37 +35,37 @@ public class Mejora extends Accion implements Serializable {
     public Mejora(){this.Actividades = new ArrayList<>();}
     
     // Getters
-    public List<ActividadMejora> getActividades() {return this.Actividades;}
+    public List<Actividad> getActividades() {return this.Actividades;}
     
     // Setters
-    public void setActividades(List<ActividadMejora> Actividades) {
+    public void setActividades(List<Actividad> Actividades) {
         this.Actividades = Actividades;
-        for(ActividadMejora actividad: this.Actividades){
-            actividad.setAccionMejora(this);
+        for(Actividad actividad: this.Actividades){
+            actividad.setAccionActividad(this);
         }
     }
     
     // Listas
-    public void addActividad(ActividadMejora Actividad){
+    public void addActividad(Actividad Actividad){
         this.Actividades.add(Actividad);
-        if(Actividad.getAccionMejora() == null || !Actividad.getAccionMejora().equals(this))
-            Actividad.setAccionMejora(this);
+        if(Actividad.getAccionActividad()== null || !Actividad.getAccionActividad().equals(this))
+            Actividad.setAccionActividad(this);
     }
     
-    public void removeActividad(ActividadMejora Actividad){
+    public void removeActividad(Actividad Actividad){
         this.Actividades.remove(Actividad);
-        if(Actividad.getAccionMejora()!=null && Actividad.getAccionMejora().equals(this))
-            Actividad.setAccionMejora(null);
+        if(Actividad.getAccionActividad()!=null && Actividad.getAccionActividad().equals(this))
+            Actividad.setAccionActividad(null);
     }
     
     public void removeActividad(int idActividad){
-        Iterator<ActividadMejora> it = this.Actividades.iterator() ;
+        Iterator<Actividad> it = this.Actividades.iterator() ;
         while(it.hasNext()){
-            ActividadMejora ac = it.next();
+            Actividad ac = it.next();
             if(ac.getId()==idActividad){
                 it.remove();
-                if(ac.getAccionMejora()!=null && ac.getAccionMejora().equals(this))
-                    ac.setAccionMejora(null);
+                if(ac.getAccionActividad()!=null && ac.getAccionActividad().equals(this))
+                    ac.setAccionActividad(null);
             }
         }
     }
@@ -76,7 +76,7 @@ public class Mejora extends Accion implements Serializable {
             boolean actividadesImp = true;
             int numActividadesImp = 0;
             // chequear implementacion de todas las actividades
-            for(ActividadMejora actividad: this.Actividades){
+            for(Actividad actividad: this.Actividades){
                 if(actividad.getFechaImplementacion()==null) {
                     actividadesImp = false;
                 }else{

@@ -3,8 +3,9 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
 */
-package com.dperez.maymweb.accion.medida;
+package com.dperez.maymweb.accion.actividad;
 
+import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.usuario.Usuario;
 import java.io.Serializable;
 import java.util.Date;
@@ -22,8 +23,8 @@ import javax.persistence.TemporalType;
  * @author dperez
  */
 @Entity
-@Table(name="Medidas")
-public abstract class Medida implements Serializable {
+@Table(name="Actividades")
+public class Actividad implements Serializable {
     @Id@GeneratedValue(strategy = GenerationType.AUTO)
     private int Id;
     @Temporal(TemporalType.DATE)
@@ -33,11 +34,14 @@ public abstract class Medida implements Serializable {
     private String Descripcion  = new String();
     
     @ManyToOne
+    private Accion AccionActvividad;
+    
+    @ManyToOne
     private Usuario ResponsableImplementacion;
     
     // Constructores
-    public Medida(){}
-    public Medida(Date FechaEstimadaDeImplementacion, String Descripcion){
+    public Actividad(){}
+    public Actividad(Date FechaEstimadaDeImplementacion, String Descripcion){
         this.FechaEstimadaImplementacion = FechaEstimadaDeImplementacion;
         this.Descripcion = Descripcion;
     }
@@ -48,6 +52,8 @@ public abstract class Medida implements Serializable {
     public Date getFechaImplementacion() {return this.FechaImplementacion;}
     public String getDescripcion() {return this.Descripcion;}
     
+    public Accion getAccionActividad(){return this.AccionActvividad;}
+    
     public Usuario getResponsableImplementacion() {return this.ResponsableImplementacion;}
     
     // Setters
@@ -55,6 +61,10 @@ public abstract class Medida implements Serializable {
     public void setFechaEstimadaImplementacion(Date FechaEstimadaImplementacion) {this.FechaEstimadaImplementacion = FechaEstimadaImplementacion;}
     public void setFechaImplementacion(Date FechaImplementacion) {this.FechaImplementacion = FechaImplementacion;}
     public void setDescripcion(String Descripcion) {this.Descripcion = Descripcion;}
+    
+    public void setAccionActividad(Accion AccionActividad){
+        this.AccionActvividad = AccionActividad;
+    }
     
     public void setResponsableImplementacion(Usuario ResponsableImplementacion) {
         if(ResponsableImplementacion == null && this.ResponsableImplementacion != null){

@@ -5,7 +5,7 @@
 */
 package com.dperez.maymweb.accion.acciones;
 
-import com.dperez.maymweb.accion.medida.medidas.ActividadPreventiva;
+import com.dperez.maymweb.accion.actividad.Actividad;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;
@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
  */
 public class PreventivaTest {
     
-    private final ActividadPreventiva  actividad = new ActividadPreventiva();
+    private final Actividad  actividad = new Actividad();
     
     public PreventivaTest() {
     }
@@ -49,10 +49,10 @@ public class PreventivaTest {
     public void testGetActividades() {
         System.out.println("getActividades");
         Preventiva instance = new Preventiva();
-        List<ActividadPreventiva> expResult = new ArrayList<>();
+        List<Actividad> expResult = new ArrayList<>();
         expResult.add(actividad);
         instance.setActividades(expResult);
-        List<ActividadPreventiva> result = instance.getActividades();
+        List<Actividad> result = instance.getActividades();
         assertEquals(expResult, result);
     }
     
@@ -62,7 +62,7 @@ public class PreventivaTest {
     @Test
     public void testSetActividades() {
         System.out.println("setActividades");
-        List<ActividadPreventiva> Actividades = new ArrayList<>();
+        List<Actividad> Actividades = new ArrayList<>();
         Preventiva instance = new Preventiva();
         instance.setActividades(Actividades);
     }

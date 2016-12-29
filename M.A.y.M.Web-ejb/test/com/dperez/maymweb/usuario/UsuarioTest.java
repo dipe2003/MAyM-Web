@@ -5,11 +5,7 @@
 */
 package com.dperez.maymweb.usuario;
 
-import com.dperez.maymweb.accion.medida.Medida;
-import com.dperez.maymweb.accion.medida.medidas.ActividadMejora;
-import com.dperez.maymweb.accion.medida.medidas.ActividadPreventiva;
-import com.dperez.maymweb.accion.medida.medidas.MedidaCorrectiva;
-import com.dperez.maymweb.accion.medida.medidas.MedidaPreventiva;
+import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.usuario.permiso.EnumPermiso;
 import java.util.ArrayList;
@@ -28,10 +24,10 @@ import static org.junit.Assert.*;
 public class UsuarioTest {
     
     private final EnumPermiso permiso = EnumPermiso.LECTURA;
-    private final Medida medidaPreventiva = new MedidaPreventiva();
-    private final Medida medidaCorrectiva = new MedidaCorrectiva();
-    private final Medida actividadMejora = new ActividadMejora();
-    private final Medida actividadPreventiva = new ActividadPreventiva();
+    private final Actividad medidaPreventiva = new Actividad();
+    private final Actividad medidaCorrectiva = new Actividad();
+    private final Actividad actividadMejora = new Actividad();
+    private final Actividad actividadPreventiva = new Actividad();
     private final Credencial credencial = new Credencial();
     private final Empresa empresaUsuario = new Empresa();
     
@@ -154,8 +150,8 @@ public class UsuarioTest {
     public void testGetMedidasResponsableImplementacion() {
         System.out.println("getMedidasResponsableImplementacion");
         Usuario instance = new Usuario();
-        List<Medida> expResult = new ArrayList<>();
-        List<Medida> result = instance.getMedidasResponsableImplementacion();
+        List<Actividad> expResult = new ArrayList<>();
+        List<Actividad> result = instance.getMedidasResponsableImplementacion();
         assertEquals(expResult, result);
         
         expResult.add(actividadMejora);
@@ -264,7 +260,7 @@ public class UsuarioTest {
     @Test
     public void testSetMedidasResponsableImplementacion() {
         System.out.println("setMedidasResponsableImplementacion");
-        List<Medida> MedidasResponsableImplementacion = new ArrayList<>();
+        List<Actividad> MedidasResponsableImplementacion = new ArrayList<>();
         Usuario instance = new Usuario();
         instance.setMedidasResponsableImplementacion(MedidasResponsableImplementacion);
     }
@@ -284,7 +280,7 @@ public class UsuarioTest {
     @Test
     public void testAddMedidaResponsableImplementacion() {
         System.out.println("addMedidaResponsableImplementacion");
-        Medida MedidaResponsableImplementacion = null;
+        Actividad MedidaResponsableImplementacion = null;
         Usuario instance = new Usuario();
         instance.addMedidaResponsableImplementacion(MedidaResponsableImplementacion);
     }
@@ -295,7 +291,7 @@ public class UsuarioTest {
     @Test
     public void testRemoveMedidaResponsableImplementacion_Medida() {
         System.out.println("removeMedidaResponsableImplementacion");
-        Medida MedidaResponsableImplementacion = null;
+        Actividad MedidaResponsableImplementacion = null;
         Usuario instance = new Usuario();
         instance.removeMedidaResponsableImplementacion(MedidaResponsableImplementacion);
     }

@@ -12,13 +12,10 @@ import com.dperez.maymweb.accion.acciones.EnumAccion;
 import com.dperez.maymweb.accion.acciones.EnumTipoDesvio;
 import com.dperez.maymweb.accion.acciones.Mejora;
 import com.dperez.maymweb.accion.acciones.Preventiva;
+import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.accion.adjunto.Adjunto;
 import com.dperez.maymweb.accion.adjunto.ManejadorAdjunto;
-import com.dperez.maymweb.accion.medida.ManejadorMedida;
-import com.dperez.maymweb.accion.medida.medidas.ActividadMejora;
-import com.dperez.maymweb.accion.medida.medidas.ActividadPreventiva;
-import com.dperez.maymweb.accion.medida.medidas.MedidaCorrectiva;
-import com.dperez.maymweb.accion.medida.medidas.MedidaPreventiva;
+import com.dperez.maymweb.accion.actividad.ManejadorActividad;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.area.ManejadorArea;
 import com.dperez.maymweb.codificacion.Codificacion;
@@ -54,7 +51,7 @@ public class ControladorEdicionRegistro {
     @Inject
     private ManejadorAdjunto mAdjunto;
     @Inject
-    private ManejadorMedida mMedida;
+    private ManejadorActividad mMedida;
     @Inject
     private ControladorSeguridad cSeg;
     
@@ -174,8 +171,8 @@ public class ControladorEdicionRegistro {
         ((Mejora)accion).CambiarEstado();
         int res = mAccion.ActualizarAccion(accion);
         if(res!=-1){
-            ActividadMejora actividad = mMedida.GetActividadMejora(IdActividadMejora);
-            mMedida.BorrarMedida(actividad);
+            Actividad actividad = mMedida.GetActividad(IdActividadMejora);
+            mMedida.BorrarActividad(actividad);
         }
         return res;
     }
@@ -193,8 +190,8 @@ public class ControladorEdicionRegistro {
         ((Preventiva)accion).CambiarEstado();
         int res = mAccion.ActualizarAccion(accion);
         if(res!=-1){
-            ActividadPreventiva actividad = mMedida.GetActividadPreventiva(IdActividadPreventiva);
-            mMedida.BorrarMedida(actividad);
+            Actividad actividad = mMedida.GetActividad(IdActividadPreventiva);
+            mMedida.BorrarActividad(actividad);
         }
         return res;
     }
@@ -212,8 +209,8 @@ public class ControladorEdicionRegistro {
         ((Correctiva)accion).CambiarEstado();
         int res = mAccion.ActualizarAccion(accion);
         if(res!=-1){
-            MedidaPreventiva medida = mMedida.GetMedidaPreventiva(IdMedidaPreventiva);
-            mMedida.BorrarMedida(medida);
+            Actividad medida = mMedida.GetActividad(IdMedidaPreventiva);
+            mMedida.BorrarActividad(medida);
         }
         return res;
     }
@@ -231,8 +228,8 @@ public class ControladorEdicionRegistro {
         ((Correctiva)accion).CambiarEstado();
         int res = mAccion.ActualizarAccion(accion);
         if(res!=-1){
-            MedidaCorrectiva medida = mMedida.GetMedidaCorrectiva(IdMedidaCorrectiva);
-            mMedida.BorrarMedida(medida);
+            Actividad medida = mMedida.GetActividad(IdMedidaCorrectiva);
+            mMedida.BorrarActividad(medida);
         }
         return res;
     }

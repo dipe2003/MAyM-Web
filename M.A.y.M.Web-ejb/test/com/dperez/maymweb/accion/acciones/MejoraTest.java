@@ -5,7 +5,7 @@
 */
 package com.dperez.maymweb.accion.acciones;
 
-import com.dperez.maymweb.accion.medida.medidas.ActividadMejora;
+import com.dperez.maymweb.accion.actividad.Actividad;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;
@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
  */
 public class MejoraTest {
     
-    private final ActividadMejora actividad = new ActividadMejora();
+    private final Actividad actividad = new Actividad();
     
     public MejoraTest() {
     }
@@ -49,10 +49,10 @@ public class MejoraTest {
     public void testGetActividades() {
         System.out.println("getActividades");
         Mejora instance = new Mejora();
-        List<ActividadMejora> expResult = new ArrayList<>();
+        List<Actividad> expResult = new ArrayList<>();
         expResult.add(actividad);
         instance.setActividades(expResult);
-        List<ActividadMejora> result = instance.getActividades();
+        List<Actividad> result = instance.getActividades();
         assertEquals(expResult, result);
     }
     
@@ -62,7 +62,7 @@ public class MejoraTest {
     @Test
     public void testSetActividades() {
         System.out.println("setActividades");
-        List<ActividadMejora> Actividades = new ArrayList<>();
+        List<Actividad> Actividades = new ArrayList<>();
         Actividades.add(actividad);
         Mejora instance = new Mejora();
         instance.setActividades(Actividades);
