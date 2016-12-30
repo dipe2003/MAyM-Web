@@ -29,7 +29,7 @@ public class DeteccionTest {
     private final Accion ACorrectiva = new Correctiva();
     private final Accion APreventiva = new Preventiva();
     private final Accion AMejora = new Mejora();
-    private final TipoDeteccion tipo = new TipoDeteccion("Nombre", "Descripcion");
+    private final EnumTipoDeteccion tipo = EnumTipoDeteccion.INTERNA;
     
     public DeteccionTest() {
     }
@@ -56,7 +56,7 @@ public class DeteccionTest {
     @Test
     public void testGetId() {
         System.out.println("getId");
-        TipoDeteccion instance = new TipoDeteccion();
+        Deteccion instance = new Deteccion();
         int expResult = 0;
         int result = instance.getId();
         assertEquals(expResult, result);
@@ -81,8 +81,8 @@ public class DeteccionTest {
     public void testGetTipo() {
         System.out.println("getTipo");
         Deteccion instance = new Deteccion();
-        TipoDeteccion expResult = null;
-        TipoDeteccion result = instance.getTipo();
+        EnumTipoDeteccion expResult = null;
+        EnumTipoDeteccion result = instance.getTipo();
         assertEquals(expResult, result);
         
         instance.setTipo(tipo);
@@ -135,7 +135,7 @@ public class DeteccionTest {
     public void testSetId() {
         System.out.println("setId");
         int Id = 0;
-        TipoDeteccion instance = new TipoDeteccion();
+        Deteccion instance = new Deteccion();
         instance.setId(Id);
     }
 
@@ -146,7 +146,7 @@ public class DeteccionTest {
     public void testSetNombre() {
         System.out.println("setNombre");
         String Nombre = "Nombre";
-        TipoDeteccion instance = new TipoDeteccion();
+        Deteccion instance = new Deteccion();
         instance.setNombre(Nombre);
     }
 

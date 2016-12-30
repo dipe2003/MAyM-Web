@@ -9,7 +9,6 @@ import com.dperez.maymweb.accion.adjunto.Adjunto;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
-import com.dperez.maymweb.deteccion.TipoDeteccion;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import java.io.Serializable;
@@ -34,9 +33,7 @@ public class CrearAccionCorrectiva implements Serializable {
     private String AnalisisCausa;
     
     private List<Adjunto> Adjuntos;
-    
-    private List<TipoDeteccion> TiposDeteccion;
-    
+        
     private Deteccion GeneradaPor;
     
     private Area AreaSectorAccion;
@@ -51,7 +48,6 @@ public class CrearAccionCorrectiva implements Serializable {
     public String getDescripcion() {return Descripcion;}
     public String getAnalisisCausa() {return AnalisisCausa;}
     public List<Adjunto> getAdjuntos() {return Adjuntos;}
-    public List<TipoDeteccion> getTiposDeteccion() {return TiposDeteccion;}
     public Deteccion getGeneradaPor() {return GeneradaPor;}
     public Area getAreaSectorAccion() {return AreaSectorAccion;}
     public Codificacion getCodificacionAccion() {return CodificacionAccion;}
@@ -63,19 +59,15 @@ public class CrearAccionCorrectiva implements Serializable {
     public void setDescripcion(String Descripcion) {this.Descripcion = Descripcion;}    
     public void setAnalisisCausa(String AnalisisCausa) {this.AnalisisCausa = AnalisisCausa;}    
     public void setAdjuntos(List<Adjunto> Adjuntos) {this.Adjuntos = Adjuntos;}    
-    public void setTiposDeteccion(List<TipoDeteccion> TiposDeteccion) {this.TiposDeteccion = TiposDeteccion;}    
     public void setGeneradaPor(Deteccion GeneradaPor) {this.GeneradaPor = GeneradaPor;}    
     public void setAreaSectorAccion(Area AreaSectorAccion) {this.AreaSectorAccion = AreaSectorAccion;}    
     public void setCodificacionAccion(Codificacion CodificacionAccion) {this.CodificacionAccion = CodificacionAccion;}    
     public void setEmpresaAccion(Empresa EmpresaAccion) {this.EmpresaAccion = EmpresaAccion;}
     
-    //  Metodos
-    
+    //  Metodos   
     
     @PostConstruct
     public void init(){
-        this.Adjuntos = new ArrayList<>();
-        this.TiposDeteccion = new ArrayList<>();
     }
     
     

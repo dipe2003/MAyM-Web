@@ -32,7 +32,7 @@ public class Deteccion implements Serializable {
     private String Nombre = new String();
     
     @ManyToOne
-    private TipoDeteccion Tipo;
+    private EnumTipoDeteccion Tipo;
     
     @OneToMany(mappedBy = "GeneradaPor")
     private List<Accion> AccionesDetectadas;
@@ -45,7 +45,7 @@ public class Deteccion implements Serializable {
         this.AccionesDetectadas = new ArrayList<>();
         this.FortalezasDetectadas = new ArrayList<>();
     }
-    public Deteccion(String NombreDeteccion, TipoDeteccion tipoDeteccion){
+    public Deteccion(String NombreDeteccion, EnumTipoDeteccion tipoDeteccion){
         this.Nombre = NombreDeteccion;
         this.Tipo = tipoDeteccion;
         this.AccionesDetectadas = new ArrayList<>();
@@ -56,7 +56,7 @@ public class Deteccion implements Serializable {
     public int getId() {return this.Id;}
     public String getNombre() {return this.Nombre;}
     
-    public TipoDeteccion getTipo() {return this.Tipo;}
+    public EnumTipoDeteccion getTipo() {return this.Tipo;}
     
     public List<Accion> getAccionesDetectadas() {return AccionesDetectadas;}
 
@@ -66,7 +66,7 @@ public class Deteccion implements Serializable {
     public void setId(int Id) {this.Id = Id;}
     public void setNombre(String Nombre) {this.Nombre = Nombre;}
     
-    public void setTipo(TipoDeteccion Tipo) {this.Tipo = Tipo;}
+    public void setTipo(EnumTipoDeteccion Tipo) {this.Tipo = Tipo;}
 
     public void setAccionesDetectadas(List<Accion> AccionesDetectadas) {
         this.AccionesDetectadas = AccionesDetectadas;

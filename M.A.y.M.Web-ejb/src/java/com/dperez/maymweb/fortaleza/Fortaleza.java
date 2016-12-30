@@ -7,7 +7,6 @@ package com.dperez.maymweb.fortaleza;
 
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.deteccion.Deteccion;
-import com.dperez.maymweb.deteccion.TipoDeteccion;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;

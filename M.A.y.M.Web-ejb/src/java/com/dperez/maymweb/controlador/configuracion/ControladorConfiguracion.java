@@ -10,9 +10,8 @@ import com.dperez.maymweb.area.ManejadorArea;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.codificacion.ManejadorCodificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
-import com.dperez.maymweb.deteccion.TipoDeteccion;
+import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
 import com.dperez.maymweb.deteccion.ManejadorDeteccion;
-import com.dperez.maymweb.deteccion.ManejadorTipoDeteccion;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.empresa.ManejadorEmpresa;
 import com.dperez.maymweb.usuario.ControladorSeguridad;
@@ -38,8 +37,6 @@ public class ControladorConfiguracion {
     private ManejadorCodificacion mCodificacion;
     @Inject
     private ManejadorDeteccion mDeteccion;
-    @Inject
-    private ManejadorTipoDeteccion mTipoDeteccion;
     @Inject
     private ManejadorUsuario mUsuario;
     @Inject
@@ -219,7 +216,7 @@ public class ControladorConfiguracion {
      * @param tipoDeteccion
      * @return null si no se creo.
      */
-    public Deteccion NuevaDeteccion(String NombreDeteccion, TipoDeteccion tipoDeteccion){
+    public Deteccion NuevaDeteccion(String NombreDeteccion, EnumTipoDeteccion tipoDeteccion){
         Deteccion deteccion = new Deteccion(NombreDeteccion, tipoDeteccion);
         deteccion.setId(mDeteccion.CrearDeteccion(deteccion));
         if(deteccion.getId()!=-1){
@@ -229,48 +226,21 @@ public class ControladorConfiguracion {
         }
     }
     
-    /***
-     * Crea una nueva deteccion y la persiste en la base de datos.
-     * @param NombreTipoDeteccion
-     * @param DescripcionTipo
-     * @return null si no se creo.
-     */
-    public TipoDeteccion NuevoTipoDeteccion(String NombreTipoDeteccion, String DescripcionTipo){
-        TipoDeteccion tipoDeteccion = new TipoDeteccion(NombreTipoDeteccion, DescripcionTipo);
-        tipoDeteccion.setId(mTipoDeteccion.CrearTipoDeteccion(tipoDeteccion));
-        if(tipoDeteccion.getId()!=-1){
-            return tipoDeteccion;
-        }else{
-            return null;
-        }
-    }
     /**
      * Cambia los valores de Deteccion y actualiza la base de datos.
      * @param IdDteccion
      * @param NombreDeteccion
-     * @param IdTipoDeteccion
+     * @param TipoDeteccion
      * @return Retorna -1 si no se actualizo. Retorna el IdDeteccion si se actualizo.
      */
-    public int EditarDeteccion(int IdDteccion, String NombreDeteccion, int IdTipoDeteccion){
+    public int EditarDeteccion(int IdDteccion, String NombreDeteccion, EnumTipoDeteccion TipoDeteccion){
         Deteccion deteccion = mDeteccion.GetDeteccion(IdDteccion);
         // comprobar si se cambia el tipo de deteccion para 'ahorrar' llamada a la base de datos.
-        if(deteccion.getTipo().getId()!= IdTipoDeteccion){
-            deteccion.setTipo(mTipoDeteccion.GetTipoDeteccion(IdTipoDeteccion));
+        if(!deteccion.getTipo().equals(TipoDeteccion)){
+            deteccion.setTipo(TipoDeteccion);
         }
         deteccion.setNombre(NombreDeteccion);
         return mDeteccion.ActualizarDeteccion(deteccion);
-    }
-    
-    /**
-     * Cambia los valores de TipoDeteccin y actualiza la base de datos.
-     * @param IdTipoDeteccion
-     * @param NombreTipoDeteccion
-     * @return Retorna -1 si no se actualizo. Retorna el IdTipoDeteccion si se actualizo.
-     */
-    public int EditarTipoDeteccion(int IdTipoDeteccion, String NombreTipoDeteccion){
-        TipoDeteccion tipo = mTipoDeteccion.GetTipoDeteccion(IdTipoDeteccion);
-        tipo.setNombre(NombreTipoDeteccion);
-        return mTipoDeteccion.ActualizarTipoDeteccion(tipo);
     }
     
     /*

@@ -10,7 +10,7 @@ import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.controlador.configuracion.ControladorConfiguracion;
 import com.dperez.maymweb.controlador.registro.ControladorEdicionRegistro;
 import com.dperez.maymweb.deteccion.Deteccion;
-import com.dperez.maymweb.deteccion.TipoDeteccion;
+import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.usuario.Usuario;
 import com.dperez.maymweb.usuario.permiso.EnumPermiso;
@@ -56,20 +56,10 @@ public class FacadeAdministrador  {
      * @param tipoDeteccion
      * @return null si no se creo.
      */
-    public Deteccion NuevaDeteccion(String NombreDeteccion, TipoDeteccion tipoDeteccion){
+    public Deteccion NuevaDeteccion(String NombreDeteccion, EnumTipoDeteccion tipoDeteccion){
         return cConfig.NuevaDeteccion(NombreDeteccion, tipoDeteccion);
     }
-    
-    /***
-     * Crea una nueva deteccion y la persiste en la base de datos.
-     * @param NombreTipoDeteccion
-     * @param DescripcionTipo
-     * @return null si no se creo.
-     */
-    public TipoDeteccion NuevoTipoDeteccion(String NombreTipoDeteccion, String DescripcionTipo){
-        return cConfig.NuevoTipoDeteccion(NombreTipoDeteccion, DescripcionTipo);
-    }
-    
+        
     /**
      * Crea un nuevo usuario y lo persiste en la base de datos. El usuario creado no recibe alertas.
      * @param Nickname

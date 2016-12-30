@@ -8,8 +8,7 @@ package com.dperez.maymweb.accion;
 import com.dperez.maymweb.fortaleza.Fortaleza;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.deteccion.Deteccion;
-import com.dperez.maymweb.deteccion.TipoDeteccion;
-import com.dperez.maymweb.deteccion.TipoDeteccion;
+import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
 import java.util.Date;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -24,7 +23,7 @@ import static org.junit.Assert.*;
  */
 public class FortalezaTest {
     private final Area area = new Area("Nombre Del Area", "Correo@Area.com");
-    private final Deteccion GeneradaPor = new Deteccion("Aud. Ejemplo", new TipoDeteccion("Tipo", "DescripcionTipo"));
+    private final Deteccion GeneradaPor = new Deteccion("Aud. Ejemplo", EnumTipoDeteccion.INTERNA);
     
     public FortalezaTest() {
     }
