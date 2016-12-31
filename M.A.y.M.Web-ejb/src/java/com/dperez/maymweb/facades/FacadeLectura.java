@@ -5,7 +5,10 @@
  */
 package com.dperez.maymweb.facades;
 
+import com.dperez.maymweb.area.Area;
+import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.controlador.registro.ControladorVistaRegistros;
+import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.usuario.Usuario;
 import java.util.List;
@@ -30,5 +33,17 @@ public class FacadeLectura  {
     
     public List<Empresa> ListaEmpresasRegistradas(){
         return cVista.ListarEmpresasRegistradas();
+    }
+    
+    public List<Deteccion> ListarDetecciones(){
+        return cVista.GetDetecciones();
+    }
+    
+    public List<Codificacion> ListarCodificaciones(){
+        return cVista.GetCodificaciones();
+    }
+    
+    public List<Area> ListarAreasSectores(){
+        return cVista.GetAreas();
     }
 }

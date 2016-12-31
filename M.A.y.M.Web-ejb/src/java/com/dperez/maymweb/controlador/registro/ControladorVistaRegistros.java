@@ -8,12 +8,17 @@ package com.dperez.maymweb.controlador.registro;
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.ManejadorAccion;
 import com.dperez.maymweb.accion.acciones.EnumAccion;
+import com.dperez.maymweb.area.Area;
+import com.dperez.maymweb.area.ManejadorArea;
+import com.dperez.maymweb.codificacion.Codificacion;
+import com.dperez.maymweb.codificacion.ManejadorCodificacion;
+import com.dperez.maymweb.deteccion.Deteccion;
+import com.dperez.maymweb.deteccion.ManejadorDeteccion;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.empresa.ManejadorEmpresa;
 import com.dperez.maymweb.estado.EnumEstado;
 import com.dperez.maymweb.usuario.ManejadorUsuario;
 import com.dperez.maymweb.usuario.Usuario;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -27,12 +32,18 @@ import javax.inject.Named;
 @Named
 @Stateless
 public class ControladorVistaRegistros {
-   @Inject
+    @Inject
     private ManejadorAccion mAccion;
-   @Inject
-   private ManejadorUsuario mUsuario;
-   @Inject
-   private ManejadorEmpresa mEmpresa;
+    @Inject
+    private ManejadorUsuario mUsuario;
+    @Inject
+    private ManejadorEmpresa mEmpresa;
+    @Inject
+    private ManejadorDeteccion mDeteccion;
+    @Inject
+    private ManejadorCodificacion mCodificaciones;
+    @Inject
+    private ManejadorArea mArea;
     
     //  Constructores
     public ControladorVistaRegistros(){}
@@ -44,7 +55,7 @@ public class ControladorVistaRegistros {
      * @return
      */
     public List<Accion> ListarAccionesSegunEstado(EnumEstado EstadoAccion){
-        List<Accion> acciones = new ArrayList<>();
+        List<Accion> acciones;
         acciones = mAccion.ListarAcciones();
         if(EstadoAccion!=null){
             Iterator it = acciones.iterator();
@@ -65,7 +76,7 @@ public class ControladorVistaRegistros {
      * @return
      */
     public List<Accion> ListarAccionesSegunEstado(EnumEstado EstadoAccion, EnumAccion TipoAccion){
-        List<Accion> acciones = new ArrayList<>();
+        List<Accion> acciones;
         acciones = mAccion.ListarAcciones();
         if(EstadoAccion!=null && TipoAccion !=null){
             Iterator it = acciones.iterator();
@@ -95,9 +106,33 @@ public class ControladorVistaRegistros {
     }
     
     /**
+     * Devuelve una lista de detecciones.
+     * @return
+     */
+    public List<Deteccion> GetDetecciones(){
+        return mDeteccion.ListarDetecciones();
+    }
+    
+    /**
+     * Devuelve una lista de codificaciones.
+     * @return
+     */
+    public List<Codificacion> GetCodificaciones(){
+        return mCodificaciones.ListarCodificaciones();
+    }
+    
+    /**
+     * Devuelve una lista de areas.
+     * @return 
+     */
+    public List<Area> GetAreas(){
+        return mArea.ListarAreas();
+    }
+    
+    /**
      * Lista todos los usuarios de la empresa seleccionada por id.
      * @param IdEmpresa
-     * @return 
+     * @return
      */
     public List<Usuario> ListarUsuarios(int IdEmpresa){
         List<Usuario> usuarios = mUsuario.ListarUsuarios();
@@ -111,7 +146,7 @@ public class ControladorVistaRegistros {
     
     /**
      * Lista todas las empresas registradas.
-     * @return 
+     * @return
      */
     public List<Empresa> ListarEmpresasRegistradas(){
         return mEmpresa.ListarEmpresasRegistradas();
