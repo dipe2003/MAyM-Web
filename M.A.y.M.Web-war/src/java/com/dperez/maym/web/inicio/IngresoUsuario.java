@@ -8,6 +8,7 @@ package com.dperez.maym.web.inicio;
 import com.dperez.maymweb.facades.FacadeMain;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeLectura;
+import com.dperez.maymweb.usuario.Usuario;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
@@ -21,6 +22,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 
 
 
@@ -67,8 +69,12 @@ public class IngresoUsuario implements Serializable {
     public void Ingresar() throws IOException{
         String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
         if(facadeMain.ComprobarValidezPassword(Integer.valueOf(UsuarioSeleccionado),PasswordUsuario)){
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_INFO, "Existe Usuario", "El Ususario si existe"));
-            FacesContext.getCurrentInstance().renderResponse();
+            FacesContext context = FacesContext.getCurrentInstance();
+            HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+            Usuario usuario = fLectura.GetUsuario(Integer.valueOf(UsuarioSeleccionado));
+            request.getSession().setAttribute("Usuario", usuario);
+            Empresa empresa = fLectura.GetEmpresa(EmpresaSeleccionada);
+            request.getSession().setAttribute("Empresa", empresa);
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");
         }else{
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No Existe Usuario", "Los datos del usuario no son correctos"));

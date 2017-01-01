@@ -152,4 +152,13 @@ public class ControladorVistaRegistros {
         return mEmpresa.ListarEmpresasRegistradas();
     }
     
+    /**
+     * Devuelve la empresa indicada por su id.
+     * @param IdEmpresa
+     * @return Retorne Null si no se encontro empresa.
+     */
+    public Empresa GetEmpresa(int IdEmpresa){
+        return mEmpresa.GetEmpresa(IdEmpresa);
+    }
+    
 }

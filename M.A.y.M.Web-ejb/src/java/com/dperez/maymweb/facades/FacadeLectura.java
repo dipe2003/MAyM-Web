@@ -35,6 +35,10 @@ public class FacadeLectura  {
         return cVista.ListarEmpresasRegistradas();
     }
     
+    public Empresa GetEmpresa(int IdEmpresa){
+        return cVista.GetEmpresa(IdEmpresa);
+    }
+    
     public List<Deteccion> ListarDetecciones(){
         return cVista.GetDetecciones();
     }
@@ -46,4 +50,6 @@ public class FacadeLectura  {
     public List<Area> ListarAreasSectores(){
         return cVista.GetAreas();
     }
+    
+    
 }
