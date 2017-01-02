@@ -53,7 +53,7 @@ public class CrearAccionCorrectiva implements Serializable {
     
     private List<Adjunto> Adjuntos;
     
-    private EnumTipoDeteccion[] TipoDeteccion;
+    private EnumTipoDeteccion[] TiposDeteccion;
     private EnumTipoDeteccion TipoDeDeteccionSeleccionada;
     private String NombreNuevaDeteccion;
     
@@ -80,6 +80,7 @@ public class CrearAccionCorrectiva implements Serializable {
     public Integer getCodificacionSeleccionada() {return CodificacionSeleccionada;}
     
     public EnumTipoDeteccion getTipoDeteccion(){return this.TipoDeDeteccionSeleccionada;}
+    public EnumTipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
     public Map<Integer, String> getListaDetecciones(){return this.ListaDetecciones;}
     public Integer getDeteccionSeleccionada(){return this.DeteccionSeleccionada;}
     public String getNombreNuevaDeteccion(){return this.NombreNuevaDeteccion;}
@@ -100,6 +101,7 @@ public class CrearAccionCorrectiva implements Serializable {
     public void setCodificacionSeleccionada(Integer CodificacionSeleccionada) {this.CodificacionSeleccionada = CodificacionSeleccionada;}
     
     public void setTipoDeteccion(EnumTipoDeteccion TipoDeteccion){this.TipoDeDeteccionSeleccionada = TipoDeteccion;}
+    public void setTiposDeteccion(EnumTipoDeteccion[] TiposDeteccion){this.TiposDeteccion = TiposDeteccion;}
     public void setListaDetecciones(Map<Integer, String> ListaDetecciones){this.ListaDetecciones = ListaDetecciones;}
     public void setDeteccionSeleccionada(Integer DeteccionSeleccionada){this.DeteccionSeleccionada = DeteccionSeleccionada;}
     public void setNombreNuevaDeteccion(String NombreNuevaDeteccion){this.NombreNuevaDeteccion = NombreNuevaDeteccion;}
@@ -124,7 +126,7 @@ public class CrearAccionCorrectiva implements Serializable {
         }
         
         //  Detecciones
-        TipoDeteccion = EnumTipoDeteccion.values();
+        TiposDeteccion = EnumTipoDeteccion.values();
         TipoDeDeteccionSeleccionada = EnumTipoDeteccion.INTERNA;
         this.ListaDetecciones = new HashMap<>();
         List<Deteccion> tmpDetecciones = fLectura.ListarDetecciones();

@@ -185,8 +185,8 @@ public class ControladorConfiguracion {
      * @param NombreCodificacion
      * @return null si no se creo.
      */
-    public Codificacion NuevaCodificacion(String NombreCodificacion){
-        Codificacion codificacion = new Codificacion(NombreCodificacion);
+    public Codificacion NuevaCodificacion(String NombreCodificacion, String DescripcionCodificacion){
+        Codificacion codificacion = new Codificacion(NombreCodificacion, DescripcionCodificacion);
         codificacion.setId(mCodificacion.CrearCodificacion(codificacion));
         if(codificacion.getId()!=-1){
             return codificacion;

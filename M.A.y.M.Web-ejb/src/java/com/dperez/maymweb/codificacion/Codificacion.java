@@ -27,26 +27,30 @@ public class Codificacion implements Serializable{
     @Id@GeneratedValue(strategy = GenerationType.AUTO)
     private int Id;
     private String Nombre = new String();
+    private String Descripcion = new String();
     
     @OneToMany(mappedBy = "CodificacionAccion")
     private List<Accion> AccionesConCodificacion;
     
     // Constructores
     public Codificacion(){this.AccionesConCodificacion = new ArrayList<>();}
-    public Codificacion(String NombreCodificacion){
+    public Codificacion(String NombreCodificacion, String DescripcionCodificacion){
         this.Nombre = NombreCodificacion;
+        this.Descripcion = DescripcionCodificacion;
         this.AccionesConCodificacion = new ArrayList<>();
     }
     
     // Getters
     public int getId() {return this.Id;}
     public String getNombre() {return this.Nombre;}
+    public String getDescripcion(){return this.Descripcion;}
     
     public List<Accion> getAccionesConCodificacion() {return AccionesConCodificacion;}
     
     // Setters
     public void setId(int Id) {this.Id = Id;}
     public void setNombre(String Nombre) {this.Nombre = Nombre;}
+    public void setDescripcion(String Descripcion){this.Descripcion = Descripcion;}
     
     public void setAccionesConCodificacion(List<Accion> AccionesConCodificacion) {
         this.AccionesConCodificacion = AccionesConCodificacion;

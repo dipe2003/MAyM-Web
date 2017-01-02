@@ -45,10 +45,11 @@ public class FacadeAdministrador  {
     /***
      * Crea una nueva codificacion y la persiste en la base de datos.
      * @param NombreCodificacion
+     * @param DescripcionCodificacion
      * @return null si no se creo.
      */
-    public Codificacion NuevaCodificacion(String NombreCodificacion){
-        return cConfig.NuevaCodificacion(NombreCodificacion);
+    public Codificacion NuevaCodificacion(String NombreCodificacion, String DescripcionCodificacion){
+        return cConfig.NuevaCodificacion(NombreCodificacion, DescripcionCodificacion);
     }
     /***
      * Crea una nueva deteccion y la persiste en la base de datos.

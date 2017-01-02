@@ -29,7 +29,7 @@ import static org.junit.Assert.*;
 public class AccionTest {
     private final Adjunto adjunto = new Adjunto("Titulo Adjunto", "Ubicacion Adjunto");
     private final Area area = new Area("Nombre Del Area", "Correo@Area.com");
-    private final Codificacion codificacion = new Codificacion("Nombre Codificacion");
+    private final Codificacion codificacion = new Codificacion("Nombre Codificacion", "Descripcion Codificacion");
     private final Deteccion GeneradaPor = new Deteccion("Aud. Ejemplo", EnumTipoDeteccion.INTERNA);
     private final Comprobacion comprobacion = new Comprobacion(new Date(), new Usuario());
     

@@ -72,6 +72,18 @@ public class CodificacionTest {
     }
     
     /**
+     * Test of getNombre method, of class Codificacion.
+     */
+    @Test
+    public void testGetDescripcion() {
+        System.out.println("getDescripcion");
+        Codificacion instance = new Codificacion();
+        String expResult = "";
+        String result = instance.getDescripcion();
+        assertEquals(expResult, result);
+    }
+    
+    /**
      * Test of getAccionesConCodificacion method, of class Codificacion.
      */
     @Test
@@ -103,6 +115,17 @@ public class CodificacionTest {
         String Nombre = "Nombre";
         Codificacion instance = new Codificacion();
         instance.setNombre(Nombre);
+    }
+    
+    /**
+     * Test of setNombre method, of class Codificacion.
+     */
+    @Test
+    public void testSetDescripcion() {
+        System.out.println("setDescripcion");
+        String Descripcion = "Descripcion";
+        Codificacion instance = new Codificacion();
+        instance.setDescripcion(Descripcion);
     }
     
     /**
