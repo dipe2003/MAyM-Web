@@ -9,6 +9,7 @@ import com.dperez.maymweb.fortaleza.Fortaleza;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
+import com.dperez.maymweb.empresa.Empresa;
 import java.util.Date;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -22,7 +23,7 @@ import static org.junit.Assert.*;
  * @author dperez
  */
 public class FortalezaTest {
-    private final Area area = new Area("Nombre Del Area", "Correo@Area.com");
+    private final Area area = new Area("Nombre Del Area", "Correo@Area.com", new Empresa());
     private final Deteccion GeneradaPor = new Deteccion("Aud. Ejemplo", EnumTipoDeteccion.INTERNA);
     
     public FortalezaTest() {

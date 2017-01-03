@@ -5,7 +5,7 @@
 */
 package com.dperez.maymweb.empresa;
 
-import com.dperez.maymweb.accion.Accion;
+import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.usuario.Usuario;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -32,12 +32,13 @@ public class Empresa implements Serializable {
     @OneToMany(mappedBy = "EmpresaUsuario" )
     private List<Usuario> UsuariosEmpresa;
     
-    @OneToMany(mappedBy = "EmpresaAccion")
-    private List<Accion> AccionesEmpresa;
+    @OneToMany(mappedBy = "EmpresaArea")
+    private List<Area> AreasEmpresa;
         
     //  Constructores
     public Empresa(){
          this.UsuariosEmpresa = new ArrayList<>();
+         this.AreasEmpresa = new ArrayList<>();
     }
     public Empresa(int idEmpresa, String NombreEmpresa, String DireccionEmpresa, String TelefonoEmpresa, String CorreoEmpresa){
         this.Id = idEmpresa;
@@ -46,6 +47,7 @@ public class Empresa implements Serializable {
         this.TelefonoEmpresa = TelefonoEmpresa;
         this.CorreoEmpresa = CorreoEmpresa;
         this.UsuariosEmpresa = new ArrayList<>();
+        this.AreasEmpresa = new ArrayList<>();
     }
     
     //  Getters
@@ -55,7 +57,7 @@ public class Empresa implements Serializable {
     public String getTelefonoEmpresa() {return TelefonoEmpresa;}
     public String getCorreoEmpresa() {return CorreoEmpresa;}    
     public List<Usuario> getUsuariosEmpresa(){return this.UsuariosEmpresa;}
-    public List<Accion> getAccionesEmpresa(){return this.AccionesEmpresa;}
+    public List<Area> getAreasEmpresa(){return this.AreasEmpresa;}
     
     //  Setters
     public void setId(int Id) {this.Id = Id;}
@@ -64,7 +66,7 @@ public class Empresa implements Serializable {
     public void setTelefonoEmpresa(String TelefonoEmpresa) {this.TelefonoEmpresa = TelefonoEmpresa;}
     public void setCorreoEmpresa(String CorreoEmpresa) {this.CorreoEmpresa = CorreoEmpresa;}  
     public void setUsuariosEmpresa(List<Usuario> UsuariosEmpresa){this.UsuariosEmpresa = UsuariosEmpresa;}
-    public void setAccionesEmpresa(List<Accion> AccionesEmpresa){this.AccionesEmpresa = AccionesEmpresa;}
+    public void setAreasEmpresa(List<Area> AreasEmpresa){this.AreasEmpresa = AreasEmpresa;}
     
     //  Listas-Relaciones
     public void addUsuario(Usuario UsuarioEmpresa){
@@ -92,24 +94,24 @@ public class Empresa implements Serializable {
         }
     }
     
-    public void addAccion(Accion AccionEmpresa){
-        if(this.AccionesEmpresa == null) this.AccionesEmpresa = new ArrayList<>();
-        if(AccionEmpresa!=null){
-            this.AccionesEmpresa.add(AccionEmpresa);
-            if(AccionEmpresa.getEmpresaAccion()!=null){
-                if(!AccionEmpresa.getEmpresaAccion().equals(this)){
-                    AccionEmpresa.setEmpresaAccion(this);
+    public void addArea(Area AreaEmpresa){
+        if(this.AreasEmpresa == null) this.AreasEmpresa = new ArrayList<>();
+        if(AreaEmpresa!=null){
+            this.AreasEmpresa.add(AreaEmpresa);
+            if(AreaEmpresa.getEmpresaArea()!=null){
+                if(!AreaEmpresa.getEmpresaArea().equals(this)){
+                    AreaEmpresa.setEmpresaArea(this);
                 }
             }
         }
     }
     
-    public void removeAccion(Accion AccionEmpresa){
-        if(this.AccionesEmpresa != null) {
-            if(AccionEmpresa!=null){
-                this.AccionesEmpresa.remove(AccionEmpresa);
-                if(AccionEmpresa.getEmpresaAccion().equals(this)){
-                    AccionEmpresa.setEmpresaAccion(null);
+    public void removeArea(Area AreaEmpresa){
+        if(this.AreasEmpresa != null) {
+            if(AreaEmpresa!=null){
+                this.AreasEmpresa.remove(AreaEmpresa);
+                if(AreaEmpresa.getEmpresaArea().equals(this)){
+                    AreaEmpresa.setEmpresaArea(null);
                 }
             }
         }

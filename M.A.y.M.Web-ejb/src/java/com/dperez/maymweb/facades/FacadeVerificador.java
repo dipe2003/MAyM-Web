@@ -15,6 +15,7 @@ import com.dperez.maymweb.controlador.registro.ControladorRegistro;
 import com.dperez.maymweb.producto.Producto;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import javax.inject.Inject;
 
 /**
@@ -81,27 +82,27 @@ public class FacadeVerificador {
      * @return Null: si no se creo.
      */
     public Accion NuevaAccion(EnumAccion TipoAccion, Date FechaDeteccion, String Descripcion, EnumTipoDesvio TipoDesvio,
-            int IdAreaSector, int IdDeteccion, int IdCodificacion, int IdEmpresa){
-        return cReg.NuevaAccion(TipoAccion, FechaDeteccion, Descripcion, TipoDesvio, IdAreaSector, IdDeteccion, IdCodificacion, IdEmpresa);
+            int IdAreaSector, int IdDeteccion, int IdCodificacion){
+        return cReg.NuevaAccion(TipoAccion, FechaDeteccion, Descripcion, TipoDesvio, IdAreaSector, IdDeteccion, IdCodificacion);
     }
     
     /**
      * Crea el/los productos involucrados en el desvio, los agrega a la accion correctiva y actualiza la base de datos.
      * @param AccionCorrectiva
-     * @param productos
+     * @param productos Map.Key = Nombre del producto | Map.Value = Datos del producto
      * @return -1 si no se creo.
      */
-    public int AgregarProductoInvolucrado(int AccionCorrectiva, List<Producto> productos){
+    public int AgregarProductoInvolucrado(int AccionCorrectiva, Map<String, String> productos){
         return cReg.AgregarProductoInvolucrado(AccionCorrectiva, productos);
     }
     
     /**
      * Crea el/los adjuntos, los agrega a la accion y actualiza la base de datos.
      * @param IdAccion
-     * @param adjuntos
+     * @param adjuntos Map.Key = Titulo del archivo Adjunto | Map.Value = Ubicacion del archivo adjunto
      * @return -1 si no se creo.
      */
-    public int AgregarArchivoAdjunto(int IdAccion, List<Adjunto> adjuntos){
+    public int AgregarArchivoAdjunto(int IdAccion, Map<String, String> adjuntos){
         return cReg.AgregarArchivoAdjunto(IdAccion, adjuntos);
     }
     

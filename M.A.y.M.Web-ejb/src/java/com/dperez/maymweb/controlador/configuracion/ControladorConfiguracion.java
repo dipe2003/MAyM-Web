@@ -151,10 +151,12 @@ public class ControladorConfiguracion {
      * Crea una nueva area/sector y la persiste en la base de datos.
      * @param NombreArea
      * @param CorreoArea
+     * @param IdEmpresa
      * @return null si no se creo.
      */
-    public Area NuevaArea(String NombreArea, String CorreoArea){
-        Area area = new Area(NombreArea, CorreoArea);
+    public Area NuevaArea(String NombreArea, String CorreoArea, int IdEmpresa){
+        Empresa empresa = mEmpresa.GetEmpresa(IdEmpresa);
+        Area area = new Area(NombreArea, CorreoArea, empresa);
         area.setId(mArea.CrearArea(area));
         if(area.getId()!=-1){
             return area;

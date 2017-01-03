@@ -6,6 +6,7 @@
 package com.dperez.maymweb.area;
 
 import com.dperez.maymweb.accion.Accion;
+import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.fortaleza.Fortaleza;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -30,6 +32,9 @@ public class Area implements Serializable {
     private String Nombre = new String();
     private String Correo = new String();
     
+    @ManyToOne
+    private Empresa EmpresaArea;
+    
     @OneToMany(mappedBy = "AreaSectorAccion")
     private List<Accion> AccionesEnAreaSector;
     @OneToMany(mappedBy = "AreaSectorFortaleza")
@@ -40,9 +45,10 @@ public class Area implements Serializable {
         this.AccionesEnAreaSector = new ArrayList<>();
         this.FortalezasEnAreaSector = new ArrayList<>();
     }
-    public Area(String NombreArea, String CorreoArea){
+    public Area(String NombreArea, String CorreoArea, Empresa EmpresaArea){
         this.Nombre = NombreArea;
         this.Correo = CorreoArea;
+        this.EmpresaArea = EmpresaArea;
         this.AccionesEnAreaSector = new ArrayList<>();
         this.FortalezasEnAreaSector = new ArrayList<>();
     }
@@ -52,6 +58,8 @@ public class Area implements Serializable {
     public String getNombre() {return this.Nombre;}
     public String getCorreo() {return this.Correo;}
     
+    public Empresa getEmpresaArea() {return this.EmpresaArea;}
+    
     public List<Accion> getAccionesEnAreaSector() {return AccionesEnAreaSector;}
     
     public List<Fortaleza> getFortalezasEnAreaSector() {return FortalezasEnAreaSector;}
@@ -60,6 +68,8 @@ public class Area implements Serializable {
     public void setId(int Id) {this.Id = Id;}
     public void setNombre(String Nombre) {this.Nombre = Nombre;}
     public void setCorreo(String Correo) {this.Correo = Correo;}
+    
+    public void setEmpresaArea(Empresa EmpresaArea){this.EmpresaArea = EmpresaArea;}
     
     public void setAccionesEnAreaSector(List<Accion> AccionesEnAreaSector) {
         this.AccionesEnAreaSector = AccionesEnAreaSector;

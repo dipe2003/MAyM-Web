@@ -62,9 +62,6 @@ public abstract class Accion implements Serializable{
     @OneToOne
     private Comprobacion ComprobacionImplementacion;
     
-    @ManyToOne
-    private Empresa EmpresaAccion;
-    
     // Constructores
     public Accion(){
         this.EstadoAccion = EnumEstado.PENDIENTE;
@@ -95,8 +92,6 @@ public abstract class Accion implements Serializable{
     
     public Comprobacion getComprobacionEficacia() {return ComprobacionEficacia;}
     public Comprobacion getComprobacionImplementacion() {return ComprobacionImplementacion;}
-    
-    public Empresa getEmpresaAccion(){return this.EmpresaAccion;}
     
     // Setters
     public void setId(int Id) {this.Id = Id;}
@@ -163,15 +158,6 @@ public abstract class Accion implements Serializable{
             ComprobacionImplementacion.setAccionImplementacion(this);
         }
         this.ComprobacionImplementacion = ComprobacionImplementacion;
-    }
-    
-    public void setEmpresaAccion(Empresa EmpresaAccion){
-        this.EmpresaAccion = EmpresaAccion;
-        if(EmpresaAccion!=null){
-            if(!EmpresaAccion.getAccionesEmpresa().contains(this)){
-                EmpresaAccion.getAccionesEmpresa().add(this);
-            }
-        }
     }
     
     // Listas

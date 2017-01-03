@@ -13,11 +13,9 @@ import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
-import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
-import com.dperez.maymweb.usuario.Usuario;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
@@ -33,7 +31,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
 
 
 
@@ -51,17 +48,18 @@ public class CrearAccionCorrectiva implements Serializable {
     private String Descripcion;
     private String AnalisisCausa;
     
-    private List<Adjunto> Adjuntos;
+    private String TituloAdjunto;
+    private String UbicacionAdjunto;
+    private Map<String, String> ListaAdjuntos;
     
     private EnumTipoDeteccion[] TiposDeteccion;
     private EnumTipoDeteccion TipoDeDeteccionSeleccionada;
     private String NombreNuevaDeteccion;
-    
-    private EnumTipoDesvio[] TipoDesvio;
-    private EnumTipoDesvio TipoDesvioSeleccionado;
-    
     private Map<Integer, String> ListaDetecciones;
     private Integer DeteccionSeleccionada;
+    
+    private EnumTipoDesvio[] TiposDesvios;
+    private EnumTipoDesvio TipoDesvioSeleccionado;
     
     private Map<Integer, String> ListaAreasSectores;
     private Integer AreaSectorAccionSeleccionada;
@@ -69,47 +67,69 @@ public class CrearAccionCorrectiva implements Serializable {
     private Map<Integer, String> ListaCodificaciones;
     private Integer CodificacionSeleccionada;
     
+    private boolean hayProductoAfectado;
+    private Map<String, String> ListaProductosAfectados;
+    private String NombreProductoAfectado;
+    private String DatosProductoAfectado;
+    
     //  Getters
     
     public Date getFechaDeteccion() {return FechaDeteccion;}
     public String getDescripcion() {return Descripcion;}
     public String getAnalisisCausa() {return AnalisisCausa;}
-    public List<Adjunto> getAdjuntos() {return Adjuntos;}
+    public String getTituloAdjunto(){return this.TituloAdjunto;}
+    public String getUbicacionAdjunto(){return this.UbicacionAdjunto;}
+    public Map<String, String> getAdjuntos() {return ListaAdjuntos;}
     
     public Map<Integer, String> getListaCodificaciones(){return this.ListaCodificaciones;}
     public Integer getCodificacionSeleccionada() {return CodificacionSeleccionada;}
     
-    public EnumTipoDeteccion getTipoDeteccion(){return this.TipoDeDeteccionSeleccionada;}
+    public EnumTipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
     public EnumTipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
     public Map<Integer, String> getListaDetecciones(){return this.ListaDetecciones;}
-    public Integer getDeteccionSeleccionada(){return this.DeteccionSeleccionada;}
     public String getNombreNuevaDeteccion(){return this.NombreNuevaDeteccion;}
+    public Integer getDeteccionSeleccionada(){return this.DeteccionSeleccionada;}
     
+    public EnumTipoDesvio[] getTiposDesvios(){return this.TiposDesvios;}
     public EnumTipoDesvio getTipoDesvioSeleccionado(){return this.TipoDesvioSeleccionado;}
     
     public Map<Integer, String> getListaAreasSectores(){return this.ListaAreasSectores;}
     public Integer getAreaSectorAccionSeleccionada() {return AreaSectorAccionSeleccionada;}
+    
+    public boolean hayProductoAfectado(){return this.hayProductoAfectado;}
+    public Map<String, String> getListaProductosAfectados(){return this.ListaProductosAfectados;}
+    public String getNombreProductoAfectado(){return this.NombreProductoAfectado;}
+    public String getDatosProductoAfectado(){return this.DatosProductoAfectado;}
+    
     
     //  Setters
     
     public void setFechaDeteccion(Date FechaDeteccion) {this.FechaDeteccion = FechaDeteccion;}
     public void setDescripcion(String Descripcion) {this.Descripcion = Descripcion;}
     public void setAnalisisCausa(String AnalisisCausa) {this.AnalisisCausa = AnalisisCausa;}
-    public void setAdjuntos(List<Adjunto> Adjuntos) {this.Adjuntos = Adjuntos;}
+    public void setTituloAdjunto(String TituloAdjunto){this.TituloAdjunto = TituloAdjunto;}
+    public void setUbicacionAdjunto(String UbicacionAdjunto){this.UbicacionAdjunto = UbicacionAdjunto;}
+    public void setAdjuntos(Map<String, String> Adjuntos) {this.ListaAdjuntos = Adjuntos;}
     
     public void setListaCodificaciones(Map<Integer, String> ListaCodificaciones){this.ListaCodificaciones = ListaCodificaciones;}
     public void setCodificacionSeleccionada(Integer CodificacionSeleccionada) {this.CodificacionSeleccionada = CodificacionSeleccionada;}
     
-    public void setTipoDeteccion(EnumTipoDeteccion TipoDeteccion){this.TipoDeDeteccionSeleccionada = TipoDeteccion;}
+    public void setTipoDeDeteccionSeleccionada(EnumTipoDeteccion TipoDeteccion){this.TipoDeDeteccionSeleccionada = TipoDeteccion;}
     public void setTiposDeteccion(EnumTipoDeteccion[] TiposDeteccion){this.TiposDeteccion = TiposDeteccion;}
     public void setListaDetecciones(Map<Integer, String> ListaDetecciones){this.ListaDetecciones = ListaDetecciones;}
-    public void setDeteccionSeleccionada(Integer DeteccionSeleccionada){this.DeteccionSeleccionada = DeteccionSeleccionada;}
     public void setNombreNuevaDeteccion(String NombreNuevaDeteccion){this.NombreNuevaDeteccion = NombreNuevaDeteccion;}
+    public void setDeteccionSeleccionada(Integer DeteccionSeleccionada){this.DeteccionSeleccionada = DeteccionSeleccionada;}
     
+    public void setTiposDesvios(EnumTipoDesvio[] TiposDesvios){this.TiposDesvios = TiposDesvios;}
     public void setTipoDesvioSeleccionado(EnumTipoDesvio TipoDesvioSeleccionado){this.TipoDesvioSeleccionado = TipoDesvioSeleccionado;}
     
     public void setListaAreaSectores(Map<Integer, String> ListaAreasSectores){this.ListaAreasSectores = ListaAreasSectores;}
     public void setAreaSectorAccionSeleccionada(Integer AreaSectorAccionSeleccionada) {this.AreaSectorAccionSeleccionada = AreaSectorAccionSeleccionada;}
+    
+    public void setHayProductoAfectado(boolean hayProductoAfectado){this.hayProductoAfectado = hayProductoAfectado;}
+    public void setListaProductosAfectados(Map<String, String> ListaProductosAfectados) {this.ListaProductosAfectados = ListaProductosAfectados;}
+    public void setNombreProductoAfectado(String NombreProductoAfectado){this.NombreProductoAfectado = NombreProductoAfectado;}
+    public void setDatosProductoAfectado(String DatosProductoAfectado){this.DatosProductoAfectado = DatosProductoAfectado;}
     
     //  Metodos
     
@@ -138,7 +158,7 @@ public class CrearAccionCorrectiva implements Serializable {
         }
         
         //  Tipo de desvios
-        TipoDesvio = EnumTipoDesvio.values();
+        TiposDesvios = EnumTipoDesvio.values();
         TipoDesvioSeleccionado = EnumTipoDesvio.NC_MENOR_OBS;
         
         // Areas Sectores
@@ -177,27 +197,43 @@ public class CrearAccionCorrectiva implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_INFO, "Se agrego nueva deteccion", "Se agrego nueva deteccion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }
-    }    
+    }
+    
+    /**
+     * Agrega un nuevo producto afectado a la lista de productos afectados para ser persistidos durante la creacion de la accion correctiva.
+     * Si el nombre del producto ya existe se sustituye
+     * Si el nombre o el datos estan vacios no se crea y se muestra el mensaje correspondiente.
+     */
+    public void nuevoProductoAfectado(){
+        if(NombreProductoAfectado.isEmpty() || DatosProductoAfectado.isEmpty()){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo agregar producto", "No se pudo agregar producto" ));
+            FacesContext.getCurrentInstance().renderResponse();
+        }else{
+            this.ListaProductosAfectados.put(NombreProductoAfectado, DatosProductoAfectado);
+        }
+    }
     
     /**
      * Crea la accion correctiva con los datos ingresados.
-     * Si on se creo se muestra mensaje de error.
+     * Agrega los productos involucrados si existen {hayProductoAfectado = True}
+     * Si no se creo se muestra mensaje de error.
      * Si se creo se redirige a la pagina de listado de acciones.
      * @throws java.io.IOException
      */
-    public void crearAccionCorrectiva() throws IOException{              
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        Usuario usuario = (Usuario)request.getSession().getAttribute("Usuario");
-        Empresa empresa = (Empresa)request.getSession().getAttribute("Empresa");
-        Accion accion = fDatos.NuevaAccion(EnumAccion.CORRECTIVA, FechaDeteccion, Descripcion, TipoDesvioSeleccionado, AreaSectorAccionSeleccionada, DeteccionSeleccionada, CodificacionSeleccionada, empresa.getId());
+    public void crearAccionCorrectiva() throws IOException{
+        Accion accion = fDatos.NuevaAccion(EnumAccion.CORRECTIVA, FechaDeteccion, Descripcion, TipoDesvioSeleccionado, AreaSectorAccionSeleccionada, DeteccionSeleccionada, CodificacionSeleccionada);
         if(accion != null){
+            // Crear los productos y agregarlos a la accion correctiva si hay producto involucrado
+            if(hayProductoAfectado) fDatos.AgregarProductoInvolucrado(accion.getId(), ListaProductosAfectados);   
+            // Crear los adjuntos y agregarlos a la accion correctiva
+            if(!ListaAdjuntos.isEmpty()) fDatos.AgregarArchivoAdjunto(accion.getId(), ListaAdjuntos);
+            // redirigir a la lista de las acciones correctivas.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");
-        }else{
+        }else{            
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Accion", "No se pudo crear la Accion" ));
             FacesContext.getCurrentInstance().renderResponse();
-        }        
+        }
     }
     
 }

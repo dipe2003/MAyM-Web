@@ -38,8 +38,8 @@ public class FacadeAdministrador  {
         return cConfig.NuevaEmpresa(Id, NombreEmpresa, DireccionEmpresa, TelefonoEmpresa, CorreoEmpresa);
     }
     
-    public Area NuevaArea(String NombreArea, String CorreoArea){
-        return cConfig.NuevaArea(NombreArea, CorreoArea);
+    public Area NuevaArea(String NombreArea, String CorreoArea, int IdEmpresa){
+        return cConfig.NuevaArea(NombreArea, CorreoArea, IdEmpresa);
     }
     
     /***

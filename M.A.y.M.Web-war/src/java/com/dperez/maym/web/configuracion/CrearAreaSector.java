@@ -5,17 +5,17 @@
  */
 package com.dperez.maym.web.configuracion;
 
+import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import java.io.IOException;
 import java.io.Serializable;
 import javax.faces.application.FacesMessage;
-import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
-import static javax.faces.application.FacesMessage.SEVERITY_INFO;
 import static javax.faces.application.FacesMessage.SEVERITY_WARN;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -46,7 +46,10 @@ public class CrearAreaSector implements Serializable{
      * @throws IOException 
      */
     public void crearAreaSector() throws IOException{
-        if (fAdmin.NuevaArea(NombreArea, CorreoArea) != null){
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        Empresa empresa = (Empresa)request.getSession().getAttribute("Empresa");
+        if (fAdmin.NuevaArea(NombreArea, CorreoArea, empresa.getId()) != null){
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");
         }else{

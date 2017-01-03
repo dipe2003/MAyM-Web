@@ -5,6 +5,7 @@
  */
 package com.dperez.maymweb.empresa;
 
+import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.usuario.Usuario;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,8 @@ public class EmpresaTest {
     
     private final Usuario Usr1 = new Usuario();
     private final Usuario Usr2 = new Usuario();
+    private final Area AreaTest1 = new Area();
+    private final Area AreaTest2 = new Area();
     
     public EmpresaTest() {
     }
@@ -123,6 +126,22 @@ public class EmpresaTest {
         List<Usuario> result = instance.getUsuariosEmpresa();
         assertEquals(expResult, result);
     }
+    
+    /**
+     * Test of getAreasEmpresa method, of class Empresa.
+     */
+    @Test
+    public void testGetAreasEmpresa() {
+        System.out.println("getAreasEmpresa");
+        Empresa instance = new Empresa();
+        instance.addArea(AreaTest1);
+        instance.addArea(AreaTest2);
+        List<Area> expResult = new ArrayList<>();
+        expResult.add(AreaTest1);
+        expResult.add(AreaTest2);
+        List<Area> result = instance.getAreasEmpresa();
+        assertEquals(expResult, result);
+    }
 
     /**
      * Test of setId method, of class Empresa.
@@ -189,6 +208,18 @@ public class EmpresaTest {
         UsuariosEmpresa.add(Usr1);
         Empresa instance = new Empresa();
         instance.setUsuariosEmpresa(UsuariosEmpresa);
+    }
+    
+    /**
+     * Test of setAreasEmpresa method, of class Empresa.
+     */
+    @Test
+    public void testSetAreasEmpresa() {
+        System.out.println("setAreasEmpresa");
+        List<Area> AreasEmpresa = new ArrayList<>();
+        AreasEmpresa.add(AreaTest1);
+        Empresa instance = new Empresa();
+        instance.setAreasEmpresa(AreasEmpresa);
     }
 
     /**

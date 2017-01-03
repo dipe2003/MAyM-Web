@@ -30,6 +30,7 @@ import com.dperez.maymweb.usuario.Usuario;
 import java.security.InvalidParameterException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -68,11 +69,10 @@ public class ControladorRegistro {
      * @param IdAreaSector
      * @param IdDeteccion
      * @param IdCodificacion
-     * @param idEmpresa
      * @return Null: si no se creo.
      */
     public Accion NuevaAccion(EnumAccion TipoAccion, Date FechaDeteccion, String Descripcion, EnumTipoDesvio TipoDesvio,
-            int IdAreaSector, int IdDeteccion, int IdCodificacion, int idEmpresa){
+            int IdAreaSector, int IdDeteccion, int IdCodificacion){
         Accion accion = null;
         switch(TipoAccion){
             case CORRECTIVA:
@@ -95,7 +95,6 @@ public class ControladorRegistro {
             Codificacion codificacion = mCodificacion.GetCodificacion(IdCodificacion);
             accion.setCodificacionAccion(codificacion);
             accion.setId(mAccion.CrearAccion(accion));
-            accion.setEmpresaAccion(mEmpresa.GetEmpresa(idEmpresa));
         }
         if(accion.getId()!=-1){
             return accion;
@@ -107,13 +106,13 @@ public class ControladorRegistro {
     /**
      * Crea el/los productos involucrados en el desvio, los agrega a la accion correctiva y actualiza la base de datos.
      * @param AccionCorrectiva
-     * @param productos
+     * @param productos Map.Key = Nombre del producto | Map.Value = Datos del producto
      * @return -1 si no se creo.
      */
-    public int AgregarProductoInvolucrado(int AccionCorrectiva, List<Producto> productos){
+    public int AgregarProductoInvolucrado(int AccionCorrectiva, Map<String, String> productos){
         Correctiva correctiva = (Correctiva) mAccion.GetAccion(AccionCorrectiva);
-        for(Producto producto: productos){
-            Producto ProductoInvolucrado = new Producto(producto.getNombre(), producto.getDatos());
+        for(Map.Entry<String, String> entry : productos.entrySet()){
+            Producto ProductoInvolucrado = new Producto(entry.getKey(), entry.getValue());
             correctiva.addProductoAfectado(ProductoInvolucrado);
         }
         return mAccion.ActualizarAccion(correctiva);
@@ -122,13 +121,13 @@ public class ControladorRegistro {
     /**
      * Crea el/los adjuntos, los agrega a la accion y actualiza la base de datos.
      * @param IdAccion
-     * @param adjuntos
+     * @param adjuntos Map.Key = Titulo del archivo Adjunto | Map.Value = Ubicacion del archivo adjunto
      * @return -1 si no se creo.
      */
-    public int AgregarArchivoAdjunto(int IdAccion, List<Adjunto> adjuntos){
+    public int AgregarArchivoAdjunto(int IdAccion, Map<String, String> adjuntos){
         Accion accion = mAccion.GetAccion(IdAccion);
-        for(Adjunto adjunto: adjuntos){
-            Adjunto AdjuntoAccion = new Adjunto(adjunto.getTitulo(), adjunto.getUbicacion());
+        for(Map.Entry<String, String> entry: adjuntos.entrySet()){
+            Adjunto adjunto = new Adjunto(entry.getKey(), entry.getValue());
             accion.addAdjunto(adjunto);
         }
         return mAccion.ActualizarAccion(accion);

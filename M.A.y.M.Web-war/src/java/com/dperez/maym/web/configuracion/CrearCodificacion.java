@@ -9,7 +9,6 @@ import com.dperez.maymweb.facades.FacadeAdministrador;
 import java.io.IOException;
 import java.io.Serializable;
 import javax.faces.application.FacesMessage;
-import static javax.faces.application.FacesMessage.SEVERITY_INFO;
 import static javax.faces.application.FacesMessage.SEVERITY_WARN;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
