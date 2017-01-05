@@ -3,12 +3,11 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
 */
-package com.dperez.maym.web.accion;
+package com.dperez.maym.web.acciones;
 
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.acciones.EnumAccion;
 import com.dperez.maymweb.accion.acciones.EnumTipoDesvio;
-import com.dperez.maymweb.accion.adjunto.Adjunto;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.deteccion.Deteccion;

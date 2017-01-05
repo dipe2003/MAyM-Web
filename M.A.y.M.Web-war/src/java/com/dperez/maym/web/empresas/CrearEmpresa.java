@@ -3,7 +3,7 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
 */
-package com.dperez.maym.web.empresa;
+package com.dperez.maym.web.empresas;
 
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import java.io.IOException;

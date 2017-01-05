@@ -97,12 +97,44 @@ public class ControladorVistaRegistros {
     }
     
     /**
+     * Devuelve la accion indicada por su id
+     * @param IdAccion
+     * @return 
+     */
+    public Accion GetAccion(int IdAccion){
+        return mAccion.GetAccion(IdAccion);
+    }
+    
+    /**
      * Devuelve el usuario especificado por su id
      * @param IdUsuario
      * @return Null si no existe el usuario.
      */
     public Usuario GetUsuario(int IdUsuario){
         return mUsuario.GetUsuario(IdUsuario);
+    }
+    
+    /**
+     * Devuelve todos los usuarios registrados.
+     * @return 
+     */
+    public List<Usuario> GetUsuarios(){
+        return mUsuario.ListarUsuarios();
+    }
+    
+    /**
+     * Devuelve todos usuarios registrados que pertenecen a la empresa indicada.
+     * @param IdEmpresa Id de la empresa de los usuarios
+     * @return
+     */
+    public List<Usuario> GetUsuariosEmpresa(int IdEmpresa){
+        List<Usuario> usuarios = mUsuario.ListarUsuarios();
+        Iterator<Usuario> it = usuarios.iterator();
+        while(it.hasNext()){
+            Usuario usuario = it.next();
+            if(usuario.getEmpresaUsuario().getId() != IdEmpresa) it.remove();
+        }
+        return usuarios;
     }
     
     /**
