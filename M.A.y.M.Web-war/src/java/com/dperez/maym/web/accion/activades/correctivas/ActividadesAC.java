@@ -13,6 +13,7 @@ import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.usuario.Usuario;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +38,7 @@ public class ActividadesAC implements Serializable {
     
     private Accion AccionCorrectiva;
     
-    private Map<Integer, String> ListaUsuariosEmpresa;
+    private Map<Integer, Usuario> ListaUsuariosEmpresa;
     
     private Map<Integer, Actividad> ListaMedidasCorrectivas;
     private int MedidaCorrectivaSeleccionada;
@@ -45,15 +46,41 @@ public class ActividadesAC implements Serializable {
     private Map<Integer, Actividad> ListaMedidasPreventivas;
     private int MedidaPreventivaSeleccionada;
     
+    private List<Actividad> ActividadesARemover;
+    
     private Date FechaEstimadaImplementacionMedidaCorrectiva;
-    private Date FechaImplementacionMedidaCorrectiva;
     private String DescripcionMedidaCorrectiva;
     private int ResponsableMedidaCorrectiva;
     
     private Date FechaEstimadaImplementacionMedidaPreventiva;
-    private Date FechaImplementacionMedidaPreventiva;
     private String DescripcionMedidaPreventiva;
     private int ResponsableMedidaPreventiva;
+
+    //  Getters
+    public Map<Integer, Usuario> getListaUsuariosEmpresa() {return ListaUsuariosEmpresa;}
+    public Map<Integer, Actividad> getListaMedidasCorrectivas() {return ListaMedidasCorrectivas;}
+    public int getMedidaCorrectivaSeleccionada() {return MedidaCorrectivaSeleccionada;}
+    public Map<Integer, Actividad> getListaMedidasPreventivas() {return ListaMedidasPreventivas;}
+    public int getMedidaPreventivaSeleccionada() {return MedidaPreventivaSeleccionada;}
+    public Date getFechaEstimadaImplementacionMedidaCorrectiva() {return FechaEstimadaImplementacionMedidaCorrectiva;}
+    public String getDescripcionMedidaCorrectiva() {return DescripcionMedidaCorrectiva;}
+    public int getResponsableMedidaCorrectiva() {return ResponsableMedidaCorrectiva;}
+    public Date getFechaEstimadaImplementacionMedidaPreventiva() {return FechaEstimadaImplementacionMedidaPreventiva;}
+    public String getDescripcionMedidaPreventiva() {return DescripcionMedidaPreventiva;}
+    public int getResponsableMedidaPreventiva() {return ResponsableMedidaPreventiva;}
+    
+    //  Setters
+    public void setListaUsuariosEmpresa(Map<Integer, Usuario> ListaUsuariosEmpresa) {this.ListaUsuariosEmpresa = ListaUsuariosEmpresa;}
+    public void setListaMedidasCorrectivas(Map<Integer, Actividad> ListaMedidasCorrectivas) {this.ListaMedidasCorrectivas = ListaMedidasCorrectivas;}
+    public void setMedidaCorrectivaSeleccionada(int MedidaCorrectivaSeleccionada) {this.MedidaCorrectivaSeleccionada = MedidaCorrectivaSeleccionada;}
+    public void setListaMedidasPreventivas(Map<Integer, Actividad> ListaMedidasPreventivas) {this.ListaMedidasPreventivas = ListaMedidasPreventivas;}
+    public void setMedidaPreventivaSeleccionada(int MedidaPreventivaSeleccionada) {this.MedidaPreventivaSeleccionada = MedidaPreventivaSeleccionada;}
+    public void setFechaEstimadaImplementacionMedidaCorrectiva(Date FechaEstimadaImplementacionMedidaCorrectiva) {this.FechaEstimadaImplementacionMedidaCorrectiva = FechaEstimadaImplementacionMedidaCorrectiva;}
+    public void setDescripcionMedidaCorrectiva(String DescripcionMedidaCorrectiva) {this.DescripcionMedidaCorrectiva = DescripcionMedidaCorrectiva;}
+    public void setResponsableMedidaCorrectiva(int ResponsableMedidaCorrectiva) {this.ResponsableMedidaCorrectiva = ResponsableMedidaCorrectiva;}
+    public void setFechaEstimadaImplementacionMedidaPreventiva(Date FechaEstimadaImplementacionMedidaPreventiva) {this.FechaEstimadaImplementacionMedidaPreventiva = FechaEstimadaImplementacionMedidaPreventiva;}
+    public void setDescripcionMedidaPreventiva(String DescripcionMedidaPreventiva) {this.DescripcionMedidaPreventiva = DescripcionMedidaPreventiva;}
+    public void setResponsableMedidaPreventiva(int ResponsableMedidaPreventiva) {this.ResponsableMedidaPreventiva = ResponsableMedidaPreventiva;}    
     
     //  Inicializacion del bean
     public void init(){
@@ -88,7 +115,7 @@ public class ActividadesAC implements Serializable {
             if(empresa!=null) {
                 List<Usuario> tmpUsuarios = fLectura.GetUsuariosEmpresa(empresa.getId());
                 for(Usuario usuario: tmpUsuarios){
-                    ListaUsuariosEmpresa.put(usuario.getId(), usuario.GetNombreCompleto());
+                    ListaUsuariosEmpresa.put(usuario.getId(), usuario);
                 }
             }
         }
@@ -100,7 +127,15 @@ public class ActividadesAC implements Serializable {
      * No se persiste hasta guardar los cambios.
      */
     public void agregarMedidaCorrectiva(){
-        //TODO: completar agregar medida correctiva
+        if(!DescripcionMedidaCorrectiva.isEmpty() && FechaEstimadaImplementacionMedidaCorrectiva != null && ResponsableMedidaCorrectiva != 0){
+            Actividad MedidaCorrectiva  = new Actividad();
+            MedidaCorrectiva.setDescripcion(DescripcionMedidaCorrectiva);
+            MedidaCorrectiva.setFechaEstimadaImplementacion(FechaEstimadaImplementacionMedidaCorrectiva);
+            MedidaCorrectiva.setId(getIdTemporal(TipoMedida.CORRECTIVA));
+            Usuario responsable = ListaUsuariosEmpresa.get(ResponsableMedidaCorrectiva);
+            MedidaCorrectiva.setResponsableImplementacion(responsable);
+            ListaMedidasCorrectivas.put(MedidaCorrectiva.getId(), MedidaCorrectiva);
+        }
     }
     
     /**
@@ -108,23 +143,37 @@ public class ActividadesAC implements Serializable {
      * No se persiste hasta guardar los cambios.
      */
     public void agregarMedidaPreventiva(){
-        //TODO: completar agregar medida preventiva
+        if(!DescripcionMedidaPreventiva.isEmpty() && FechaEstimadaImplementacionMedidaPreventiva != null && ResponsableMedidaPreventiva != 0){
+            Actividad MedidaPreventiva  = new Actividad();
+            MedidaPreventiva.setDescripcion(DescripcionMedidaPreventiva);
+            MedidaPreventiva.setFechaEstimadaImplementacion(FechaEstimadaImplementacionMedidaPreventiva);
+            MedidaPreventiva.setId(getIdTemporal(TipoMedida.PREVENTIVA));
+            Usuario responsable = ListaUsuariosEmpresa.get(ResponsableMedidaPreventiva);
+            MedidaPreventiva.setResponsableImplementacion(responsable);
+            ListaMedidasPreventivas.put(MedidaPreventiva.getId(), MedidaPreventiva);
+        }
     }
     
     /**
-     * Remueve la medida correctiva.
+     * Remueve la medida correctiva de la lista de medidas correctivas.
+     * Agrega la medida correctiva a la lista de actividades a remover para guardar los cambios en la base de datos.
      * No se persiste hasta guardar los cambios.
      */
     public void removerMedidaCorrectiva(){
-        //TODO: completar remvoer medida correctiva
+        if(ActividadesARemover == null ) ActividadesARemover = new ArrayList<>();
+        ActividadesARemover.add(ListaMedidasCorrectivas.get(MedidaCorrectivaSeleccionada));
+        ListaMedidasCorrectivas.remove(MedidaCorrectivaSeleccionada);
     }
     
     /**
-     * Remueve la medida preventiva.
+     * Remueve la medida preventiva de la lista de medidas preventivas.
+     * Agrega la medida preventiva a la lista de actividades a remover para guardar los cambios en la base de datos.
      * No se persiste hasta guardar los cambios.
      */
     public void removerMedidaPreventiva(){
-        //TODO: completar remvoer medida preventiva
+        if(ActividadesARemover == null ) ActividadesARemover = new ArrayList<>();
+        ActividadesARemover.add(ListaMedidasPreventivas.get(MedidaPreventivaSeleccionada));
+        ListaMedidasPreventivas.remove(MedidaPreventivaSeleccionada);
     }
     
     /**
@@ -132,5 +181,33 @@ public class ActividadesAC implements Serializable {
      */
     public void guardarCambios(){
         //TODO: completar guardar cambios
+    }
+    
+    /**
+     * Obtiene un id temporal las actividades ingresadas previo a persistencia.
+     * Recorre la lista de actividades segun el tipo indicado y devuelve un entero menor que 0.
+     * @param tipo
+     * @return 
+     */
+    private int getIdTemporal(TipoMedida tipo){
+        int id = -1;
+        if(tipo.equals(TipoMedida.CORRECTIVA)){
+            for(int clave: ListaMedidasCorrectivas.keySet()){
+                if(id>clave) id--;
+            }
+        }else{
+            for(int clave: ListaMedidasPreventivas.keySet()){
+                if(id>clave) id--;
+            }
+        }
+        return id;
+    }
+    
+    /**
+     * Enumeracion para metodo de obtener id
+     */
+    private enum TipoMedida{
+        CORRECTIVA,
+        PREVENTIVA
     }
 }
