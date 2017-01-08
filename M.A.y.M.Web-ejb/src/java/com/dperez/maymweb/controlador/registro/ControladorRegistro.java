@@ -29,7 +29,6 @@ import com.dperez.maymweb.usuario.ManejadorUsuario;
 import com.dperez.maymweb.usuario.Usuario;
 import java.security.InvalidParameterException;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -172,10 +171,12 @@ public class ControladorRegistro {
      * @param IdAccion
      * @param FechaEstimadaImplementacion
      * @param Descripcion
+     * @param IdUsuarioResponsable
      * @return -1 si no se creo.
      */
-    public int AgregarMedidaPreventiva(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion ){
+    public int AgregarMedidaPreventiva(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion, int IdUsuarioResponsable ){
         Actividad medida = new Actividad(FechaEstimadaImplementacion, Descripcion);
+        Usuario usuario = mUsuario.GetUsuario(IdUsuarioResponsable);
         medida.setId(mMedida.CrearActividad(medida));
         Accion accion = mAccion.GetAccion(IdAccion);
         if((accion.getClass())!= Correctiva.class) throw new InvalidParameterException("El id no corresponde con una Correctiva");
@@ -189,10 +190,13 @@ public class ControladorRegistro {
      * @param IdAccion
      * @param FechaEstimadaImplementacion
      * @param Descripcion
+     * @param IdUsuarioResponsable
      * @return -1 si no se creo.
      */
-    public int AgregarMedidaCorrectiva(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion ){
+    public int AgregarMedidaCorrectiva(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion, int IdUsuarioResponsable){
         Actividad medida = new Actividad(FechaEstimadaImplementacion, Descripcion);
+        Usuario usuario = mUsuario.GetUsuario(IdUsuarioResponsable);
+        medida.setResponsableImplementacion(usuario);
         medida.setId(mMedida.CrearActividad(medida));
         Accion accion = mAccion.GetAccion(IdAccion);
         if((accion.getClass())!= Correctiva.class) throw new InvalidParameterException("El id no corresponde con una Correctiva");

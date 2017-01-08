@@ -46,8 +46,6 @@ public class ActividadesAC implements Serializable {
     private Map<Integer, Actividad> ListaMedidasPreventivas;
     private int MedidaPreventivaSeleccionada;
     
-    private List<Actividad> ActividadesARemover;
-    
     private Date FechaEstimadaImplementacionMedidaCorrectiva;
     private String DescripcionMedidaCorrectiva;
     private int ResponsableMedidaCorrectiva;
@@ -124,90 +122,73 @@ public class ActividadesAC implements Serializable {
     //  Metodos
     /**
      * Agrega una nueva medida correctiva.
-     * No se persiste hasta guardar los cambios.
+     * Se persiste los cambios.
      */
     public void agregarMedidaCorrectiva(){
         if(!DescripcionMedidaCorrectiva.isEmpty() && FechaEstimadaImplementacionMedidaCorrectiva != null && ResponsableMedidaCorrectiva != 0){
-            Actividad MedidaCorrectiva  = new Actividad();
-            MedidaCorrectiva.setDescripcion(DescripcionMedidaCorrectiva);
-            MedidaCorrectiva.setFechaEstimadaImplementacion(FechaEstimadaImplementacionMedidaCorrectiva);
-            MedidaCorrectiva.setId(getIdTemporal(TipoMedida.CORRECTIVA));
+            Actividad Medida  = new Actividad();
             Usuario responsable = ListaUsuariosEmpresa.get(ResponsableMedidaCorrectiva);
-            MedidaCorrectiva.setResponsableImplementacion(responsable);
-            ListaMedidasCorrectivas.put(MedidaCorrectiva.getId(), MedidaCorrectiva);
+            Medida.setDescripcion(DescripcionMedidaCorrectiva);
+            Medida.setFechaEstimadaImplementacion(FechaEstimadaImplementacionMedidaCorrectiva);            
+            Medida.setResponsableImplementacion(responsable);
+            int id = fDatos.AgregarMedidaCorrectiva(AccionCorrectiva.getId(), Medida.getFechaEstimadaImplementacion(), Medida.getDescripcion(), 
+                    Medida.getResponsableImplementacion().getId());
+            if(id<0){
+                //  mensaje de error
+            }else{
+                Medida.setId(id);
+                ListaMedidasCorrectivas.put(Medida.getId(), Medida);
+            }            
         }
     }
     
     /**
      * Agrega una nueva medida preventiva.
-     * No se persiste hasta guardar los cambios.
+     * Se persiste los cambios.
      */
     public void agregarMedidaPreventiva(){
         if(!DescripcionMedidaPreventiva.isEmpty() && FechaEstimadaImplementacionMedidaPreventiva != null && ResponsableMedidaPreventiva != 0){
-            Actividad MedidaPreventiva  = new Actividad();
-            MedidaPreventiva.setDescripcion(DescripcionMedidaPreventiva);
-            MedidaPreventiva.setFechaEstimadaImplementacion(FechaEstimadaImplementacionMedidaPreventiva);
-            MedidaPreventiva.setId(getIdTemporal(TipoMedida.PREVENTIVA));
+            Actividad Medida  = new Actividad();
             Usuario responsable = ListaUsuariosEmpresa.get(ResponsableMedidaPreventiva);
-            MedidaPreventiva.setResponsableImplementacion(responsable);
-            ListaMedidasPreventivas.put(MedidaPreventiva.getId(), MedidaPreventiva);
+            Medida.setDescripcion(DescripcionMedidaPreventiva);
+            Medida.setFechaEstimadaImplementacion(FechaEstimadaImplementacionMedidaPreventiva);            
+            Medida.setResponsableImplementacion(responsable);
+            int id = fDatos.AgregarMedidaPreventiva(AccionCorrectiva.getId(), Medida.getFechaEstimadaImplementacion(), Medida.getDescripcion(), 
+                    Medida.getResponsableImplementacion().getId());
+            if(id<0){
+                //  mensaje de error
+            }else{
+                Medida.setId(id);
+                ListaMedidasCorrectivas.put(Medida.getId(), Medida);
+            }  
         }
     }
     
     /**
      * Remueve la medida correctiva de la lista de medidas correctivas.
-     * Agrega la medida correctiva a la lista de actividades a remover para guardar los cambios en la base de datos.
-     * No se persiste hasta guardar los cambios.
+     * Se persiste hasta guardar los cambios.
+     * @param IdMedidaCorrectiva
      */
-    public void removerMedidaCorrectiva(){
-        if(ActividadesARemover == null ) ActividadesARemover = new ArrayList<>();
-        ActividadesARemover.add(ListaMedidasCorrectivas.get(MedidaCorrectivaSeleccionada));
-        ListaMedidasCorrectivas.remove(MedidaCorrectivaSeleccionada);
+    public void removerMedidaCorrectiva(int IdMedidaCorrectiva){
+
     }
     
     /**
      * Remueve la medida preventiva de la lista de medidas preventivas.
-     * Agrega la medida preventiva a la lista de actividades a remover para guardar los cambios en la base de datos.
-     * No se persiste hasta guardar los cambios.
+     * Se persisten los cambios y se actualiza la lista del bean.
+     * @param IdMedidaPreventiva
      */
-    public void removerMedidaPreventiva(){
-        if(ActividadesARemover == null ) ActividadesARemover = new ArrayList<>();
-        ActividadesARemover.add(ListaMedidasPreventivas.get(MedidaPreventivaSeleccionada));
-        ListaMedidasPreventivas.remove(MedidaPreventivaSeleccionada);
+    public void removerMedidaPreventiva(int IdMedidaPreventiva){
+
     }
     
     /**
      * Persiste los cambios realizados en la accion correctiva.
+     * Se actualizan actividades con cambios.
      */
     public void guardarCambios(){
-        //TODO: completar guardar cambios
+        
+       
     }
     
-    /**
-     * Obtiene un id temporal las actividades ingresadas previo a persistencia.
-     * Recorre la lista de actividades segun el tipo indicado y devuelve un entero menor que 0.
-     * @param tipo
-     * @return 
-     */
-    private int getIdTemporal(TipoMedida tipo){
-        int id = -1;
-        if(tipo.equals(TipoMedida.CORRECTIVA)){
-            for(int clave: ListaMedidasCorrectivas.keySet()){
-                if(id>clave) id--;
-            }
-        }else{
-            for(int clave: ListaMedidasPreventivas.keySet()){
-                if(id>clave) id--;
-            }
-        }
-        return id;
-    }
-    
-    /**
-     * Enumeracion para metodo de obtener id
-     */
-    private enum TipoMedida{
-        CORRECTIVA,
-        PREVENTIVA
-    }
-}
+  }

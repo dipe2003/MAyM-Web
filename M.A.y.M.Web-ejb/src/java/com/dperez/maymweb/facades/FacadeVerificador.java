@@ -9,12 +9,9 @@ import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.EnumComprobacion;
 import com.dperez.maymweb.accion.acciones.EnumAccion;
 import com.dperez.maymweb.accion.acciones.EnumTipoDesvio;
-import com.dperez.maymweb.accion.adjunto.Adjunto;
 import com.dperez.maymweb.controlador.registro.ControladorEdicionRegistro;
 import com.dperez.maymweb.controlador.registro.ControladorRegistro;
-import com.dperez.maymweb.producto.Producto;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 
@@ -133,10 +130,11 @@ public class FacadeVerificador {
      * @param IdAccion
      * @param FechaEstimadaImplementacion
      * @param Descripcion
+     * @param IdUsuarioResponsable
      * @return -1 si no se creo.
      */
-    public int AgregarMedidaPreventiva(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion ){
-        return cReg.AgregarMedidaPreventiva(IdAccion, FechaEstimadaImplementacion, Descripcion);
+    public int AgregarMedidaPreventiva(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion, int IdUsuarioResponsable ){
+        return cReg.AgregarMedidaPreventiva(IdAccion, FechaEstimadaImplementacion, Descripcion, IdUsuarioResponsable);
     }
     
     /**
@@ -144,10 +142,11 @@ public class FacadeVerificador {
      * @param IdAccion
      * @param FechaEstimadaImplementacion
      * @param Descripcion
+     * @param IdUsuarioResponsable
      * @return -1 si no se creo.
      */
-    public int AgregarMedidaCorrectiva(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion ){
-        return cReg.AgregarMedidaCorrectiva(IdAccion, FechaEstimadaImplementacion, Descripcion);
+    public int AgregarMedidaCorrectiva(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion, int IdUsuarioResponsable ){
+        return cReg.AgregarMedidaCorrectiva(IdAccion, FechaEstimadaImplementacion, Descripcion, IdUsuarioResponsable);
     }
     
     /**
