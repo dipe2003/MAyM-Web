@@ -8,6 +8,7 @@ package com.dperez.maymweb.facades;
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.acciones.EnumAccion;
 import com.dperez.maymweb.accion.acciones.EnumTipoDesvio;
+import com.dperez.maymweb.controlador.registro.ControladorEdicionRegistro;
 import com.dperez.maymweb.controlador.registro.ControladorRegistro;
 import java.util.Date;
 import java.util.Map;
@@ -24,6 +25,8 @@ import javax.inject.Named;
 public class FacadeDatos {
     @Inject
     private ControladorRegistro cReg;
+    @Inject
+    private ControladorEdicionRegistro cEdicion;
     
     //  Constructores
     public FacadeDatos(){}
@@ -69,10 +72,11 @@ public class FacadeDatos {
      * @param IdAccion
      * @param FechaEstimadaImplementacion
      * @param Descripcion
+     * @param IdUsuarioResponsable
      * @return -1 si no se creo.
      */
-    public int AgregarActividadMejora(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion ){
-        return cReg.AgregarActividadMejora(IdAccion, FechaEstimadaImplementacion, Descripcion);
+    public int AgregarActividadMejora(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion, int IdUsuarioResponsable){
+        return cReg.AgregarActividadMejora(IdAccion, FechaEstimadaImplementacion, Descripcion, IdUsuarioResponsable);
     }
     
     /**
@@ -80,10 +84,11 @@ public class FacadeDatos {
      * @param IdAccion
      * @param FechaEstimadaImplementacion
      * @param Descripcion
+     * @param IdUsuarioResponsable
      * @return -1 si no se creo.
      */
-    public int AgregarActividadPreventiva(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion ){
-        return cReg.AgregarActividadPreventiva(IdAccion, FechaEstimadaImplementacion, Descripcion);
+    public int AgregarActividadPreventiva(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion, int IdUsuarioResponsable){
+        return cReg.AgregarActividadPreventiva(IdAccion, FechaEstimadaImplementacion, Descripcion, IdUsuarioResponsable);
     }
     
     /**
@@ -170,5 +175,49 @@ public class FacadeDatos {
      */
     public int SetEstimadoComprobacionEficacia(Date FechaEstimada, int IdUsuarioResponsableComprobacion, int IdAccion){
         return cReg.SetEstimadoComprobacionEficacia(FechaEstimada, IdUsuarioResponsableComprobacion, IdAccion);
+    }
+    
+    /**
+     * Remueve la medida correctiva de la accion correctiva seleccionada y actualiza la base de datos.
+     * Elimina la medida correctiva de la base de datos.
+     * @param IdAccion
+     * @param IdMedidaCorrectiva
+     * @return Retorna -1 si se actualizo. Retorna el IdAccion si no se elimino.
+     */
+    public int RemoverMedidaCorrectiva(int IdAccion, int IdMedidaCorrectiva){
+        return cEdicion.RemoverMedidaCorrectiva(IdAccion, IdMedidaCorrectiva);
+    }
+    
+    /**
+     * Remueve la medida preventiva de la accion correctiva seleccionada y actualiza la base de datos.
+     * Elimina la medida preventiva de la base de datos.
+     * @param IdAccion
+     * @param IdMedidaPreventiva
+     * @return Retorna -1 si se actualizo. Retorna el IdAccion si no se elimino.
+     */
+    public int RemoverMedidaPreventiva(int IdAccion, int IdMedidaPreventiva){
+        return cEdicion.RemoverMedidaPreventiva(IdAccion, IdMedidaPreventiva);
+    }
+    
+    /**
+     * Remueve la actividad de mejora de la accion de mejora seleccionada y actualiza la base de datos.
+     * Elimina la actividad de mejora de la base de datos.
+     * @param IdAccion
+     * @param IdActividadMejora
+     * @return Retorna -1 si se actualizo. Retorna el IdAccion si no se elimino.
+     */
+    public int RemoverActividadMejora(int IdAccion, int IdActividadMejora){
+        return cEdicion.RemoverActividadMejora(IdAccion, IdActividadMejora);
+    }
+    
+    /**
+     * Remueve la actividad preventiva de la accion preventiva selaccionada y actualiza la base de datos.
+     * Elimina la actividad preventiva de la base de datos.
+     * @param IdAccion
+     * @param IdActividadPreventiva
+     * @return Retorna -1 si se actualizo. Retorna el IdAccion si no se elimino.
+     */
+    public int RemoverActividadPreventiva(int IdAccion, int IdActividadPreventiva){
+        return cEdicion.RemoverActividadPreventiva(IdAccion, IdActividadPreventiva);
     }
 }

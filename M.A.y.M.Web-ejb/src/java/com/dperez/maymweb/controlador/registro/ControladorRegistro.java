@@ -137,12 +137,15 @@ public class ControladorRegistro {
      * @param IdAccion
      * @param FechaEstimadaImplementacion
      * @param Descripcion
+     * @param IdUsuarioResponsable
      * @return -1 si no se creo.
      */
-    public int AgregarActividadMejora(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion ){
+    public int AgregarActividadMejora(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion, int IdUsuarioResponsable){
         Actividad medida = new Actividad(FechaEstimadaImplementacion, Descripcion);
+        Usuario usuario = mUsuario.GetUsuario(IdUsuarioResponsable);
+        medida.setResponsableImplementacion(usuario);
         medida.setId(mMedida.CrearActividad(medida));
-        Accion accion = mAccion.GetAccion(IdAccion);
+        Accion accion = mAccion.GetAccion(IdAccion);        
         if((accion.getClass())!= Mejora.class) throw new InvalidParameterException("El id no corresponde con una mejora");
         ((Mejora)accion).addActividad((Actividad)medida);
         int res = mAccion.ActualizarAccion(accion);
@@ -154,10 +157,13 @@ public class ControladorRegistro {
      * @param IdAccion
      * @param FechaEstimadaImplementacion
      * @param Descripcion
+     * @param IdUsuarioResponsable
      * @return -1 si no se creo.
      */
-    public int AgregarActividadPreventiva(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion ){
+    public int AgregarActividadPreventiva(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion, int IdUsuarioResponsable){
         Actividad medida = new Actividad(FechaEstimadaImplementacion, Descripcion);
+        Usuario usuario = mUsuario.GetUsuario(IdUsuarioResponsable);
+        medida.setResponsableImplementacion(usuario);
         medida.setId(mMedida.CrearActividad(medida));
         Accion accion = mAccion.GetAccion(IdAccion);
         if((accion.getClass())!= Preventiva.class) throw new InvalidParameterException("El id no corresponde con una Preventiva");
@@ -177,7 +183,8 @@ public class ControladorRegistro {
     public int AgregarMedidaPreventiva(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion, int IdUsuarioResponsable ){
         Actividad medida = new Actividad(FechaEstimadaImplementacion, Descripcion);
         Usuario usuario = mUsuario.GetUsuario(IdUsuarioResponsable);
-        medida.setId(mMedida.CrearActividad(medida));
+        medida.setResponsableImplementacion(usuario);
+        medida.setId(mMedida.CrearActividad(medida));        
         Accion accion = mAccion.GetAccion(IdAccion);
         if((accion.getClass())!= Correctiva.class) throw new InvalidParameterException("El id no corresponde con una Correctiva");
         ((Correctiva)accion).addMedidaPreventiva(medida);

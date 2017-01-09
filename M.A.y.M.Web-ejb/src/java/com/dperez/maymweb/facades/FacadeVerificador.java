@@ -108,10 +108,11 @@ public class FacadeVerificador {
      * @param IdAccion
      * @param FechaEstimadaImplementacion
      * @param Descripcion
+     * @param IdUsuarioResponsable
      * @return -1 si no se creo.
      */
-    public int AgregarActividadMejora(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion ){
-        return cReg.AgregarActividadMejora(IdAccion, FechaEstimadaImplementacion, Descripcion);
+    public int AgregarActividadMejora(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion, int IdUsuarioResponsable){
+        return cReg.AgregarActividadMejora(IdAccion, FechaEstimadaImplementacion, Descripcion, IdUsuarioResponsable);
     }
     
     /**
@@ -119,10 +120,11 @@ public class FacadeVerificador {
      * @param IdAccion
      * @param FechaEstimadaImplementacion
      * @param Descripcion
+     * @param IdUsuarioResponsable
      * @return -1 si no se creo.
      */
-    public int AgregarActividadPreventiva(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion ){
-        return cReg.AgregarActividadPreventiva(IdAccion, FechaEstimadaImplementacion, Descripcion);
+    public int AgregarActividadPreventiva(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion, int IdUsuarioResponsable){
+        return cReg.AgregarActividadPreventiva(IdAccion, FechaEstimadaImplementacion, Descripcion, IdUsuarioResponsable);
     }
     
     /**

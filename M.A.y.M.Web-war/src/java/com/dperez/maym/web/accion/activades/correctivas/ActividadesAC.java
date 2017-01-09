@@ -13,11 +13,12 @@ import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.usuario.Usuario;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.faces.application.FacesMessage;
+import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -53,7 +54,7 @@ public class ActividadesAC implements Serializable {
     private Date FechaEstimadaImplementacionMedidaPreventiva;
     private String DescripcionMedidaPreventiva;
     private int ResponsableMedidaPreventiva;
-
+    
     //  Getters
     public Map<Integer, Usuario> getListaUsuariosEmpresa() {return ListaUsuariosEmpresa;}
     public Map<Integer, Actividad> getListaMedidasCorrectivas() {return ListaMedidasCorrectivas;}
@@ -78,7 +79,104 @@ public class ActividadesAC implements Serializable {
     public void setResponsableMedidaCorrectiva(int ResponsableMedidaCorrectiva) {this.ResponsableMedidaCorrectiva = ResponsableMedidaCorrectiva;}
     public void setFechaEstimadaImplementacionMedidaPreventiva(Date FechaEstimadaImplementacionMedidaPreventiva) {this.FechaEstimadaImplementacionMedidaPreventiva = FechaEstimadaImplementacionMedidaPreventiva;}
     public void setDescripcionMedidaPreventiva(String DescripcionMedidaPreventiva) {this.DescripcionMedidaPreventiva = DescripcionMedidaPreventiva;}
-    public void setResponsableMedidaPreventiva(int ResponsableMedidaPreventiva) {this.ResponsableMedidaPreventiva = ResponsableMedidaPreventiva;}    
+    public void setResponsableMedidaPreventiva(int ResponsableMedidaPreventiva) {this.ResponsableMedidaPreventiva = ResponsableMedidaPreventiva;}
+    
+    //  Metodos
+    /**
+     * Agrega una nueva medida correctiva a la accion correctiva.
+     * Se actualiza la lista de medidas correctivas del bean.
+     * Se persisten los cambios.
+     * Muestra un mensaje de error si no se pudo completar correctamente.
+     */
+    public void agregarMedidaCorrectiva(){
+        if(!DescripcionMedidaCorrectiva.isEmpty() && FechaEstimadaImplementacionMedidaCorrectiva != null && ResponsableMedidaCorrectiva != 0){
+            Actividad Medida  = new Actividad();
+            Usuario responsable = ListaUsuariosEmpresa.get(ResponsableMedidaCorrectiva);
+            Medida.setDescripcion(DescripcionMedidaCorrectiva);
+            Medida.setFechaEstimadaImplementacion(FechaEstimadaImplementacionMedidaCorrectiva);
+            Medida.setResponsableImplementacion(responsable);
+            int id;
+            if((id = fDatos.AgregarMedidaCorrectiva(AccionCorrectiva.getId(), Medida.getFechaEstimadaImplementacion(), Medida.getDescripcion(),
+                    Medida.getResponsableImplementacion().getId()))<0){
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo agregar Medida Correctiva", "No se pudo agregar Medida Correctiva" ));
+                FacesContext.getCurrentInstance().renderResponse();
+            }else{
+                // agregar a la lista de medidas del bean
+                Medida.setId(id);
+                ListaMedidasCorrectivas.put(Medida.getId(), Medida);
+            }
+        }
+    }
+    
+    /**
+     * Agrega una nueva medida preventiva a la accion correctiva.
+     * Se actualiza la lista de medidas preventivas del bean.
+     * Se persisten los cambios.
+     * Muestra un mensaje de error si no se pudo completar correctamente.
+     */
+    public void agregarMedidaPreventiva(){
+        if(!DescripcionMedidaPreventiva.isEmpty() && FechaEstimadaImplementacionMedidaPreventiva != null && ResponsableMedidaPreventiva != 0){
+            Actividad Medida  = new Actividad();
+            Usuario responsable = ListaUsuariosEmpresa.get(ResponsableMedidaPreventiva);
+            Medida.setDescripcion(DescripcionMedidaPreventiva);
+            Medida.setFechaEstimadaImplementacion(FechaEstimadaImplementacionMedidaPreventiva);
+            Medida.setResponsableImplementacion(responsable);
+            int id;
+            if((id = fDatos.AgregarMedidaPreventiva(AccionCorrectiva.getId(), Medida.getFechaEstimadaImplementacion(), Medida.getDescripcion(),
+                    Medida.getResponsableImplementacion().getId()))<0){
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo agregar Medida Preventiva", "No se pudo agregar Medida Preventiva" ));
+                FacesContext.getCurrentInstance().renderResponse();
+            }else{
+                // agregar a la lista de medidas del bean
+                Medida.setId(id);
+                ListaMedidasCorrectivas.put(Medida.getId(), Medida);
+            }
+        }
+    }
+    
+    /**
+     * Remueve la medida correctiva de la lista de medidas correctivas si la fecha de implementacion no esta definida.
+     * Remueve la medida correctiva de la accion correctiva.
+     * Se persisten los cambios.
+     * Muestra un mensaje de error si no se pudo completar correctamente.
+     * @param IdMedidaCorrectiva
+     */
+    public void removerMedidaCorrectiva(int IdMedidaCorrectiva){
+        if(IdMedidaCorrectiva!=0 && ListaMedidasCorrectivas.get(IdMedidaCorrectiva).getFechaImplementacion() == null){
+            int res;
+            if((res = fDatos.RemoverMedidaCorrectiva(AccionCorrectiva.getId(), IdMedidaCorrectiva))> 0){
+                ListaMedidasCorrectivas.remove(res);
+            }else{
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo quitar Medida Correctiva", "No se pudo quitar Medida Correctiva" ));
+                FacesContext.getCurrentInstance().renderResponse();
+            }
+        }else{
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se puede quitar porque ya fue implementada", "No se puede quitar porque ya fue implementada" ));
+            FacesContext.getCurrentInstance().renderResponse();
+        }
+    }
+    
+    /**
+     * Remueve la medida preventiva de la lista de medidas preventivas si la fecha de implementacion no esta definida.
+     * Remueve la medida Preventiva de la accion correctiva.
+     * Se persisten los cambios.
+     * Muestra un mensaje de error si no se pudo completar correctamente.
+     * @param IdMedidaPreventiva
+     */
+    public void removerMedidaPreventiva(int IdMedidaPreventiva){
+        if(IdMedidaPreventiva!=0 && ListaMedidasPreventivas.get(IdMedidaPreventiva).getFechaImplementacion() == null){
+            int res;
+            if((res = fDatos.RemoverMedidaPreventiva(AccionCorrectiva.getId(), IdMedidaPreventiva))> 0){
+                ListaMedidasPreventivas.remove(res);
+            }else{
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo quitar Medida Preventiva", "No se pudo quitar Medida Preventiva" ));
+                FacesContext.getCurrentInstance().renderResponse();
+            }
+        }else{
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se puede quitar porque ya fue implementada", "No se puede quitar porque ya fue implementada" ));
+            FacesContext.getCurrentInstance().renderResponse();
+        }
+    }
     
     //  Inicializacion del bean
     public void init(){
@@ -118,77 +216,4 @@ public class ActividadesAC implements Serializable {
             }
         }
     }
-    
-    //  Metodos
-    /**
-     * Agrega una nueva medida correctiva.
-     * Se persiste los cambios.
-     */
-    public void agregarMedidaCorrectiva(){
-        if(!DescripcionMedidaCorrectiva.isEmpty() && FechaEstimadaImplementacionMedidaCorrectiva != null && ResponsableMedidaCorrectiva != 0){
-            Actividad Medida  = new Actividad();
-            Usuario responsable = ListaUsuariosEmpresa.get(ResponsableMedidaCorrectiva);
-            Medida.setDescripcion(DescripcionMedidaCorrectiva);
-            Medida.setFechaEstimadaImplementacion(FechaEstimadaImplementacionMedidaCorrectiva);            
-            Medida.setResponsableImplementacion(responsable);
-            int id = fDatos.AgregarMedidaCorrectiva(AccionCorrectiva.getId(), Medida.getFechaEstimadaImplementacion(), Medida.getDescripcion(), 
-                    Medida.getResponsableImplementacion().getId());
-            if(id<0){
-                //  mensaje de error
-            }else{
-                Medida.setId(id);
-                ListaMedidasCorrectivas.put(Medida.getId(), Medida);
-            }            
-        }
-    }
-    
-    /**
-     * Agrega una nueva medida preventiva.
-     * Se persiste los cambios.
-     */
-    public void agregarMedidaPreventiva(){
-        if(!DescripcionMedidaPreventiva.isEmpty() && FechaEstimadaImplementacionMedidaPreventiva != null && ResponsableMedidaPreventiva != 0){
-            Actividad Medida  = new Actividad();
-            Usuario responsable = ListaUsuariosEmpresa.get(ResponsableMedidaPreventiva);
-            Medida.setDescripcion(DescripcionMedidaPreventiva);
-            Medida.setFechaEstimadaImplementacion(FechaEstimadaImplementacionMedidaPreventiva);            
-            Medida.setResponsableImplementacion(responsable);
-            int id = fDatos.AgregarMedidaPreventiva(AccionCorrectiva.getId(), Medida.getFechaEstimadaImplementacion(), Medida.getDescripcion(), 
-                    Medida.getResponsableImplementacion().getId());
-            if(id<0){
-                //  mensaje de error
-            }else{
-                Medida.setId(id);
-                ListaMedidasCorrectivas.put(Medida.getId(), Medida);
-            }  
-        }
-    }
-    
-    /**
-     * Remueve la medida correctiva de la lista de medidas correctivas.
-     * Se persiste hasta guardar los cambios.
-     * @param IdMedidaCorrectiva
-     */
-    public void removerMedidaCorrectiva(int IdMedidaCorrectiva){
-
-    }
-    
-    /**
-     * Remueve la medida preventiva de la lista de medidas preventivas.
-     * Se persisten los cambios y se actualiza la lista del bean.
-     * @param IdMedidaPreventiva
-     */
-    public void removerMedidaPreventiva(int IdMedidaPreventiva){
-
-    }
-    
-    /**
-     * Persiste los cambios realizados en la accion correctiva.
-     * Se actualizan actividades con cambios.
-     */
-    public void guardarCambios(){
-        
-       
-    }
-    
-  }
+}
