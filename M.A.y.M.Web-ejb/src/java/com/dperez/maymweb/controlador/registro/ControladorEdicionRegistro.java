@@ -250,5 +250,5 @@ public class ControladorEdicionRegistro {
         producto.setDatos(DatosProducto);
         producto.setNombre(NombreProducto);
         return mProducto.ActualizarProducto(producto);
-    }
+    }   
 }

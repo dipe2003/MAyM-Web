@@ -9,6 +9,7 @@ import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.acciones.Correctiva;
 import com.dperez.maymweb.accion.acciones.EnumAccion;
 import com.dperez.maymweb.accion.acciones.EnumTipoDesvio;
+import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
@@ -243,13 +244,17 @@ public class EditarAccionCorrectiva implements Serializable {
     
     /**
      * Actualiza la accion correctiva con los datos nuevos.
-     * Si no se creo se muestra mensaje de error.
+     * Si no se actualizo se muestra mensaje de error.
      * Si se creo se redirige a la pagina de listado de acciones.
      * @throws java.io.IOException
      */
     public void editarAccionCorrectiva() throws IOException{
         // actualizar accion
-        
+        int res = fDatos.EditarAccion(IdAccionCorrectiva, EnumAccion.CORRECTIVA, FechaDeteccion, Descripcion, TipoDesvioSeleccionado, 
+                AreaSectorAccionSeleccionada, DeteccionSeleccionada, CodificacionSeleccionada);
+        if(res !=-1){
+            //TODO: Actualizar el resto de las propiedades de la accion.
+        }
         // Si la actualizacion se realizo correctamente redirige a lista de acciones.
         String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
         FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");

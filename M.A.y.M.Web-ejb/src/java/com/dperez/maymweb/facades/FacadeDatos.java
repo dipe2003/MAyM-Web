@@ -220,4 +220,26 @@ public class FacadeDatos {
     public int RemoverActividadPreventiva(int IdAccion, int IdActividadPreventiva){
         return cEdicion.RemoverActividadPreventiva(IdAccion, IdActividadPreventiva);
     }
+    
+        /**
+     * Edita una accion con los mismos parametros que se creo. Actualiza la base de datos.
+     * @param IdAccion
+     * @param TipoAccion
+     * @param FechaDeteccion
+     * @param Descripcion
+     * @param TipoDesvio
+     * @param IdAreaSector
+     * @param IdDeteccion
+     * @param IdCodificacion
+     * @return -1 si no se actualizo.
+     */
+    public int EditarAccion(int IdAccion, EnumAccion TipoAccion, Date FechaDeteccion, String Descripcion, EnumTipoDesvio TipoDesvio,
+            int IdAreaSector, int IdDeteccion, int IdCodificacion){
+        return cEdicion.EditarAccion(IdAccion, TipoAccion, FechaDeteccion, Descripcion, TipoDesvio, IdAreaSector, IdDeteccion, IdCodificacion);
+    }
+    
+    
+    public int EditarActividad(int IdAccion, int IdActividad, String Descripcion, int ResponsableImplementacion, Date FechaImplementacion){
+        return 0;
+    }
 }
