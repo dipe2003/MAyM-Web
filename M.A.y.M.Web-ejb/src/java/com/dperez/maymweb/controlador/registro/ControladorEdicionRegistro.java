@@ -26,6 +26,8 @@ import com.dperez.maymweb.estado.EnumEstado;
 import com.dperez.maymweb.producto.ManejadorProducto;
 import com.dperez.maymweb.producto.Producto;
 import com.dperez.maymweb.usuario.ControladorSeguridad;
+import com.dperez.maymweb.usuario.ManejadorUsuario;
+import com.dperez.maymweb.usuario.Usuario;
 import java.util.Date;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -51,7 +53,9 @@ public class ControladorEdicionRegistro {
     @Inject
     private ManejadorAdjunto mAdjunto;
     @Inject
-    private ManejadorActividad mMedida;
+    private ManejadorActividad mActividad;
+    @Inject
+    private ManejadorUsuario mUsuario;
     @Inject
     private ControladorSeguridad cSeg;
     
@@ -171,8 +175,8 @@ public class ControladorEdicionRegistro {
         ((Mejora)accion).CambiarEstado();
         int res = mAccion.ActualizarAccion(accion);
         if(res!=-1){
-            Actividad actividad = mMedida.GetActividad(IdActividadMejora);
-            mMedida.BorrarActividad(actividad);
+            Actividad actividad = mActividad.GetActividad(IdActividadMejora);
+            mActividad.BorrarActividad(actividad);
         }
         return res;
     }
@@ -190,8 +194,8 @@ public class ControladorEdicionRegistro {
         ((Preventiva)accion).CambiarEstado();
         int res = mAccion.ActualizarAccion(accion);
         if(res!=-1){
-            Actividad actividad = mMedida.GetActividad(IdActividadPreventiva);
-            mMedida.BorrarActividad(actividad);
+            Actividad actividad = mActividad.GetActividad(IdActividadPreventiva);
+            mActividad.BorrarActividad(actividad);
         }
         return res;
     }
@@ -209,8 +213,8 @@ public class ControladorEdicionRegistro {
         ((Correctiva)accion).CambiarEstado();
         int res = mAccion.ActualizarAccion(accion);
         if(res!=-1){
-            Actividad medida = mMedida.GetActividad(IdMedidaPreventiva);
-            mMedida.BorrarActividad(medida);
+            Actividad medida = mActividad.GetActividad(IdMedidaPreventiva);
+            mActividad.BorrarActividad(medida);
         }
         return res;
     }
@@ -228,10 +232,29 @@ public class ControladorEdicionRegistro {
         ((Correctiva)accion).CambiarEstado();
         int res = mAccion.ActualizarAccion(accion);
         if(res!=-1){
-            Actividad medida = mMedida.GetActividad(IdMedidaCorrectiva);
-            mMedida.BorrarActividad(medida);
+            Actividad medida = mActividad.GetActividad(IdMedidaCorrectiva);
+            mActividad.BorrarActividad(medida);
         }
         return res;
+    }
+    
+    /**
+     * Actualiza la actividad en la base de datos.
+     * @param IdActividad
+     * @param IdResponsable
+     * @param FechaEstimada
+     * @param Descripcion
+     * @return Retorna -1 si no se actualizo. Retorna el IdActividad si se actualizo.
+     */
+    public int EditarActividad(int IdActividad, int IdResponsable, Date FechaEstimada, String Descripcion){
+        Actividad actividad = mActividad.GetActividad(IdActividad);
+        actividad.setDescripcion(Descripcion);
+        actividad.setFechaEstimadaImplementacion(FechaEstimada);
+        if(actividad.getResponsableImplementacion().getId() != IdResponsable){
+            Usuario responsable = mUsuario.GetUsuario(IdResponsable);
+            actividad.setResponsableImplementacion(responsable);
+        }
+        return mActividad.ActualizarActividad(actividad);              
     }
     
     /*

@@ -238,8 +238,15 @@ public class FacadeDatos {
         return cEdicion.EditarAccion(IdAccion, TipoAccion, FechaDeteccion, Descripcion, TipoDesvio, IdAreaSector, IdDeteccion, IdCodificacion);
     }
     
-    
-    public int EditarActividad(int IdAccion, int IdActividad, String Descripcion, int ResponsableImplementacion, Date FechaImplementacion){
-        return 0;
+    /**
+     * Actualiza la actividad en la base de datos.
+     * @param IdActividad
+     * @param Descripcion
+     * @param ResponsableImplementacion
+     * @param FechaImplementacion
+     * @return Retorna -1 si no se actualizo. Retorna el IdActividad si se actualizo.
+     */
+    public int EditarActividad(int IdActividad, String Descripcion, int ResponsableImplementacion, Date FechaImplementacion){
+       return cEdicion.EditarActividad(IdActividad, ResponsableImplementacion, FechaImplementacion,Descripcion);
     }
 }

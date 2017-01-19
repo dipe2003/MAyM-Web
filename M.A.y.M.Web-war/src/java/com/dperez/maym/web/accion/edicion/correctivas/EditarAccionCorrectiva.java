@@ -250,19 +250,16 @@ public class EditarAccionCorrectiva implements Serializable {
      */
     public void editarAccionCorrectiva() throws IOException{
         // actualizar accion
-        int res = fDatos.EditarAccion(IdAccionCorrectiva, EnumAccion.CORRECTIVA, FechaDeteccion, Descripcion, TipoDesvioSeleccionado, 
-                AreaSectorAccionSeleccionada, DeteccionSeleccionada, CodificacionSeleccionada);
-        if(res !=-1){
-            //TODO: Actualizar el resto de las propiedades de la accion.
-        }
-        // Si la actualizacion se realizo correctamente redirige a lista de acciones.
-        String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-        FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");
-        
-        // Si no se actualizo muestra mensaje de error.
+        if(fDatos.EditarAccion(IdAccionCorrectiva, EnumAccion.CORRECTIVA, FechaDeteccion, Descripcion, TipoDesvioSeleccionado, 
+                AreaSectorAccionSeleccionada, DeteccionSeleccionada, CodificacionSeleccionada) != -1){
+            // Si no se actualizo muestra mensaje de error.
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Accion", "No se pudo crear la Accion" ));
         FacesContext.getCurrentInstance().renderResponse();
-
+        }else{
+            // Si la actualizacion se realizo correctamente redirige a lista de acciones.
+        String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+        FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");
+        }
     }
     
 }

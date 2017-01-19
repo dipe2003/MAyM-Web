@@ -80,7 +80,7 @@ public class EditarActividadesAC implements Serializable {
             Usuario responsable = ListaUsuariosEmpresa.get(ResponsableImplementacion);
             int id;
             // guardar los cambios y redirigir
-            if(true || false){
+            if(fDatos.EditarActividad(IdActividadSeleccionada, Descripcion, ResponsableImplementacion, FechaEstimadaImplementacion) == -1){
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo agregar Medida Correctiva", 
                                                                                                     "No se pudo agregar Medida Correctiva" ));
                 FacesContext.getCurrentInstance().renderResponse();
