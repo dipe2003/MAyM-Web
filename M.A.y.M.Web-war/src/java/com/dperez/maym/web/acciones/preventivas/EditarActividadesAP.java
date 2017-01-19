@@ -3,10 +3,11 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
 */
-package com.dperez.maym.web.accion.edicion.correctivas;
+package com.dperez.maym.web.acciones.preventivas;
 
 import com.dperez.maymweb.accion.Accion;
-import com.dperez.maymweb.accion.acciones.Correctiva;
+import com.dperez.maymweb.accion.acciones.Mejora;
+import com.dperez.maymweb.accion.acciones.Preventiva;
 import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeDatos;
@@ -14,7 +15,6 @@ import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.usuario.Usuario;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -33,14 +33,13 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Named
 @ViewScoped
-public class EditarActividadesAC implements Serializable {
+public class EditarActividadesAP implements Serializable {
     @Inject
     private FacadeDatos fDatos;
     @Inject
     private FacadeLectura fLectura;
     
-    private int IdAccionCorrectivaSeleccionada;
-    private String tipoActividad;
+    private int IdAccionPreventivaSeleccionada;
     
     private Map<Integer, Usuario> ListaUsuariosEmpresa;
     
@@ -69,10 +68,10 @@ public class EditarActividadesAC implements Serializable {
     
     //  Metodos
     /**
-     * Edita la medida correctiva a la accion correctiva.
+     * Edita la actividad de la preventiva.
      * Se persisten los cambios.
      * Muestra un mensaje de error si no se pudo completar correctamente.
-     * Redirige a la pagina con la accion correctiva.
+     * Redirige a la pagina con la accion preventiva.
      * @throws java.io.IOException
      */
     public void editarActividad() throws IOException{
@@ -81,8 +80,8 @@ public class EditarActividadesAC implements Serializable {
             int id;
             // guardar los cambios y redirigir
             if(fDatos.EditarActividad(IdActividadSeleccionada, Descripcion, ResponsableImplementacion, FechaEstimadaImplementacion) == -1){
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo agregar Medida Correctiva", 
-                                                                                                    "No se pudo agregar Medida Correctiva" ));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo editar actividad", 
+                                                                                                    "No se pudo editar actividad" ));
                 FacesContext.getCurrentInstance().renderResponse();
             }else{
                 // regresar a la pagina de editar accion correctiva enviando el id de la accion como parametro
@@ -97,17 +96,11 @@ public class EditarActividadesAC implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         // recuperar el id para llenar datos de la accion correctiva y el resto de las propiedades.
-        IdAccionCorrectivaSeleccionada = Integer.parseInt(request.getParameter("id"));
+        IdAccionPreventivaSeleccionada = Integer.parseInt(request.getParameter("id"));
         IdActividadSeleccionada = Integer.parseInt(request.getParameter("idactividad"));
-        tipoActividad = request.getParameter("tipo");
-        if(IdAccionCorrectivaSeleccionada != 0){
-            Accion AccionCorrectiva = (Correctiva) fLectura.GetAccion(IdAccionCorrectivaSeleccionada);
-            List<Actividad> actividades = new ArrayList<>();
-            if(tipoActividad.equals("correctiva")){
-                actividades = ((Correctiva) AccionCorrectiva).getMedidasCorrectivas();
-            }else{
-                actividades.addAll(((Correctiva)AccionCorrectiva).getMedidasPreventivas());
-            }
+        if(IdAccionPreventivaSeleccionada != 0){
+            Accion AccionPreventiva = (Preventiva) fLectura.GetAccion(IdAccionPreventivaSeleccionada);
+            List<Actividad> actividades = ((Preventiva)AccionPreventiva).getActividades();
             for(Actividad act: actividades){
                 if(act.getId()== IdActividadSeleccionada){
                     ActividadSeleccionada = act;

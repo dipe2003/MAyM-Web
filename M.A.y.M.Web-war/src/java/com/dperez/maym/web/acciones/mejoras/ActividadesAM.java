@@ -3,11 +3,10 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
 */
-package com.dperez.maym.web.accion.activades.preventivas;
+package com.dperez.maym.web.acciones.mejoras;
 
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.acciones.Mejora;
-import com.dperez.maymweb.accion.acciones.Preventiva;
 import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeDatos;
@@ -32,13 +31,13 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Named
 @ViewScoped
-public class ActividadesAP implements Serializable {
+public class ActividadesAM implements Serializable {
     @Inject
     private FacadeDatos fDatos;
     @Inject
     private FacadeLectura fLectura;
     
-    private Accion AccionPreventiva;
+    private Accion AccionMejora;
     
     private Map<Integer, Usuario> ListaUsuariosEmpresa;
     
@@ -67,12 +66,12 @@ public class ActividadesAP implements Serializable {
     
     //  Metodos
     /**
-     * Agrega una actividad a la accion preventiva.
+     * Agrega una actividad a la accion de mejora.
      * Se actualiza la lista de actividades del bean.
      * Se persisten los cambios.
      * Muestra un mensaje de error si no se pudo completar correctamente.
      */
-    public void agregarActividadPreventiva(){
+    public void agregarActividadMejora(){
         if(!DescripcionActividad.isEmpty() && FechaEstimadaImplementacionActividad != null && ResponsableActividad != 0){
             Actividad actividad  = new Actividad();
             Usuario responsable = ListaUsuariosEmpresa.get(ResponsableActividad);
@@ -80,7 +79,7 @@ public class ActividadesAP implements Serializable {
             actividad.setFechaEstimadaImplementacion(FechaEstimadaImplementacionActividad);
             actividad.setResponsableImplementacion(responsable);
             int id;
-            if((id = fDatos.AgregarActividadPreventiva(AccionPreventiva.getId(), actividad.getFechaEstimadaImplementacion(), actividad.getDescripcion(),
+            if((id = fDatos.AgregarActividadMejora(AccionMejora.getId(), actividad.getFechaEstimadaImplementacion(), actividad.getDescripcion(),
                     actividad.getResponsableImplementacion().getId()))<0){
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo agregar Actividad", "No se pudo agregar Actividad" ));
                 FacesContext.getCurrentInstance().renderResponse();
@@ -93,16 +92,16 @@ public class ActividadesAP implements Serializable {
     }    
     
     /**
-     * Remueve la actividad preventiva de la lista de actividades si la fecha de implementacion no esta definida.
-     * Remueve la actividad de la accion preventiva.
+     * Remueve la actividad de mejora de la lista de actividades si la fecha de implementacion no esta definida.
+     * Remueve la actividad de la accion de mejora.
      * Se persisten los cambios.
      * Muestra un mensaje de error si no se pudo completar correctamente.
-     * @param IdActividadPreventiva
+     * @param IdActividadMejora
      */
-    public void removerActividadPreventiva(int IdActividadPreventiva){
-        if(IdActividadPreventiva!=0 && ListaActividades.get(IdActividadPreventiva).getFechaImplementacion() == null){
+    public void removerActividadMejora(int IdActividadMejora){
+        if(IdActividadMejora!=0 && ListaActividades.get(IdActividadMejora).getFechaImplementacion() == null){
             int res;
-            if((res = fDatos.RemoverActividadPreventiva(AccionPreventiva.getId(), IdActividadPreventiva))> 0){
+            if((res = fDatos.RemoverActividadMejora(AccionMejora.getId(), IdActividadMejora))> 0){
                 ListaActividades.remove(res);
             }else{
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo quitar la Actividad", "No se pudo quitar la Actividad" ));
@@ -119,15 +118,15 @@ public class ActividadesAP implements Serializable {
     public void init(){
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        // recuperar el id para llenar datos de la accion preventiva y el resto de las propiedades.
+        // recuperar el id para llenar datos de la accion de mejora y el resto de las propiedades.
         int idAccion = 0;
         idAccion = Integer.parseInt(request.getParameter("id"));
         if(idAccion != 0){
-            AccionPreventiva = (Preventiva) fLectura.GetAccion(idAccion);
-            //  Actividades Preventivas
+            AccionMejora = (Mejora) fLectura.GetAccion(idAccion);
+            //  Actividades de Mejora
             ListaActividades = new HashMap<>();
-            if(!((Preventiva)AccionPreventiva).getActividades().isEmpty()){
-                List<Actividad> actividades = ((Preventiva)AccionPreventiva).getActividades();
+            if(!((Mejora)AccionMejora).getActividades().isEmpty()){
+                List<Actividad> actividades = ((Mejora)AccionMejora).getActividades();
                 for(Actividad actividad: actividades ){
                     ListaActividades.put(actividad.getId(), actividad);
                 }

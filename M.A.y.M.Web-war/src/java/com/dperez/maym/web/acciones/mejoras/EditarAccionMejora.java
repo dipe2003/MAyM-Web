@@ -3,13 +3,11 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
 */
-package com.dperez.maym.web.accion.edicion.correctivas;
+package com.dperez.maym.web.acciones.mejoras;
 
 import com.dperez.maymweb.accion.Accion;
-import com.dperez.maymweb.accion.acciones.Correctiva;
 import com.dperez.maymweb.accion.acciones.EnumAccion;
-import com.dperez.maymweb.accion.acciones.EnumTipoDesvio;
-import com.dperez.maymweb.accion.actividad.Actividad;
+import com.dperez.maymweb.accion.acciones.Mejora;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
@@ -17,7 +15,6 @@ import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
-import com.dperez.maymweb.producto.Producto;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
@@ -39,7 +36,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Named
 @ViewScoped
-public class EditarAccionCorrectiva implements Serializable {
+public class EditarAccionMejora implements Serializable {
     @Inject
     private FacadeAdministrador fAdmin;
     @Inject
@@ -63,19 +60,11 @@ public class EditarAccionCorrectiva implements Serializable {
     private Map<Integer, String> ListaDetecciones;
     private Integer DeteccionSeleccionada;
     
-    private EnumTipoDesvio[] TiposDesvios;
-    private EnumTipoDesvio TipoDesvioSeleccionado;
-    
     private Map<Integer, String> ListaAreasSectores;
     private Integer AreaSectorAccionSeleccionada;
     
     private Map<Integer, String> ListaCodificaciones;
     private Integer CodificacionSeleccionada;
-    
-    private boolean hayProductoAfectado;
-    private Map<String, String> ListaProductosAfectados;
-    private String NombreProductoAfectado;
-    private String DatosProductoAfectado;
     
     //  Getters
     public int getIdAccionCorrectiva(){return IdAccionCorrectiva;}
@@ -95,16 +84,8 @@ public class EditarAccionCorrectiva implements Serializable {
     public String getNombreNuevaDeteccion(){return this.NombreNuevaDeteccion;}
     public Integer getDeteccionSeleccionada(){return this.DeteccionSeleccionada;}
     
-    public EnumTipoDesvio[] getTiposDesvios(){return this.TiposDesvios;}
-    public EnumTipoDesvio getTipoDesvioSeleccionado(){return this.TipoDesvioSeleccionado;}
-    
     public Map<Integer, String> getListaAreasSectores(){return this.ListaAreasSectores;}
     public Integer getAreaSectorAccionSeleccionada() {return AreaSectorAccionSeleccionada;}
-    
-    public boolean hayProductoAfectado(){return this.hayProductoAfectado;}
-    public Map<String, String> getListaProductosAfectados(){return this.ListaProductosAfectados;}
-    public String getNombreProductoAfectado(){return this.NombreProductoAfectado;}
-    public String getDatosProductoAfectado(){return this.DatosProductoAfectado;}
     
     
     //  Setters
@@ -125,16 +106,8 @@ public class EditarAccionCorrectiva implements Serializable {
     public void setNombreNuevaDeteccion(String NombreNuevaDeteccion){this.NombreNuevaDeteccion = NombreNuevaDeteccion;}
     public void setDeteccionSeleccionada(Integer DeteccionSeleccionada){this.DeteccionSeleccionada = DeteccionSeleccionada;}
     
-    public void setTiposDesvios(EnumTipoDesvio[] TiposDesvios){this.TiposDesvios = TiposDesvios;}
-    public void setTipoDesvioSeleccionado(EnumTipoDesvio TipoDesvioSeleccionado){this.TipoDesvioSeleccionado = TipoDesvioSeleccionado;}
-    
     public void setListaAreaSectores(Map<Integer, String> ListaAreasSectores){this.ListaAreasSectores = ListaAreasSectores;}
     public void setAreaSectorAccionSeleccionada(Integer AreaSectorAccionSeleccionada) {this.AreaSectorAccionSeleccionada = AreaSectorAccionSeleccionada;}
-    
-    public void setHayProductoAfectado(boolean hayProductoAfectado){this.hayProductoAfectado = hayProductoAfectado;}
-    public void setListaProductosAfectados(Map<String, String> ListaProductosAfectados) {this.ListaProductosAfectados = ListaProductosAfectados;}
-    public void setNombreProductoAfectado(String NombreProductoAfectado){this.NombreProductoAfectado = NombreProductoAfectado;}
-    public void setDatosProductoAfectado(String DatosProductoAfectado){this.DatosProductoAfectado = DatosProductoAfectado;}
     
     //  Metodos
     
@@ -145,14 +118,14 @@ public class EditarAccionCorrectiva implements Serializable {
     public void init(){
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        // recuperar el id para llenar datos de la accion correctiva y el resto de las propiedades.
+        // recuperar el id para llenar datos de la accion de mejora y el resto de las propiedades.
         int idAccion = 0;
         idAccion = Integer.parseInt(request.getParameter("id"));
         if(idAccion != 0){
-            Accion AccionCorrectiva = (Correctiva) fLectura.GetAccion(idAccion);
-            FechaDeteccion = AccionCorrectiva.getFechaDeteccion();
-            Descripcion = AccionCorrectiva.getDescripcion();
-            AnalisisCausa = AccionCorrectiva.getAnalisisCausa();
+            Accion AccionMejora = (Mejora) fLectura.GetAccion(idAccion);
+            FechaDeteccion = AccionMejora.getFechaDeteccion();
+            Descripcion = AccionMejora.getDescripcion();
+            AnalisisCausa = AccionMejora.getAnalisisCausa();
             
             //  Codificaciones
             ListaCodificaciones = new HashMap<>();
@@ -160,7 +133,7 @@ public class EditarAccionCorrectiva implements Serializable {
             for(Codificacion codificacion:tmpCodificaciones){
                 ListaCodificaciones.put(codificacion.getId(), codificacion.getNombre());
             }
-            CodificacionSeleccionada = AccionCorrectiva.getCodificacionAccion().getId();
+            CodificacionSeleccionada = AccionMejora.getCodificacionAccion().getId();
             
             //  Detecciones
             TiposDeteccion = EnumTipoDeteccion.values();
@@ -173,11 +146,7 @@ public class EditarAccionCorrectiva implements Serializable {
                     ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
                 }
             }
-            DeteccionSeleccionada = AccionCorrectiva.getGeneradaPor().getId();
-            
-            //  Tipo de desvios
-            TiposDesvios = EnumTipoDesvio.values();
-            TipoDesvioSeleccionado = ((Correctiva)AccionCorrectiva).getTipo();
+            DeteccionSeleccionada = AccionMejora.getGeneradaPor().getId();
             
             // Areas Sectores
             ListaAreasSectores = new HashMap<>();
@@ -185,15 +154,7 @@ public class EditarAccionCorrectiva implements Serializable {
             for(Area area:tmpAreas){
                 this.ListaAreasSectores.put(area.getId(), area.getNombre());
             }
-            AreaSectorAccionSeleccionada = AccionCorrectiva.getAreaSectorAccion().getId();
-            
-            if(!((Correctiva)AccionCorrectiva).getProductosAfectados().isEmpty()){
-                List<Producto> ProductosAfectados = ((Correctiva)AccionCorrectiva).getProductosAfectados();
-                for(Producto producto: ProductosAfectados){
-                    ListaProductosAfectados.put(producto.getNombre(), producto.getDatos());
-                }
-                hayProductoAfectado = true;
-            }
+            AreaSectorAccionSeleccionada = AccionMejora.getAreaSectorAccion().getId();
         }
         
     }
@@ -228,19 +189,6 @@ public class EditarAccionCorrectiva implements Serializable {
         }
     }
     
-    /**
-     * Agrega un nuevo producto afectado a la lista de productos afectados para ser persistidos durante la creacion de la accion correctiva.
-     * Si el nombre del producto ya existe se sustituye
-     * Si el nombre o el datos estan vacios no se crea y se muestra el mensaje correspondiente.
-     */
-    public void nuevoProductoAfectado(){
-        if(NombreProductoAfectado.isEmpty() || DatosProductoAfectado.isEmpty()){
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo agregar producto", "No se pudo agregar producto" ));
-            FacesContext.getCurrentInstance().renderResponse();
-        }else{
-            this.ListaProductosAfectados.put(NombreProductoAfectado, DatosProductoAfectado);
-        }
-    }
     
     /**
      * Actualiza la accion correctiva con los datos nuevos.
@@ -248,17 +196,17 @@ public class EditarAccionCorrectiva implements Serializable {
      * Si se creo se redirige a la pagina de listado de acciones.
      * @throws java.io.IOException
      */
-    public void editarAccionCorrectiva() throws IOException{
+    public void editarAccionMejora() throws IOException{
         // actualizar accion
-        if(fDatos.EditarAccion(IdAccionCorrectiva, EnumAccion.CORRECTIVA, FechaDeteccion, Descripcion, TipoDesvioSeleccionado, 
+        if(fDatos.EditarAccion(IdAccionCorrectiva, EnumAccion.MEJORA, FechaDeteccion, Descripcion, null,
                 AreaSectorAccionSeleccionada, DeteccionSeleccionada, CodificacionSeleccionada) != -1){
             // Si no se actualizo muestra mensaje de error.
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Accion", "No se pudo crear la Accion" ));
-        FacesContext.getCurrentInstance().renderResponse();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
+            FacesContext.getCurrentInstance().renderResponse();
         }else{
             // Si la actualizacion se realizo correctamente redirige a lista de acciones.
-        String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-        FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");
+            String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");
         }
     }
     
