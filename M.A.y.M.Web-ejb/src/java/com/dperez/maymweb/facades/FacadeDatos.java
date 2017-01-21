@@ -58,6 +58,17 @@ public class FacadeDatos {
     }
     
     /**
+     * Remueve el producto involucrado de la accion seleccionada y actualiza la base de datos.
+     * Elimina el producto de la base de datos.
+     * @param IdAccionCorrectiva
+     * @param IdProducto
+     * @return Retorna -1 si no se actualizo. Retorna IdAccion si se actualizo.
+     */
+    public int RemoverProductoInvolucrado(int IdAccionCorrectiva, int IdProducto){
+        return  cEdicion.RemoverProductoInvolucrado(IdAccionCorrectiva, IdProducto);
+    }
+    
+    /**
      * Crea el/los adjuntos, los agrega a la accion y actualiza la base de datos.
      * @param IdAccion
      * @param adjuntos Map.Key = Titulo del archivo Adjunto | Map.Value = Ubicacion del archivo adjunto
@@ -221,7 +232,7 @@ public class FacadeDatos {
         return cEdicion.RemoverActividadPreventiva(IdAccion, IdActividadPreventiva);
     }
     
-        /**
+    /**
      * Edita una accion con los mismos parametros que se creo. Actualiza la base de datos.
      * @param IdAccion
      * @param TipoAccion
@@ -247,6 +258,6 @@ public class FacadeDatos {
      * @return Retorna -1 si no se actualizo. Retorna el IdActividad si se actualizo.
      */
     public int EditarActividad(int IdActividad, String Descripcion, int ResponsableImplementacion, Date FechaImplementacion){
-       return cEdicion.EditarActividad(IdActividad, ResponsableImplementacion, FechaImplementacion,Descripcion);
+        return cEdicion.EditarActividad(IdActividad, ResponsableImplementacion, FechaImplementacion,Descripcion);
     }
 }

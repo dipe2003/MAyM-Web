@@ -29,6 +29,8 @@ import com.dperez.maymweb.usuario.ControladorSeguridad;
 import com.dperez.maymweb.usuario.ManejadorUsuario;
 import com.dperez.maymweb.usuario.Usuario;
 import java.util.Date;
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -264,7 +266,7 @@ public class ControladorEdicionRegistro {
             Usuario responsable = mUsuario.GetUsuario(IdResponsable);
             actividad.setResponsableImplementacion(responsable);
         }
-        return mActividad.ActualizarActividad(actividad);              
+        return mActividad.ActualizarActividad(actividad);
     }
     
     /*
@@ -283,5 +285,5 @@ public class ControladorEdicionRegistro {
         producto.setDatos(DatosProducto);
         producto.setNombre(NombreProducto);
         return mProducto.ActualizarProducto(producto);
-    }   
+    }
 }
