@@ -26,13 +26,13 @@ import javax.persistence.OneToMany;
  */
 @Entity
 public class Correctiva extends Accion implements Serializable {
-    @OneToMany(mappedBy = "AccionCorrectivaMedidaCorrectiva", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "AccionCorrectivaMedidaCorrectiva", orphanRemoval = true)
     private List<Actividad> MedidasCorrectivas;
-    @OneToMany(mappedBy = "AccionCorrectivaMedidaPreventiva", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "AccionCorrectivaMedidaPreventiva", orphanRemoval = true)
     private List<Actividad> MedidasPreventivas;
     private EnumTipoDesvio Tipo;
     
-    @OneToMany(mappedBy = "AccionCorrectivaConProductoAfectado", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "AccionCorrectivaConProductoAfectado", orphanRemoval = true)
     private List<Producto> ProductosAfectados;
     
     // Constructores

@@ -9,7 +9,6 @@ import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.acciones.Correctiva;
 import com.dperez.maymweb.accion.acciones.EnumAccion;
 import com.dperez.maymweb.accion.acciones.EnumTipoDesvio;
-import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
@@ -259,6 +258,23 @@ public class EditarAccionCorrectiva implements Serializable {
             // Si la actualizacion se realizo correctamente redirige a lista de acciones.
         String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
         FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");
+        }
+    }
+    
+        /**
+     * Elimina la accion de la base de datos.
+     * Se eliminan todos los datos relacionados (actividades, adjuntos, comprobaciones y productos)
+     * @throws java.io.IOException
+     */
+    public void eliminarAccionPreventiva() throws IOException{
+        if(fAdmin.EliminarAccion(IdAccionCorrectiva)!=-1){
+            // Si no se elimino muestra mensaje de error.
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar la Accion", "No se pudo eliminar la Accion" ));
+            FacesContext.getCurrentInstance().renderResponse();
+        }else{
+            // Si la eliminacion se realizo correctamente redirige a lista de acciones.
+            String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");            
         }
     }
     

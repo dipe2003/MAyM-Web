@@ -44,7 +44,7 @@ public class EditarAccionPreventiva implements Serializable {
     @Inject
     private FacadeDatos fDatos;
     
-    private int IdAccionCorrectiva;
+    private int IdAccionPreventiva;
     
     private Date FechaDeteccion;
     private String Descripcion;
@@ -67,7 +67,7 @@ public class EditarAccionPreventiva implements Serializable {
     private Integer CodificacionSeleccionada;
     
     //  Getters
-    public int getIdAccionCorrectiva(){return IdAccionCorrectiva;}
+    public int getIdAccionPreventiva(){return IdAccionPreventiva;}
     public Date getFechaDeteccion() {return FechaDeteccion;}
     public String getDescripcion() {return Descripcion;}
     public String getAnalisisCausa() {return AnalisisCausa;}
@@ -89,7 +89,7 @@ public class EditarAccionPreventiva implements Serializable {
     
     
     //  Setters
-    public void serIdAccionCorrectiva(int IdAccionCorrectiva){this.IdAccionCorrectiva = IdAccionCorrectiva;}
+    public void serIdAccionCorrectiva(int IdAccionCorrectiva){this.IdAccionPreventiva = IdAccionCorrectiva;}
     public void setFechaDeteccion(Date FechaDeteccion) {this.FechaDeteccion = FechaDeteccion;}
     public void setDescripcion(String Descripcion) {this.Descripcion = Descripcion;}
     public void setAnalisisCausa(String AnalisisCausa) {this.AnalisisCausa = AnalisisCausa;}
@@ -198,7 +198,7 @@ public class EditarAccionPreventiva implements Serializable {
      */
     public void editarAccionPreventiva() throws IOException{
         // actualizar accion
-        if(fDatos.EditarAccion(IdAccionCorrectiva, EnumAccion.PREVENTIVA, FechaDeteccion, Descripcion, null,
+        if(fDatos.EditarAccion(IdAccionPreventiva, EnumAccion.PREVENTIVA, FechaDeteccion, Descripcion, null,
                 AreaSectorAccionSeleccionada, DeteccionSeleccionada, CodificacionSeleccionada) != -1){
             // Si no se actualizo muestra mensaje de error.
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
@@ -207,6 +207,23 @@ public class EditarAccionPreventiva implements Serializable {
             // Si la actualizacion se realizo correctamente redirige a lista de acciones.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");
+        }
+    }
+    
+    /**
+     * Elimina la accion de la base de datos.
+     * Se eliminan todos los datos relacionados (actividades, adjuntos, comprobaciones)
+     * @throws java.io.IOException
+     */
+    public void eliminarAccionPreventiva() throws IOException{
+        if(fAdmin.EliminarAccion(IdAccionPreventiva)!=-1){
+            // Si no se elimino muestra mensaje de error.
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar la Accion", "No se pudo eliminar la Accion" ));
+            FacesContext.getCurrentInstance().renderResponse();
+        }else{
+            // Si la eliminacion se realizo correctamente redirige a lista de acciones.
+            String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");            
         }
     }
     

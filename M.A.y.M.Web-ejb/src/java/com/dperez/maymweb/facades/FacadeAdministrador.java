@@ -60,7 +60,7 @@ public class FacadeAdministrador  {
     public Deteccion NuevaDeteccion(String NombreDeteccion, EnumTipoDeteccion tipoDeteccion){
         return cConfig.NuevaDeteccion(NombreDeteccion, tipoDeteccion);
     }
-        
+    
     /**
      * Crea un nuevo usuario y lo persiste en la base de datos. El usuario creado no recibe alertas.
      * @param Nickname
@@ -87,10 +87,19 @@ public class FacadeAdministrador  {
     /**
      * Comprueba si existe la empresa especificada por su nombre;
      * @param IdEmpresa
-     * @return 
+     * @return
      */
     public boolean ExisteEmpresa(int IdEmpresa){
         return cConfig.ExisteEmpresa(IdEmpresa);
+    }
+    
+    /**
+     * Elimina la accion seleccionada.
+     * @param IdAccion
+     * @return return Retorna -1 si no se elimino. Retorna el id de la accion eliminada.
+     */
+    public int EliminarAccion(int IdAccion){
+        return cEdicion.EliminarAccion(IdAccion);
     }
     
 }

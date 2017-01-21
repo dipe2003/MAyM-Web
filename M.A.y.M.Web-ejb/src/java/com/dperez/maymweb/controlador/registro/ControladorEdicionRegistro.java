@@ -103,6 +103,16 @@ public class ControladorEdicionRegistro {
     }
     
     /**
+     * Elimina la accion seleccionada.
+     * @param IdAccion
+     * @return return Retorna -1 si no se elimino. Retorna el id de la accion eliminada.
+     */
+    public int EliminarAccion(int IdAccion){
+        Accion accion = mAccion.GetAccion(IdAccion);
+        return mAccion.BorrarAccion(accion);
+    }
+    
+    /**
      * Setea el analisis de causa de la desviacion y actualiza la base de datos.
      * @param AnalisisDeCausa
      * @param IdAccion

@@ -17,7 +17,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.dperez.maymweb.deteccion.Deteccion;
-import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.estado.EnumEstado;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -44,7 +43,7 @@ public abstract class Accion implements Serializable{
     private String AnalisisCausa = new String();
     private EnumEstado EstadoAccion;
     
-    @OneToMany(mappedBy = "AccionAdjunto", cascade =  CascadeType.REMOVE)
+    @OneToMany(mappedBy = "AccionAdjunto",orphanRemoval = true)
     private List<Adjunto> Adjuntos;
     
     @ManyToOne
@@ -56,10 +55,10 @@ public abstract class Accion implements Serializable{
     @ManyToOne
     private Codificacion CodificacionAccion;
     
-    @OneToOne
+    @OneToOne(orphanRemoval = true)
     private Comprobacion ComprobacionEficacia;
     
-    @OneToOne
+    @OneToOne( orphanRemoval = true)
     private Comprobacion ComprobacionImplementacion;
     
     // Constructores
