@@ -242,6 +242,21 @@ public class EditarAccionCorrectiva implements Serializable {
     }
     
     /**
+     * Remueve el producto involucrado de la base de datos.
+     * Se quita el producto de la lista de productos del bean.
+     * Se muestra un mensaje de error si no se elimino.
+     * @param NombreProducto 
+     */
+    public void removerProductoAfectado(String NombreProducto){
+        if(fDatos.RemoverProductoInvolucrado(IdAccionCorrectiva, NombreProducto)==-1){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo quitar producto", "No se pudo quitar producto" ));
+            FacesContext.getCurrentInstance().renderResponse();
+        }else{
+            this.ListaProductosAfectados.remove(NombreProductoAfectado, DatosProductoAfectado);
+        }
+    }
+    
+    /**
      * Actualiza la accion correctiva con los datos nuevos.
      * Si no se actualizo se muestra mensaje de error.
      * Si se creo se redirige a la pagina de listado de acciones.
@@ -266,7 +281,7 @@ public class EditarAccionCorrectiva implements Serializable {
      * Se eliminan todos los datos relacionados (actividades, adjuntos, comprobaciones y productos)
      * @throws java.io.IOException
      */
-    public void eliminarAccionPreventiva() throws IOException{
+    public void eliminarAccionCorrectiva() throws IOException{
         if(fAdmin.EliminarAccion(IdAccionCorrectiva)!=-1){
             // Si no se elimino muestra mensaje de error.
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar la Accion", "No se pudo eliminar la Accion" ));

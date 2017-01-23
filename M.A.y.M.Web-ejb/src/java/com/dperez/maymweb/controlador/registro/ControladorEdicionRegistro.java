@@ -29,6 +29,7 @@ import com.dperez.maymweb.usuario.ControladorSeguridad;
 import com.dperez.maymweb.usuario.ManejadorUsuario;
 import com.dperez.maymweb.usuario.Usuario;
 import java.util.Date;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -140,11 +141,16 @@ public class ControladorEdicionRegistro {
      * Remueve el producto involucrado de la accion seleccionada y actualiza la base de datos.
      * Elimina el producto de la base de datos.
      * @param IdAccionCorrectiva
-     * @param IdProducto
+     * @param NombreProducto
      * @return Retorna -1 si no se actualizo. Retorna IdAccion si se actualizo.
      */
-    public int RemoverProductoInvolucrado(int IdAccionCorrectiva, int IdProducto){
+    public int RemoverProductoInvolucrado(int IdAccionCorrectiva, String NombreProducto){
         Accion accion = mAccion.GetAccion(IdAccionCorrectiva);
+        int IdProducto =0;
+        List<Producto> productos = ((Correctiva)accion).getProductosAfectados();
+        for(Producto producto: productos){
+            if(producto.getNombre().equalsIgnoreCase(NombreProducto)) IdProducto=producto.getId();
+        }
         ((Correctiva)accion).removeProducoAfectado(IdProducto);
         int res = mAccion.ActualizarAccion(accion);
         if(res!=-1){

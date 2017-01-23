@@ -215,7 +215,7 @@ public class EditarAccionMejora implements Serializable {
      * Se eliminan todos los datos relacionados (actividades, adjuntos, comprobaciones)
      * @throws java.io.IOException
      */
-    public void eliminarAccionPreventiva() throws IOException{
+    public void eliminarAccionMejora() throws IOException{
         if(fAdmin.EliminarAccion(IdAccionMejora)!=-1){
             // Si no se elimino muestra mensaje de error.
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar la Accion", "No se pudo eliminar la Accion" ));

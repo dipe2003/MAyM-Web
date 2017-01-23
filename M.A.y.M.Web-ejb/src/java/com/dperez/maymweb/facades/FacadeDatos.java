@@ -249,4 +249,15 @@ public class FacadeDatos {
     public int EditarActividad(int IdActividad, String Descripcion, int ResponsableImplementacion, Date FechaImplementacion){
        return cEdicion.EditarActividad(IdActividad, ResponsableImplementacion, FechaImplementacion,Descripcion);
     }
+    
+        /**
+     * Remueve el producto involucrado de la accion seleccionada y actualiza la base de datos.
+     * Elimina el producto de la base de datos.
+     * @param IdAccionCorrectiva
+     * @param NombreProducto
+     * @return Retorna -1 si no se actualizo. Retorna IdAccion si se actualizo.
+     */
+    public int RemoverProductoInvolucrado(int IdAccionCorrectiva, String NombreProducto){
+        return cEdicion.RemoverProductoInvolucrado(IdAccionCorrectiva, NombreProducto);
+    }
 }
