@@ -19,6 +19,7 @@ import com.dperez.maymweb.usuario.Credencial;
 import com.dperez.maymweb.usuario.ManejadorUsuario;
 import com.dperez.maymweb.usuario.Usuario;
 import com.dperez.maymweb.usuario.permiso.EnumPermiso;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -149,33 +150,81 @@ public class ControladorConfiguracion {
     
     /***
      * Crea una nueva area/sector y la persiste en la base de datos.
+     * Se verifica si existe el nombre del area en la base de datos.
      * @param NombreArea
      * @param CorreoArea
      * @param IdEmpresa
      * @return null si no se creo.
      */
     public Area NuevaArea(String NombreArea, String CorreoArea, int IdEmpresa){
-        Empresa empresa = mEmpresa.GetEmpresa(IdEmpresa);
-        Area area = new Area(NombreArea, CorreoArea, empresa);
-        area.setId(mArea.CrearArea(area));
-        if(area.getId()!=-1){
-            return area;
-        }else{
-            return null;
+        if(ExisteNombreArea(NombreArea)){
+            Empresa empresa = mEmpresa.GetEmpresa(IdEmpresa);
+            Area area = new Area(NombreArea, CorreoArea, empresa);
+            area.setId(mArea.CrearArea(area));
+            if(area.getId()!=-1){
+                return area;
+            }
         }
+        return null;
     }
     /**
      * Cambia los valores de area y actualiza la base de datos.
+     * Se verifica si existe el nombre del area en la base de datos.
      * @param IdArea
      * @param NombreArea
      * @param CorreoArea
      * @return Retorna -1 si no se actualizo. Retorna el IdArea si se actualizo.
      */
     public int EditarArea(int IdArea, String NombreArea, String CorreoArea){
+        if(ExisteNombreArea(IdArea, NombreArea)){
+            Area area = mArea.GetArea(IdArea);
+            area.setNombre(NombreArea);
+            area.setCorreo(CorreoArea);
+            return mArea.ActualizarArea(area);
+        }
+        return -1;
+    }
+    
+    /**
+     * Elimina el area de la base de datos.
+     * Se comprueba que no tenga acciones y fortalezas relacionadas.
+     * @param IdArea
+     * @return Retorna el id del area si se elimino. Retorna -1 si no se elimino.
+     */
+    public int EliminarArea(int IdArea){
         Area area = mArea.GetArea(IdArea);
-        area.setNombre(NombreArea);
-        area.setCorreo(CorreoArea);
-        return mArea.ActualizarArea(area);
+        if(area.getAccionesEnAreaSector().isEmpty() && area.getFortalezasEnAreaSector().isEmpty()){
+            return mArea.BorrarArea(area);
+        }
+        return -1;
+    }
+    
+    /**
+     * Comprueba si el nombre especificado para el area ya existe en la base de datos.
+     * Se ignoar las mayusculas y minusculas.
+     * @param NombreArea
+     * @param IdArea
+     * @return <b>True</b> Si existe. <b>False</b> si no existe.
+     */
+    private boolean ExisteNombreArea(int IdArea, String NombreArea){
+        List<Area> areas = mArea.ListarAreas();
+        for(Area area: areas){
+            if(area.getNombre().equalsIgnoreCase(NombreArea) && area.getId()!= IdArea) return true;
+        }
+        return false;
+    }
+    /**
+     * Comprueba si el nombre especificado para el area ya existe en la base de datos.
+     * Se ignoar las mayusculas y minusculas.
+     * @param NombreArea
+     * @return <b>True</b> Si existe. <b>False</b> si no existe.
+     */
+    private boolean ExisteNombreArea(String NombreArea){
+        List<Area> areas = mArea.ListarAreas();
+        for(Area area: areas){
+            if(area.getNombre().equalsIgnoreCase(NombreArea)) return true;
+        }
+        return false;
     }
     
     /*
@@ -184,28 +233,79 @@ public class ControladorConfiguracion {
     
     /***
      * Crea una nueva codificacion y la persiste en la base de datos.
+     * Se verifica si existe el nombre de la codificacion en la base de datos.
      * @param NombreCodificacion
+     * @param DescripcionCodificacion
      * @return null si no se creo.
      */
     public Codificacion NuevaCodificacion(String NombreCodificacion, String DescripcionCodificacion){
-        Codificacion codificacion = new Codificacion(NombreCodificacion, DescripcionCodificacion);
-        codificacion.setId(mCodificacion.CrearCodificacion(codificacion));
-        if(codificacion.getId()!=-1){
-            return codificacion;
-        }else{
-            return null;
+        if(ExisteNombreCodificacion(NombreCodificacion)){
+            Codificacion codificacion = new Codificacion(NombreCodificacion, DescripcionCodificacion);
+            codificacion.setId(mCodificacion.CrearCodificacion(codificacion));
+            if(codificacion.getId()!=-1){
+                return codificacion;
+            }
         }
+        return null;
     }
     /**
      * Cambia los valores de Codificacion y actualiza la base de datos.
+     * Se verifica si existe el nombre de la codificacion en la base de datos.
      * @param IdCodificacion
      * @param NombreCodificacion
+     * @param DescripcionCodificacion
      * @return Retorna -1 si no se actualizo. Retorna el IdCodificacion si se actualizo.
      */
-    public int EditarCodificacion(int IdCodificacion, String NombreCodificacion){
+    public int EditarCodificacion(int IdCodificacion, String NombreCodificacion, String DescripcionCodificacion){
+        if(!ExisteNombreCodificacion(IdCodificacion, NombreCodificacion)){
+            Codificacion codificacion = mCodificacion.GetCodificacion(IdCodificacion);
+            codificacion.setNombre(NombreCodificacion);
+            codificacion.setDescripcion(DescripcionCodificacion);
+            return mCodificacion.ActualizarCodificacion(codificacion);
+        }
+        return -1;
+    }
+    
+    /**
+     * Elimina la codificacion de la base de datos.
+     * Se comprueba que no tenga acciones relacionadas.
+     * @param IdCodificacion
+     * @return Retorna el id de la codificacion si se elimino. Retorna -1 si no se elimino.
+     */
+    public int EliminarCodificacion(int IdCodificacion){
         Codificacion codificacion = mCodificacion.GetCodificacion(IdCodificacion);
-        codificacion.setNombre(NombreCodificacion);
-        return mCodificacion.ActualizarCodificacion(codificacion);
+        if(codificacion.getAccionesConCodificacion().isEmpty()){
+            return mCodificacion.BorrarCodificacion(codificacion);
+        }
+        return -1;
+    }
+    
+    /**
+     * Comprueba si el nombre especificado para la codificacion ya existe en la base de datos.
+     * Se ignoar las mayusculas y minusculas.
+     * @param NombreCodificacion
+     * @param IdCodificacion
+     * @return <b>True</b> Si existe. <b>False</b> si no existe.
+     */
+    private boolean ExisteNombreCodificacion(int IdCodificacion, String NombreCodificacion){
+        List<Codificacion> codificaciones = mCodificacion.ListarCodificaciones();
+        for(Codificacion cod: codificaciones){
+            if(cod.getNombre().equalsIgnoreCase(NombreCodificacion) && cod.getId()!= IdCodificacion) return true;
+        }
+        return false;
+    }
+    /**
+     * Comprueba si el nombre especificado para la codificacion ya existe en la base de datos.
+     * Se ignoar las mayusculas y minusculas.
+     * @param NombreCodificacion
+     * @return <b>True</b> Si existe. <b>False</b> si no existe.
+     */
+    private boolean ExisteNombreCodificacion(String NombreCodificacion){
+        List<Codificacion> codificaciones = mCodificacion.ListarCodificaciones();
+        for(Codificacion cod: codificaciones){
+            if(cod.getNombre().equalsIgnoreCase(NombreCodificacion)) return true;
+        }
+        return false;
     }
     
     /*
@@ -214,39 +314,87 @@ public class ControladorConfiguracion {
     
     /***
      * Crea una nueva deteccion y la persiste en la base de datos.
+     * * Se comprueba que no existe una deteccion con el mismo nombre,
      * @param NombreDeteccion
      * @param tipoDeteccion
      * @return null si no se creo.
      */
     public Deteccion NuevaDeteccion(String NombreDeteccion, EnumTipoDeteccion tipoDeteccion){
-        Deteccion deteccion = new Deteccion(NombreDeteccion, tipoDeteccion);
-        deteccion.setId(mDeteccion.CrearDeteccion(deteccion));
-        if(deteccion.getId()!=-1){
-            return deteccion;
-        }else{
-            return null;
+        if(ExisteNombreDeteccion(NombreDeteccion)){
+            Deteccion deteccion = new Deteccion(NombreDeteccion, tipoDeteccion);
+            deteccion.setId(mDeteccion.CrearDeteccion(deteccion));
+            if(deteccion.getId()!=-1){
+                return deteccion;
+            }
         }
+        return null;
     }
     
     /**
      * Cambia los valores de Deteccion y actualiza la base de datos.
+     * Se comprueba que no existe una deteccion con el mismo nombre.
      * @param IdDteccion
      * @param NombreDeteccion
      * @param TipoDeteccion
      * @return Retorna -1 si no se actualizo. Retorna el IdDeteccion si se actualizo.
      */
     public int EditarDeteccion(int IdDteccion, String NombreDeteccion, EnumTipoDeteccion TipoDeteccion){
-        Deteccion deteccion = mDeteccion.GetDeteccion(IdDteccion);
-        // comprobar si se cambia el tipo de deteccion para 'ahorrar' llamada a la base de datos.
-        if(!deteccion.getTipo().equals(TipoDeteccion)){
-            deteccion.setTipo(TipoDeteccion);
+        if(ExisteNombreDeteccion(IdDteccion, NombreDeteccion)){
+            Deteccion deteccion = mDeteccion.GetDeteccion(IdDteccion);
+            // comprobar si se cambia el tipo de deteccion para 'ahorrar' llamada a la base de datos.
+            if(!deteccion.getTipo().equals(TipoDeteccion)){
+                deteccion.setTipo(TipoDeteccion);
+            }
+            deteccion.setNombre(NombreDeteccion);
+            return mDeteccion.ActualizarDeteccion(deteccion);
         }
-        deteccion.setNombre(NombreDeteccion);
-        return mDeteccion.ActualizarDeteccion(deteccion);
+        return -1;
+    }
+    
+    /**
+     * Elimina la deteccion de la base de datos.
+     * Se comprueba que no tenga acciones y fortalezas relacionadas.
+     * @param IdDeteccion
+     * @return Retorna el id de la deteccion si se elimino. Retorna -1 si no se elimino.
+     */
+    public int EliminarDeteccion(int IdDeteccion){
+        Deteccion det = mDeteccion.GetDeteccion(IdDeteccion);
+        if(det.getFortalezasDetectadas().isEmpty() && det.getAccionesDetectadas().isEmpty()){
+            return mDeteccion.BorrarDeteccion(det);
+        }
+        return -1;
+    }
+    
+    /**
+     * Comprueba si el nombre especificado para la deteccion ya existe en la base de datos.
+     * Se ignoar las mayusculas y minusculas.
+     * @param NombreDeteccion
+     * @param IdDeteccion
+     * @return <b>True</b> Si existe. <b>False</b> si no existe.
+     */
+    private boolean ExisteNombreDeteccion(int IdDeteccion, String NombreDeteccion){
+        List<Deteccion> detecciones = mDeteccion.ListarDetecciones();
+        for(Deteccion det: detecciones){
+            if(det.getNombre().equalsIgnoreCase(NombreDeteccion) && det.getId()!= IdDeteccion) return true;
+        }
+        return false;
+    }
+    /**
+     * Comprueba si el nombre especificado para la deteccion ya existe en la base de datos.
+     * Se ignoar las mayusculas y minusculas.
+     * @param NombreDeteccion
+     * @return <b>True</b> Si existe. <b>False</b> si no existe.
+     */
+    private boolean ExisteNombreDeteccion(String NombreDeteccion){
+        List<Deteccion> detecciones = mDeteccion.ListarDetecciones();
+        for(Deteccion det: detecciones){
+            if(det.getNombre().equalsIgnoreCase(NombreDeteccion)) return true;
+        }
+        return false;
     }
     
     /*
-        Empresa
+    Empresa
     */
     /**
      * Crea una empresa y la persiste en la base de datos.
@@ -290,7 +438,7 @@ public class ControladorConfiguracion {
     }
     
     /**
-     * Comprueba la existencia de la empresa 
+     * Comprueba la existencia de la empresa
      * @param IdEmpresa
      * @return True si existe. Retorna False si no existe.
      */

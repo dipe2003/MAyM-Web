@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
-import static javax.faces.application.FacesMessage.SEVERITY_INFO;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -65,7 +64,7 @@ public class CrearEmpresa implements Serializable {
                 FacesContext.getCurrentInstance().responseComplete();
             }
         }
-        FacesContext.getCurrentInstance().addMessage("frm-datos-empresa:utton-registrar-empresa", new FacesMessage(SEVERITY_ERROR, mensaje, mensaje));
+        FacesContext.getCurrentInstance().addMessage("frm-datos-empresa:button-registrar-empresa", new FacesMessage(SEVERITY_ERROR, mensaje, mensaje));
         FacesContext.getCurrentInstance().renderResponse();
     }
     

@@ -38,8 +38,38 @@ public class FacadeAdministrador  {
         return cConfig.NuevaEmpresa(Id, NombreEmpresa, DireccionEmpresa, TelefonoEmpresa, CorreoEmpresa);
     }
     
+    /***
+     * Crea una nueva area/sector y la persiste en la base de datos.
+     * Se verifica si existe el nombre del area en la base de datos.
+     * @param NombreArea
+     * @param CorreoArea
+     * @param IdEmpresa
+     * @return null si no se creo.
+     */
     public Area NuevaArea(String NombreArea, String CorreoArea, int IdEmpresa){
         return cConfig.NuevaArea(NombreArea, CorreoArea, IdEmpresa);
+    }
+    
+    /**
+     * Cambia los valores de area y actualiza la base de datos.
+     * Se verifica si existe el nombre del area en la base de datos.
+     * @param IdArea
+     * @param NombreArea
+     * @param CorreoArea
+     * @return Retorna -1 si no se actualizo. Retorna el IdArea si se actualizo.
+     */
+    public int EditarArea(int IdArea, String NombreArea, String CorreoArea){
+        return cConfig.EditarArea(IdArea, NombreArea, CorreoArea);
+    }
+    
+    /**
+     * Elimina el area de la base de datos.
+     * Se comprueba que no tenga acciones y fortalezas relacionadas.
+     * @param IdArea
+     * @return Retorna el id de la codificacion si se elimino. Retorna -1 si no se elimino.
+     */
+    public int EliminarArea(int IdArea){
+        return cConfig.EliminarArea(IdArea);
     }
     
     /***
@@ -51,6 +81,29 @@ public class FacadeAdministrador  {
     public Codificacion NuevaCodificacion(String NombreCodificacion, String DescripcionCodificacion){
         return cConfig.NuevaCodificacion(NombreCodificacion, DescripcionCodificacion);
     }
+    
+    /**
+     * Cambia los valores de Codificacion y actualiza la base de datos.
+     * Se verifica si existe el nombre de la codificacion en la base de datos.
+     * @param IdCodificacion
+     * @param NombreCodificacion
+     * @param DescripcionCodificacion
+     * @return Retorna -1 si no se actualizo. Retorna el IdCodificacion si se actualizo.
+     */
+    public int EditarCodificacion(int IdCodificacion, String NombreCodificacion, String DescripcionCodificacion){
+        return cConfig.EditarCodificacion(IdCodificacion, NombreCodificacion, DescripcionCodificacion);
+    }
+    
+    /**
+     * Elimina la codificacion de la base de datos.
+     * Se comprueba que no tenga acciones relacionadas.
+     * @param IdCodificacion
+     * @return Retorna el id de la codificacion si se elimino. Retorna -1 si no se elimino.
+     */
+    public int EliminarCodificacion(int IdCodificacion){
+        return cConfig.EliminarCodificacion(IdCodificacion);
+    }
+    
     /***
      * Crea una nueva deteccion y la persiste en la base de datos.
      * @param NombreDeteccion
@@ -59,6 +112,28 @@ public class FacadeAdministrador  {
      */
     public Deteccion NuevaDeteccion(String NombreDeteccion, EnumTipoDeteccion tipoDeteccion){
         return cConfig.NuevaDeteccion(NombreDeteccion, tipoDeteccion);
+    }
+    
+    /**
+     * Cambia los valores de Deteccion y actualiza la base de datos.
+     * Se comprueba que no existe una deteccion con el mismo nombre.
+     * @param IdDteccion
+     * @param NombreDeteccion
+     * @param TipoDeteccion
+     * @return Retorna -1 si no se actualizo. Retorna el IdDeteccion si se actualizo.
+     */
+    public int EditarDeteccion(int IdDteccion, String NombreDeteccion, EnumTipoDeteccion TipoDeteccion){
+        return cConfig.EditarDeteccion(IdDteccion, NombreDeteccion, TipoDeteccion);
+    }
+    
+    /**
+     * Elimina la deteccion de la base de datos.
+     * Se comprueba que no tenga acciones y fortalezas relacionadas.
+     * @param IdDeteccion
+     * @return Retorna el id de la deteccion si se elimino. Retorna -1 si no se elimino.
+     */
+    public int EliminarDeteccion(int IdDeteccion){
+        return cConfig.EliminarDeteccion(IdDeteccion);
     }
     
     /**
