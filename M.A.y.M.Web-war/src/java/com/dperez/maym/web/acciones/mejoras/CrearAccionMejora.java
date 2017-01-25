@@ -7,10 +7,12 @@ package com.dperez.maym.web.acciones.mejoras;
 
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.acciones.EnumAccion;
+import com.dperez.maymweb.accion.adjunto.CargarArchivo;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
+import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
@@ -29,6 +31,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
 
 
 
@@ -41,6 +45,8 @@ public class CrearAccionMejora implements Serializable {
     private FacadeLectura fLectura;
     @Inject
     private FacadeDatos fDatos;
+    @Inject
+    private CargarArchivo cargaArchivos;
     
     private Date FechaDeteccion;
     private String Descripcion;
@@ -49,6 +55,8 @@ public class CrearAccionMejora implements Serializable {
     private String TituloAdjunto;
     private String UbicacionAdjunto;
     private Map<String, String> ListaAdjuntos;
+    private Part ArchivoAdjunto;
+    private Map<String, Part> ArchivosAdjuntos;
     
     private EnumTipoDeteccion[] TiposDeteccion;
     private EnumTipoDeteccion TipoDeDeteccionSeleccionada;
@@ -70,6 +78,8 @@ public class CrearAccionMejora implements Serializable {
     public String getTituloAdjunto(){return this.TituloAdjunto;}
     public String getUbicacionAdjunto(){return this.UbicacionAdjunto;}
     public Map<String, String> getAdjuntos() {return ListaAdjuntos;}
+    public Part getArchivoAdjunto() {return ArchivoAdjunto;}
+    public Map<String, Part> getArchivosAdjuntos() {return ArchivosAdjuntos;}
     
     public Map<Integer, String> getListaCodificaciones(){return this.ListaCodificaciones;}
     public Integer getCodificacionSeleccionada() {return CodificacionSeleccionada;}
@@ -81,7 +91,7 @@ public class CrearAccionMejora implements Serializable {
     public Integer getDeteccionSeleccionada(){return this.DeteccionSeleccionada;}
     
     public Map<Integer, String> getListaAreasSectores(){return this.ListaAreasSectores;}
-    public Integer getAreaSectorAccionSeleccionada() {return AreaSectorAccionSeleccionada;}    
+    public Integer getAreaSectorAccionSeleccionada() {return AreaSectorAccionSeleccionada;}
     
     //  Setters
     
@@ -91,6 +101,8 @@ public class CrearAccionMejora implements Serializable {
     public void setTituloAdjunto(String TituloAdjunto){this.TituloAdjunto = TituloAdjunto;}
     public void setUbicacionAdjunto(String UbicacionAdjunto){this.UbicacionAdjunto = UbicacionAdjunto;}
     public void setAdjuntos(Map<String, String> Adjuntos) {this.ListaAdjuntos = Adjuntos;}
+    public void setArchivoAdjunto(Part ArchivoAdjunto) {this.ArchivoAdjunto = ArchivoAdjunto;}
+    public void setArchivosAdjuntos(Map<String, Part> ArchivosAdjuntos) {this.ArchivosAdjuntos = ArchivosAdjuntos;}
     
     public void setListaCodificaciones(Map<Integer, String> ListaCodificaciones){this.ListaCodificaciones = ListaCodificaciones;}
     public void setCodificacionSeleccionada(Integer CodificacionSeleccionada) {this.CodificacionSeleccionada = CodificacionSeleccionada;}
@@ -176,13 +188,27 @@ public class CrearAccionMejora implements Serializable {
      */
     public void crearAccionMejora() throws IOException{
         Accion accion = fDatos.NuevaAccion(EnumAccion.MEJORA, FechaDeteccion, Descripcion, null, AreaSectorAccionSeleccionada, DeteccionSeleccionada, CodificacionSeleccionada);
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        Empresa empresa = (Empresa)request.getSession().getAttribute("Empresa");
         if(accion != null){
             // Crear los adjuntos y agregarlos a la accion correctiva
-            if(!ListaAdjuntos.isEmpty()) fDatos.AgregarArchivoAdjunto(accion.getId(), ListaAdjuntos);
+            if(!ArchivosAdjuntos.isEmpty()){
+                for(Map.Entry entry: ArchivosAdjuntos.entrySet()){
+                    String ubicacion = cargaArchivos.guardarArchivo("Mejora_" + String.valueOf(accion.getId()), (Part)entry.getValue(),(String) entry.getKey(), empresa.getNombreEmpresa());
+                    if(!ubicacion.isEmpty())ListaAdjuntos.put((String) entry.getKey(), ubicacion);
+                }
+                if(!ListaAdjuntos.isEmpty()) {
+                    fDatos.AgregarArchivoAdjunto(accion.getId(), ListaAdjuntos);
+                }else{
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudieron cargar todos los adjuntos", "No se pudieron cargar todos los adjuntos" ));
+                    FacesContext.getCurrentInstance().renderResponse();
+                }
+            }
             // redirigir a la lista de las acciones de mejoras.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");
-        }else{            
+        }else{
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Accion", "No se pudo crear la Accion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }
