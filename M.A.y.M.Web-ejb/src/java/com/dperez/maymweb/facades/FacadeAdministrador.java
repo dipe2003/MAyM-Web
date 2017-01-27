@@ -158,6 +158,16 @@ public class FacadeAdministrador  {
     public boolean ExisteUsuario(int IdUsuario){
         return cConfig.ExisteUsuario(IdUsuario);
     }
+       
+    /**
+     * Elimina el usuario indicado por su id.
+     * Si el usuario esta relacionado con comprobaciones o actividades no se elimina.
+     * @param IdUsuario
+     * @return Retorna <b>Tur</b> si se elimina, <b>False</b> de lo contrario.
+     */
+    public int EliminarUsuario(int IdUsuario) {
+        return cConfig.EliminarUsuario(IdUsuario);
+    }
     
     /**
      * Comprueba si existe la empresa especificada por su nombre;

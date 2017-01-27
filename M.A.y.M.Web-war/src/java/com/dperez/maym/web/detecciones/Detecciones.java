@@ -17,7 +17,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
-import static javax.faces.application.FacesMessage.SEVERITY_INFO;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -43,13 +42,13 @@ public class Detecciones implements Serializable {
     //  Getters
     
     public String getNombreDeteccion() {return NombreDeteccion;}
-    public Map<Integer, Deteccion> getListaAreas() {return ListaDetecciones;}
+    public Map<Integer, Deteccion> getListaDetecciones() {return ListaDetecciones;}
     public EnumTipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
     public EnumTipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
     //  Setters
     
     public void setNombreDeteccion(String NombreDeteccion) {this.NombreDeteccion = NombreDeteccion;}
-    public void setListaAreas(Map<Integer, Deteccion> ListaDetecciones) {this.ListaDetecciones = ListaDetecciones;}
+    public void setListaDetecciones(Map<Integer, Deteccion> ListaDetecciones) {this.ListaDetecciones = ListaDetecciones;}
     public void setTipoDeDeteccionSeleccionada(EnumTipoDeteccion TipoDeteccion){this.TipoDeDeteccionSeleccionada = TipoDeteccion;}
     public void setTiposDeteccion(EnumTipoDeteccion[] TiposDeteccion){this.TiposDeteccion = TiposDeteccion;}
     
@@ -60,7 +59,7 @@ public class Detecciones implements Serializable {
      */
     @PostConstruct
     public void init(){
-        //  Codificaciones
+        //  Detecciones
         ListaDetecciones = new HashMap<>();
         List<Deteccion> tmpDeteccion = fLectura.ListarDetecciones();
         for(Deteccion deteccion:tmpDeteccion){
@@ -70,23 +69,19 @@ public class Detecciones implements Serializable {
     
     /**
      * Crea nueva deteccion con el tipo interna/externa seleccionado.
-     * Se verifica que el nombre no sea vacio. Si es vacio no se crea y se muestra un mensaje
+     * Si no se crea se muestra un mensaje
      */
     public void nuevaDeteccion(){
-        if(NombreDeteccion.isEmpty()){
+        // Crear Nueva Deteccion y actualizar lista
+        Deteccion deteccion;
+        if((deteccion = fAdmin.NuevaDeteccion(NombreDeteccion, TipoDeDeteccionSeleccionada))!=null){
+            ListaDetecciones.put(deteccion.getId(), deteccion);
+        }else{
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
             FacesContext.getCurrentInstance().renderResponse();
-        }else{
-            // Crear Nueva Deteccion y actualizar lista
-            Deteccion deteccion;
-            if((deteccion = fAdmin.NuevaDeteccion(NombreDeteccion, TipoDeDeteccionSeleccionada))!=null){
-                ListaDetecciones.put(deteccion.getId(), deteccion);
-            }else{
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
-                FacesContext.getCurrentInstance().renderResponse();
-            }
         }
     }
+    
     
     /**
      * Actualiza la deteccion con lo datos ingresados.

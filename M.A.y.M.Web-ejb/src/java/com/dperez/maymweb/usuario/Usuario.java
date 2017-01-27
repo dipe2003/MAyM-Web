@@ -42,7 +42,7 @@ public class Usuario implements Serializable {
     
     private EnumPermiso PermisoUsuario;
     
-    @OneToOne
+    @OneToOne(orphanRemoval = true)
     private Credencial CredencialUsuario;
     
     @OneToMany(mappedBy = "ResponsableImplementacion")

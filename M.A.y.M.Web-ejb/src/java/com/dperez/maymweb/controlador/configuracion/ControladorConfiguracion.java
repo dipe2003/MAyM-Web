@@ -89,6 +89,7 @@ public class ControladorConfiguracion {
      * Setea los datos del usuario y actualiza la base de datos. No se realiza comprobacion de password.
      * Para cambiar password utilizar metodo cambiarPasswordUsuario().
      * @param IdUsuario
+     * @param Nickname
      * @param NombreUsuario
      * @param ApellidoUsuario
      * @param CorreoUsuario
@@ -96,15 +97,18 @@ public class ControladorConfiguracion {
      * @param RecibeAlertas
      * @return -1 si no se actualizo.
      */
-    public int CambiarDatosUsuario(int IdUsuario, String NombreUsuario, String ApellidoUsuario, String CorreoUsuario,
+    public int CambiarDatosUsuario(int IdUsuario, String Nickname, String NombreUsuario, String ApellidoUsuario, String CorreoUsuario,
             EnumPermiso PermisoUsuario, boolean RecibeAlertas){
-        Usuario usuario = mUsuario.GetUsuario(IdUsuario);
-        usuario.setNombre(NombreUsuario);
-        usuario.setApellido(ApellidoUsuario);
-        usuario.setCorreo(CorreoUsuario);
-        usuario.setPermisoUsuario(PermisoUsuario);
-        usuario.setRecibeAlertas(RecibeAlertas);
-        return mUsuario.ActualizarUsuario(usuario);
+        if(!ExisteNickname(Nickname)){
+            Usuario usuario = mUsuario.GetUsuario(IdUsuario);
+            usuario.setNombre(NombreUsuario);
+            usuario.setApellido(ApellidoUsuario);
+            usuario.setCorreo(CorreoUsuario);
+            usuario.setPermisoUsuario(PermisoUsuario);
+            usuario.setRecibeAlertas(RecibeAlertas);
+            return mUsuario.ActualizarUsuario(usuario);
+        }
+        return -1;
     }
     
     /**
@@ -142,6 +146,33 @@ public class ControladorConfiguracion {
         }else{
             return null;
         }
+    }
+       
+    /**
+     * Comprueba la existencia de otro usuario con el nickname indicado.
+     * @param Nickname
+     * @return
+     */
+    private boolean ExisteNickname(String Nickname){
+        List<Usuario> usuarios = mUsuario.ListarUsuarios();
+        for(Usuario usuario: usuarios){
+            if(usuario.getNickName().equalsIgnoreCase(Nickname)) return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Elimina el usuario indicado por su id.
+     * Si el usuario esta relacionado con comprobaciones o actividades no se elimina.
+     * @param IdUsuario
+     * @return Retorna <b>Tur</b> si se elimina, <b>False</b> de lo contrario.
+     */
+    public int EliminarUsuario(int IdUsuario) {
+        Usuario usuario = mUsuario.GetUsuario(IdUsuario);
+        if(!usuario.getComprobaciones().isEmpty() || !usuario.getMedidasResponsableImplementacion().isEmpty()){
+            return mUsuario.BorrarUsuario(usuario);
+        }
+        return -1;
     }
     
     /*

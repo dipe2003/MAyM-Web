@@ -30,6 +30,7 @@ public class FacadeMain {
      * Setea los datos del usuario y actualiza la base de datos. No se realiza comprobacion de password.
      * Para cambiar password utilizar metodo cambiarPasswordUsuario().
      * @param IdUsuario
+     * @param Nickname
      * @param NombreUsuario
      * @param ApellidoUsuario
      * @param CorreoUsuario
@@ -37,9 +38,9 @@ public class FacadeMain {
      * @param RecibeAlertas
      * @return -1 si no se actualizo.
      */
-    public int CambiarDatosUsuario(int IdUsuario, String NombreUsuario, String ApellidoUsuario, String CorreoUsuario,
+    public int CambiarDatosUsuario(int IdUsuario, String Nickname, String NombreUsuario, String ApellidoUsuario, String CorreoUsuario,
             EnumPermiso PermisoUsuario, boolean RecibeAlertas){
-        return cConfig.CambiarDatosUsuario(IdUsuario, NombreUsuario, ApellidoUsuario, CorreoUsuario, EnumPermiso.VERIFICADOR, RecibeAlertas);
+        return cConfig.CambiarDatosUsuario(IdUsuario, Nickname, NombreUsuario, ApellidoUsuario, CorreoUsuario, PermisoUsuario, RecibeAlertas);
     }
     
     /**
