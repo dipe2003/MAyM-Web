@@ -233,7 +233,8 @@ public class CrearAccionCorrectiva implements Serializable {
     public void crearAccionCorrectiva() throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        Empresa empresa = (Empresa)request.getSession().getAttribute("Empresa");        Accion accion = fDatos.NuevaAccion(EnumAccion.CORRECTIVA, FechaDeteccion,
+        Empresa empresa = (Empresa)request.getSession().getAttribute("Empresa");        
+        Accion accion = fDatos.NuevaAccion(EnumAccion.CORRECTIVA, FechaDeteccion,
                 Descripcion, TipoDesvioSeleccionado, AreaSectorAccionSeleccionada, DeteccionSeleccionada, CodificacionSeleccionada, empresa.getId());
         
         if(accion != null){

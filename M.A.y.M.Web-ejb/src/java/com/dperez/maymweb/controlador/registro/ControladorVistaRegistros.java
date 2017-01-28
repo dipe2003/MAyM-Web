@@ -96,6 +96,7 @@ public class ControladorVistaRegistros {
         return acciones;
     }
     
+    
     /**
      * Devuelve la accion indicada por su id
      * @param IdAccion

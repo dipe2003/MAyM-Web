@@ -6,6 +6,7 @@
 package com.dperez.maymweb.facades;
 
 import com.dperez.maymweb.accion.Accion;
+import com.dperez.maymweb.accion.acciones.EnumAccion;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.controlador.registro.ControladorVistaRegistros;
@@ -64,5 +65,14 @@ public class FacadeLectura  {
         return cVista.GetAreas();
     }
     
+    public List<Accion> ListarAccionesPreventivas(){
+        return cVista.ListarAccionesSegunEstado(null, EnumAccion.PREVENTIVA);
+    }
+    public List<Accion> ListarAccionesCorrectivas(){
+        return cVista.ListarAccionesSegunEstado(null, EnumAccion.CORRECTIVA);
+    }
+    public List<Accion> ListarAccionesMejoras(){
+        return cVista.ListarAccionesSegunEstado(null, EnumAccion.MEJORA);
+    }
     
 }

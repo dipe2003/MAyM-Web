@@ -25,8 +25,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
-
-
 @Named
 @ViewScoped
 public class Usuarios implements Serializable {
