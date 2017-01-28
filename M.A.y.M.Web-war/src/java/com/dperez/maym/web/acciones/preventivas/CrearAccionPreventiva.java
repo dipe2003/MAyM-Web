@@ -188,10 +188,11 @@ public class CrearAccionPreventiva implements Serializable {
      * @throws java.io.IOException
      */
     public void crearAccionPreventiva() throws IOException{
-        Accion accion = fDatos.NuevaAccion(EnumAccion.PREVENTIVA, FechaDeteccion, Descripcion, null, AreaSectorAccionSeleccionada, DeteccionSeleccionada, CodificacionSeleccionada);
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         Empresa empresa = (Empresa)request.getSession().getAttribute("Empresa");
+        Accion accion = fDatos.NuevaAccion(EnumAccion.PREVENTIVA, FechaDeteccion, Descripcion, null, AreaSectorAccionSeleccionada, 
+                DeteccionSeleccionada, CodificacionSeleccionada, empresa.getId());
         if(accion != null){
             // Crear los adjuntos y agregarlos a la accion preventiva
             if(!ArchivosAdjuntos.isEmpty()){

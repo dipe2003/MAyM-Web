@@ -23,6 +23,7 @@ import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.codificacion.ManejadorCodificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.ManejadorDeteccion;
+import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.empresa.ManejadorEmpresa;
 import com.dperez.maymweb.producto.Producto;
 import com.dperez.maymweb.usuario.ManejadorUsuario;
@@ -68,10 +69,11 @@ public class ControladorRegistro {
      * @param IdAreaSector
      * @param IdDeteccion
      * @param IdCodificacion
+     * @param IdEmpresa
      * @return Null: si no se creo.
      */
     public Accion NuevaAccion(EnumAccion TipoAccion, Date FechaDeteccion, String Descripcion, EnumTipoDesvio TipoDesvio,
-            int IdAreaSector, int IdDeteccion, int IdCodificacion){
+            int IdAreaSector, int IdDeteccion, int IdCodificacion, int IdEmpresa){
         Accion accion = null;
         switch(TipoAccion){
             case CORRECTIVA:
@@ -87,12 +89,14 @@ public class ControladorRegistro {
                 break;
         }
         if(accion!=null){
+            Empresa empresa = mEmpresa.GetEmpresa(IdEmpresa);
             Area area = mArea.GetArea(IdAreaSector);
             accion.setAreaSectorAccion(area);
             Deteccion deteccion = mDeteccion.GetDeteccion(IdDeteccion);
             accion.setGeneradaPor(deteccion);
             Codificacion codificacion = mCodificacion.GetCodificacion(IdCodificacion);
             accion.setCodificacionAccion(codificacion);
+            accion.setEmpresaAccion(empresa);
             accion.setId(mAccion.CrearAccion(accion));
         }
         if(accion.getId()!=-1){

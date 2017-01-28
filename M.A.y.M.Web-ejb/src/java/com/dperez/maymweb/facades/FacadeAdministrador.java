@@ -43,11 +43,10 @@ public class FacadeAdministrador  {
      * Se verifica si existe el nombre del area en la base de datos.
      * @param NombreArea
      * @param CorreoArea
-     * @param IdEmpresa
      * @return null si no se creo.
      */
-    public Area NuevaArea(String NombreArea, String CorreoArea, int IdEmpresa){
-        return cConfig.NuevaArea(NombreArea, CorreoArea, IdEmpresa);
+    public Area NuevaArea(String NombreArea, String CorreoArea){
+        return cConfig.NuevaArea(NombreArea, CorreoArea);
     }
     
     /**
@@ -144,10 +143,11 @@ public class FacadeAdministrador  {
      * @param CorreoUsuario
      * @param Password
      * @param PermisoUsuario
+     * @param IdEmpresa
      * @return null si no se creo.
      */
-    public Usuario NuevoUsuario(String Nickname, String NombreUsuario, String ApellidoUsuario, String CorreoUsuario, String Password, EnumPermiso PermisoUsuario){
-        return cConfig.NuevoUsuario(Nickname, NombreUsuario, ApellidoUsuario, CorreoUsuario, Password, PermisoUsuario);
+    public Usuario NuevoUsuario(String Nickname, String NombreUsuario, String ApellidoUsuario, String CorreoUsuario, String Password, EnumPermiso PermisoUsuario, int IdEmpresa){
+        return cConfig.NuevoUsuario(Nickname, NombreUsuario, ApellidoUsuario, CorreoUsuario, Password, PermisoUsuario, IdEmpresa);
     }
     
     /**

@@ -23,7 +23,7 @@ import static org.junit.Assert.*;
  * @author dperez
  */
 public class FortalezaTest {
-    private final Area area = new Area("Nombre Del Area", "Correo@Area.com", new Empresa());
+    private final Area area = new Area("Nombre Del Area", "Correo@Area.com");
     private final Deteccion GeneradaPor = new Deteccion("Aud. Ejemplo", EnumTipoDeteccion.INTERNA);
     
     public FortalezaTest() {

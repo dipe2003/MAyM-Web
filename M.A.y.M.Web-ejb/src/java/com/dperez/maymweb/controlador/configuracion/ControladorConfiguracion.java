@@ -60,14 +60,17 @@ public class ControladorConfiguracion {
      * @param CorreoUsuario
      * @param Password
      * @param PermisoUsuario
+     * @param IdEmpresa
      * @return null si no se creo.
      */
-    public Usuario NuevoUsuario(String Nickname, String NombreUsuario, String ApellidoUsuario, String CorreoUsuario, String Password, EnumPermiso PermisoUsuario){
+    public Usuario NuevoUsuario(String Nickname, String NombreUsuario, String ApellidoUsuario, String CorreoUsuario, String Password, EnumPermiso PermisoUsuario, int IdEmpresa){
         Usuario usuario = new Usuario(Nickname, NombreUsuario, ApellidoUsuario, CorreoUsuario, false, PermisoUsuario);
+        Empresa empresa = mEmpresa.GetEmpresa(IdEmpresa);
         String[] pass = cSeg.getPasswordSeguro(Password);
         // pass[0] corresponde al password | pass[1] corresponde al salt
         Credencial credencial = new Credencial(pass[1], pass[0]);
         usuario.setCredencialUsuario(credencial);
+        usuario.setEmpresaUsuario(empresa);
         usuario.setId(mUsuario.CrearUsuario(usuario));
         if(usuario.getId()!=-1){
             return usuario;
@@ -184,13 +187,11 @@ public class ControladorConfiguracion {
      * Se verifica si existe el nombre del area en la base de datos.
      * @param NombreArea
      * @param CorreoArea
-     * @param IdEmpresa
      * @return null si no se creo.
      */
-    public Area NuevaArea(String NombreArea, String CorreoArea, int IdEmpresa){
+    public Area NuevaArea(String NombreArea, String CorreoArea){
         if(ExisteNombreArea(NombreArea)){
-            Empresa empresa = mEmpresa.GetEmpresa(IdEmpresa);
-            Area area = new Area(NombreArea, CorreoArea, empresa);
+            Area area = new Area(NombreArea, CorreoArea);
             area.setId(mArea.CrearArea(area));
             if(area.getId()!=-1){
                 return area;

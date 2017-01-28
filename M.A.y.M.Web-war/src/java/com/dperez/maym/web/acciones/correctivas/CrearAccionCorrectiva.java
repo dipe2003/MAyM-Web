@@ -231,10 +231,11 @@ public class CrearAccionCorrectiva implements Serializable {
      * @throws java.io.IOException
      */
     public void crearAccionCorrectiva() throws IOException{
-        Accion accion = fDatos.NuevaAccion(EnumAccion.CORRECTIVA, FechaDeteccion, Descripcion, TipoDesvioSeleccionado, AreaSectorAccionSeleccionada, DeteccionSeleccionada, CodificacionSeleccionada);
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        Empresa empresa = (Empresa)request.getSession().getAttribute("Empresa");
+        Empresa empresa = (Empresa)request.getSession().getAttribute("Empresa");        Accion accion = fDatos.NuevaAccion(EnumAccion.CORRECTIVA, FechaDeteccion,
+                Descripcion, TipoDesvioSeleccionado, AreaSectorAccionSeleccionada, DeteccionSeleccionada, CodificacionSeleccionada, empresa.getId());
+        
         if(accion != null){
             // agrega los productos afectados
             if(hayProductoAfectado) fDatos.AgregarProductoInvolucrado(accion.getId(), ListaProductosAfectados);

@@ -5,7 +5,10 @@
  */
 package com.dperez.maymweb.empresa;
 
+import com.dperez.maymweb.accion.Accion;
+import com.dperez.maymweb.accion.acciones.Correctiva;
 import com.dperez.maymweb.area.Area;
+import com.dperez.maymweb.fortaleza.Fortaleza;
 import com.dperez.maymweb.usuario.Usuario;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +27,10 @@ public class EmpresaTest {
     
     private final Usuario Usr1 = new Usuario();
     private final Usuario Usr2 = new Usuario();
-    private final Area AreaTest1 = new Area();
-    private final Area AreaTest2 = new Area();
+    private final Fortaleza Fortaleza1 = new Fortaleza();
+    private final Fortaleza Fortaleza2 = new Fortaleza();
+    private final Accion AccionC1= new Correctiva();
+    private final Accion AccionC2 = new Correctiva();
     
     public EmpresaTest() {
     }
@@ -128,18 +133,33 @@ public class EmpresaTest {
     }
     
     /**
-     * Test of getAreasEmpresa method, of class Empresa.
+     * Test of getFortalezasEmpresa method, of class Empresa.
      */
     @Test
-    public void testGetAreasEmpresa() {
-        System.out.println("getAreasEmpresa");
+    public void testGetFortelezasEmpresa() {
+        System.out.println("getFortalezasEmpresa");
         Empresa instance = new Empresa();
-        instance.addArea(AreaTest1);
-        instance.addArea(AreaTest2);
-        List<Area> expResult = new ArrayList<>();
-        expResult.add(AreaTest1);
-        expResult.add(AreaTest2);
-        List<Area> result = instance.getAreasEmpresa();
+        instance.addFortaleza(Fortaleza1);
+        instance.addFortaleza(Fortaleza2);
+        List<Fortaleza> expResult = new ArrayList<>();
+        expResult.add(Fortaleza1);
+        expResult.add(Fortaleza2);
+        List<Fortaleza> result = instance.getFortalezasEmpresa();
+        assertEquals(expResult, result);
+    }
+    /**
+     * Test of getAccionesEmpresa method, of class Empresa.
+     */
+    @Test
+    public void testGetAccionesEmpresa() {
+        System.out.println("getFAccionesEmpresa");
+        Empresa instance = new Empresa();
+        instance.addAccion(AccionC1);
+        instance.addAccion(AccionC2);
+        List<Accion> expResult = new ArrayList<>();
+        expResult.add(AccionC1);
+        expResult.add(AccionC2);
+        List<Accion> result = instance.getAccionesEmpresa();
         assertEquals(expResult, result);
     }
 
@@ -211,15 +231,26 @@ public class EmpresaTest {
     }
     
     /**
-     * Test of setAreasEmpresa method, of class Empresa.
+     * Test of setFortalezasEmpresa method, of class Empresa.
      */
     @Test
-    public void testSetAreasEmpresa() {
-        System.out.println("setAreasEmpresa");
-        List<Area> AreasEmpresa = new ArrayList<>();
-        AreasEmpresa.add(AreaTest1);
+    public void testSetFortalezasEmpresa() {
+        System.out.println("setFortalezasEmpresa");
+        List<Fortaleza> FortalezasEmpresa = new ArrayList<>();
+        FortalezasEmpresa.add(Fortaleza1);
         Empresa instance = new Empresa();
-        instance.setAreasEmpresa(AreasEmpresa);
+        instance.setFortalezasEmpresa(FortalezasEmpresa);
+    }
+    /**
+     * Test of setAccionesEmpresa method, of class Empresa.
+     */
+    @Test
+    public void testsetAccionesEmpresa() {
+        System.out.println("setAccionesEmpresa");
+        List<Accion> AccionesEmpresa = new ArrayList<>();
+        AccionesEmpresa.add(AccionC1);
+        Empresa instance = new Empresa();
+        instance.setAccionesEmpresa(AccionesEmpresa);
     }
 
     /**

@@ -7,6 +7,7 @@ package com.dperez.maymweb.fortaleza;
 
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.deteccion.Deteccion;
+import com.dperez.maymweb.empresa.Empresa;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;
@@ -37,6 +38,9 @@ public class Fortaleza implements Serializable {
     @ManyToOne
     private Area AreaSectorFortaleza;
     
+    @ManyToOne
+    private Empresa EmpresaFortaleza;
+    
     // Constructores
     public Fortaleza(){}
     
@@ -51,6 +55,7 @@ public class Fortaleza implements Serializable {
     public String getDescripcion() {return this.Descripcion;}
     public Deteccion getGeneradaPor() {return this.GeneradaPor;}
     public Area getAreaSectorFortaleza() {return this.AreaSectorFortaleza;}
+    public Empresa getEmpresaFortaleza(){return this.EmpresaFortaleza;}
     
     // Setters
     public void setId(int Id) {this.Id = Id;}
@@ -81,5 +86,7 @@ public class Fortaleza implements Serializable {
             }
         }
     }
+    
+    public void setEmpresaFortaleza(Empresa EmpresaFortaleza){this.EmpresaFortaleza = EmpresaFortaleza;}
     
 }

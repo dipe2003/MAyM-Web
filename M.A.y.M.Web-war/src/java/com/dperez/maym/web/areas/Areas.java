@@ -6,7 +6,6 @@
 package com.dperez.maym.web.areas;
 
 import com.dperez.maymweb.area.Area;
-import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.Serializable;
@@ -20,9 +19,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
-
-
 
 @Named
 @ViewScoped
@@ -70,11 +66,8 @@ public class Areas implements Serializable {
      * Se agrega a la lista de areas del bean.
      */
     public void crearArea(){
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        Empresa empresa = (Empresa)request.getSession().getAttribute("Empresa");
         Area area;
-        if((area = fAdmin.NuevaArea(NombreArea, CorreoArea, empresa.getId())) != null){
+        if((area = fAdmin.NuevaArea(NombreArea, CorreoArea)) != null){
             this.ListaAreas.put(area.getId(), area);
         }else{
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo crear el area", "No se pudo crear el area" ));

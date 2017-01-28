@@ -5,6 +5,7 @@
 */
 package com.dperez.maym.web.usuarios;
 
+import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.facades.FacadeMain;
@@ -22,6 +23,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 
 
 
@@ -107,9 +109,12 @@ public class Usuarios implements Serializable {
      * Si no se crea se muestra un mensaje
      */
     public void nuevoUsuario(){
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        Empresa empresa = (Empresa)request.getSession().getAttribute("Empresa");
         // Crear nuevo usuario y actualizar lista
         Usuario usuario;
-        if((usuario = fAdmin.NuevoUsuario(Nickname,Nombre,Apellido,CorreoElectronico, Password,PermisoSeleccionado))!=null){
+        if((usuario = fAdmin.NuevoUsuario(Nickname,Nombre,Apellido,CorreoElectronico, Password,PermisoSeleccionado, empresa.getId()))!=null){
             ListaUsuarios.put(usuario.getId(), usuario);
         }else{
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo crear nuevo usuario", "No se pudo crear nuevo usuario" ));

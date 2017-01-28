@@ -17,6 +17,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.dperez.maymweb.deteccion.Deteccion;
+import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.estado.EnumEstado;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -60,6 +61,9 @@ public abstract class Accion implements Serializable{
     @OneToOne( orphanRemoval = true)
     private Comprobacion ComprobacionImplementacion;
     
+    @ManyToOne
+    private Empresa EmpresaAccion;
+    
     // Constructores
     public Accion(){
         this.EstadoAccion = EnumEstado.PENDIENTE;
@@ -90,6 +94,8 @@ public abstract class Accion implements Serializable{
     
     public Comprobacion getComprobacionEficacia() {return ComprobacionEficacia;}
     public Comprobacion getComprobacionImplementacion() {return ComprobacionImplementacion;}
+    
+    public Empresa getEmpresaAccion(){return this.EmpresaAccion;}
     
     // Setters
     public void setId(int Id) {this.Id = Id;}
@@ -157,6 +163,8 @@ public abstract class Accion implements Serializable{
         }
         this.ComprobacionImplementacion = ComprobacionImplementacion;
     }
+    
+    public void setEmpresaAccion(Empresa EmpresaAccion){this.EmpresaAccion = EmpresaAccion;}
     
     // Listas
     public void addAdjunto(Adjunto ArchivoAdjunto){
