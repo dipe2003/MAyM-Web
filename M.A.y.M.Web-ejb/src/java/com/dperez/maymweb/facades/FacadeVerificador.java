@@ -34,7 +34,7 @@ public class FacadeVerificador {
      */
     public int SetComprobacionImplementacionAccion(Date FechaComprobacionImplementacion, String ComentariosImplementacion, EnumComprobacion Comprobacion,
             int IdAccion){
-        return cReg.SetComprobacionImplementacionAccion(FechaComprobacionImplementacion, ComentariosImplementacion, EnumComprobacion.NO_COMPROBADA, IdAccion);
+        return cReg.SetComprobacionImplementacionAccion(FechaComprobacionImplementacion, ComentariosImplementacion, Comprobacion, IdAccion);
     }
     
     /**
