@@ -4,8 +4,6 @@ package com.dperez.maymweb.email;
 import java.util.Properties;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import javax.inject.Named;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
@@ -18,8 +16,6 @@ import javax.mail.internet.MimeMessage;
  *
  * @author dperez
  */
-@Named
-@Stateless
 public class SendMail {
     @EJB
     private ControladorPropiedad prop;
@@ -32,9 +28,7 @@ public class SendMail {
     private static Properties props;
     private static Session session;
     
-    public SendMail() {
-        
-    }
+    public SendMail(String NombreEmpresa) {}
         
     @PostConstruct
     public void init(){

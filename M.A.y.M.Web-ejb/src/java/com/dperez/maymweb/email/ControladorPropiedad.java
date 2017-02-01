@@ -1,7 +1,7 @@
 
 package com.dperez.maymweb.email;
 
-import java.util.List;
+import com.dperez.maymweb.tools.IOPropiedades;
 import javax.ejb.Stateless;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
@@ -12,38 +12,27 @@ import javax.inject.Named;
 @ManagedBean
 public class ControladorPropiedad {
     @Inject
-    private ManejadorPropiedad mProp;
+    private IOPropiedades ioProp;
     
-    public ControladorPropiedad(){}       
+    public ControladorPropiedad(){}
+    
+    //  Propiedades
     
     public String getMailFrom(){
-        return mProp.ObtenerPropiedad("mail_from").getValorPropiedad();
+        return ioProp.getPropiedad("mail_from");
     }
-    public String getMailSmtp(){
-        return mProp.ObtenerPropiedad("mail_smtp").getValorPropiedad();
+    public String getMailSmtp() {
+        return ioProp.getPropiedad("mail_smtp");
     }
-    public String getMailUser(){
-        return mProp.ObtenerPropiedad("mail_user").getValorPropiedad();
+    public String getMailUser() {
+        return ioProp.getPropiedad("mail_user");
     }
     public String getMailPass(){
-        return mProp.ObtenerPropiedad("mail_pass").getValorPropiedad();
+        return ioProp.getPropiedad("mail_pass");
     }
     public int getMailPort(){
-        return Integer.parseInt(mProp.ObtenerPropiedad("mail_port").getValorPropiedad());
+        return Integer.parseInt(ioProp.getPropiedad("mail_port"));
     }
-    
-    //  Edicion de propiedades
-    public List<Propiedad> getPropiedades(){
-        return mProp.ListarPropiedades();
-    }
-    
-    public boolean guardarPropiedad(String nombrePropiedad, String valorPropiedad){
-        Propiedad prop = mProp.ObtenerPropiedad(nombrePropiedad);
-        try{
-            prop.setValorPropiedad(valorPropiedad);
-        }catch(NullPointerException ex){}
-        return !mProp.ActualizarPropiedad(prop).equals("na"); 
-    }
-    
+        
 }
 

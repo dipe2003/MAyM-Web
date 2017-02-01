@@ -3,7 +3,6 @@ package com.dperez.maymweb.tools;
 
 import com.dperez.maymweb.email.SendMail;
 import java.util.List;
-import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.inject.Inject;
@@ -13,7 +12,7 @@ import javax.inject.Inject;
  * @author dperez
  */
 @Singleton
-public class TimerService1 {
+public class TimerService {
     @Inject
     private SendMail mail;
     
