@@ -187,4 +187,13 @@ public class FacadeAdministrador  {
         return cEdicion.EliminarAccion(IdAccion);
     }
     
+     /**
+     * Se elimina la fortaleza indicada de la base de datos.
+     * @param IdFortaleza
+     * @return Retorna el id de la fortaleza si se elimino, de lo contrario retorna -1.
+     */
+    public int EliminarFortaleza(int IdFortaleza){
+        return cEdicion.EliminarFortaleza(IdFortaleza);
+    }
+    
 }

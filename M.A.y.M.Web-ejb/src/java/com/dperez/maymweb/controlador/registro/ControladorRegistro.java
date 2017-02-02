@@ -25,6 +25,8 @@ import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.ManejadorDeteccion;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.empresa.ManejadorEmpresa;
+import com.dperez.maymweb.fortaleza.Fortaleza;
+import com.dperez.maymweb.fortaleza.ManejadorFortaleza;
 import com.dperez.maymweb.producto.Producto;
 import com.dperez.maymweb.usuario.ManejadorUsuario;
 import com.dperez.maymweb.usuario.Usuario;
@@ -56,6 +58,8 @@ public class ControladorRegistro {
     private ManejadorUsuario mUsuario;
     @Inject
     private ManejadorEmpresa mEmpresa;
+    @Inject
+    private ManejadorFortaleza mFortaleza;
     
     //  Constructores
     public ControladorRegistro(){}
@@ -352,6 +356,32 @@ public class ControladorRegistro {
         accion.getComprobacionEficacia().setResultado(Comprobacion);
         accion.CambiarEstado();
         return mAccion.ActualizarAccion(accion);
+    }
+    
+    /**
+     * Crea una nueva fortaleza y la persiste en la base de datos
+     * @param FechaDeteccion
+     * @param Descripcion
+     * @param IdDeteccion
+     * @param IdAreaSector
+     * @param IdEmpresa
+     * @return Null: si no se creo.
+     */
+    public Fortaleza NuevaFortaleza(Date FechaDeteccion, String Descripcion, int IdDeteccion, int IdAreaSector, int IdEmpresa){
+        Fortaleza fortaleza = new Fortaleza(FechaDeteccion, Descripcion);
+        
+        Area area = mArea.GetArea(IdAreaSector);
+        Deteccion deteccion = mDeteccion.GetDeteccion(IdDeteccion);
+        Empresa empresa = mEmpresa.GetEmpresa(IdEmpresa);
+        fortaleza.setAreaSectorFortaleza(area);
+        fortaleza.setEmpresaFortaleza(empresa);
+        fortaleza.setGeneradaPor(deteccion);
+        fortaleza.setId(mFortaleza.CrearFortaleza(fortaleza));
+        
+        if(fortaleza.getId()== -1){
+            return null;
+        }
+        return fortaleza;        
     }
     
 }

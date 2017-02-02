@@ -23,6 +23,8 @@ import com.dperez.maymweb.codificacion.ManejadorCodificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.ManejadorDeteccion;
 import com.dperez.maymweb.estado.EnumEstado;
+import com.dperez.maymweb.fortaleza.Fortaleza;
+import com.dperez.maymweb.fortaleza.ManejadorFortaleza;
 import com.dperez.maymweb.producto.ManejadorProducto;
 import com.dperez.maymweb.producto.Producto;
 import com.dperez.maymweb.usuario.ControladorSeguridad;
@@ -57,6 +59,8 @@ public class ControladorEdicionRegistro {
     private ManejadorActividad mActividad;
     @Inject
     private ManejadorUsuario mUsuario;
+    @Inject
+    private ManejadorFortaleza mFortaleza;
     @Inject
     private ControladorSeguridad cSeg;
     
@@ -270,7 +274,7 @@ public class ControladorEdicionRegistro {
             Usuario responsable = mUsuario.GetUsuario(IdResponsable);
             actividad.setResponsableImplementacion(responsable);
         }
-        return mActividad.ActualizarActividad(actividad);              
+        return mActividad.ActualizarActividad(actividad);
     }
     
     /*
@@ -289,5 +293,43 @@ public class ControladorEdicionRegistro {
         producto.setDatos(DatosProducto);
         producto.setNombre(NombreProducto);
         return mProducto.ActualizarProducto(producto);
-    }   
+    }
+    
+    /*
+    FORTALEZA
+    */
+    
+    /**
+     * Actualiza la fortaleza especificada por su id en la base de datos.
+     * @param IdFortaleza
+     * @param FechaDeteccion
+     * @param Descripcion
+     * @param IdDeteccion
+     * @param IdAreaSector
+     * @return Retorna el id de la fortaleza si se actualizo, de lo contrario retorna -1.
+     */
+    public int EditarFortaleza(int IdFortaleza, Date FechaDeteccion, String Descripcion, int IdDeteccion, int IdAreaSector){
+        Fortaleza fortaleza = mFortaleza.GetFortaleza(IdFortaleza);
+        if(fortaleza.getAreaSectorFortaleza().getId() != IdAreaSector){
+            Area area = mArea.GetArea(IdAreaSector);
+            fortaleza.setAreaSectorFortaleza(area);
+        }
+        if(fortaleza.getGeneradaPor().getId() != IdDeteccion){
+            Deteccion deteccion = mDeteccion.GetDeteccion(IdDeteccion);
+            fortaleza.setGeneradaPor(deteccion);
+        }
+        fortaleza.setDescripcion(Descripcion);
+        fortaleza.setFechaDeteccion(FechaDeteccion);
+        return mFortaleza.ActualizarFortaleza(fortaleza);
+    }
+    
+    /**
+     * Se elimina la fortaleza indicada de la base de datos.
+     * @param IdFortaleza
+     * @return Retorna el id de la fortaleza si se elimino, de lo contrario retorna -1.
+     */
+    public int EliminarFortaleza(int IdFortaleza){
+        Fortaleza fortaleza = mFortaleza.GetFortaleza(IdFortaleza);
+        return mFortaleza.BorrarFortaleza(fortaleza);
+    }
 }

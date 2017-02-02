@@ -12,6 +12,7 @@ import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.controlador.registro.ControladorVistaRegistros;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.empresa.Empresa;
+import com.dperez.maymweb.fortaleza.Fortaleza;
 import com.dperez.maymweb.usuario.Usuario;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -75,4 +76,11 @@ public class FacadeLectura  {
         return cVista.ListarAccionesSegunEstado(null, EnumAccion.MEJORA);
     }
     
+    public Fortaleza GetFotaleza(int IdFortaleza){
+        return cVista.GetFortaleza(IdFortaleza);
+    }
+    
+    public List<Fortaleza> ListarFortalezas(){
+        return cVista.ListarFortalezas();
+    }
 }

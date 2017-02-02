@@ -17,6 +17,8 @@ import com.dperez.maymweb.deteccion.ManejadorDeteccion;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.empresa.ManejadorEmpresa;
 import com.dperez.maymweb.estado.EnumEstado;
+import com.dperez.maymweb.fortaleza.Fortaleza;
+import com.dperez.maymweb.fortaleza.ManejadorFortaleza;
 import com.dperez.maymweb.usuario.ManejadorUsuario;
 import com.dperez.maymweb.usuario.Usuario;
 import java.util.Iterator;
@@ -44,6 +46,8 @@ public class ControladorVistaRegistros {
     private ManejadorCodificacion mCodificaciones;
     @Inject
     private ManejadorArea mArea;
+    @Inject
+    private ManejadorFortaleza mFortaleza;
     
     //  Constructores
     public ControladorVistaRegistros(){}
@@ -192,6 +196,23 @@ public class ControladorVistaRegistros {
      */
     public Empresa GetEmpresa(int IdEmpresa){
         return mEmpresa.GetEmpresa(IdEmpresa);
+    }
+    
+    /**
+     * Devuelve la fortaleza indicada por su id
+     * @param IdFortaleza
+     * @return Retorna null si no se encontro fortaleza.
+     */
+    public Fortaleza GetFortaleza(int IdFortaleza){
+        return mFortaleza.GetFortaleza(IdFortaleza);
+    }
+    
+    /**
+     * Lista todas las fortalezas registradas
+     * @return 
+     */
+    public List<Fortaleza> ListarFortalezas(){
+        return mFortaleza.ListarFortalezas();
     }
     
 }

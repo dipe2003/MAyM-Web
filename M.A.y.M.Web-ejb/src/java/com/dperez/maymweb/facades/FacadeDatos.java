@@ -10,6 +10,7 @@ import com.dperez.maymweb.accion.acciones.EnumAccion;
 import com.dperez.maymweb.accion.acciones.EnumTipoDesvio;
 import com.dperez.maymweb.controlador.registro.ControladorEdicionRegistro;
 import com.dperez.maymweb.controlador.registro.ControladorRegistro;
+import com.dperez.maymweb.fortaleza.Fortaleza;
 import java.util.Date;
 import java.util.Map;
 import javax.ejb.Stateless;
@@ -222,7 +223,7 @@ public class FacadeDatos {
         return cEdicion.RemoverActividadPreventiva(IdAccion, IdActividadPreventiva);
     }
     
-        /**
+    /**
      * Edita una accion con los mismos parametros que se creo. Actualiza la base de datos.
      * @param IdAccion
      * @param TipoAccion
@@ -248,10 +249,10 @@ public class FacadeDatos {
      * @return Retorna -1 si no se actualizo. Retorna el IdActividad si se actualizo.
      */
     public int EditarActividad(int IdActividad, String Descripcion, int ResponsableImplementacion, Date FechaImplementacion){
-       return cEdicion.EditarActividad(IdActividad, ResponsableImplementacion, FechaImplementacion,Descripcion);
+        return cEdicion.EditarActividad(IdActividad, ResponsableImplementacion, FechaImplementacion,Descripcion);
     }
     
-        /**
+    /**
      * Remueve el producto involucrado de la accion seleccionada y actualiza la base de datos.
      * Elimina el producto de la base de datos.
      * @param IdAccionCorrectiva
@@ -261,4 +262,32 @@ public class FacadeDatos {
     public int RemoverProductoInvolucrado(int IdAccionCorrectiva, String NombreProducto){
         return cEdicion.RemoverProductoInvolucrado(IdAccionCorrectiva, NombreProducto);
     }
+    
+    /**
+     * Crea una nueva fortaleza y la persiste en la base de datos
+     * @param FechaDeteccion
+     * @param Descripcion
+     * @param IdDeteccion
+     * @param IdAreaSector
+     * @param IdEmpresa
+     * @return Null: si no se creo.
+     */
+    public Fortaleza NuevaFortaleza(Date FechaDeteccion, String Descripcion, int IdDeteccion, int IdAreaSector, int IdEmpresa){
+        return cReg.NuevaFortaleza(FechaDeteccion, Descripcion, IdDeteccion, IdAreaSector, IdEmpresa);
+    }
+    
+    /**
+     * Actualiza la fortaleza especificada por su id en la base de datos.
+     * @param IdFortaleza
+     * @param FechaDeteccion
+     * @param Descripcion
+     * @param IdDeteccion
+     * @param IdAreaSector
+     * @return Retorna el id de la fortaleza si se actualizo, de lo contrario retorna -1.
+     */
+    public int EditarFortaleza(int IdFortaleza, Date FechaDeteccion, String Descripcion, int IdDeteccion, int IdAreaSector){
+        return cEdicion.EditarFortaleza(IdFortaleza, FechaDeteccion, Descripcion, IdDeteccion, IdAreaSector);
+    }
+    
+    
 }
