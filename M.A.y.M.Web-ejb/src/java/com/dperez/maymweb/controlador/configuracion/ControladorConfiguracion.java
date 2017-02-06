@@ -259,6 +259,31 @@ public class ControladorConfiguracion {
         return false;
     }
     
+    /**
+     * Agrega el area a la empresa y actualiza la base de  datos.
+     * @param IdArea
+     * @param IdEmpresa
+     * @return Retorna el id de la empresa si se agrego, de lo contrario retorna -1.
+     */
+    public int AgregarAreaEmpresa(int IdArea, int IdEmpresa){
+        Area area = mArea.GetArea(IdArea);
+        Empresa empresa = mEmpresa.GetEmpresa(IdEmpresa);
+        empresa.addAreaEmpresa(area);
+        return mEmpresa.ActualizarEmpresa(empresa);
+    }
+    /**
+     * Remueve el area a la empresa y actualiza la base de  datos.
+     * @param IdArea
+     * @param IdEmpresa
+     * @return Retorna el id de la empresa si se removio, de lo contrario retorna -1.
+     */
+    public int RemoverAreaEmpresa(int IdArea, int IdEmpresa){
+        Area area = mArea.GetArea(IdArea);
+        Empresa empresa = mEmpresa.GetEmpresa(IdEmpresa);
+        empresa.removeAreaEmpresa(area);
+        return mEmpresa.ActualizarEmpresa(empresa);
+    }
+    
     /*
     CODIFICACION
     */
@@ -340,6 +365,31 @@ public class ControladorConfiguracion {
         return false;
     }
     
+    /**
+     * Agrega la codificacon a la empresa y actualiza la base de datos.
+     * @param IdCodificacion
+     * @param IdEmpresa
+     * @return  Retorna el id de la codificacion si se agergo. Retorna -1 si no se agrego.
+     */
+    public int AgregarCodificacionEmpresa(int IdCodificacion, int IdEmpresa){
+        Codificacion codificacion = mCodificacion.GetCodificacion(IdCodificacion);
+        Empresa empresa = mEmpresa.GetEmpresa(IdEmpresa);
+        empresa.addCodificacionEmpresa(codificacion);
+        return mEmpresa.ActualizarEmpresa(empresa);
+    }
+    
+    /**
+     * Remueve la codificacion de la empresa y actualiza la base de datos.
+     * @param IdCodificacion
+     * @param IdEmpresa
+     * @return Retorna el id de la codificacion si se quito. Retorna -1 si no se quito.
+     */
+    public int RemoverCodificacionEmpresa(int IdCodificacion, int IdEmpresa){
+        Codificacion codificacion = mCodificacion.GetCodificacion(IdCodificacion);
+        Empresa empresa = mEmpresa.GetEmpresa(IdEmpresa);
+        empresa.removeCodificacionEmpresa(codificacion);
+        return mEmpresa.ActualizarEmpresa(empresa);
+    }
     /*
     DETECCION Y TIPO DE DETECCION
     */

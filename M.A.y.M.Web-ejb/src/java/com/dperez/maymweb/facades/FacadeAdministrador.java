@@ -158,7 +158,7 @@ public class FacadeAdministrador  {
     public boolean ExisteUsuario(int IdUsuario){
         return cConfig.ExisteUsuario(IdUsuario);
     }
-       
+    
     /**
      * Elimina el usuario indicado por su id.
      * Si el usuario esta relacionado con comprobaciones o actividades no se elimina.
@@ -187,13 +187,52 @@ public class FacadeAdministrador  {
         return cEdicion.EliminarAccion(IdAccion);
     }
     
-     /**
+    /**
      * Se elimina la fortaleza indicada de la base de datos.
      * @param IdFortaleza
      * @return Retorna el id de la fortaleza si se elimino, de lo contrario retorna -1.
      */
     public int EliminarFortaleza(int IdFortaleza){
         return cEdicion.EliminarFortaleza(IdFortaleza);
+    }
+    
+    /**
+     * Agrega la codificacon a la empresa y actualiza la base de datos.
+     * @param IdCodificacion
+     * @param IdEmpresa
+     * @return  Retorna el id de la codificacion si se agergo. Retorna -1 si no se agrego.
+     */
+    public int AgregarCodificacionEmpresa(int IdCodificacion, int IdEmpresa){
+        return cConfig.AgregarCodificacionEmpresa(IdCodificacion, IdEmpresa);
+    }
+    
+    /**
+     * Remueve la codificacion de la empresa y actualiza la base de datos.
+     * @param IdCodificacion
+     * @param IdEmpresa
+     * @return Retorna el id de la codificacion si se quito. Retorna -1 si no se quito.
+     */
+    public int RemoverCodificacionEmpresa(int IdCodificacion, int IdEmpresa){
+        return cConfig.RemoverCodificacionEmpresa(IdCodificacion, IdEmpresa);
+    }
+    
+    /**
+     * Agrega el area a la empresa y actualiza la base de  datos.
+     * @param IdArea
+     * @param IdEmpresa
+     * @return Retorna el id de la empresa si se agrego, de lo contrario retorna -1.
+     */
+    public int AgregarAreaEmpresa(int IdArea, int IdEmpresa){
+        return cConfig.AgregarAreaEmpresa(IdArea, IdEmpresa);
+    }
+    /**
+     * Remueve el area a la empresa y actualiza la base de  datos.
+     * @param IdArea
+     * @param IdEmpresa
+     * @return Retorna el id de la empresa si se removio, de lo contrario retorna -1.
+     */
+    public int RemoverAreaEmpresa(int IdArea, int IdEmpresa){
+        return cConfig.RemoverAreaEmpresa(IdArea, IdEmpresa);
     }
     
 }

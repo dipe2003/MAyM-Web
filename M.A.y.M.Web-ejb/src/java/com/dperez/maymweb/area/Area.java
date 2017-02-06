@@ -6,6 +6,7 @@
 package com.dperez.maymweb.area;
 
 import com.dperez.maymweb.accion.Accion;
+import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.fortaleza.Fortaleza;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -29,32 +31,36 @@ public class Area implements Serializable {
     private int Id;
     private String Nombre = new String();
     private String Correo = new String();
-       
+    
     @OneToMany(mappedBy = "AreaSectorAccion")
     private List<Accion> AccionesEnAreaSector;
     @OneToMany(mappedBy = "AreaSectorFortaleza")
     private List<Fortaleza> FortalezasEnAreaSector;
     
+    @ManyToMany(mappedBy = "AreasEmpresa")
+    private List<Empresa> EmpresasArea;
+    
     // Constructores
     public Area(){
         this.AccionesEnAreaSector = new ArrayList<>();
         this.FortalezasEnAreaSector = new ArrayList<>();
+        this.EmpresasArea = new ArrayList<>();
     }
     public Area(String NombreArea, String CorreoArea){
         this.Nombre = NombreArea;
         this.Correo = CorreoArea;
         this.AccionesEnAreaSector = new ArrayList<>();
         this.FortalezasEnAreaSector = new ArrayList<>();
+        this.EmpresasArea = new ArrayList<>();
     }
     
     // Getters
     public int getId() {return Id;}
     public String getNombre() {return this.Nombre;}
     public String getCorreo() {return this.Correo;}
-    
     public List<Accion> getAccionesEnAreaSector() {return AccionesEnAreaSector;}
-    
     public List<Fortaleza> getFortalezasEnAreaSector() {return FortalezasEnAreaSector;}
+    public List<Empresa> getEmpresasArea(){return this.EmpresasArea;}
     
     // Setters
     public void setId(int Id) {this.Id = Id;}
@@ -75,7 +81,19 @@ public class Area implements Serializable {
         }
     }
     
+    public void setEmpresasArea(List<Empresa> EmpresasArea) {
+        this.EmpresasArea = EmpresasArea;
+        for(Empresa empresa: this.EmpresasArea){
+            if(!empresa.getAreasEmpresa().contains(this)){
+                empresa.addAreaEmpresa(this);
+            }
+        }
+    }
+    
     // Listas
+    /*
+        Acciones
+    */
     public void addAccionEnAreaSector(Accion AccionEnAreaSector){
         this.AccionesEnAreaSector.add(AccionEnAreaSector);
         if(AccionEnAreaSector.getAreaSectorAccion()== null || !AccionEnAreaSector.getAreaSectorAccion().equals(this))
@@ -99,6 +117,10 @@ public class Area implements Serializable {
             }
         }
     }
+    
+    /*
+        Fortalezas
+    */
     
     public void addFortalezaEnAreaSector(Fortaleza FortalezaEnAreaSector){
         this.FortalezasEnAreaSector.add(FortalezaEnAreaSector);
@@ -124,4 +146,20 @@ public class Area implements Serializable {
         }
     }
     
+    /*
+        Area
+    */
+    public void addEmpresaArea(Empresa EmpresaArea){
+        this.EmpresasArea.add(EmpresaArea);
+        if(!EmpresaArea.getAreasEmpresa().contains(this)){
+            EmpresaArea.getAreasEmpresa().add(this);
+        }
+    }
+    
+    public void removeEmpresaArea(Empresa EmpresaArea){
+        this.EmpresasArea.remove(EmpresaArea);
+        if(EmpresaArea.getAreasEmpresa().contains(this)){
+            EmpresaArea.removeAreaEmpresa(this);
+        }
+    }
 }
