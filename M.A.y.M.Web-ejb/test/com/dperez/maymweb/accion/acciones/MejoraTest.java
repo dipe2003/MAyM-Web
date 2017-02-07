@@ -69,34 +69,23 @@ public class MejoraTest {
     }
     
     /**
-     * Test of addActividad method, of class Mejora.
+     * Test of addActividadMejora method, of class Mejora.
      */
     @Test
     public void testAddActividad() {
         System.out.println("addActividad");
         Mejora instance = new Mejora();
-        instance.addActividad(actividad);
+        instance.addActividadMejora(actividad);
     }
     
     /**
-     * Test of removeActividad method, of class Mejora.
+     * Test of removeActividadMejora method, of class Mejora.
      */
     @Test
     public void testRemoveActividad_ActividadMejora() {
         System.out.println("removeActividad");
         Mejora instance = new Mejora();
-        instance.removeActividad(actividad);
+        instance.removeActividadMejora(actividad);
     }
     
-    /**
-     * Test of removeActividad method, of class Mejora.
-     */
-    @Test
-    public void testRemoveActividad_int() {
-        System.out.println("removeActividad");
-        int idActividad = 1;
-        actividad.setId(idActividad);
-        Mejora instance = new Mejora();
-        instance.removeActividad(idActividad);
-    }
 }

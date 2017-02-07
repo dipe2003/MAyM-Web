@@ -97,7 +97,7 @@ public class SeguimientoCorrectiva implements Serializable {
      * @param IdActividad
      */
     public void setFechaImplementacionActividad(int IdActividad){
-        if((fDatos.SetFechaImplementacionActividadPreventiva(FechaImplementacion, IdActividad))== -1){
+        if((fDatos.SetFechaImplementacionActividadPreventiva(FechaImplementacion, IdActividad, AccionSeleccionada.getId()))== -1){
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo agregar fecha", "No se pudo agregar fecha" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{

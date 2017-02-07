@@ -166,20 +166,7 @@ public class CorrectivaTest {
         instance.addMedidaCorrectiva(mc);
         instance.removeMedidaCorrectiva(mc);
     }
-    
-    /**
-     * Test of removeMedidaCorrectiva method, of class Correctiva.
-     */
-    @Test
-    public void testRemoveMedidaCorrectiva_int() {
-        System.out.println("removeMedidaCorrectiva");
-        int IdMedidaCorrectiva = 1;
-        mc.setId(IdMedidaCorrectiva);
-        Correctiva instance = new Correctiva();
-        instance.addMedidaCorrectiva(mc);
-        instance.removeMedidaCorrectiva(IdMedidaCorrectiva);
-    }
-    
+        
     /**
      * Test of addMedidaPreventiva method, of class Correctiva.
      */
@@ -200,20 +187,7 @@ public class CorrectivaTest {
         instance.addMedidaPreventiva(mp);
         instance.removeMedidaPreventiva(mp);
     }
-    
-    /**
-     * Test of removeMedidaPreventiva method, of class Correctiva.
-     */
-    @Test
-    public void testRemoveMedidaPreventiva_int() {
-        System.out.println("removeMedidaPreventiva");
-        int IdMedidaPreventiva = 1;
-        mp.setId(IdMedidaPreventiva);
-        Correctiva instance = new Correctiva();
-        instance.addMedidaPreventiva(mp);
-        instance.removeMedidaPreventiva(IdMedidaPreventiva);
-    }
-    
+        
     /**
      * Test of addProductoAfectado method, of class Correctiva.
      */

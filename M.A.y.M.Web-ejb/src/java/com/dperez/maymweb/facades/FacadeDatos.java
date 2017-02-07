@@ -121,40 +121,44 @@ public class FacadeDatos {
      * Setea la fecha de implementacion de la Medida correctiva, cambia el estado de la accion (si corresponde) y persiste los cambios en la base de deatos.
      * @param FechaImplementacion
      * @param IdMedidaCorrectiva
+     * @param IdAccion
      * @return -1 si no se pudo actualizar.
      */
-    public int SetFechaImplementacionMedidaCorrectiva(Date FechaImplementacion, int IdMedidaCorrectiva){
-        return cReg.SetFechaImplementacionMedidaCorrectiva(FechaImplementacion, IdMedidaCorrectiva);
+    public int SetFechaImplementacionMedidaCorrectiva(Date FechaImplementacion, int IdMedidaCorrectiva, int IdAccion){
+        return cReg.SetFechaImplementacionMedidaCorrectiva(FechaImplementacion, IdMedidaCorrectiva, IdAccion);
     }
     
     /**
      * Setea la fecha de implementacion de la Medida Preventiva, cambia el estado de la accion (si corresponde) y persiste los cambios en la base de deatos.
      * @param FechaImplementacion
      * @param IdMedidaPreventiva
+     * @param IdAccion
      * @return -1 si no se pudo actualizar.
      */
-    public int SetFechaImplementacionMedidaPreventiva(Date FechaImplementacion, int IdMedidaPreventiva){
-        return cReg.SetFechaImplementacionMedidaPreventiva(FechaImplementacion, IdMedidaPreventiva);
+    public int SetFechaImplementacionMedidaPreventiva(Date FechaImplementacion, int IdMedidaPreventiva, int IdAccion){
+        return cReg.SetFechaImplementacionMedidaPreventiva(FechaImplementacion, IdMedidaPreventiva, IdAccion);
     }
     
     /**
      * Setea la fecha de implementacion de la Actividad Preventiva, cambia el estado de la accion (si corresponde) y persiste los cambios en la base de deatos.
      * @param FechaImplementacion
      * @param IdActividadPreventiva
+     * @param IdAccion
      * @return -1 si no se pudo actualizar.
      */
-    public int SetFechaImplementacionActividadPreventiva(Date FechaImplementacion, int IdActividadPreventiva){
-        return cReg.SetFechaImplementacionActividadPreventiva(FechaImplementacion, IdActividadPreventiva);
+    public int SetFechaImplementacionActividadPreventiva(Date FechaImplementacion, int IdActividadPreventiva, int IdAccion){
+        return cReg.SetFechaImplementacionActividadPreventiva(FechaImplementacion, IdActividadPreventiva, IdAccion);
     }
     
     /**
      * Setea la fecha de implementacion de la Actividad de Mejora, cambia el estado de la accion (si corresponde) y persiste los cambios en la base de deatos.
      * @param FechaImplementacion
      * @param IdActividadMejora
+     * @param IdAccion
      * @return -1 si no se pudo actualizar.
      */
-    public int SetFechaImplementacionActividadMejora(Date FechaImplementacion, int IdActividadMejora){
-        return cReg.SetFechaImplementacionActividadMejora(FechaImplementacion, IdActividadMejora);
+    public int SetFechaImplementacionActividadMejora(Date FechaImplementacion, int IdActividadMejora, int IdAccion){
+        return cReg.SetFechaImplementacionActividadMejora(FechaImplementacion, IdActividadMejora, IdAccion);
     }
     
     /**

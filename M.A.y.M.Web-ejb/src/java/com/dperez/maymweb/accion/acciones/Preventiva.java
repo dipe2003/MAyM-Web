@@ -12,7 +12,6 @@ import com.dperez.maymweb.estado.EnumEstado;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -24,7 +23,7 @@ import javax.persistence.OneToMany;
  */
 @Entity
 public class Preventiva extends Accion implements Serializable{
-    @OneToMany(mappedBy = "AccionPreventiva", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "AccionActividad", cascade = CascadeType.REMOVE)
     private List<Actividad> Actividades;
     
     // Constructores
@@ -46,10 +45,10 @@ public class Preventiva extends Accion implements Serializable{
     }
     
     // Listas
-    public void addActividad(Actividad Actividad){
-        this.Actividades.add(Actividad);
-        if(Actividad.getAccionActividad()== null || !Actividad.getAccionActividad().equals(this)) 
-            Actividad.setAccionActividad(this);
+    public void addActividadPreventiva(Actividad ActividadPreventiva){
+        this.Actividades.add(ActividadPreventiva);
+        if(ActividadPreventiva.getAccionActividad()== null || !ActividadPreventiva.getAccionActividad().equals(this)) 
+            ActividadPreventiva.setAccionActividad(this);
     }
     
     public void removeActividad(Actividad Actividad){
@@ -58,17 +57,6 @@ public class Preventiva extends Accion implements Serializable{
             Actividad.setAccionActividad(null);
     }
     
-    public void removeActividad(int IdActividad){
-        Iterator<Actividad> it = this.Actividades.iterator() ;
-        while(it.hasNext()){
-            Actividad ac = it.next();
-            if(ac.getId()==IdActividad){
-                it.remove();
-                if(ac.getAccionActividad()!=null && ac.getAccionActividad().equals(this))
-                    ac.setAccionActividad(null);
-            }
-        }
-    }
     
     @Override
     public void CambiarEstado() {

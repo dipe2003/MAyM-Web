@@ -69,13 +69,13 @@ public class PreventivaTest {
     
     
     /**
-     * Test of addActividad method, of class Preventiva.
+     * Test of addActividadPreventiva method, of class Preventiva.
      */
     @Test
     public void testAddActividad() {
         System.out.println("addActividad");
         Preventiva instance = new Preventiva();
-        instance.addActividad(actividad);
+        instance.addActividadPreventiva(actividad);
     }
     
     /**
@@ -86,18 +86,5 @@ public class PreventivaTest {
         System.out.println("removeActividad");
         Preventiva instance = new Preventiva();
         instance.removeActividad(actividad);
-    }
-    
-    /**
-     * Test of removeActividad method, of class Preventiva.
-     */
-    @Test
-    public void testRemoveActividad_int() {
-        System.out.println("removeActividad");
-        int IdActividad = 1;
-        actividad.setId(IdActividad);
-        Preventiva instance = new Preventiva();
-        instance.removeActividad(IdActividad);
-    }
-    
+    }    
 }

@@ -191,12 +191,12 @@ public class ControladorEdicionRegistro {
      */
     public int RemoverActividadMejora(int IdAccion, int IdActividadMejora){
         Accion accion = mAccion.GetAccion(IdAccion);
-        ((Mejora)accion).removeActividad(IdActividadMejora);
+        Actividad actividad = mActividad.GetActividad(IdActividadMejora);
+        ((Mejora)accion).removeActividadMejora(actividad);
         ((Mejora)accion).CambiarEstado();
         int res = mAccion.ActualizarAccion(accion);
         if(res!=-1){
-            Actividad actividad = mActividad.GetActividad(IdActividadMejora);
-            mActividad.BorrarActividad(actividad);
+           res = mActividad.BorrarActividad(actividad);
         }
         return res;
     }
@@ -210,12 +210,12 @@ public class ControladorEdicionRegistro {
      */
     public int RemoverActividadPreventiva(int IdAccion, int IdActividadPreventiva){
         Accion accion = mAccion.GetAccion(IdAccion);
-        ((Preventiva)accion).removeActividad(IdAccion);
+        Actividad actividad = mActividad.GetActividad(IdActividadPreventiva);
+        ((Preventiva)accion).removeActividad(actividad);
         ((Preventiva)accion).CambiarEstado();
         int res = mAccion.ActualizarAccion(accion);
-        if(res!=-1){
-            Actividad actividad = mActividad.GetActividad(IdActividadPreventiva);
-            mActividad.BorrarActividad(actividad);
+        if(res!=-1){            
+           res =  mActividad.BorrarActividad(actividad);
         }
         return res;
     }
@@ -229,12 +229,12 @@ public class ControladorEdicionRegistro {
      */
     public int RemoverMedidaPreventiva(int IdAccion, int IdMedidaPreventiva){
         Accion accion = mAccion.GetAccion(IdAccion);
-        ((Correctiva)accion).removeMedidaPreventiva(IdMedidaPreventiva);
+        Actividad medida = mActividad.GetActividad(IdMedidaPreventiva);
+        ((Correctiva)accion).removeMedidaPreventiva(medida);
         ((Correctiva)accion).CambiarEstado();
         int res = mAccion.ActualizarAccion(accion);
-        if(res!=-1){
-            Actividad medida = mActividad.GetActividad(IdMedidaPreventiva);
-            mActividad.BorrarActividad(medida);
+        if(res!=-1){            
+            res = mActividad.BorrarActividad(medida);
         }
         return res;
     }
@@ -248,12 +248,12 @@ public class ControladorEdicionRegistro {
      */
     public int RemoverMedidaCorrectiva(int IdAccion, int IdMedidaCorrectiva){
         Accion accion = mAccion.GetAccion(IdAccion);
-        ((Correctiva)accion).removeMedidaCorrectiva(IdMedidaCorrectiva);
+        Actividad medida = mActividad.GetActividad(IdMedidaCorrectiva);
+        ((Correctiva)accion).removeMedidaCorrectiva(medida);
         ((Correctiva)accion).CambiarEstado();
         int res = mAccion.ActualizarAccion(accion);
         if(res!=-1){
-            Actividad medida = mActividad.GetActividad(IdMedidaCorrectiva);
-            mActividad.BorrarActividad(medida);
+           res = mActividad.BorrarActividad(medida);
         }
         return res;
     }

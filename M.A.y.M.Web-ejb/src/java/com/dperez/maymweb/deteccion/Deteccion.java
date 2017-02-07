@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -31,7 +30,6 @@ public class Deteccion implements Serializable {
     private int Id;
     private String Nombre = new String();
     
-    @ManyToOne
     private EnumTipoDeteccion Tipo;
     
     @OneToMany(mappedBy = "GeneradaPor")

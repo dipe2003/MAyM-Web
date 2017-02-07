@@ -26,9 +26,9 @@ import javax.persistence.OneToMany;
  */
 @Entity
 public class Correctiva extends Accion implements Serializable {
-    @OneToMany(mappedBy = "AccionCorrectivaMedidaCorrectiva", orphanRemoval = true)
+    @OneToMany(mappedBy = "AccionActividad", cascade = CascadeType.REMOVE)
     private List<Actividad> MedidasCorrectivas;
-    @OneToMany(mappedBy = "AccionCorrectivaMedidaPreventiva", orphanRemoval = true)
+    @OneToMany(mappedBy = "AccionActividad", cascade = CascadeType.REMOVE)
     private List<Actividad> MedidasPreventivas;
     private EnumTipoDesvio Tipo;
     
@@ -92,17 +92,6 @@ public class Correctiva extends Accion implements Serializable {
             MedidaCorrectiva.setAccionActividad(null);
     }
     
-    public void removeMedidaCorrectiva(int IdMedidaCorrectiva){
-        Iterator<Actividad> it = this.MedidasCorrectivas.iterator() ;
-        while(it.hasNext()){
-            Actividad mc = it.next();
-            if(mc.getId()==IdMedidaCorrectiva){
-                it.remove();
-                if(mc.getAccionActividad()!=null && mc.getAccionActividad().equals(this))
-                    mc.setAccionActividad(null);
-            }
-        }
-    }
     
 //Medidas Preventivas
     public void addMedidaPreventiva(Actividad MedidaPreventiva){
@@ -115,18 +104,6 @@ public class Correctiva extends Accion implements Serializable {
         this.MedidasPreventivas.remove(MedidaPreventiva);
         if(MedidaPreventiva.getAccionActividad()!=null && MedidaPreventiva.getAccionActividad().equals(this))
             MedidaPreventiva.setAccionActividad(null);
-    }
-    
-    public void removeMedidaPreventiva(int IdMedidaPreventiva){
-        Iterator<Actividad> it = this.MedidasPreventivas.iterator() ;
-        while(it.hasNext()){
-            Actividad mp = it.next();
-            if(mp.getId()==IdMedidaPreventiva){
-                it.remove();
-                if(mp.getAccionActividad()!=null && mp.getAccionActividad().equals(this))
-                    mp.setAccionActividad(null);
-            }
-        }
     }
     
 //Productos Afectados

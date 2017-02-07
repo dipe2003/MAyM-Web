@@ -8,11 +8,14 @@ package com.dperez.maymweb.accion.actividad;
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.usuario.Usuario;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -34,7 +37,7 @@ public class Actividad implements Serializable {
     private String Descripcion  = new String();
     
     @ManyToOne
-    private Accion AccionActvividad;
+    private Accion AccionActividad;
     
     @ManyToOne
     private Usuario ResponsableImplementacion;
@@ -52,7 +55,7 @@ public class Actividad implements Serializable {
     public Date getFechaImplementacion() {return this.FechaImplementacion;}
     public String getDescripcion() {return this.Descripcion;}
     
-    public Accion getAccionActividad(){return this.AccionActvividad;}
+    public Accion getAccionActividad(){return this.AccionActividad;}
     
     public Usuario getResponsableImplementacion() {return this.ResponsableImplementacion;}
     
@@ -63,7 +66,7 @@ public class Actividad implements Serializable {
     public void setDescripcion(String Descripcion) {this.Descripcion = Descripcion;}
     
     public void setAccionActividad(Accion AccionActividad){
-        this.AccionActvividad = AccionActividad;
+        this.AccionActividad = AccionActividad;
     }
     
     public void setResponsableImplementacion(Usuario ResponsableImplementacion) {

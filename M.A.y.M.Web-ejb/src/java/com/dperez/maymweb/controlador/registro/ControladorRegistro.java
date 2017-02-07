@@ -155,7 +155,7 @@ public class ControladorRegistro {
         medida.setId(mMedida.CrearActividad(medida));
         Accion accion = mAccion.GetAccion(IdAccion);        
         if((accion.getClass())!= Mejora.class) throw new InvalidParameterException("El id no corresponde con una mejora");
-        ((Mejora)accion).addActividad((Actividad)medida);
+        ((Mejora)accion).addActividadMejora((Actividad)medida);
         int res = mAccion.ActualizarAccion(accion);
         return res;
     }
@@ -175,7 +175,7 @@ public class ControladorRegistro {
         medida.setId(mMedida.CrearActividad(medida));
         Accion accion = mAccion.GetAccion(IdAccion);
         if((accion.getClass())!= Preventiva.class) throw new InvalidParameterException("El id no corresponde con una Preventiva");
-        ((Preventiva)accion).addActividad((Actividad)medida);
+        ((Preventiva)accion).addActividadPreventiva((Actividad)medida);
         int res = mAccion.ActualizarAccion(accion);
         return res;
     }
@@ -224,14 +224,15 @@ public class ControladorRegistro {
      * Setea la fecha de implementacion de la Actividad correctiva, cambia el estado de la accion (si corresponde) y persiste los cambios en la base de deatos.
      * @param FechaImplementacion
      * @param IdMedidaCorrectiva
+     * @param IdAccion
      * @return -1 si no se pudo actualizar.
      */
-    public int SetFechaImplementacionMedidaCorrectiva(Date FechaImplementacion, int IdMedidaCorrectiva){
+    public int SetFechaImplementacionMedidaCorrectiva(Date FechaImplementacion, int IdMedidaCorrectiva, int IdAccion){
         Actividad medida = mMedida.GetActividad(IdMedidaCorrectiva);
         medida.setFechaImplementacion(FechaImplementacion);
         int res = mMedida.ActualizarActividad(medida);
         if(res!=-1){
-            Accion AccionCorrectiva = mAccion.GetAccion(medida.getAccionActividad().getId());
+            Accion AccionCorrectiva = mAccion.GetAccion(IdAccion);
             AccionCorrectiva.CambiarEstado();
             res = mAccion.ActualizarAccion(AccionCorrectiva);
         }
@@ -242,14 +243,15 @@ public class ControladorRegistro {
      * Setea la fecha de implementacion de la Actividad Preventiva, cambia el estado de la accion (si corresponde) y persiste los cambios en la base de deatos.
      * @param FechaImplementacion
      * @param IdMedidaPreventiva
+     * @param IdAccion
      * @return -1 si no se pudo actualizar.
      */
-    public int SetFechaImplementacionMedidaPreventiva(Date FechaImplementacion, int IdMedidaPreventiva){
+    public int SetFechaImplementacionMedidaPreventiva(Date FechaImplementacion, int IdMedidaPreventiva, int IdAccion){
         Actividad medida = mMedida.GetActividad(IdMedidaPreventiva);
         medida.setFechaImplementacion(FechaImplementacion);
         int res = mMedida.ActualizarActividad(medida);
         if(res!=-1){
-            Accion AccionCorrectiva = mAccion.GetAccion(medida.getAccionActividad().getId());
+            Accion AccionCorrectiva = mAccion.GetAccion(IdAccion);
             AccionCorrectiva.CambiarEstado();
             res = mAccion.ActualizarAccion(AccionCorrectiva);
         }
@@ -260,14 +262,15 @@ public class ControladorRegistro {
      * Setea la fecha de implementacion de la Actividad Preventiva, cambia el estado de la accion (si corresponde) y persiste los cambios en la base de deatos.
      * @param FechaImplementacion
      * @param IdActividadPreventiva
+     * @param IdAccion
      * @return -1 si no se pudo actualizar.
      */
-    public int SetFechaImplementacionActividadPreventiva(Date FechaImplementacion, int IdActividadPreventiva){
+    public int SetFechaImplementacionActividadPreventiva(Date FechaImplementacion, int IdActividadPreventiva, int IdAccion){
         Actividad medida = mMedida.GetActividad(IdActividadPreventiva);
         medida.setFechaImplementacion(FechaImplementacion);
         int res = mMedida.ActualizarActividad(medida);
         if(res!=-1){
-            Accion AccionPreventiva = mAccion.GetAccion(medida.getAccionActividad().getId());
+            Accion AccionPreventiva = mAccion.GetAccion(IdAccion);
             AccionPreventiva.CambiarEstado();
             res = mAccion.ActualizarAccion(AccionPreventiva);
         }
@@ -278,14 +281,15 @@ public class ControladorRegistro {
      * Setea la fecha de implementacion de la Actividad de Mejora, cambia el estado de la accion (si corresponde) y persiste los cambios en la base de deatos.
      * @param FechaImplementacion
      * @param IdActividadMejora
+     * @param IdAccion
      * @return -1 si no se pudo actualizar.
      */
-    public int SetFechaImplementacionActividadMejora(Date FechaImplementacion, int IdActividadMejora){
+    public int SetFechaImplementacionActividadMejora(Date FechaImplementacion, int IdActividadMejora, int IdAccion){
         Actividad medida = mMedida.GetActividad(IdActividadMejora);
         medida.setFechaImplementacion(FechaImplementacion);
         int res = mMedida.ActualizarActividad(medida);
         if(res!=-1){
-            Accion AccionMejora = mAccion.GetAccion(medida.getAccionActividad().getId());
+            Accion AccionMejora = mAccion.GetAccion(IdAccion);
             AccionMejora.CambiarEstado();
             res = mAccion.ActualizarAccion(AccionMejora);
         }

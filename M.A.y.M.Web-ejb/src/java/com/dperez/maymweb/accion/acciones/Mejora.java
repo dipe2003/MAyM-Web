@@ -12,7 +12,6 @@ import com.dperez.maymweb.estado.EnumEstado;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -24,7 +23,7 @@ import javax.persistence.OneToMany;
  */
 @Entity
 public class Mejora extends Accion implements Serializable {
-    @OneToMany(mappedBy = "AccionMejora", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "AccionActividad", cascade = CascadeType.REMOVE)
     private List<Actividad> Actividades;
     
     // Constructores
@@ -46,29 +45,17 @@ public class Mejora extends Accion implements Serializable {
     }
     
     // Listas
-    public void addActividad(Actividad Actividad){
-        this.Actividades.add(Actividad);
-        if(Actividad.getAccionActividad()== null || !Actividad.getAccionActividad().equals(this))
-            Actividad.setAccionActividad(this);
+    public void addActividadMejora(Actividad ActividadMejora){
+        this.Actividades.add(ActividadMejora);
+            ActividadMejora.setAccionActividad(this);
     }
     
-    public void removeActividad(Actividad Actividad){
-        this.Actividades.remove(Actividad);
-        if(Actividad.getAccionActividad()!=null && Actividad.getAccionActividad().equals(this))
-            Actividad.setAccionActividad(null);
+    public void removeActividadMejora(Actividad ActividadMejora){
+        this.Actividades.remove(ActividadMejora);
+        if(ActividadMejora.getAccionActividad()!=null && ActividadMejora.getAccionActividad().equals(this))
+            ActividadMejora.setAccionActividad(null);
     }
     
-    public void removeActividad(int idActividad){
-        Iterator<Actividad> it = this.Actividades.iterator() ;
-        while(it.hasNext()){
-            Actividad ac = it.next();
-            if(ac.getId()==idActividad){
-                it.remove();
-                if(ac.getAccionActividad()!=null && ac.getAccionActividad().equals(this))
-                    ac.setAccionActividad(null);
-            }
-        }
-    }
     
     @Override
     public void CambiarEstado() {
