@@ -17,6 +17,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -29,14 +30,14 @@ import javax.persistence.TemporalType;
 @Table(name="Actividades")
 public class Actividad implements Serializable {
     @Id@GeneratedValue(strategy = GenerationType.AUTO)
-    private int Id;
+    private int IdActividad;
     @Temporal(TemporalType.DATE)
     private Date FechaEstimadaImplementacion;
     @Temporal(TemporalType.DATE)
     private Date FechaImplementacion;
     private String Descripcion  = new String();
     
-    @ManyToOne
+    @OneToOne
     private Accion AccionActividad;
     
     @ManyToOne
@@ -50,7 +51,7 @@ public class Actividad implements Serializable {
     }
     
     // Getters
-    public int getId() {return this.Id;}
+    public int getIdActividad() {return this.IdActividad;}
     public Date getFechaEstimadaImplementacion() {return this.FechaEstimadaImplementacion;}
     public Date getFechaImplementacion() {return this.FechaImplementacion;}
     public String getDescripcion() {return this.Descripcion;}
@@ -60,7 +61,7 @@ public class Actividad implements Serializable {
     public Usuario getResponsableImplementacion() {return this.ResponsableImplementacion;}
     
     // Setters
-    public void setId(int Id) {this.Id = Id;}
+    public void setIdActividad(int IdActividad) {this.IdActividad = IdActividad;}
     public void setFechaEstimadaImplementacion(Date FechaEstimadaImplementacion) {this.FechaEstimadaImplementacion = FechaEstimadaImplementacion;}
     public void setFechaImplementacion(Date FechaImplementacion) {this.FechaImplementacion = FechaImplementacion;}
     public void setDescripcion(String Descripcion) {this.Descripcion = Descripcion;}

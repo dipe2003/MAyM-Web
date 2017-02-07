@@ -50,7 +50,7 @@ public class MedidaTest {
         System.out.println("getId");
         Actividad instance = new MedidaImpl();
         int expResult = 0;
-        int result = instance.getId();
+        int result = instance.getIdActividad();
         assertEquals(expResult, result);
     }
 
@@ -110,7 +110,7 @@ public class MedidaTest {
         System.out.println("setId");
         int Id = 1;
         Actividad instance = new MedidaImpl();
-        instance.setId(Id);
+        instance.setIdActividad(Id);
     }
 
     /**

@@ -18,6 +18,8 @@ import java.util.Date;
 import java.util.Iterator;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 
 /**
@@ -26,9 +28,21 @@ import javax.persistence.OneToMany;
  */
 @Entity
 public class Correctiva extends Accion implements Serializable {
-    @OneToMany(mappedBy = "AccionActividad", cascade = CascadeType.REMOVE)
+    @OneToMany(cascade = CascadeType.REMOVE)
+    @JoinTable
+  (
+      name="MCORRECTIVAS_ACTIVIDADES",
+      joinColumns={ @JoinColumn(name="Id", referencedColumnName="Id") },
+      inverseJoinColumns={ @JoinColumn(name="IdActividad", referencedColumnName="IdActividad", unique=true) }
+  )
     private List<Actividad> MedidasCorrectivas;
-    @OneToMany(mappedBy = "AccionActividad", cascade = CascadeType.REMOVE)
+    @OneToMany(cascade = CascadeType.REMOVE)
+    @JoinTable
+  (
+      name="MPREVENTIVAS_ACTIVIDADES",
+      joinColumns={ @JoinColumn(name="Id", referencedColumnName="Id") },
+      inverseJoinColumns={ @JoinColumn(name="IdActividad", referencedColumnName="IdActividad", unique=true) }
+  )
     private List<Actividad> MedidasPreventivas;
     private EnumTipoDesvio Tipo;
     

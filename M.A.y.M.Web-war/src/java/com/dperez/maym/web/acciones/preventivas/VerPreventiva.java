@@ -117,7 +117,7 @@ public class VerPreventiva implements Serializable {
             actividades = ((Preventiva)AccionSeleccionada).getActividades();
             ListaActividades = new HashMap<>();
             for(Actividad act: actividades){
-                ListaActividades.put(act.getId(), act);
+                ListaActividades.put(act.getIdActividad(), act);
             }
             EmpresaAccion = (Empresa) request.getSession().getAttribute("Empresa");
         }

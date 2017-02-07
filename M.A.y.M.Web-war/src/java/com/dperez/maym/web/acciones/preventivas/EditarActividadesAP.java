@@ -102,7 +102,7 @@ public class EditarActividadesAP implements Serializable {
             Accion AccionPreventiva = (Preventiva) fLectura.GetAccion(IdAccionPreventivaSeleccionada);
             List<Actividad> actividades = ((Preventiva)AccionPreventiva).getActividades();
             for(Actividad act: actividades){
-                if(act.getId()== IdActividadSeleccionada){
+                if(act.getIdActividad()== IdActividadSeleccionada){
                     ActividadSeleccionada = act;
                 }
             }

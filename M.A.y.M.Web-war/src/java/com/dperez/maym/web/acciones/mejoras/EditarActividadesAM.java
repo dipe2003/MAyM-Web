@@ -101,7 +101,7 @@ public class EditarActividadesAM implements Serializable {
             Accion AccionMejora = (Mejora) fLectura.GetAccion(IdAccionMejoraSeleccionada);
             List<Actividad> actividades = ((Mejora)AccionMejora).getActividades();
             for(Actividad act: actividades){
-                if(act.getId()== IdActividadSeleccionada){
+                if(act.getIdActividad()== IdActividadSeleccionada){
                     ActividadSeleccionada = act;
                 }
             }

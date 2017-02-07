@@ -109,7 +109,7 @@ public class EditarActividadesAC implements Serializable {
                 actividades.addAll(((Correctiva)AccionCorrectiva).getMedidasPreventivas());
             }
             for(Actividad act: actividades){
-                if(act.getId()== IdActividadSeleccionada){
+                if(act.getIdActividad()== IdActividadSeleccionada){
                     ActividadSeleccionada = act;
                 }
             }

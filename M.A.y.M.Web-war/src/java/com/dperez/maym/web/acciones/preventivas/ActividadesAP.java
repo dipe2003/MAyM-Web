@@ -86,8 +86,8 @@ public class ActividadesAP implements Serializable {
                 FacesContext.getCurrentInstance().renderResponse();
             }else{
                 // agregar a la lista de actividades del bean
-                actividad.setId(id);
-                ListaActividades.put(actividad.getId(), actividad);
+                actividad.setIdActividad(id);
+                ListaActividades.put(actividad.getIdActividad(), actividad);
             }
         }
     }    
@@ -129,7 +129,7 @@ public class ActividadesAP implements Serializable {
             if(!((Preventiva)AccionPreventiva).getActividades().isEmpty()){
                 List<Actividad> actividades = ((Preventiva)AccionPreventiva).getActividades();
                 for(Actividad actividad: actividades ){
-                    ListaActividades.put(actividad.getId(), actividad);
+                    ListaActividades.put(actividad.getIdActividad(), actividad);
                 }
             }
                         

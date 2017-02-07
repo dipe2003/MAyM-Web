@@ -102,8 +102,8 @@ public class ActividadesAC implements Serializable {
                 FacesContext.getCurrentInstance().renderResponse();
             }else{
                 // agregar a la lista de medidas del bean
-                Medida.setId(id);
-                ListaMedidasCorrectivas.put(Medida.getId(), Medida);
+                Medida.setIdActividad(id);
+                ListaMedidasCorrectivas.put(Medida.getIdActividad(), Medida);
             }
         }
     }
@@ -128,8 +128,8 @@ public class ActividadesAC implements Serializable {
                 FacesContext.getCurrentInstance().renderResponse();
             }else{
                 // agregar a la lista de medidas del bean
-                Medida.setId(id);
-                ListaMedidasCorrectivas.put(Medida.getId(), Medida);
+                Medida.setIdActividad(id);
+                ListaMedidasCorrectivas.put(Medida.getIdActividad(), Medida);
             }
         }
     }
@@ -192,7 +192,7 @@ public class ActividadesAC implements Serializable {
             if(!((Correctiva)AccionCorrectiva).getMedidasCorrectivas().isEmpty()){
                 List<Actividad> medidas = ((Correctiva)AccionCorrectiva).getMedidasCorrectivas();
                 for(Actividad medida: medidas ){
-                    ListaMedidasCorrectivas.put(medida.getId(), medida);
+                    ListaMedidasCorrectivas.put(medida.getIdActividad(), medida);
                 }
             }
             //  Medidas Preventivas
@@ -200,7 +200,7 @@ public class ActividadesAC implements Serializable {
             if(!((Correctiva)AccionCorrectiva).getMedidasPreventivas().isEmpty()){
                 List<Actividad> medidas = ((Correctiva)AccionCorrectiva).getMedidasPreventivas();
                 for(Actividad medida: medidas ){
-                    ListaMedidasPreventivas.put(medida.getId(), medida);
+                    ListaMedidasPreventivas.put(medida.getIdActividad(), medida);
                 }
             }
             

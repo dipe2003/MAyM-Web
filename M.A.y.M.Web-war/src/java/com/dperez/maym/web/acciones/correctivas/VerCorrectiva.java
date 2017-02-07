@@ -126,13 +126,13 @@ public class VerCorrectiva implements Serializable {
             List<Actividad> actividades = ((Correctiva)AccionSeleccionada).getMedidasCorrectivas();
             MedidasCorrectivas = new HashMap<>();
             for(Actividad act: actividades){
-                MedidasCorrectivas.put(act.getId(), act);
+                MedidasCorrectivas.put(act.getIdActividad(), act);
             }
             actividades.clear();
             actividades = ((Correctiva)AccionSeleccionada).getMedidasPreventivas();
             MedidasPreventivas = new HashMap<>();
             for(Actividad act: actividades){
-                MedidasPreventivas.put(act.getId(), act);
+                MedidasPreventivas.put(act.getIdActividad(), act);
             }
             EmpresaAccion = (Empresa) request.getSession().getAttribute("Empresa");
             ResponsableEficacia = AccionSeleccionada.getComprobacionEficacia().getResponsable();

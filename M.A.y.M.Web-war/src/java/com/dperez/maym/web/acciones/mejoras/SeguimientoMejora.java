@@ -165,7 +165,7 @@ public class SeguimientoMejora implements Serializable {
             actividades = ((Mejora)AccionSeguimiento).getActividades();
             ListaActividades = new HashMap<>();
             for(Actividad act: actividades){
-                ListaActividades.put(act.getId(), act);
+                ListaActividades.put(act.getIdActividad(), act);
             }
             //  Usuarios
             this.ListaUsuarios = new HashMap<>();

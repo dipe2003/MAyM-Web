@@ -150,7 +150,7 @@ public class Usuario implements Serializable {
         Iterator<Actividad> it = this.MedidasResponsableImplementacion.iterator() ;
         while(it.hasNext()){
             Actividad m = it.next();
-            if(m.getId()== IdMedidaResponsableImplementacion){
+            if(m.getIdActividad()== IdMedidaResponsableImplementacion){
                 it.remove();
                 if(m.getResponsableImplementacion()!=null && m.getResponsableImplementacion().equals(this))
                     m.setResponsableImplementacion(null);

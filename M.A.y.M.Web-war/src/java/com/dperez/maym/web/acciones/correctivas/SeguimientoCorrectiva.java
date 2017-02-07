@@ -167,13 +167,13 @@ public class SeguimientoCorrectiva implements Serializable {
             List<Actividad> actividades = ((Correctiva)AccionSeguimiento).getMedidasCorrectivas();
             MedidasCorrectivas = new HashMap<>();
             for(Actividad act: actividades){
-                MedidasCorrectivas.put(act.getId(), act);
+                MedidasCorrectivas.put(act.getIdActividad(), act);
             }
             actividades.clear();
             actividades = ((Correctiva)AccionSeguimiento).getMedidasPreventivas();
             MedidasPreventivas = new HashMap<>();
             for(Actividad act: actividades){
-                MedidasPreventivas.put(act.getId(), act);
+                MedidasPreventivas.put(act.getIdActividad(), act);
             }
             //  Usuarios
             this.ListaUsuarios = new HashMap<>();

@@ -32,7 +32,7 @@ public class ManejadorActividad{
     public int CrearActividad(Actividad actividad){
         try{
             em.persist(actividad);
-            return actividad.getId();
+            return actividad.getIdActividad();
         }catch(Exception ex){
             System.out.println("Error al crear actividad: " + ex.getMessage());
         }
@@ -42,7 +42,7 @@ public class ManejadorActividad{
     public int ActualizarActividad(Actividad actividad){
         try{
             em.merge(actividad);
-            return actividad.getId();
+            return actividad.getIdActividad();
         }catch(Exception ex){
             System.out.println("Error al actualizar actividad: " + ex.getMessage());
         }
@@ -52,7 +52,7 @@ public class ManejadorActividad{
     public int BorrarActividad(Actividad actividad){
         try{
             em.remove(actividad);
-            return actividad.getId();
+            return actividad.getIdActividad();
         }catch(Exception ex){
             System.out.println("Error al borrar actividad: " + ex.getMessage());
         }
