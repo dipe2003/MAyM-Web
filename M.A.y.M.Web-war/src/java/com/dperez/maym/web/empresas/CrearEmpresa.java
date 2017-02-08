@@ -28,6 +28,9 @@ public class CrearEmpresa implements Serializable {
     private String DireccionEmpresa;
     private String TelefonoEmpresa;
     private String CorreoEmpresa;
+    private String Fax;
+    private String Descripcion;
+    private String Imagen;
     
     //  Getters
     
@@ -36,6 +39,9 @@ public class CrearEmpresa implements Serializable {
     public String getDireccionEmpresa() {return DireccionEmpresa;}
     public String getTelefonoEmpresa() {return TelefonoEmpresa;}
     public String getCorreoEmpresa() {return CorreoEmpresa;}
+    public String getFax() {return Fax;}
+    public String getDescripcion() {return Descripcion;}
+    public String getImagen() {return Imagen;}
     
     //  Setters
     
@@ -44,6 +50,9 @@ public class CrearEmpresa implements Serializable {
     public void setDireccionEmpresa(String DireccionEmpresa) {this.DireccionEmpresa = DireccionEmpresa;}
     public void setTelefonoEmpresa(String TelefonoEmpresa) {this.TelefonoEmpresa = TelefonoEmpresa;}
     public void setCorreoEmpresa(String CorreoEmpresa) {this.CorreoEmpresa = CorreoEmpresa;}
+    public void setFax(String Fax) {this.Fax = Fax;}
+    public void setDescripcion(String Descripcion) {this.Descripcion = Descripcion;}
+    public void setImagen(String Imagen) {this.Imagen = Imagen;}
     
     //  Metodos
     public boolean comprobarDisponibilidadId(int idEmpresa){
@@ -56,7 +65,7 @@ public class CrearEmpresa implements Serializable {
             mensaje = "El numero de Empresa ya existe.";
         }else{
             //  registrar empresa
-            if(fAdmin.NuevaEmpresa(Id, NombreEmpresa, DireccionEmpresa, TelefonoEmpresa, CorreoEmpresa)==null){
+            if(fAdmin.NuevaEmpresa(Id, NombreEmpresa, DireccionEmpresa, TelefonoEmpresa, CorreoEmpresa, Fax, Descripcion)==null){
                 mensaje = "No se pudo registrar la Empresa";
             }else{
                 String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();

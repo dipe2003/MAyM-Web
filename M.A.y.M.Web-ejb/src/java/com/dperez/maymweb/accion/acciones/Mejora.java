@@ -26,12 +26,8 @@ import javax.persistence.OneToMany;
 @Entity
 public class Mejora extends Accion implements Serializable {
     @OneToMany(cascade = CascadeType.REMOVE)
-    @JoinTable
-  (
-      name="MEJORAS_ACTIVIDADES",
-      joinColumns={ @JoinColumn(name="Id", referencedColumnName="Id") },
-      inverseJoinColumns={ @JoinColumn(name="IdActividad", referencedColumnName="IdActividad", unique=true) }
-  )
+    @JoinTable(name="mejoras_actividades",joinColumns={ @JoinColumn(name="Id", referencedColumnName="Id") },
+            inverseJoinColumns={ @JoinColumn(name="IdActividad", referencedColumnName="IdActividad", unique=true) })
     private List<Actividad> Actividades;
     
     // Constructores
@@ -55,7 +51,7 @@ public class Mejora extends Accion implements Serializable {
     // Listas
     public void addActividadMejora(Actividad ActividadMejora){
         this.Actividades.add(ActividadMejora);
-            ActividadMejora.setAccionActividad(this);
+        ActividadMejora.setAccionActividad(this);
     }
     
     public void removeActividadMejora(Actividad ActividadMejora){
@@ -88,7 +84,7 @@ public class Mejora extends Accion implements Serializable {
                         this.setEstadoAccion(EnumEstado.PROCESO_IMP);
                     }
                 }
-            }            
+            }
         }
     }
 }

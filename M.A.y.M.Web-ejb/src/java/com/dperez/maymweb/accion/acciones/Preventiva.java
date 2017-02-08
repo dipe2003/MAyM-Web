@@ -26,12 +26,8 @@ import javax.persistence.OneToMany;
 @Entity
 public class Preventiva extends Accion implements Serializable{
     @OneToMany(cascade = CascadeType.REMOVE)
-    @JoinTable
-  (
-      name="PREVENTIVA_ACTIVIDADES",
-      joinColumns={ @JoinColumn(name="Id", referencedColumnName="Id") },
-      inverseJoinColumns={ @JoinColumn(name="IdActividad", referencedColumnName="IdActividad", unique=true) }
-  )
+    @JoinTable(name="preventivas_actividades",joinColumns={ @JoinColumn(name="Id", referencedColumnName="Id") },
+            inverseJoinColumns={ @JoinColumn(name="IdActividad", referencedColumnName="IdActividad", unique=true) }  )
     private List<Actividad> Actividades;
     
     // Constructores
@@ -55,7 +51,7 @@ public class Preventiva extends Accion implements Serializable{
     // Listas
     public void addActividadPreventiva(Actividad ActividadPreventiva){
         this.Actividades.add(ActividadPreventiva);
-        if(ActividadPreventiva.getAccionActividad()== null || !ActividadPreventiva.getAccionActividad().equals(this)) 
+        if(ActividadPreventiva.getAccionActividad()== null || !ActividadPreventiva.getAccionActividad().equals(this))
             ActividadPreventiva.setAccionActividad(this);
     }
     
@@ -89,7 +85,7 @@ public class Preventiva extends Accion implements Serializable{
                         this.setEstadoAccion(EnumEstado.PROCESO_IMP);
                     }
                 }
-            }            
+            }
         }
     }
 }

@@ -32,6 +32,9 @@ public class Empresa implements Serializable {
     private String DireccionEmpresa = new String();
     private String TelefonoEmpresa = new String();
     private String CorreoEmpresa = new String();
+    private String FaxEmpresa = new String();
+    private String DescripcionEmpresa = new String();
+    private String ImagenEmpresa = new String();
     
     @OneToMany(mappedBy = "EmpresaUsuario" )
     private List<Usuario> UsuariosEmpresa;
@@ -56,12 +59,15 @@ public class Empresa implements Serializable {
         this.CodificacionesEmpresa = new ArrayList<>();
         this.AreasEmpresa = new ArrayList<>();
     }
-    public Empresa(int idEmpresa, String NombreEmpresa, String DireccionEmpresa, String TelefonoEmpresa, String CorreoEmpresa){
+    public Empresa(int idEmpresa, String NombreEmpresa, String DireccionEmpresa, String TelefonoEmpresa, String CorreoEmpresa, 
+            String FaxEmpresa, String DescripcionEmpresa){
         this.Id = idEmpresa;
         this.NombreEmpresa = NombreEmpresa;
         this.DireccionEmpresa = DireccionEmpresa;
         this.TelefonoEmpresa = TelefonoEmpresa;
         this.CorreoEmpresa = CorreoEmpresa;
+        this.FaxEmpresa = FaxEmpresa;
+        this.DescripcionEmpresa = DescripcionEmpresa;
         this.UsuariosEmpresa = new ArrayList<>();
         this.FortalezasEmpresa = new ArrayList<>();
         this.AccionesEmpresa = new ArrayList<>();
@@ -75,6 +81,9 @@ public class Empresa implements Serializable {
     public String getDireccionEmpresa() {return DireccionEmpresa;}
     public String getTelefonoEmpresa() {return TelefonoEmpresa;}
     public String getCorreoEmpresa() {return CorreoEmpresa;}
+    public String getFaxEmpresa(){return this.FaxEmpresa;}
+    public String getDescripcion(){return this.DescripcionEmpresa;}
+    public String getImagenEmpresa(){return this.ImagenEmpresa;}
     public List<Usuario> getUsuariosEmpresa(){return this.UsuariosEmpresa;}
     public List<Fortaleza> getFortalezasEmpresa(){return this.FortalezasEmpresa;}
     public List<Accion> getAccionesEmpresa(){return this.AccionesEmpresa;}
@@ -87,6 +96,9 @@ public class Empresa implements Serializable {
     public void setDireccionEmpresa(String DireccionEmpresa) {this.DireccionEmpresa = DireccionEmpresa;}
     public void setTelefonoEmpresa(String TelefonoEmpresa) {this.TelefonoEmpresa = TelefonoEmpresa;}
     public void setCorreoEmpresa(String CorreoEmpresa) {this.CorreoEmpresa = CorreoEmpresa;}
+    public void setFaxEmpresa(String FaxEmpresa){this.FaxEmpresa = FaxEmpresa;}
+    public void setDescripcion(String DescripcionEmpresa){this.DescripcionEmpresa = DescripcionEmpresa;}
+    public void setImagenEmpresa(String ImagenEmpresa){this.ImagenEmpresa = ImagenEmpresa;}
     public void setUsuariosEmpresa(List<Usuario> UsuariosEmpresa){this.UsuariosEmpresa = UsuariosEmpresa;}
     public void setFortalezasEmpresa(List<Fortaleza> FortalezasEmpresa){this.FortalezasEmpresa = FortalezasEmpresa;}
     public void setAccionesEmpresa(List<Accion> AccionesEmpresa){this.AccionesEmpresa = AccionesEmpresa;}

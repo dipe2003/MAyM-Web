@@ -29,20 +29,13 @@ import javax.persistence.OneToMany;
 @Entity
 public class Correctiva extends Accion implements Serializable {
     @OneToMany(cascade = CascadeType.REMOVE)
-    @JoinTable
-  (
-      name="MCORRECTIVAS_ACTIVIDADES",
-      joinColumns={ @JoinColumn(name="Id", referencedColumnName="Id") },
-      inverseJoinColumns={ @JoinColumn(name="IdActividad", referencedColumnName="IdActividad", unique=true) }
-  )
+    @JoinTable(name="medidascorrectivas_actividades",joinColumns={ @JoinColumn(name="Id", referencedColumnName="Id") },
+            inverseJoinColumns={ @JoinColumn(name="IdActividad", referencedColumnName="IdActividad", unique=true) } )
     private List<Actividad> MedidasCorrectivas;
+    
     @OneToMany(cascade = CascadeType.REMOVE)
-    @JoinTable
-  (
-      name="MPREVENTIVAS_ACTIVIDADES",
-      joinColumns={ @JoinColumn(name="Id", referencedColumnName="Id") },
-      inverseJoinColumns={ @JoinColumn(name="IdActividad", referencedColumnName="IdActividad", unique=true) }
-  )
+    @JoinTable  (name="medidaspreventiva_actividades",joinColumns={ @JoinColumn(name="Id", referencedColumnName="Id") },
+            inverseJoinColumns={ @JoinColumn(name="IdActividad", referencedColumnName="IdActividad", unique=true) } )
     private List<Actividad> MedidasPreventivas;
     private EnumTipoDesvio Tipo;
     

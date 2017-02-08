@@ -485,10 +485,13 @@ public class ControladorConfiguracion {
      * @param DireccionEmpresa
      * @param TelefonoEmpresa
      * @param CorreoEmpresa
+     * @param FaxEmpresa
+     * @param Descripcion
      * @return Null si no se creo la empresa.
      */
-    public Empresa NuevaEmpresa(int Id, String NombreEmpresa, String DireccionEmpresa, String TelefonoEmpresa, String CorreoEmpresa){
-        Empresa empresa = new Empresa(Id, NombreEmpresa, DireccionEmpresa, TelefonoEmpresa, CorreoEmpresa);
+    public Empresa NuevaEmpresa(int Id, String NombreEmpresa, String DireccionEmpresa, String TelefonoEmpresa, String CorreoEmpresa, 
+            String FaxEmpresa, String Descripcion){
+        Empresa empresa = new Empresa(Id, NombreEmpresa, DireccionEmpresa, TelefonoEmpresa, CorreoEmpresa, FaxEmpresa, Descripcion);
         if(mEmpresa.CrearEmpresa(empresa)!=-1){
             return empresa;
         }else{
@@ -503,20 +506,38 @@ public class ControladorConfiguracion {
      * @param DireccionEmpresa
      * @param TelefonoEmpresa
      * @param CorreoEmpresa
+     * @param FaxEmpresa
+     * @param DescripcionEmpresa
      * @return Retorna -1 si no se actualizo. Retorna el id de la empresa si se actualizo.
      */
-    public int EditarEmpresa(int Id, String NombreEmpresa, String DireccionEmpresa, String TelefonoEmpresa, String CorreoEmpresa){
+    public int EditarEmpresa(int Id, String NombreEmpresa, String DireccionEmpresa, String TelefonoEmpresa, String CorreoEmpresa, 
+            String FaxEmpresa, String DescripcionEmpresa){
         Empresa empresa = mEmpresa.GetEmpresa(Id);
         empresa.setId(Id);
         empresa.setCorreoEmpresa(CorreoEmpresa);
         empresa.setDireccionEmpresa(DireccionEmpresa);
         empresa.setNombreEmpresa(NombreEmpresa);
         empresa.setTelefonoEmpresa(TelefonoEmpresa);
+        empresa.setFaxEmpresa(FaxEmpresa);
+        empresa.setDescripcion(DescripcionEmpresa);
         if(mEmpresa.ActualizarEmpresa(empresa)!=-1){
             return empresa.getId();
         }else{
             return -1;
         }
+    }
+    
+    /**
+     * Agrega la ubicacion de la imagen de la empresa en la base de datos.
+     * No se mueve ningun archivo
+     * @param IdEmpresa
+     * @param ImagenEmpresa Ubicacion de la imagen en el servidor.
+     * @return Retorna -1 si no se actualizo. Retorna el id de la empresa si se actualizo.
+     */
+    public int AgregarImagenEmpresa(int IdEmpresa, String ImagenEmpresa){
+        Empresa empresa = mEmpresa.GetEmpresa(IdEmpresa);
+        empresa.setImagenEmpresa(ImagenEmpresa);
+        return mEmpresa.ActualizarEmpresa(empresa);
     }
     
     /**
