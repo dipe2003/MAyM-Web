@@ -8,27 +8,31 @@
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:head>
         
-        <title>Bootstrap Example</title>
+        <title>Medicion Analisis y Mejora</title>
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/Resources/bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-        <script src="#{facesContext.externalContext.requestContextPath}/Resources/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-
         <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/Resources/CSS/Cargando.css"/>
+        
         <script src="#{facesContext.externalContext.requestContextPath}/Resources/Scripts/IndicadorCarga.js"/>
+        <script src="#{facesContext.externalContext.requestContextPath}/Resources/Scripts/jquery/3.1.1/jquery-3.1.1.min.js"/>
+        <script src="#{facesContext.externalContext.requestContextPath}/Resources/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+        
         <link rel="shortcut icon" type="image/x-icon" href="#{facesContext.externalContext.requestContextPath}/Resources/Images/favicon.ico"/>
         
     </h:head>
     <h:body>
         <div id="loading-container" class="contenedor-carga" >
             <div class="carga">
-                <img height="100%" src="#{facesContext.externalContext.requestContextPath}/Resources/Images/loading-wheel.gif"/>
+                <img height="100px" src="#{facesContext.externalContext.requestContextPath}/Resources/Images/loading-wheel.gif"/>
                 <div>Cargando...</div>
             </div>
         </div>
-
-    
+        <div id="loading" class="carga" style="display: none;">
+            <img height="100px" src="#{facesContext.externalContext.requestContextPath}/Resources/Images/loading-wheel.gif"/>
+            <div>Cargando...</div>
+        </div> 
+              
         <div>
             <ui:include src="header.xhtml"/>
         </div>
