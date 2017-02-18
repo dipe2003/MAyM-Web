@@ -9,12 +9,16 @@ import com.dperez.maymweb.accion.EnumComprobacion;
 import com.dperez.maymweb.controlador.registro.ControladorEdicionRegistro;
 import com.dperez.maymweb.controlador.registro.ControladorRegistro;
 import java.util.Date;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * Contiene los metodos exclusivos para el permiso de verificador ademas de el ingreso de datos.
  * @author Diego
  */
+@Named
+@Stateless
 public class FacadeVerificador {
     @Inject
     private ControladorRegistro cReg;

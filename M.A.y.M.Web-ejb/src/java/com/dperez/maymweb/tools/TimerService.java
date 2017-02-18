@@ -13,8 +13,8 @@ import javax.inject.Inject;
  */
 @Singleton
 public class TimerService {
-    @Inject
-    private SendMail mail;
+//    @Inject
+//    private SendMail mail;
     
     // todos los domingos de todas las semanas, todos los años, a la hora 4:00 0s
     @Schedule(dayOfWeek = "Sun", month = "*", hour = "4", dayOfMonth = "*", year = "*", minute = "0", second = "0")
