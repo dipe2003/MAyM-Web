@@ -61,6 +61,7 @@ public class CrearAccionCorrectiva implements Serializable {
     
     private EnumTipoDeteccion[] TiposDeteccion;
     private EnumTipoDeteccion TipoDeDeteccionSeleccionada;
+    private EnumTipoDeteccion TipoNuevaDeteccion;
     private String NombreNuevaDeteccion;
     private Map<Integer, String> ListaDetecciones;
     private Integer DeteccionSeleccionada;
@@ -68,7 +69,7 @@ public class CrearAccionCorrectiva implements Serializable {
     private EnumTipoDesvio[] TiposDesvios;
     private EnumTipoDesvio TipoDesvioSeleccionado;
     
-    private Map<Integer, String> ListaAreasSectores;
+    private Map<Integer, Area> ListaAreasSectores;
     private Integer AreaSectorAccionSeleccionada;
     
     private Map<Integer, String> ListaCodificaciones;
@@ -98,14 +99,15 @@ public class CrearAccionCorrectiva implements Serializable {
     public Map<Integer, String> getListaDetecciones(){return this.ListaDetecciones;}
     public String getNombreNuevaDeteccion(){return this.NombreNuevaDeteccion;}
     public Integer getDeteccionSeleccionada(){return this.DeteccionSeleccionada;}
+    public EnumTipoDeteccion getTipoNuevaDeteccion() {return TipoNuevaDeteccion;}
     
     public EnumTipoDesvio[] getTiposDesvios(){return this.TiposDesvios;}
     public EnumTipoDesvio getTipoDesvioSeleccionado(){return this.TipoDesvioSeleccionado;}
     
-    public Map<Integer, String> getListaAreasSectores(){return this.ListaAreasSectores;}
+    public Map<Integer, Area> getListaAreasSectores(){return this.ListaAreasSectores;}
     public Integer getAreaSectorAccionSeleccionada() {return AreaSectorAccionSeleccionada;}
     
-    public boolean hayProductoAfectado(){return this.hayProductoAfectado;}
+    public boolean isHayProductoAfectado() {return hayProductoAfectado;}
     public Map<String, String> getListaProductosAfectados(){return this.ListaProductosAfectados;}
     public String getNombreProductoAfectado(){return this.NombreProductoAfectado;}
     public String getDatosProductoAfectado(){return this.DatosProductoAfectado;}
@@ -129,14 +131,18 @@ public class CrearAccionCorrectiva implements Serializable {
     public void setListaDetecciones(Map<Integer, String> ListaDetecciones){this.ListaDetecciones = ListaDetecciones;}
     public void setNombreNuevaDeteccion(String NombreNuevaDeteccion){this.NombreNuevaDeteccion = NombreNuevaDeteccion;}
     public void setDeteccionSeleccionada(Integer DeteccionSeleccionada){this.DeteccionSeleccionada = DeteccionSeleccionada;}
+    public void setTipoNuevaDeteccion(EnumTipoDeteccion TipoNuevaDeteccion) {this.TipoNuevaDeteccion = TipoNuevaDeteccion;}
     
     public void setTiposDesvios(EnumTipoDesvio[] TiposDesvios){this.TiposDesvios = TiposDesvios;}
     public void setTipoDesvioSeleccionado(EnumTipoDesvio TipoDesvioSeleccionado){this.TipoDesvioSeleccionado = TipoDesvioSeleccionado;}
     
-    public void setListaAreaSectores(Map<Integer, String> ListaAreasSectores){this.ListaAreasSectores = ListaAreasSectores;}
+    public void setListaAreaSectores(Map<Integer, Area> ListaAreasSectores){this.ListaAreasSectores = ListaAreasSectores;}
     public void setAreaSectorAccionSeleccionada(Integer AreaSectorAccionSeleccionada) {this.AreaSectorAccionSeleccionada = AreaSectorAccionSeleccionada;}
     
-    public void setHayProductoAfectado(boolean hayProductoAfectado){this.hayProductoAfectado = hayProductoAfectado;}
+    public void setHayProductoAfectado(boolean hayProductoAfectado){
+        this.hayProductoAfectado = hayProductoAfectado;
+        if(hayProductoAfectado) this.ListaProductosAfectados = new HashMap<>();
+    }
     public void setListaProductosAfectados(Map<String, String> ListaProductosAfectados) {this.ListaProductosAfectados = ListaProductosAfectados;}
     public void setNombreProductoAfectado(String NombreProductoAfectado){this.NombreProductoAfectado = NombreProductoAfectado;}
     public void setDatosProductoAfectado(String DatosProductoAfectado){this.DatosProductoAfectado = DatosProductoAfectado;}
@@ -159,8 +165,8 @@ public class CrearAccionCorrectiva implements Serializable {
         TiposDeteccion = EnumTipoDeteccion.values();
         TipoDeDeteccionSeleccionada = EnumTipoDeteccion.INTERNA;
         this.ListaDetecciones = new HashMap<>();
+        this.ListaDetecciones.put(0, " --- Nueva Deteccion --- ");
         List<Deteccion> tmpDetecciones = fLectura.ListarDetecciones();
-        ListaDetecciones.put(0, "--- Nueva ---");
         for(Deteccion deteccion:tmpDetecciones){
             if (deteccion.getTipo().equals(EnumTipoDeteccion.INTERNA)){
                 ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
@@ -175,7 +181,7 @@ public class CrearAccionCorrectiva implements Serializable {
         ListaAreasSectores = new HashMap<>();
         List<Area> tmpAreas = fLectura.ListarAreasSectores();
         for(Area area:tmpAreas){
-            this.ListaAreasSectores.put(area.getId(), area.getNombre());
+            this.ListaAreasSectores.put(area.getId(), area);
         }
     }
     
@@ -184,7 +190,8 @@ public class CrearAccionCorrectiva implements Serializable {
      */
     public void actualizarDeteccion(){
         List<Deteccion> tmpDetecciones = fLectura.ListarDetecciones();
-        ListaDetecciones.put(0, "--- Nueva ---");
+        this.ListaDetecciones.clear();
+        this.ListaDetecciones.put(0, " --- Nueva Deteccion --- ");
         for(Deteccion deteccion:tmpDetecciones){
             if (deteccion.getTipo().equals(TipoDeDeteccionSeleccionada)){
                 ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
@@ -202,10 +209,15 @@ public class CrearAccionCorrectiva implements Serializable {
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             // Crear Nueva Deteccion y actualizar lista
-            fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoDeDeteccionSeleccionada);
-            actualizarDeteccion();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_INFO, "Se agrego nueva deteccion", "Se agrego nueva deteccion" ));
-            FacesContext.getCurrentInstance().renderResponse();
+            Deteccion det = fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoDeDeteccionSeleccionada);
+            if(det != null){
+                actualizarDeteccion();
+                this.DeteccionSeleccionada = det.getId();
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_INFO, "Se agrego nueva deteccion", "Se agrego nueva deteccion" ));
+                FacesContext.getCurrentInstance().renderResponse();
+            }else{
+                System.out.println("Error>");
+            }
         }
     }
     
@@ -220,7 +232,23 @@ public class CrearAccionCorrectiva implements Serializable {
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             this.ListaProductosAfectados.put(NombreProductoAfectado, DatosProductoAfectado);
+            this.NombreProductoAfectado = new String();
+            this.DatosProductoAfectado = new String();
         }
+    }
+    
+    /**
+     * Quita el producto seleccionado de la lista de productos afectados.
+     * @param NombreProducto
+     */
+    public void quitarProducto(String NombreProducto){
+        this.ListaProductosAfectados.remove(NombreProducto);
+    }
+    
+    public void editarProducto(String NombreProducto){
+        this.NombreProductoAfectado = NombreProducto;
+        this.DatosProductoAfectado = this.ListaProductosAfectados.get(NombreProducto);
+        this.ListaProductosAfectados.remove(NombreProducto);
     }
     
     /**
@@ -233,7 +261,7 @@ public class CrearAccionCorrectiva implements Serializable {
     public void crearAccionCorrectiva() throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        Empresa empresa = (Empresa)request.getSession().getAttribute("Empresa");        
+        Empresa empresa = (Empresa)request.getSession().getAttribute("Empresa");
         Accion accion = fDatos.NuevaAccion(EnumAccion.CORRECTIVA, FechaDeteccion,
                 Descripcion, TipoDesvioSeleccionado, AreaSectorAccionSeleccionada, DeteccionSeleccionada, CodificacionSeleccionada, empresa.getId());
         

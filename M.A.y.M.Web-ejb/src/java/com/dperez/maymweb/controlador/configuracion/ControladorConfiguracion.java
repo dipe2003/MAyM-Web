@@ -402,9 +402,10 @@ public class ControladorConfiguracion {
      * @return null si no se creo.
      */
     public Deteccion NuevaDeteccion(String NombreDeteccion, EnumTipoDeteccion tipoDeteccion){
-        if(ExisteNombreDeteccion(NombreDeteccion)){
+        if(!ExisteNombreDeteccion(NombreDeteccion)){
             Deteccion deteccion = new Deteccion(NombreDeteccion, tipoDeteccion);
-            deteccion.setId(mDeteccion.CrearDeteccion(deteccion));
+            int id = mDeteccion.CrearDeteccion(deteccion);
+            deteccion.setId(id);
             if(deteccion.getId()!=-1){
                 return deteccion;
             }
@@ -421,7 +422,7 @@ public class ControladorConfiguracion {
      * @return Retorna -1 si no se actualizo. Retorna el IdDeteccion si se actualizo.
      */
     public int EditarDeteccion(int IdDteccion, String NombreDeteccion, EnumTipoDeteccion TipoDeteccion){
-        if(ExisteNombreDeteccion(IdDteccion, NombreDeteccion)){
+        if(!ExisteNombreDeteccion(IdDteccion, NombreDeteccion)){
             Deteccion deteccion = mDeteccion.GetDeteccion(IdDteccion);
             // comprobar si se cambia el tipo de deteccion para 'ahorrar' llamada a la base de datos.
             if(!deteccion.getTipo().equals(TipoDeteccion)){

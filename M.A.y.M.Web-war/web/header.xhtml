@@ -14,15 +14,15 @@
                         <span class="icon-bar">B</span>
                         <span class="icon-bar">C</span>                        
                     </button>
-                    <a class="navbar-brand" href="index.xhtml">Inicio</a>
+                    <a class="navbar-brand" href="#{facesContext.externalContext.requestContextPath}/index.xhtml">Inicio</a>
                 </div>
                 <div class="collapse navbar-collapse" id="myNavbar">
                     <ul class="nav navbar-nav">
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">Correctivas<span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="#">Nueva</a></li>
-                                <li><a href="ListadoAC.xhtml">Listado</a></li>
+                                <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/Correctivas/CrearAccionCorrectiva.xhtml">Nueva</a></li>
+                                <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/Correctivas/ListarCorrectivas.xhtml">Listado</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
