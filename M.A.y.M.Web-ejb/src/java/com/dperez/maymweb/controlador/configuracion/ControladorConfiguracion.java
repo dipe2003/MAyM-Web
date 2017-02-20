@@ -296,7 +296,7 @@ public class ControladorConfiguracion {
      * @return null si no se creo.
      */
     public Codificacion NuevaCodificacion(String NombreCodificacion, String DescripcionCodificacion){
-        if(ExisteNombreCodificacion(NombreCodificacion)){
+        if(!ExisteNombreCodificacion(NombreCodificacion)){
             Codificacion codificacion = new Codificacion(NombreCodificacion, DescripcionCodificacion);
             codificacion.setId(mCodificacion.CrearCodificacion(codificacion));
             if(codificacion.getId()!=-1){

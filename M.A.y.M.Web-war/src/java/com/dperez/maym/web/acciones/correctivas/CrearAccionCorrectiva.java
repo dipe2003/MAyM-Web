@@ -74,6 +74,8 @@ public class CrearAccionCorrectiva implements Serializable {
     
     private Map<Integer, String> ListaCodificaciones;
     private Integer CodificacionSeleccionada;
+    private String NombreNuevaCodificacion;
+    private String DescripcionNuevaCodificacion;
     
     private boolean hayProductoAfectado;
     private Map<String, String> ListaProductosAfectados;
@@ -93,6 +95,8 @@ public class CrearAccionCorrectiva implements Serializable {
     
     public Map<Integer, String> getListaCodificaciones(){return this.ListaCodificaciones;}
     public Integer getCodificacionSeleccionada() {return CodificacionSeleccionada;}
+    public String getNombreNuevaCodificacion() {return NombreNuevaCodificacion;}
+    public String getDescripcionNuevaCodificacion() {return DescripcionNuevaCodificacion;}
     
     public EnumTipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
     public EnumTipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
@@ -125,6 +129,8 @@ public class CrearAccionCorrectiva implements Serializable {
     
     public void setListaCodificaciones(Map<Integer, String> ListaCodificaciones){this.ListaCodificaciones = ListaCodificaciones;}
     public void setCodificacionSeleccionada(Integer CodificacionSeleccionada) {this.CodificacionSeleccionada = CodificacionSeleccionada;}
+    public void setNombreNuevaCodificacion(String NombreNuevaCodificacion) {this.NombreNuevaCodificacion = NombreNuevaCodificacion;}
+    public void setDescripcionNuevaCodificacion(String DescripcionNuevaCodificacion) {this.DescripcionNuevaCodificacion = DescripcionNuevaCodificacion;}
     
     public void setTipoDeDeteccionSeleccionada(EnumTipoDeteccion TipoDeteccion){this.TipoDeDeteccionSeleccionada = TipoDeteccion;}
     public void setTiposDeteccion(EnumTipoDeteccion[] TiposDeteccion){this.TiposDeteccion = TiposDeteccion;}
@@ -157,6 +163,7 @@ public class CrearAccionCorrectiva implements Serializable {
         //  Codificaciones
         ListaCodificaciones = new HashMap<>();
         List<Codificacion> tmpCodificaciones = fLectura.ListarCodificaciones();
+        this.ListaCodificaciones.put(0, " --- Nueva Codificacion --- ");
         for(Codificacion codificacion:tmpCodificaciones){
             ListaCodificaciones.put(codificacion.getId(), codificacion.getNombre());
         }
@@ -218,6 +225,41 @@ public class CrearAccionCorrectiva implements Serializable {
             }else{
                 System.out.println("Error>");
             }
+        }
+    }
+    /**
+     * Crea nueva codificacion.
+     * Se verifica que el nombre o la descripcion no esten vacios. Si estan vacios no se crea y se muestra un mensaje
+     */
+    public void nuevaCodificacion(){
+        if(NombreNuevaCodificacion.isEmpty() || DescripcionNuevaCodificacion.isEmpty()){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva codificacion", "No se pudo crear nueva codificacion" ));
+            FacesContext.getCurrentInstance().renderResponse();
+        }else{
+            // Crear Nueva Codificacion y actualizar lista
+            Codificacion cod = fAdmin.NuevaCodificacion(NombreNuevaCodificacion, DescripcionNuevaCodificacion);
+            if(cod != null){
+                actualizarCodificacion();
+                this.CodificacionSeleccionada = cod.getId();
+                this.NombreNuevaCodificacion = new String();
+                this.DescripcionNuevaCodificacion = new String();
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_INFO, "Se agrego nueva codificacion", "Se agrego nueva codificacion" ));
+                FacesContext.getCurrentInstance().renderResponse();
+            }else{
+                System.out.println("Error");
+            }
+        }
+    }
+    
+    /**
+     * Actualiza la lista de codificaciones.
+     */
+    public void actualizarCodificacion(){
+        List<Codificacion> tmpCodificacion = fLectura.ListarCodificaciones();
+        this.ListaCodificaciones.clear();
+        this.ListaCodificaciones.put(0, " --- Nueva Codificacion --- ");
+        for(Codificacion codificacion:tmpCodificacion){
+            ListaCodificaciones.put(codificacion.getId(), codificacion.getNombre());
         }
     }
     
