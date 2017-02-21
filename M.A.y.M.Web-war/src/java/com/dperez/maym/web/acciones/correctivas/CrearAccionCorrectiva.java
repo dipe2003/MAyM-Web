@@ -287,10 +287,36 @@ public class CrearAccionCorrectiva implements Serializable {
         this.ListaProductosAfectados.remove(NombreProducto);
     }
     
+    /**
+     * Carga los datos del producto en los campos del formulario.
+     * Lo remueve de la lista.
+     * @param NombreProducto 
+     */
     public void editarProducto(String NombreProducto){
         this.NombreProductoAfectado = NombreProducto;
         this.DatosProductoAfectado = this.ListaProductosAfectados.get(NombreProducto);
         this.ListaProductosAfectados.remove(NombreProducto);
+    }
+    
+    /**
+     * Carga el adjunto en la lista de adjuntos.
+     * Deja vacios los campos para un nuevo adjunto.
+     */
+    public void agregarAdjunto(){
+        if(this.ArchivosAdjuntos == null) this.ArchivosAdjuntos = new HashMap<>();
+        this.ArchivosAdjuntos.put(TituloAdjunto, ArchivoAdjunto);
+        this.TituloAdjunto = new String();
+        this.ArchivoAdjunto =  null;
+    }
+    
+    /**
+     * Quita el adjunto de la lista de adjuntos.
+     * @param TituloAdjunto
+     * @throws IOException
+     */
+    public void quitarAdjunto(String TituloAdjunto) throws IOException{
+        this.ArchivoAdjunto = this.ArchivosAdjuntos.get(TituloAdjunto);
+        this.ArchivosAdjuntos.remove(TituloAdjunto);        
     }
     
     /**
