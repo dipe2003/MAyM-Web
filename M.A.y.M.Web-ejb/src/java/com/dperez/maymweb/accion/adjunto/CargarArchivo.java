@@ -45,7 +45,7 @@ public class CargarArchivo implements Serializable{
         String realPath = new String();
         if (Archivo != null) {
             try{
-                String resPath = "MAYMWEB"+separator+NombreEmpresa+separator+"Adjuntos"+separator+DirectorioArchivo+separator;                
+                String resPath = "/adjuntos/"+NombreEmpresa+separator+DirectorioArchivo+separator;                
                 String extensionArchivo = FilenameUtils.getExtension(Archivo.getSubmittedFileName());
                 NombreArchivo += "."+extensionArchivo;
                 //String baseDatos = "/img/"+DirectorioArchivo+"/"+NombreArchivo;

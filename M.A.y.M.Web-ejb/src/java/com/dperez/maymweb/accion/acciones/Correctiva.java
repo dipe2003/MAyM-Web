@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.Iterator;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
@@ -39,7 +40,7 @@ public class Correctiva extends Accion implements Serializable {
     private List<Actividad> MedidasPreventivas;
     private EnumTipoDesvio Tipo;
     
-    @OneToMany(mappedBy = "AccionCorrectivaConProductoAfectado", orphanRemoval = true)
+    @OneToMany(mappedBy = "AccionCorrectivaConProductoAfectado", orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Producto> ProductosAfectados;
     
     // Constructores

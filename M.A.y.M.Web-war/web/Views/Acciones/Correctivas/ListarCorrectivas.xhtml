@@ -47,10 +47,10 @@
                                         #{accion.value.fechaDeteccion}
                                     </td>
                                     <td>
-                                        #{accion.value.areaSectorAccion}
+                                        #{accion.value.areaSectorAccion.nombre}
                                     </td>
                                     <td>
-                                        #{accion.value.generadaPor}
+                                        #{accion.value.generadaPor.nombre}
                                     </td>
                                     <td>
                                         #{accion.value.descripcion}
@@ -81,10 +81,10 @@
                                             </button>
                                             <ul class="dropdown-menu" role="menu">
                                                 <li><a href="#">Ver Accion</a></li>
-                                                <li><a href="#">Editar Datos</a></li>
+                                                <li><a href="EditarAccionCorrectiva.xhtml?id=#{accion.value.id}">Editar Datos</a></li>
                                                 <li><a href="#">Agregar Actividades</a></li>                                    
                                                 <c:choose>
-                                                    <c:when test="#{accion.value.estado != 'Cerrada'}">
+                                                    <c:when test="#{accion.value.estadoAccion != 'CERRADA'}">
                                                         <li><a href="#">Realizar Seguimiento</a></li>
                                                     </c:when>
                                                 </c:choose>

@@ -9,7 +9,6 @@ import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.acciones.EnumAccion;
 import com.dperez.maymweb.accion.adjunto.CargarArchivo;
 import com.dperez.maymweb.area.Area;
-import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
 import com.dperez.maymweb.empresa.Empresa;
@@ -18,6 +17,9 @@ import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +51,7 @@ public class CrearAccionMejora implements Serializable {
     private CargarArchivo cargaArchivos;
     
     private Date FechaDeteccion;
+    private String strFechaDeteccion;
     private String Descripcion;
     private String AnalisisCausa;
     
@@ -67,12 +70,17 @@ public class CrearAccionMejora implements Serializable {
     private Map<Integer, String> ListaAreasSectores;
     private Integer AreaSectorAccionSeleccionada;
     
-    private Map<Integer, String> ListaCodificaciones;
-    private Integer CodificacionSeleccionada;
-    
     //  Getters
     
     public Date getFechaDeteccion() {return FechaDeteccion;}
+    public String getStrFechaDeteccion(){
+        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
+        if (FechaDeteccion == null) {
+            return this.strFechaDeteccion;
+        }else{
+            return fDate.format(FechaDeteccion);
+        }
+    }
     public String getDescripcion() {return Descripcion;}
     public String getAnalisisCausa() {return AnalisisCausa;}
     public String getTituloAdjunto(){return this.TituloAdjunto;}
@@ -80,9 +88,6 @@ public class CrearAccionMejora implements Serializable {
     public Map<String, String> getAdjuntos() {return ListaAdjuntos;}
     public Part getArchivoAdjunto() {return ArchivoAdjunto;}
     public Map<String, Part> getArchivosAdjuntos() {return ArchivosAdjuntos;}
-    
-    public Map<Integer, String> getListaCodificaciones(){return this.ListaCodificaciones;}
-    public Integer getCodificacionSeleccionada() {return CodificacionSeleccionada;}
     
     public EnumTipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
     public EnumTipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
@@ -96,6 +101,15 @@ public class CrearAccionMejora implements Serializable {
     //  Setters
     
     public void setFechaDeteccion(Date FechaDeteccion) {this.FechaDeteccion = FechaDeteccion;}
+    public void setStrFechaDeteccion(String strFechaDeteccion) {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try{
+            cal.setTime(sdf.parse(strFechaDeteccion));
+        }catch(ParseException ex){}
+        this.strFechaDeteccion = strFechaDeteccion;
+        this.FechaDeteccion = cal.getTime();
+    }
     public void setDescripcion(String Descripcion) {this.Descripcion = Descripcion;}
     public void setAnalisisCausa(String AnalisisCausa) {this.AnalisisCausa = AnalisisCausa;}
     public void setTituloAdjunto(String TituloAdjunto){this.TituloAdjunto = TituloAdjunto;}
@@ -103,9 +117,6 @@ public class CrearAccionMejora implements Serializable {
     public void setAdjuntos(Map<String, String> Adjuntos) {this.ListaAdjuntos = Adjuntos;}
     public void setArchivoAdjunto(Part ArchivoAdjunto) {this.ArchivoAdjunto = ArchivoAdjunto;}
     public void setArchivosAdjuntos(Map<String, Part> ArchivosAdjuntos) {this.ArchivosAdjuntos = ArchivosAdjuntos;}
-    
-    public void setListaCodificaciones(Map<Integer, String> ListaCodificaciones){this.ListaCodificaciones = ListaCodificaciones;}
-    public void setCodificacionSeleccionada(Integer CodificacionSeleccionada) {this.CodificacionSeleccionada = CodificacionSeleccionada;}
     
     public void setTipoDeDeteccionSeleccionada(EnumTipoDeteccion TipoDeteccion){this.TipoDeDeteccionSeleccionada = TipoDeteccion;}
     public void setTiposDeteccion(EnumTipoDeteccion[] TiposDeteccion){this.TiposDeteccion = TiposDeteccion;}
@@ -123,13 +134,6 @@ public class CrearAccionMejora implements Serializable {
      */
     @PostConstruct
     public void init(){
-        //  Codificaciones
-        ListaCodificaciones = new HashMap<>();
-        List<Codificacion> tmpCodificaciones = fLectura.ListarCodificaciones();
-        for(Codificacion codificacion:tmpCodificaciones){
-            ListaCodificaciones.put(codificacion.getId(), codificacion.getNombre());
-        }
-        
         //  Detecciones
         TiposDeteccion = EnumTipoDeteccion.values();
         TipoDeDeteccionSeleccionada = EnumTipoDeteccion.INTERNA;
@@ -190,8 +194,7 @@ public class CrearAccionMejora implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         Empresa empresa = (Empresa)request.getSession().getAttribute("Empresa");
-        Accion accion = fDatos.NuevaAccion(EnumAccion.MEJORA, FechaDeteccion, Descripcion, null, AreaSectorAccionSeleccionada, DeteccionSeleccionada, 
-                CodificacionSeleccionada, empresa.getId());
+        Accion accion = fDatos.NuevaAccion(EnumAccion.MEJORA, FechaDeteccion, Descripcion, null, AreaSectorAccionSeleccionada, DeteccionSeleccionada, empresa.getId());
         
         if(accion != null){
             // Crear los adjuntos y agregarlos a la accion correctiva

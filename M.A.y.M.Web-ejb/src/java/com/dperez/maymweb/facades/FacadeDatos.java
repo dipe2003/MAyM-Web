@@ -40,13 +40,12 @@ public class FacadeDatos {
      * @param TipoDesvio Null cuando no corresponde
      * @param IdAreaSector
      * @param IdDeteccion
-     * @param IdCodificacion
      * @param IdEmpresa
      * @return Null: si no se creo.
      */
     public Accion NuevaAccion(EnumAccion TipoAccion, Date FechaDeteccion, String Descripcion, EnumTipoDesvio TipoDesvio,
-            int IdAreaSector, int IdDeteccion, int IdCodificacion, int IdEmpresa){
-        return cReg.NuevaAccion(TipoAccion, FechaDeteccion, Descripcion, TipoDesvio, IdAreaSector, IdDeteccion, IdCodificacion, IdEmpresa);
+            int IdAreaSector, int IdDeteccion, int IdEmpresa){
+        return cReg.NuevaAccion(TipoAccion, FechaDeteccion, Descripcion, TipoDesvio, IdAreaSector, IdDeteccion, IdEmpresa);
     }
     
     /**

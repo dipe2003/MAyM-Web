@@ -19,6 +19,9 @@ import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.producto.Producto;
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +36,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
 
 
 
@@ -49,12 +53,15 @@ public class EditarAccionCorrectiva implements Serializable {
     private int IdAccionCorrectiva;
     
     private Date FechaDeteccion;
+    private String strFechaDeteccion;
     private String Descripcion;
     private String AnalisisCausa;
     
     private String TituloAdjunto;
     private String UbicacionAdjunto;
     private Map<String, String> ListaAdjuntos;
+    private Part ArchivoAdjunto;
+    private Map<String, Part> ArchivosAdjuntos;
     
     private EnumTipoDeteccion[] TiposDeteccion;
     private EnumTipoDeteccion TipoDeDeteccionSeleccionada;
@@ -65,11 +72,13 @@ public class EditarAccionCorrectiva implements Serializable {
     private EnumTipoDesvio[] TiposDesvios;
     private EnumTipoDesvio TipoDesvioSeleccionado;
     
-    private Map<Integer, String> ListaAreasSectores;
+    private Map<Integer, Area> ListaAreasSectores;
     private Integer AreaSectorAccionSeleccionada;
     
     private Map<Integer, String> ListaCodificaciones;
     private Integer CodificacionSeleccionada;
+    private String NombreNuevaCodificacion;
+    private String DescripcionNuevaCodificacion;
     
     private boolean hayProductoAfectado;
     private Map<String, String> ListaProductosAfectados;
@@ -79,14 +88,26 @@ public class EditarAccionCorrectiva implements Serializable {
     //  Getters
     public int getIdAccionCorrectiva(){return IdAccionCorrectiva;}
     public Date getFechaDeteccion() {return FechaDeteccion;}
+    public String getStrFechaDeteccion(){
+        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
+        if (FechaDeteccion == null) {
+            return this.strFechaDeteccion;
+        }else{
+            return fDate.format(FechaDeteccion);
+        }
+    }
     public String getDescripcion() {return Descripcion;}
     public String getAnalisisCausa() {return AnalisisCausa;}
     public String getTituloAdjunto(){return this.TituloAdjunto;}
     public String getUbicacionAdjunto(){return this.UbicacionAdjunto;}
     public Map<String, String> getAdjuntos() {return ListaAdjuntos;}
+    public Part getArchivoAdjunto() {return ArchivoAdjunto;}
+    public Map<String, Part> getArchivosAdjuntos() {return ArchivosAdjuntos;}
     
     public Map<Integer, String> getListaCodificaciones(){return this.ListaCodificaciones;}
     public Integer getCodificacionSeleccionada() {return CodificacionSeleccionada;}
+    public String getNombreNuevaCodificacion() {return NombreNuevaCodificacion;}
+    public String getDescripcionNuevaCodificacion() {return DescripcionNuevaCodificacion;}
     
     public EnumTipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
     public EnumTipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
@@ -97,10 +118,10 @@ public class EditarAccionCorrectiva implements Serializable {
     public EnumTipoDesvio[] getTiposDesvios(){return this.TiposDesvios;}
     public EnumTipoDesvio getTipoDesvioSeleccionado(){return this.TipoDesvioSeleccionado;}
     
-    public Map<Integer, String> getListaAreasSectores(){return this.ListaAreasSectores;}
+    public Map<Integer, Area> getListaAreasSectores(){return this.ListaAreasSectores;}
     public Integer getAreaSectorAccionSeleccionada() {return AreaSectorAccionSeleccionada;}
     
-    public boolean hayProductoAfectado(){return this.hayProductoAfectado;}
+    public boolean isHayProductoAfectado() {return hayProductoAfectado;}
     public Map<String, String> getListaProductosAfectados(){return this.ListaProductosAfectados;}
     public String getNombreProductoAfectado(){return this.NombreProductoAfectado;}
     public String getDatosProductoAfectado(){return this.DatosProductoAfectado;}
@@ -109,14 +130,27 @@ public class EditarAccionCorrectiva implements Serializable {
     //  Setters
     public void serIdAccionCorrectiva(int IdAccionCorrectiva){this.IdAccionCorrectiva = IdAccionCorrectiva;}
     public void setFechaDeteccion(Date FechaDeteccion) {this.FechaDeteccion = FechaDeteccion;}
+    public void setStrFechaDeteccion(String strFechaDeteccion) {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try{
+            cal.setTime(sdf.parse(strFechaDeteccion));
+        }catch(ParseException ex){}
+        this.strFechaDeteccion = strFechaDeteccion;
+        this.FechaDeteccion = cal.getTime();
+    }
     public void setDescripcion(String Descripcion) {this.Descripcion = Descripcion;}
     public void setAnalisisCausa(String AnalisisCausa) {this.AnalisisCausa = AnalisisCausa;}
     public void setTituloAdjunto(String TituloAdjunto){this.TituloAdjunto = TituloAdjunto;}
     public void setUbicacionAdjunto(String UbicacionAdjunto){this.UbicacionAdjunto = UbicacionAdjunto;}
     public void setAdjuntos(Map<String, String> Adjuntos) {this.ListaAdjuntos = Adjuntos;}
+    public void setArchivoAdjunto(Part ArchivoAdjunto) {this.ArchivoAdjunto = ArchivoAdjunto;}
+    public void setArchivosAdjuntos(Map<String, Part> ArchivosAdjuntos) {this.ArchivosAdjuntos = ArchivosAdjuntos;}
     
     public void setListaCodificaciones(Map<Integer, String> ListaCodificaciones){this.ListaCodificaciones = ListaCodificaciones;}
     public void setCodificacionSeleccionada(Integer CodificacionSeleccionada) {this.CodificacionSeleccionada = CodificacionSeleccionada;}
+    public void setNombreNuevaCodificacion(String NombreNuevaCodificacion) {this.NombreNuevaCodificacion = NombreNuevaCodificacion;}
+    public void setDescripcionNuevaCodificacion(String DescripcionNuevaCodificacion) {this.DescripcionNuevaCodificacion = DescripcionNuevaCodificacion;}
     
     public void setTipoDeDeteccionSeleccionada(EnumTipoDeteccion TipoDeteccion){this.TipoDeDeteccionSeleccionada = TipoDeteccion;}
     public void setTiposDeteccion(EnumTipoDeteccion[] TiposDeteccion){this.TiposDeteccion = TiposDeteccion;}
@@ -127,10 +161,13 @@ public class EditarAccionCorrectiva implements Serializable {
     public void setTiposDesvios(EnumTipoDesvio[] TiposDesvios){this.TiposDesvios = TiposDesvios;}
     public void setTipoDesvioSeleccionado(EnumTipoDesvio TipoDesvioSeleccionado){this.TipoDesvioSeleccionado = TipoDesvioSeleccionado;}
     
-    public void setListaAreaSectores(Map<Integer, String> ListaAreasSectores){this.ListaAreasSectores = ListaAreasSectores;}
+    public void setListaAreaSectores(Map<Integer, Area> ListaAreasSectores){this.ListaAreasSectores = ListaAreasSectores;}
     public void setAreaSectorAccionSeleccionada(Integer AreaSectorAccionSeleccionada) {this.AreaSectorAccionSeleccionada = AreaSectorAccionSeleccionada;}
     
-    public void setHayProductoAfectado(boolean hayProductoAfectado){this.hayProductoAfectado = hayProductoAfectado;}
+    public void setHayProductoAfectado(boolean hayProductoAfectado){
+        this.hayProductoAfectado = hayProductoAfectado;
+        if(hayProductoAfectado) this.ListaProductosAfectados = new HashMap<>();
+    }
     public void setListaProductosAfectados(Map<String, String> ListaProductosAfectados) {this.ListaProductosAfectados = ListaProductosAfectados;}
     public void setNombreProductoAfectado(String NombreProductoAfectado){this.NombreProductoAfectado = NombreProductoAfectado;}
     public void setDatosProductoAfectado(String DatosProductoAfectado){this.DatosProductoAfectado = DatosProductoAfectado;}
@@ -156,6 +193,7 @@ public class EditarAccionCorrectiva implements Serializable {
             //  Codificaciones
             ListaCodificaciones = new HashMap<>();
             List<Codificacion> tmpCodificaciones = fLectura.ListarCodificaciones();
+            ListaCodificaciones.put(0, "--- Nueva ---");
             for(Codificacion codificacion:tmpCodificaciones){
                 ListaCodificaciones.put(codificacion.getId(), codificacion.getNombre());
             }
@@ -182,7 +220,7 @@ public class EditarAccionCorrectiva implements Serializable {
             ListaAreasSectores = new HashMap<>();
             List<Area> tmpAreas = fLectura.ListarAreasSectores();
             for(Area area:tmpAreas){
-                this.ListaAreasSectores.put(area.getId(), area.getNombre());
+                this.ListaAreasSectores.put(area.getId(), area);
             }
             AreaSectorAccionSeleccionada = AccionCorrectiva.getAreaSectorAccion().getId();
             
@@ -228,6 +266,42 @@ public class EditarAccionCorrectiva implements Serializable {
     }
     
     /**
+     * Crea nueva codificacion.
+     * Se verifica que el nombre o la descripcion no esten vacios. Si estan vacios no se crea y se muestra un mensaje
+     */
+    public void nuevaCodificacion(){
+        if(NombreNuevaCodificacion.isEmpty() || DescripcionNuevaCodificacion.isEmpty()){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva codificacion", "No se pudo crear nueva codificacion" ));
+            FacesContext.getCurrentInstance().renderResponse();
+        }else{
+            // Crear Nueva Codificacion y actualizar lista
+            Codificacion cod = fAdmin.NuevaCodificacion(NombreNuevaCodificacion, DescripcionNuevaCodificacion);
+            if(cod != null){
+                actualizarCodificacion();
+                this.CodificacionSeleccionada = cod.getId();
+                this.NombreNuevaCodificacion = new String();
+                this.DescripcionNuevaCodificacion = new String();
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_INFO, "Se agrego nueva codificacion", "Se agrego nueva codificacion" ));
+                FacesContext.getCurrentInstance().renderResponse();
+            }else{
+                System.out.println("Error");
+            }
+        }
+    }
+    
+    /**
+     * Actualiza la lista de codificaciones.
+     */
+    public void actualizarCodificacion(){
+        List<Codificacion> tmpCodificacion = fLectura.ListarCodificaciones();
+        this.ListaCodificaciones.clear();
+        this.ListaCodificaciones.put(0, " --- Nueva Codificacion --- ");
+        for(Codificacion codificacion:tmpCodificacion){
+            ListaCodificaciones.put(codificacion.getId(), codificacion.getNombre());
+        }
+    }
+    
+    /**
      * Agrega un nuevo producto afectado a la lista de productos afectados para ser persistidos durante la creacion de la accion correctiva.
      * Si el nombre del producto ya existe se sustituye
      * Si el nombre o el datos estan vacios no se crea y se muestra el mensaje correspondiente.
@@ -245,7 +319,7 @@ public class EditarAccionCorrectiva implements Serializable {
      * Remueve el producto involucrado de la base de datos.
      * Se quita el producto de la lista de productos del bean.
      * Se muestra un mensaje de error si no se elimino.
-     * @param NombreProducto 
+     * @param NombreProducto
      */
     public void removerProductoAfectado(String NombreProducto){
         if(fDatos.RemoverProductoInvolucrado(IdAccionCorrectiva, NombreProducto)==-1){
@@ -264,19 +338,19 @@ public class EditarAccionCorrectiva implements Serializable {
      */
     public void editarAccionCorrectiva() throws IOException{
         // actualizar accion
-        if(fDatos.EditarAccion(IdAccionCorrectiva, EnumAccion.CORRECTIVA, FechaDeteccion, Descripcion, TipoDesvioSeleccionado, 
+        if(fDatos.EditarAccion(IdAccionCorrectiva, EnumAccion.CORRECTIVA, FechaDeteccion, Descripcion, TipoDesvioSeleccionado,
                 AreaSectorAccionSeleccionada, DeteccionSeleccionada, CodificacionSeleccionada) != -1){
             // Si no se actualizo muestra mensaje de error.
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
-        FacesContext.getCurrentInstance().renderResponse();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
+            FacesContext.getCurrentInstance().renderResponse();
         }else{
             // Si la actualizacion se realizo correctamente redirige a lista de acciones.
-        String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-        FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");
+            String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");
         }
     }
     
-        /**
+    /**
      * Elimina la accion de la base de datos.
      * Se eliminan todos los datos relacionados (actividades, adjuntos, comprobaciones y productos)
      * @throws java.io.IOException
@@ -289,7 +363,7 @@ public class EditarAccionCorrectiva implements Serializable {
         }else{
             // Si la eliminacion se realizo correctamente redirige a lista de acciones.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");            
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");
         }
     }
     

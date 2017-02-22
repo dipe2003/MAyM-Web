@@ -17,6 +17,9 @@ import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +50,7 @@ public class EditarAccionMejora implements Serializable {
     private int IdAccionMejora;
     
     private Date FechaDeteccion;
+    private String strFechaDeteccion;
     private String Descripcion;
     private String AnalisisCausa;
     
@@ -69,6 +73,14 @@ public class EditarAccionMejora implements Serializable {
     //  Getters
     public int getIdAccionMejora(){return IdAccionMejora;}
     public Date getFechaDeteccion() {return FechaDeteccion;}
+    public String getStrFechaDeteccion(){
+        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
+        if (FechaDeteccion == null) {
+            return this.strFechaDeteccion;
+        }else{
+            return fDate.format(FechaDeteccion);
+        }
+    }
     public String getDescripcion() {return Descripcion;}
     public String getAnalisisCausa() {return AnalisisCausa;}
     public String getTituloAdjunto(){return this.TituloAdjunto;}
@@ -91,6 +103,15 @@ public class EditarAccionMejora implements Serializable {
     //  Setters
     public void serIdAccionCorrectiva(int IdAccionCorrectiva){this.IdAccionMejora = IdAccionCorrectiva;}
     public void setFechaDeteccion(Date FechaDeteccion) {this.FechaDeteccion = FechaDeteccion;}
+    public void setStrFechaDeteccion(String strFechaDeteccion) {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try{
+            cal.setTime(sdf.parse(strFechaDeteccion));
+        }catch(ParseException ex){}
+        this.strFechaDeteccion = strFechaDeteccion;
+        this.FechaDeteccion = cal.getTime();
+    }
     public void setDescripcion(String Descripcion) {this.Descripcion = Descripcion;}
     public void setAnalisisCausa(String AnalisisCausa) {this.AnalisisCausa = AnalisisCausa;}
     public void setTituloAdjunto(String TituloAdjunto){this.TituloAdjunto = TituloAdjunto;}
@@ -210,7 +231,7 @@ public class EditarAccionMejora implements Serializable {
         }
     }
     
-        /**
+    /**
      * Elimina la accion de la base de datos.
      * Se eliminan todos los datos relacionados (actividades, adjuntos, comprobaciones)
      * @throws java.io.IOException
@@ -223,7 +244,7 @@ public class EditarAccionMejora implements Serializable {
         }else{
             // Si la eliminacion se realizo correctamente redirige a lista de acciones.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");            
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");
         }
     }
     

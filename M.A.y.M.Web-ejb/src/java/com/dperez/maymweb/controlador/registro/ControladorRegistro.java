@@ -72,12 +72,11 @@ public class ControladorRegistro {
      * @param TipoDesvio Null cuando no corresponde
      * @param IdAreaSector
      * @param IdDeteccion
-     * @param IdCodificacion
      * @param IdEmpresa
      * @return Null: si no se creo.
      */
     public Accion NuevaAccion(EnumAccion TipoAccion, Date FechaDeteccion, String Descripcion, EnumTipoDesvio TipoDesvio,
-            int IdAreaSector, int IdDeteccion, int IdCodificacion, int IdEmpresa){
+            int IdAreaSector, int IdDeteccion, int IdEmpresa){
         Accion accion = null;
         switch(TipoAccion){
             case CORRECTIVA:
@@ -98,8 +97,6 @@ public class ControladorRegistro {
             accion.setAreaSectorAccion(area);
             Deteccion deteccion = mDeteccion.GetDeteccion(IdDeteccion);
             accion.setGeneradaPor(deteccion);
-            Codificacion codificacion = mCodificacion.GetCodificacion(IdCodificacion);
-            accion.setCodificacionAccion(codificacion);
             accion.setEmpresaAccion(empresa);
             accion.setId(mAccion.CrearAccion(accion));
         }

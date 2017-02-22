@@ -92,7 +92,8 @@ public class ControladorVistaRegistros {
             if(EstadoAccion == null && TipoAccion != null){
                 Iterator it = acciones.iterator();
                 while(it.hasNext()){
-                    if(!((Accion)it.next()).getClass().getName().equals(TipoAccion.toString()))
+                    Accion accion = (Accion)it.next();
+                    if(!accion.getClass().getSimpleName().equalsIgnoreCase(TipoAccion.toString()))
                         it.remove();
                 }
             }

@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -40,6 +41,7 @@ public class ListarCorrectivas implements Serializable{
     // Metodos
     
     //  Inicializacion
+    @PostConstruct
     public void init(){
         // recuperar Empresa para filtrar las acciones
         FacesContext context = FacesContext.getCurrentInstance();
@@ -50,7 +52,7 @@ public class ListarCorrectivas implements Serializable{
         ListaAcciones = new HashMap<>();
         List<Accion> acciones = fLectura.ListarAccionesCorrectivas();
         for(Accion accion: acciones){
-            if(accion.getEmpresaAccion().getId() == empresa.getId())
+            if(accion.getEmpresaAccion().getId() == 100)
                 ListaAcciones.put(accion.getId(), accion);
         }
     }

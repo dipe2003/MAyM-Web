@@ -19,6 +19,9 @@ import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -50,8 +53,8 @@ public class CrearAccionCorrectiva implements Serializable {
     private CargarArchivo cargaArchivos;
     
     private Date FechaDeteccion;
+    private String strFechaDeteccion;
     private String Descripcion;
-    private String AnalisisCausa;
     
     private String TituloAdjunto;
     private String UbicacionAdjunto;
@@ -74,8 +77,6 @@ public class CrearAccionCorrectiva implements Serializable {
     
     private Map<Integer, String> ListaCodificaciones;
     private Integer CodificacionSeleccionada;
-    private String NombreNuevaCodificacion;
-    private String DescripcionNuevaCodificacion;
     
     private boolean hayProductoAfectado;
     private Map<String, String> ListaProductosAfectados;
@@ -85,8 +86,15 @@ public class CrearAccionCorrectiva implements Serializable {
     //  Getters
     
     public Date getFechaDeteccion() {return FechaDeteccion;}
+    public String getStrFechaDeteccion(){
+        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
+        if (FechaDeteccion == null) {
+            return this.strFechaDeteccion;
+        }else{
+            return fDate.format(FechaDeteccion);
+        }
+    }
     public String getDescripcion() {return Descripcion;}
-    public String getAnalisisCausa() {return AnalisisCausa;}
     public String getTituloAdjunto(){return this.TituloAdjunto;}
     public String getUbicacionAdjunto(){return this.UbicacionAdjunto;}
     public Map<String, String> getAdjuntos() {return ListaAdjuntos;}
@@ -95,8 +103,6 @@ public class CrearAccionCorrectiva implements Serializable {
     
     public Map<Integer, String> getListaCodificaciones(){return this.ListaCodificaciones;}
     public Integer getCodificacionSeleccionada() {return CodificacionSeleccionada;}
-    public String getNombreNuevaCodificacion() {return NombreNuevaCodificacion;}
-    public String getDescripcionNuevaCodificacion() {return DescripcionNuevaCodificacion;}
     
     public EnumTipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
     public EnumTipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
@@ -119,8 +125,16 @@ public class CrearAccionCorrectiva implements Serializable {
 //  Setters
     
     public void setFechaDeteccion(Date FechaDeteccion) {this.FechaDeteccion = FechaDeteccion;}
+    public void setStrFechaDeteccion(String strFechaDeteccion) {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try{
+            cal.setTime(sdf.parse(strFechaDeteccion));
+        }catch(ParseException ex){}
+        this.strFechaDeteccion = strFechaDeteccion;
+        this.FechaDeteccion = cal.getTime();
+    }
     public void setDescripcion(String Descripcion) {this.Descripcion = Descripcion;}
-    public void setAnalisisCausa(String AnalisisCausa) {this.AnalisisCausa = AnalisisCausa;}
     public void setTituloAdjunto(String TituloAdjunto){this.TituloAdjunto = TituloAdjunto;}
     public void setUbicacionAdjunto(String UbicacionAdjunto){this.UbicacionAdjunto = UbicacionAdjunto;}
     public void setAdjuntos(Map<String, String> Adjuntos) {this.ListaAdjuntos = Adjuntos;}
@@ -129,8 +143,6 @@ public class CrearAccionCorrectiva implements Serializable {
     
     public void setListaCodificaciones(Map<Integer, String> ListaCodificaciones){this.ListaCodificaciones = ListaCodificaciones;}
     public void setCodificacionSeleccionada(Integer CodificacionSeleccionada) {this.CodificacionSeleccionada = CodificacionSeleccionada;}
-    public void setNombreNuevaCodificacion(String NombreNuevaCodificacion) {this.NombreNuevaCodificacion = NombreNuevaCodificacion;}
-    public void setDescripcionNuevaCodificacion(String DescripcionNuevaCodificacion) {this.DescripcionNuevaCodificacion = DescripcionNuevaCodificacion;}
     
     public void setTipoDeDeteccionSeleccionada(EnumTipoDeteccion TipoDeteccion){this.TipoDeDeteccionSeleccionada = TipoDeteccion;}
     public void setTiposDeteccion(EnumTipoDeteccion[] TiposDeteccion){this.TiposDeteccion = TiposDeteccion;}
@@ -212,7 +224,7 @@ public class CrearAccionCorrectiva implements Serializable {
      */
     public void nuevaDeteccion(){
         if(NombreNuevaDeteccion.isEmpty()){
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
+            FacesContext.getCurrentInstance().addMessage("form_nueva_correctiva:deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             // Crear Nueva Deteccion y actualizar lista
@@ -220,49 +232,16 @@ public class CrearAccionCorrectiva implements Serializable {
             if(det != null){
                 actualizarDeteccion();
                 this.DeteccionSeleccionada = det.getId();
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_INFO, "Se agrego nueva deteccion", "Se agrego nueva deteccion" ));
+                this.NombreNuevaDeteccion = new String();
+                FacesContext.getCurrentInstance().addMessage("form_nueva_correctiva:deteccion", new FacesMessage(SEVERITY_INFO, "Se agrego nueva deteccion", "Se agrego nueva deteccion" ));
                 FacesContext.getCurrentInstance().renderResponse();
             }else{
-                System.out.println("Error>");
+                FacesContext.getCurrentInstance().addMessage("form_nueva_correctiva:deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
+                FacesContext.getCurrentInstance().renderResponse();
             }
         }
     }
-    /**
-     * Crea nueva codificacion.
-     * Se verifica que el nombre o la descripcion no esten vacios. Si estan vacios no se crea y se muestra un mensaje
-     */
-    public void nuevaCodificacion(){
-        if(NombreNuevaCodificacion.isEmpty() || DescripcionNuevaCodificacion.isEmpty()){
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva codificacion", "No se pudo crear nueva codificacion" ));
-            FacesContext.getCurrentInstance().renderResponse();
-        }else{
-            // Crear Nueva Codificacion y actualizar lista
-            Codificacion cod = fAdmin.NuevaCodificacion(NombreNuevaCodificacion, DescripcionNuevaCodificacion);
-            if(cod != null){
-                actualizarCodificacion();
-                this.CodificacionSeleccionada = cod.getId();
-                this.NombreNuevaCodificacion = new String();
-                this.DescripcionNuevaCodificacion = new String();
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_INFO, "Se agrego nueva codificacion", "Se agrego nueva codificacion" ));
-                FacesContext.getCurrentInstance().renderResponse();
-            }else{
-                System.out.println("Error");
-            }
-        }
-    }
-    
-    /**
-     * Actualiza la lista de codificaciones.
-     */
-    public void actualizarCodificacion(){
-        List<Codificacion> tmpCodificacion = fLectura.ListarCodificaciones();
-        this.ListaCodificaciones.clear();
-        this.ListaCodificaciones.put(0, " --- Nueva Codificacion --- ");
-        for(Codificacion codificacion:tmpCodificacion){
-            ListaCodificaciones.put(codificacion.getId(), codificacion.getNombre());
-        }
-    }
-    
+        
     /**
      * Agrega un nuevo producto afectado a la lista de productos afectados para ser persistidos durante la creacion de la accion correctiva.
      * Si el nombre del producto ya existe se sustituye
@@ -290,7 +269,7 @@ public class CrearAccionCorrectiva implements Serializable {
     /**
      * Carga los datos del producto en los campos del formulario.
      * Lo remueve de la lista.
-     * @param NombreProducto 
+     * @param NombreProducto
      */
     public void editarProducto(String NombreProducto){
         this.NombreProductoAfectado = NombreProducto;
@@ -316,7 +295,7 @@ public class CrearAccionCorrectiva implements Serializable {
      */
     public void quitarAdjunto(String TituloAdjunto) throws IOException{
         this.ArchivoAdjunto = this.ArchivosAdjuntos.get(TituloAdjunto);
-        this.ArchivosAdjuntos.remove(TituloAdjunto);        
+        this.ArchivosAdjuntos.remove(TituloAdjunto);
     }
     
     /**
@@ -331,13 +310,13 @@ public class CrearAccionCorrectiva implements Serializable {
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         Empresa empresa = (Empresa)request.getSession().getAttribute("Empresa");
         Accion accion = fDatos.NuevaAccion(EnumAccion.CORRECTIVA, FechaDeteccion,
-                Descripcion, TipoDesvioSeleccionado, AreaSectorAccionSeleccionada, DeteccionSeleccionada, CodificacionSeleccionada, empresa.getId());
+                Descripcion, TipoDesvioSeleccionado, AreaSectorAccionSeleccionada, DeteccionSeleccionada, 100);
         
         if(accion != null){
             // agrega los productos afectados
             if(hayProductoAfectado) fDatos.AgregarProductoInvolucrado(accion.getId(), ListaProductosAfectados);
             // Crear los adjuntos y agregarlos a la accion preventiva
-            if(!ArchivosAdjuntos.isEmpty()){
+            if(ArchivosAdjuntos!=null && !ArchivosAdjuntos.isEmpty()){
                 for(Map.Entry entry: ArchivosAdjuntos.entrySet()){
                     String ubicacion = cargaArchivos.guardarArchivo("Preventiva_" + String.valueOf(accion.getId()), (Part)entry.getValue(),(String) entry.getKey(), empresa.getNombreEmpresa());
                     if(!ubicacion.isEmpty())ListaAdjuntos.put((String) entry.getKey(), ubicacion);
@@ -350,12 +329,12 @@ public class CrearAccionCorrectiva implements Serializable {
                 }
                 // redirigir a la lista de las acciones correctivas.
                 String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-                FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");
-            }else{
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Accion", "No se pudo crear la Accion" ));
-                FacesContext.getCurrentInstance().renderResponse();
+                FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/ListarCorrectivas.xhtml");
             }
+        }else{
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Accion", "No se pudo crear la Accion" ));
+            FacesContext.getCurrentInstance().renderResponse();
         }
     }
-    
+        
 }
