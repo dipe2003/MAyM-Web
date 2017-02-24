@@ -5,10 +5,12 @@
 */
 package com.dperez.maym.web.acciones.correctivas;
 
+import com.dperez.maym.web.herramientas.CargarArchivo;
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.acciones.Correctiva;
 import com.dperez.maymweb.accion.acciones.EnumAccion;
 import com.dperez.maymweb.accion.acciones.EnumTipoDesvio;
+import com.dperez.maymweb.accion.adjunto.Adjunto;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
@@ -49,6 +51,8 @@ public class EditarAccionCorrectiva implements Serializable {
     private FacadeLectura fLectura;
     @Inject
     private FacadeDatos fDatos;
+    @Inject
+    private CargarArchivo cArchivo;
     
     private int IdAccionCorrectiva;
     
@@ -58,10 +62,9 @@ public class EditarAccionCorrectiva implements Serializable {
     private String AnalisisCausa;
     
     private String TituloAdjunto;
-    private String UbicacionAdjunto;
     private Map<String, String> ListaAdjuntos;
+    private Map<Integer, Adjunto> MapAdjuntos;
     private Part ArchivoAdjunto;
-    private Map<String, Part> ArchivosAdjuntos;
     
     private EnumTipoDeteccion[] TiposDeteccion;
     private EnumTipoDeteccion TipoDeDeteccionSeleccionada;
@@ -99,10 +102,8 @@ public class EditarAccionCorrectiva implements Serializable {
     public String getDescripcion() {return Descripcion;}
     public String getAnalisisCausa() {return AnalisisCausa;}
     public String getTituloAdjunto(){return this.TituloAdjunto;}
-    public String getUbicacionAdjunto(){return this.UbicacionAdjunto;}
-    public Map<String, String> getAdjuntos() {return ListaAdjuntos;}
+    public Map<String, String> getListaAdjuntos() {return ListaAdjuntos;}
     public Part getArchivoAdjunto() {return ArchivoAdjunto;}
-    public Map<String, Part> getArchivosAdjuntos() {return ArchivosAdjuntos;}
     
     public Map<Integer, String> getListaCodificaciones(){return this.ListaCodificaciones;}
     public Integer getCodificacionSeleccionada() {return CodificacionSeleccionada;}
@@ -142,10 +143,8 @@ public class EditarAccionCorrectiva implements Serializable {
     public void setDescripcion(String Descripcion) {this.Descripcion = Descripcion;}
     public void setAnalisisCausa(String AnalisisCausa) {this.AnalisisCausa = AnalisisCausa;}
     public void setTituloAdjunto(String TituloAdjunto){this.TituloAdjunto = TituloAdjunto;}
-    public void setUbicacionAdjunto(String UbicacionAdjunto){this.UbicacionAdjunto = UbicacionAdjunto;}
-    public void setAdjuntos(Map<String, String> Adjuntos) {this.ListaAdjuntos = Adjuntos;}
+    public void setListaAdjuntos(Map<String, String> Adjuntos) {this.ListaAdjuntos = Adjuntos;}
     public void setArchivoAdjunto(Part ArchivoAdjunto) {this.ArchivoAdjunto = ArchivoAdjunto;}
-    public void setArchivosAdjuntos(Map<String, Part> ArchivosAdjuntos) {this.ArchivosAdjuntos = ArchivosAdjuntos;}
     
     public void setListaCodificaciones(Map<Integer, String> ListaCodificaciones){this.ListaCodificaciones = ListaCodificaciones;}
     public void setCodificacionSeleccionada(Integer CodificacionSeleccionada) {this.CodificacionSeleccionada = CodificacionSeleccionada;}
@@ -179,13 +178,13 @@ public class EditarAccionCorrectiva implements Serializable {
      */
     @PostConstruct
     public void init(){
+        this.ListaAdjuntos = new HashMap<>();
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         // recuperar el id para llenar datos de la accion correctiva y el resto de las propiedades.
-        int idAccion = 0;
-        idAccion = Integer.parseInt(request.getParameter("id"));
-        if(idAccion != 0){
-            Accion AccionCorrectiva = (Correctiva) fLectura.GetAccion(idAccion);
+        IdAccionCorrectiva = Integer.parseInt(request.getParameter("id"));
+        if(IdAccionCorrectiva != 0){
+            Accion AccionCorrectiva = (Correctiva) fLectura.GetAccion(IdAccionCorrectiva);
             FechaDeteccion = AccionCorrectiva.getFechaDeteccion();
             Descripcion = AccionCorrectiva.getDescripcion();
             AnalisisCausa = AccionCorrectiva.getAnalisisCausa();
@@ -231,8 +230,22 @@ public class EditarAccionCorrectiva implements Serializable {
                 }
                 hayProductoAfectado = true;
             }
+            
+            actualizarListaAdjuntos();
         }
         
+    }
+    
+    private void actualizarListaAdjuntos(){
+        Accion AccionCorrectiva = (Correctiva) fLectura.GetAccion(IdAccionCorrectiva);
+        if(!AccionCorrectiva.getAdjuntos().isEmpty()){
+                List<Adjunto> listAdjuntos = AccionCorrectiva.getAdjuntos();
+                this.MapAdjuntos = new HashMap<>();
+                for(Adjunto adjunto: listAdjuntos){
+                    this.ListaAdjuntos.put(adjunto.getTitulo(), adjunto.getUbicacion());
+                    this.MapAdjuntos.put(adjunto.getId(), adjunto);
+                }
+            }
     }
     
     /**
@@ -328,6 +341,44 @@ public class EditarAccionCorrectiva implements Serializable {
         }else{
             this.ListaProductosAfectados.remove(NombreProductoAfectado, DatosProductoAfectado);
         }
+    }
+    
+    /**
+     * Carga el adjunto en la lista de adjuntos.
+     * Deja vacios los campos para un nuevo adjunto.
+     */
+    public void agregarAdjunto(){
+        String ubicacion = cArchivo.guardarArchivo("Correctiva_Id"+ String.valueOf(IdAccionCorrectiva) + "_", ArchivoAdjunto, TituloAdjunto, "Nombre Empresa");
+        if(!ubicacion.isEmpty()){
+            this.ListaAdjuntos.put(TituloAdjunto, ubicacion);
+            if((fDatos.AgregarArchivoAdjunto(IdAccionCorrectiva, TituloAdjunto, ubicacion))!=-1){
+                actualizarListaAdjuntos();
+                this.TituloAdjunto = new String();
+                this.ArchivoAdjunto =  null;
+                
+            }else{
+                cArchivo.BorrarArchivo(ubicacion);
+            }
+        }
+    }
+    
+    /**
+     * Quita el adjunto de la lista de adjuntos.
+     * @param TituloAdjunto
+     * @throws IOException
+     */
+    public void quitarAdjunto(String TituloAdjunto) throws IOException{
+        if(cArchivo.BorrarArchivo(this.ListaAdjuntos.get(TituloAdjunto))){
+            int idAdjunto = 0;
+            for(Adjunto adjunto: MapAdjuntos.values()){
+                if(adjunto.getTitulo().equals(TituloAdjunto))
+                    idAdjunto = adjunto.getId();
+            }
+            if((fDatos.RemoverAdjunto(IdAccionCorrectiva, idAdjunto))!=-1){
+                this.ListaAdjuntos.remove(TituloAdjunto);
+                MapAdjuntos.remove(idAdjunto);
+            }
+        }        
     }
     
     /**

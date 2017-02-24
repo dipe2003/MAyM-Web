@@ -7,6 +7,7 @@ package com.dperez.maym.web.acciones.correctivas;
 
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.empresa.Empresa;
+import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.IOException;
 import java.io.Serializable;
@@ -14,6 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -29,6 +32,8 @@ import javax.servlet.http.HttpServletRequest;
 public class ListarCorrectivas implements Serializable{
     @Inject
     private FacadeLectura fLectura;
+    @Inject
+    private FacadeAdministrador fAdmin;
     
     private Map<Integer, Accion> ListaAcciones;
     
@@ -74,5 +79,15 @@ public class ListarCorrectivas implements Serializable{
     public void abrirEdicion(int IdAccionSeleccionada) throws IOException{
         String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
         FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml?id="+IdAccionSeleccionada);
+    }
+    
+    public void eliminarAccion(int IdAccionSeleccoiondada) throws IOException{
+        if((fAdmin.EliminarAccion(IdAccionSeleccoiondada))!= -1){
+        String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+        FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/ListarCorrectivas.xhtml");
+        }else{
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo eliminar la accion", "No se pudo eliminar la accion" ));
+            FacesContext.getCurrentInstance().renderResponse();
+        }
     }
 }

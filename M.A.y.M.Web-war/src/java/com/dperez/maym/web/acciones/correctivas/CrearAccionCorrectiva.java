@@ -8,7 +8,7 @@ package com.dperez.maym.web.acciones.correctivas;
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.acciones.EnumAccion;
 import com.dperez.maymweb.accion.acciones.EnumTipoDesvio;
-import com.dperez.maymweb.accion.adjunto.CargarArchivo;
+import com.dperez.maym.web.herramientas.CargarArchivo;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
@@ -31,6 +31,7 @@ import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
 import static javax.faces.application.FacesMessage.SEVERITY_INFO;
+import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -42,6 +43,7 @@ import javax.servlet.http.Part;
 
 @Named
 @ViewScoped
+@ManagedBean
 public class CrearAccionCorrectiva implements Serializable {
     @Inject
     private FacadeAdministrador fAdmin;
@@ -60,7 +62,7 @@ public class CrearAccionCorrectiva implements Serializable {
     private String UbicacionAdjunto;
     private Map<String, String> ListaAdjuntos;
     private Part ArchivoAdjunto;
-    private Map<String, Part> ArchivosAdjuntos;
+    private Map<String, String> ArchivosAdjuntos;
     
     private EnumTipoDeteccion[] TiposDeteccion;
     private EnumTipoDeteccion TipoDeDeteccionSeleccionada;
@@ -99,7 +101,7 @@ public class CrearAccionCorrectiva implements Serializable {
     public String getUbicacionAdjunto(){return this.UbicacionAdjunto;}
     public Map<String, String> getAdjuntos() {return ListaAdjuntos;}
     public Part getArchivoAdjunto() {return ArchivoAdjunto;}
-    public Map<String, Part> getArchivosAdjuntos() {return ArchivosAdjuntos;}
+    public Map<String, String> getArchivosAdjuntos() {return ArchivosAdjuntos;}
     
     public Map<Integer, String> getListaCodificaciones(){return this.ListaCodificaciones;}
     public Integer getCodificacionSeleccionada() {return CodificacionSeleccionada;}
@@ -139,7 +141,7 @@ public class CrearAccionCorrectiva implements Serializable {
     public void setUbicacionAdjunto(String UbicacionAdjunto){this.UbicacionAdjunto = UbicacionAdjunto;}
     public void setAdjuntos(Map<String, String> Adjuntos) {this.ListaAdjuntos = Adjuntos;}
     public void setArchivoAdjunto(Part ArchivoAdjunto) {this.ArchivoAdjunto = ArchivoAdjunto;}
-    public void setArchivosAdjuntos(Map<String, Part> ArchivosAdjuntos) {this.ArchivosAdjuntos = ArchivosAdjuntos;}
+    public void setArchivosAdjuntos(Map<String, String> ArchivosAdjuntos) {this.ArchivosAdjuntos = ArchivosAdjuntos;}
     
     public void setListaCodificaciones(Map<Integer, String> ListaCodificaciones){this.ListaCodificaciones = ListaCodificaciones;}
     public void setCodificacionSeleccionada(Integer CodificacionSeleccionada) {this.CodificacionSeleccionada = CodificacionSeleccionada;}
@@ -172,6 +174,7 @@ public class CrearAccionCorrectiva implements Serializable {
      */
     @PostConstruct
     public void init(){
+        this.ListaAdjuntos = new HashMap<>();
         //  Codificaciones
         ListaCodificaciones = new HashMap<>();
         List<Codificacion> tmpCodificaciones = fLectura.ListarCodificaciones();
@@ -241,7 +244,7 @@ public class CrearAccionCorrectiva implements Serializable {
             }
         }
     }
-        
+    
     /**
      * Agrega un nuevo producto afectado a la lista de productos afectados para ser persistidos durante la creacion de la accion correctiva.
      * Si el nombre del producto ya existe se sustituye
@@ -278,27 +281,6 @@ public class CrearAccionCorrectiva implements Serializable {
     }
     
     /**
-     * Carga el adjunto en la lista de adjuntos.
-     * Deja vacios los campos para un nuevo adjunto.
-     */
-    public void agregarAdjunto(){
-        if(this.ArchivosAdjuntos == null) this.ArchivosAdjuntos = new HashMap<>();
-        this.ArchivosAdjuntos.put(TituloAdjunto, ArchivoAdjunto);
-        this.TituloAdjunto = new String();
-        this.ArchivoAdjunto =  null;
-    }
-    
-    /**
-     * Quita el adjunto de la lista de adjuntos.
-     * @param TituloAdjunto
-     * @throws IOException
-     */
-    public void quitarAdjunto(String TituloAdjunto) throws IOException{
-        this.ArchivoAdjunto = this.ArchivosAdjuntos.get(TituloAdjunto);
-        this.ArchivosAdjuntos.remove(TituloAdjunto);
-    }
-    
-    /**
      * Crea la accion correctiva con los datos ingresados.
      * Agrega los productos involucrados si existen {hayProductoAfectado = True}
      * Si no se creo se muestra mensaje de error.
@@ -315,26 +297,13 @@ public class CrearAccionCorrectiva implements Serializable {
         if(accion != null){
             // agrega los productos afectados
             if(hayProductoAfectado) fDatos.AgregarProductoInvolucrado(accion.getId(), ListaProductosAfectados);
-            // Crear los adjuntos y agregarlos a la accion preventiva
-            if(ArchivosAdjuntos!=null && !ArchivosAdjuntos.isEmpty()){
-                for(Map.Entry entry: ArchivosAdjuntos.entrySet()){
-                    String ubicacion = cargaArchivos.guardarArchivo("Preventiva_" + String.valueOf(accion.getId()), (Part)entry.getValue(),(String) entry.getKey(), empresa.getNombreEmpresa());
-                    if(!ubicacion.isEmpty())ListaAdjuntos.put((String) entry.getKey(), ubicacion);
-                }
-                if(!ListaAdjuntos.isEmpty()) {
-                    fDatos.AgregarArchivoAdjunto(accion.getId(), ListaAdjuntos);
-                }else{
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudieron cargar todos los adjuntos", "No se pudieron cargar todos los adjuntos" ));
-                    FacesContext.getCurrentInstance().renderResponse();
-                }
-                // redirigir a la lista de las acciones correctivas.
-                String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-                FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/ListarCorrectivas.xhtml");
-            }
+            // redirigir a la lista de las acciones correctivas.
+            String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/EditarAccionCorrectiva.xhtml?id="+accion.getId());
         }else{
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Accion", "No se pudo crear la Accion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }
     }
-        
+    
 }

@@ -17,10 +17,9 @@ import com.dperez.maymweb.accion.acciones.Preventiva;
 import com.dperez.maymweb.accion.adjunto.Adjunto;
 import com.dperez.maymweb.accion.actividad.ManejadorActividad;
 import com.dperez.maymweb.accion.actividad.Actividad;
+import com.dperez.maymweb.accion.adjunto.ManejadorAdjunto;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.area.ManejadorArea;
-import com.dperez.maymweb.codificacion.Codificacion;
-import com.dperez.maymweb.codificacion.ManejadorCodificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.ManejadorDeteccion;
 import com.dperez.maymweb.empresa.Empresa;
@@ -49,7 +48,7 @@ public class ControladorRegistro {
     @Inject
     private ManejadorArea mArea;
     @Inject
-    private ManejadorCodificacion mCodificacion;
+    private ManejadorAdjunto mAdjunto;
     @Inject
     private ManejadorDeteccion mDeteccion;
     @Inject
@@ -125,15 +124,16 @@ public class ControladorRegistro {
     /**
      * Crea el/los adjuntos, los agrega a la accion y actualiza la base de datos.
      * @param IdAccion
-     * @param adjuntos Map.Key = Titulo del archivo Adjunto | Map.Value = Ubicacion del archivo adjunto
+     * @param TituloAdjunto
+     * @param UbicacionAdjunto
      * @return -1 si no se creo.
      */
-    public int AgregarArchivoAdjunto(int IdAccion, Map<String, String> adjuntos){
+    public int AgregarArchivoAdjunto(int IdAccion, String TituloAdjunto, String UbicacionAdjunto){
         Accion accion = mAccion.GetAccion(IdAccion);
-        for(Map.Entry<String, String> entry: adjuntos.entrySet()){
-            Adjunto adjunto = new Adjunto(entry.getKey(), entry.getValue());
+        Adjunto adjunto = new Adjunto(TituloAdjunto, UbicacionAdjunto);
+        if(mAdjunto.CrearAdjunto(adjunto)!=-1){
             accion.addAdjunto(adjunto);
-        }
+        }        
         return mAccion.ActualizarAccion(accion);
     }
     
@@ -150,7 +150,7 @@ public class ControladorRegistro {
         Usuario usuario = mUsuario.GetUsuario(IdUsuarioResponsable);
         medida.setResponsableImplementacion(usuario);
         medida.setIdActividad(mMedida.CrearActividad(medida));
-        Accion accion = mAccion.GetAccion(IdAccion);        
+        Accion accion = mAccion.GetAccion(IdAccion);
         if((accion.getClass())!= Mejora.class) throw new InvalidParameterException("El id no corresponde con una mejora");
         ((Mejora)accion).addActividadMejora((Actividad)medida);
         int res = mAccion.ActualizarAccion(accion);
@@ -189,7 +189,7 @@ public class ControladorRegistro {
         Actividad medida = new Actividad(FechaEstimadaImplementacion, Descripcion);
         Usuario usuario = mUsuario.GetUsuario(IdUsuarioResponsable);
         medida.setResponsableImplementacion(usuario);
-        medida.setIdActividad(mMedida.CrearActividad(medida));        
+        medida.setIdActividad(mMedida.CrearActividad(medida));
         Accion accion = mAccion.GetAccion(IdAccion);
         if((accion.getClass())!= Correctiva.class) throw new InvalidParameterException("El id no corresponde con una Correctiva");
         ((Correctiva)accion).addMedidaPreventiva(medida);
@@ -382,7 +382,7 @@ public class ControladorRegistro {
         if(fortaleza.getId()== -1){
             return null;
         }
-        return fortaleza;        
+        return fortaleza;
     }
     
 }

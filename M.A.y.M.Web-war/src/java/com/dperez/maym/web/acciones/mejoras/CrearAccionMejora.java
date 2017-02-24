@@ -7,7 +7,7 @@ package com.dperez.maym.web.acciones.mejoras;
 
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.acciones.EnumAccion;
-import com.dperez.maymweb.accion.adjunto.CargarArchivo;
+import com.dperez.maym.web.herramientas.CargarArchivo;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
@@ -196,23 +196,10 @@ public class CrearAccionMejora implements Serializable {
         Empresa empresa = (Empresa)request.getSession().getAttribute("Empresa");
         Accion accion = fDatos.NuevaAccion(EnumAccion.MEJORA, FechaDeteccion, Descripcion, null, AreaSectorAccionSeleccionada, DeteccionSeleccionada, empresa.getId());
         
-        if(accion != null){
-            // Crear los adjuntos y agregarlos a la accion correctiva
-            if(!ArchivosAdjuntos.isEmpty()){
-                for(Map.Entry entry: ArchivosAdjuntos.entrySet()){
-                    String ubicacion = cargaArchivos.guardarArchivo("Mejora_" + String.valueOf(accion.getId()), (Part)entry.getValue(),(String) entry.getKey(), empresa.getNombreEmpresa());
-                    if(!ubicacion.isEmpty())ListaAdjuntos.put((String) entry.getKey(), ubicacion);
-                }
-                if(!ListaAdjuntos.isEmpty()) {
-                    fDatos.AgregarArchivoAdjunto(accion.getId(), ListaAdjuntos);
-                }else{
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudieron cargar todos los adjuntos", "No se pudieron cargar todos los adjuntos" ));
-                    FacesContext.getCurrentInstance().renderResponse();
-                }
-            }
+        if(accion != null){            
             // redirigir a la lista de las acciones de mejoras.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Mejoras/EditarMejora.xhtml?id="+accion.getId());
         }else{
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Accion", "No se pudo crear la Accion" ));
             FacesContext.getCurrentInstance().renderResponse();

@@ -23,86 +23,102 @@
                     <p>No hay acciones registradas</p>
                 </c:when>
                 <c:otherwise>
-                    <table class="table table-hover table-striped">
-                        <thead>
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Area</th>
-                                <th>Generada Por</th>
-                                <th>Descripcion</th>
-                                <th>Analisis de Causa</th>
-                                <th>Medida Correctiva</th>
-                                <th>Medida Preventiva</th>
-                                <th>Plazo Eficacia</th>
-                                <th>Codificacion</th>
-                                <th>Estado</th>
-                            </tr>
-                            
-                        </thead>
-                        
-                        <tbody>
-                            <c:forEach items="#{listarCorrectivas.listaAcciones}" var="accion">
+                    <h:form id="form_tabla_acciones" >
+                        <table class="table table-hover table-striped">
+                            <thead>
                                 <tr>
-                                    <td>
-                                        #{accion.value.fechaDeteccion}
-                                    </td>
-                                    <td>
-                                        #{accion.value.areaSectorAccion.nombre}
-                                    </td>
-                                    <td>
-                                        #{accion.value.generadaPor.nombre}
-                                    </td>
-                                    <td>
-                                        #{accion.value.descripcion}
-                                    </td>
-                                    <td>
-                                        #{accion.value.analisisCausa}
-                                    </td>
-                                    <td>
-                                        medidas correctivas
-                                    </td>
-                                    <td>
-                                        medidas preventivas
-                                    </td>
-                                    <td>
-                                        comprobacion eficacia
-                                    </td>
-                                    <td>
-                                        #{accion.value.codificacionAccion}
-                                    </td>
-                                    <td>
-                                        #{accion.value.estadoAccion}
-                                    </td>
-                                    <td>
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
-                                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                                <span class="caret"></span>
-                                            </button>
-                                            <ul class="dropdown-menu" role="menu">
-                                                <li><a href="#">Ver Accion</a></li>
-                                                <li><a href="EditarAccionCorrectiva.xhtml?id=#{accion.value.id}">Editar Datos</a></li>
-                                                <li><a href="#">Agregar Actividades</a></li>                                    
-                                                <c:choose>
-                                                    <c:when test="#{accion.value.estadoAccion != 'CERRADA'}">
-                                                        <li><a href="#">Realizar Seguimiento</a></li>
-                                                    </c:when>
-                                                </c:choose>
-                                                <li><a href="#">Eliminar</a></li>
-                                                <!--
-                                                <c:choose>
-                                                    <c:when test="#{sesion.permiso == 'Verificador'}">
-                                                        <li><a href="#">Eliminar</a></li>
-                                                    </c:when>
-                                                </c:choose>
-                                                -->
-                                            </ul>
-                                        </div>
-                                    </td>
+                                    <th>Fecha</th>
+                                    <th>Area</th>
+                                    <th>Generada Por</th>
+                                    <th>Descripcion</th>
+                                    <th>Analisis de Causa</th>
+                                    <th>Medida Correctiva</th>
+                                    <th>Medida Preventiva</th>
+                                    <th>Plazo Eficacia</th>
+                                    <th>Codificacion</th>
+                                    <th>Estado</th>
                                 </tr>
-                            </c:forEach>
-                        </tbody>
-                    </table> 
+                                
+                            </thead>
+                            
+                            <tbody>
+                                <c:forEach items="#{listarCorrectivas.listaAcciones}" var="accion">
+                                    <tr>
+                                        <td>
+                                            #{accion.value.fechaDeteccion}
+                                        </td>
+                                        <td>
+                                            #{accion.value.areaSectorAccion.nombre}
+                                        </td>
+                                        <td>
+                                            #{accion.value.generadaPor.nombre}
+                                        </td>
+                                        <td>
+                                            #{accion.value.descripcion}
+                                        </td>
+                                        <td>
+                                            #{accion.value.analisisCausa}
+                                        </td>
+                                        <td>
+                                            medidas correctivas
+                                        </td>
+                                        <td>
+                                            medidas preventivas
+                                        </td>
+                                        <td>
+                                            comprobacion eficacia
+                                        </td>
+                                        <td>
+                                            #{accion.value.codificacionAccion}
+                                        </td>
+                                        <td>
+                                            #{accion.value.estadoAccion}
+                                        </td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
+                                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li><h:link value="Ver Accion" >                                                        
+                                                            <f:ajax onevent="indicador" />
+                                                        </h:link>
+                                                    </li>
+                                                    <li><h:link value="Editar Datos" outcome="EditarAccionCorrectiva.xhtml?id=#{accion.value.id}" >                                                        
+                                                            <f:ajax onevent="indicador" />
+                                                        </h:link>
+                                                    </li>
+                                                    <li><h:link  value="Agregar Actividades" >                                                        
+                                                            <f:ajax onevent="indicador" />
+                                                        </h:link>
+                                                    </li>                                    
+                                                    <c:choose>
+                                                        <c:when test="#{accion.value.estadoAccion != 'CERRADA'}">
+                                                            <li><h:link value="Realizar Seguimiento" >                                                                
+                                                                    <f:ajax onevent="indicador" />
+                                                                </h:link>
+                                                            </li>
+                                                        </c:when>
+                                                    </c:choose>
+                                                    <!--<c:choose>
+                                                        <c:when test="#{sesion.permiso == 'Verificador'}"> -->
+                                                    
+                                                    <li><h:commandLink action="#{listarCorrectivas.eliminarAccion(accion.value.id)}" value="Eliminar" onclick="if (! confirm('Seguro que desea quitar esta accion y todos los datos relacionados?')) return false" >
+                                                            <f:ajax onevent="indicador" />
+                                                        </h:commandLink>
+                                                    </li>
+                                                    
+                                                    <!--</c:when>
+                                                </c:choose>-->
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table> 
+                    </h:form>
                     <ul class="pagination">
                         <li class="active"><a href="#">1</a></li>
                         <li><a href="#">2</a></li>
@@ -113,6 +129,6 @@
                 </c:otherwise>
             </c:choose>
         </div>
-       
+        
     </ui:define>
 </ui:composition>

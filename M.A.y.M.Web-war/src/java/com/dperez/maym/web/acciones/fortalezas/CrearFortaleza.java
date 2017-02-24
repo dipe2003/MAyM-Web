@@ -5,7 +5,7 @@
 */
 package com.dperez.maym.web.acciones.fortalezas;
 
-import com.dperez.maymweb.accion.adjunto.CargarArchivo;
+import com.dperez.maym.web.herramientas.CargarArchivo;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.EnumTipoDeteccion;

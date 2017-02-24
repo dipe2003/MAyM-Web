@@ -23,6 +23,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -43,7 +44,7 @@ public abstract class Accion implements Serializable{
     private String AnalisisCausa = new String();
     private EnumEstado EstadoAccion;
     
-    @OneToMany(mappedBy = "AccionAdjunto",orphanRemoval = true)
+    @OneToMany(mappedBy = "AccionAdjunto",orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Adjunto> Adjuntos;
     
     @ManyToOne

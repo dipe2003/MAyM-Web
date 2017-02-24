@@ -1,5 +1,5 @@
 
-package com.dperez.maymweb.accion.adjunto;
+package com.dperez.maym.web.herramientas;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,6 +10,7 @@ import javax.faces.bean.SessionScoped;
 import javax.inject.Named;
 import javax.servlet.http.Part;
 import org.apache.commons.io.FilenameUtils;
+
 
 @Named
 @Stateless
@@ -45,16 +46,20 @@ public class CargarArchivo implements Serializable{
         String realPath = new String();
         if (Archivo != null) {
             try{
-                String resPath = "/adjuntos/"+NombreEmpresa+separator+DirectorioArchivo+separator;                
+                String resPath = "MAyM_Web"+separator+"Adjuntos"+separator+NombreEmpresa+separator;                
                 String extensionArchivo = FilenameUtils.getExtension(Archivo.getSubmittedFileName());
-                NombreArchivo += "."+extensionArchivo;
+                NombreArchivo = DirectorioArchivo + NombreArchivo + "."+extensionArchivo;
                 //String baseDatos = "/img/"+DirectorioArchivo+"/"+NombreArchivo;
                 realPath = homeDir+separator+resPath+NombreArchivo;
+                String baseDatos = "/adjuntos/"+NombreEmpresa+"/"+NombreArchivo;
                 Archivo.write(realPath);
+                return baseDatos;
             }catch(FileNotFoundException ex){
                 System.out.println("Archivo no econtrado: " + ex.getMessage());
+                realPath = new String();
             }catch(IOException ex){
                 System.out.println("Error IO: " + ex.getMessage());
+                realPath = new String();
             }
         }
         return realPath;
@@ -67,7 +72,8 @@ public class CargarArchivo implements Serializable{
      */
     public boolean BorrarArchivo(String NombreUbicacionArchivo){
         if(!NombreUbicacionArchivo.isEmpty()){
-            File archivo = new File(NombreUbicacionArchivo);
+            String resPath = homeDir+separator+"MAyM_Web"+separator+NombreUbicacionArchivo;    
+            File archivo = new File(resPath);
             archivo.delete();
             return true;
         }

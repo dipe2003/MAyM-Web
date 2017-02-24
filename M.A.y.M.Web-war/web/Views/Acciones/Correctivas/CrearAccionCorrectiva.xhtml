@@ -82,11 +82,11 @@
                         <div class="form-group">
                             <strong><label for="clasificacion">Clasificacion:</label></strong>                                    
                             <h:selectOneRadio id="clasificacion" value="#{crearAccionCorrectiva.tipoDesvioSeleccionado}" required="true">
-                                    <div class="radio" >
-                                        <f:selectItem itemLabel="Menor/Observacion" itemValue="NC_MENOR_OBS" />
-                                        <f:selectItem itemLabel="Mayor" itemValue="NC_MAYOR" />
-                                        <f:selectItem itemLabel="Critica" itemValue="NC_CRITICA" />
-                                    </div>
+                                <div class="radio" >
+                                    <f:selectItem itemLabel="Menor/Observacion" itemValue="NC_MENOR_OBS" />
+                                    <f:selectItem itemLabel="Mayor" itemValue="NC_MAYOR" />
+                                    <f:selectItem itemLabel="Critica" itemValue="NC_CRITICA" />
+                                </div>
                             </h:selectOneRadio>
                         </div> 
                         
@@ -169,69 +169,6 @@
                     </div>
                 </div>    
                 
-                <!-- Adjuntos -->
-                <div class="panel panel-primary">
-                    <div class="panel-heading">Archivos Adjuntos / Anexos:</div>
-                    <div class="panel-body">
-                        <h:panelGroup id="panel_datos_archivo_adjunto">
-                            <div class="form-group">
-                                <strong><label for="titulo_adjunto">Titulo:</label></strong>
-                                <h:inputText id="titulo_adjunto" class="form-control" p:placeholder="Titulo que describe el adjunto." value="#{crearAccionCorrectiva.tituloAdjunto}">
-                                    <f:ajax execute="@this"/>
-                                </h:inputText>
-                            </div>                            
-                            <div class="form-group">
-                                <h:inputFile value="#{crearAccionCorrectiva.archivoAdjunto}" p:accept="image/x-png,image/gif,image/jpeg,application/pdf">
-                                    <f:ajax event="change" listener="#{crearAccionCorrectiva.setArchivoAdjunto(crearAccionCorrectiva.archivoAdjunto)}" onevent="indicador" />
-                                </h:inputFile>
-                            </div>
-                        </h:panelGroup>
-                        <div class="form-group">
-                            <h:commandButton action="#{crearAccionCorrectiva.agregarAdjunto()}" value="Agregar" >
-                                <f:ajax render="panel_lista_adjuntos panel_datos_archivo_adjunto"/>
-                            </h:commandButton>
-                        </div>
-                        <h:panelGroup id="panel_lista_adjuntos">
-                            <c:if test="#{not empty crearAccionCorrectiva.archivosAdjuntos}">
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <table class="table table-hover table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th>Titulo del Adjunto:</th>
-                                                    <th>Adjunto:</th>
-                                                    <th></th>
-                                                </tr>                                                
-                                            </thead>
-                                            <tbody>
-                                                <c:forEach items="#{crearAccionCorrectiva.archivosAdjuntos}" var="adjunto">
-                                                    <tr>
-                                                        <td>#{adjunto.key}</td>
-                                                        <td>#{adjunto.value.getSubmittedFileName()}</td>
-                                                        <td><div class="btn-group">
-                                                                <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
-                                                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                                                    <span class="caret"></span>
-                                                                </button>
-                                                                <ul class="dropdown-menu" role="menu">
-                                                                    <li><h:commandLink action="#{crearAccionCorrectiva.quitarAdjunto(adjunto.key)}" value="Eliminar Adjunto">
-                                                                            <f:ajax render="panel_lista_adjuntos"/>
-                                                                        </h:commandLink>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                </c:forEach>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </c:if>
-                        </h:panelGroup>   
-                        
-                    </div>
-                </div>
                 <div class="form-group-sm">
                     <h:commandButton id="boton_guardar_ac" class="form-control" value="Guardar" >
                         <f:ajax execute="@form" event="click" listener="#{crearAccionCorrectiva.crearAccionCorrectiva()}" onevent="indicador" render="panel_mensajes"/>

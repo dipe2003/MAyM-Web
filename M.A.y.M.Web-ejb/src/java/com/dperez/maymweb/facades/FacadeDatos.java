@@ -61,11 +61,12 @@ public class FacadeDatos {
     /**
      * Crea el/los adjuntos, los agrega a la accion y actualiza la base de datos.
      * @param IdAccion
-     * @param adjuntos Map.Key = Titulo del archivo Adjunto | Map.Value = Ubicacion del archivo adjunto
+     * @param TituloAdjunto
+     * @param UbicacionAdjunto
      * @return -1 si no se creo.
      */
-    public int AgregarArchivoAdjunto(int IdAccion, Map<String, String> adjuntos){
-        return cReg.AgregarArchivoAdjunto(IdAccion, adjuntos);
+    public int AgregarArchivoAdjunto(int IdAccion, String TituloAdjunto, String UbicacionAdjunto){
+        return cReg.AgregarArchivoAdjunto(IdAccion, TituloAdjunto, UbicacionAdjunto);
     }
     
     /**
@@ -226,6 +227,16 @@ public class FacadeDatos {
         return cEdicion.RemoverActividadPreventiva(IdAccion, IdActividadPreventiva);
     }
     
+    /**
+     * Remueve el archivo adjunto de la accion seleccionada y actualiza la base de datos.
+     * Elimina el adjunto de la base de datos.
+     * @param IdAccion
+     * @param IdAdjunto
+     * @return Retorna -1 si no se actualizo. Retorna IdAccion si se actualizo.
+     */
+    public int RemoverAdjunto(int IdAccion, int IdAdjunto){
+        return cEdicion.RemoverArchivoAdjunto(IdAccion, IdAdjunto);
+    }
     /**
      * Edita una accion con los mismos parametros que se creo. Actualiza la base de datos.
      * @param IdAccion
