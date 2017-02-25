@@ -46,8 +46,6 @@ public class CrearAccionMejora implements Serializable {
     private FacadeLectura fLectura;
     @Inject
     private FacadeDatos fDatos;
-    @Inject
-    private CargarArchivo cargaArchivos;
     
     private Date FechaDeteccion;
     private String strFechaDeteccion;
@@ -180,7 +178,7 @@ public class CrearAccionMejora implements Serializable {
      * Si se creo se redirige a la pagina de edicion para agregar mas datos.
      * @throws java.io.IOException
      */
-    public void crearAccionCorrectiva() throws IOException{
+    public void crearAccion() throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         Empresa empresa = (Empresa)request.getSession().getAttribute("Empresa");

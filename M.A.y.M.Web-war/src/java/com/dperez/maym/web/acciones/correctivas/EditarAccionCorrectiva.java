@@ -56,7 +56,7 @@ public class EditarAccionCorrectiva implements Serializable {
     @Inject
     private CargarArchivo cArchivo;
     
-    private int IdAccionCorrectiva;
+    private int IdAccionSeleccionada;
     
     private Date FechaDeteccion;
     private String strFechaDeteccion;
@@ -91,7 +91,7 @@ public class EditarAccionCorrectiva implements Serializable {
     private String DatosProductoAfectado;
     
     //  Getters
-    public int getIdAccionCorrectiva(){return IdAccionCorrectiva;}
+    public int getIdAccionSeleccionada(){return IdAccionSeleccionada;}
     public Date getFechaDeteccion() {return FechaDeteccion;}
     public String getStrFechaDeteccion(){
         SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
@@ -132,7 +132,7 @@ public class EditarAccionCorrectiva implements Serializable {
     public String getDatosProductoAfectado(){return this.DatosProductoAfectado;}
     
     //  Setters
-    public void serIdAccionCorrectiva(int IdAccionCorrectiva){this.IdAccionCorrectiva = IdAccionCorrectiva;}
+    public void serIdAccionCorrectiva(int IdAccionCorrectiva){this.IdAccionSeleccionada = IdAccionCorrectiva;}
     public void setFechaDeteccion(Date FechaDeteccion) {this.FechaDeteccion = FechaDeteccion;}
     public void setStrFechaDeteccion(String strFechaDeteccion) {
         Calendar cal = Calendar.getInstance();
@@ -186,9 +186,9 @@ public class EditarAccionCorrectiva implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         // recuperar el id para llenar datos de la accion correctiva y el resto de las propiedades.
-        IdAccionCorrectiva = Integer.parseInt(request.getParameter("id"));
-        if(IdAccionCorrectiva != 0){
-            Accion AccionCorrectiva = (Correctiva) fLectura.GetAccion(IdAccionCorrectiva);
+        IdAccionSeleccionada = Integer.parseInt(request.getParameter("id"));
+        if(IdAccionSeleccionada != 0){
+            Accion AccionCorrectiva = (Correctiva) fLectura.GetAccion(IdAccionSeleccionada);
             FechaDeteccion = AccionCorrectiva.getFechaDeteccion();
             Descripcion = AccionCorrectiva.getDescripcion();
             AnalisisCausa = AccionCorrectiva.getAnalisisCausa();
@@ -240,7 +240,7 @@ public class EditarAccionCorrectiva implements Serializable {
     }
     
     private void actualizarListaAdjuntos(){
-        Accion AccionCorrectiva = (Correctiva) fLectura.GetAccion(IdAccionCorrectiva);
+        Accion AccionCorrectiva = (Correctiva) fLectura.GetAccion(IdAccionSeleccionada);
         if(!AccionCorrectiva.getAdjuntos().isEmpty()){
             List<Adjunto> listAdjuntos = AccionCorrectiva.getAdjuntos();
             this.MapAdjuntos = new HashMap<>();
@@ -326,7 +326,7 @@ public class EditarAccionCorrectiva implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo agregar producto", "No se pudo agregar producto" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
-            if((fDatos.AgregarProductoInvolucrado(IdAccionCorrectiva, NombreProductoAfectado, DatosProductoAfectado))!=-1){
+            if((fDatos.AgregarProductoInvolucrado(IdAccionSeleccionada, NombreProductoAfectado, DatosProductoAfectado))!=-1){
                 this.ListaProductosAfectados.put(NombreProductoAfectado, DatosProductoAfectado);
                 this.NombreProductoAfectado = new String();
                 this.DatosProductoAfectado = new String();
@@ -341,7 +341,7 @@ public class EditarAccionCorrectiva implements Serializable {
      * @param NombreProducto
      */
     public void removerProductoAfectado(String NombreProducto){
-        if(fDatos.RemoverProductoInvolucrado(IdAccionCorrectiva, NombreProducto)==-1){
+        if(fDatos.RemoverProductoInvolucrado(IdAccionSeleccionada, NombreProducto)==-1){
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo quitar producto", "No se pudo quitar producto" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
@@ -369,7 +369,7 @@ public class EditarAccionCorrectiva implements Serializable {
      * Deja vacios los campos para un nuevo adjunto.
      */
     public void agregarAdjunto(){
-        String datosAdjunto[] = cArchivo.guardarArchivo("Correctiva_"+ String.valueOf(IdAccionCorrectiva), ArchivoAdjunto, TituloAdjunto, "Nombre Empresa");
+        String datosAdjunto[] = cArchivo.guardarArchivo("Correctiva_"+ String.valueOf(IdAccionSeleccionada), ArchivoAdjunto, TituloAdjunto, "Nombre Empresa");
         // datosAdjunto[0]: ubicacion | datosAdjunto[1]: extension
         if(!datosAdjunto[0].isEmpty()){
             EnumTipoAdjunto tipoAdjunto = EnumTipoAdjunto.IMAGEN;
@@ -382,7 +382,7 @@ public class EditarAccionCorrectiva implements Serializable {
             if(!tipos.contains(extension.toLowerCase().trim())){
                 tipoAdjunto = EnumTipoAdjunto.DOCUMENTO;
             }
-            if((fDatos.AgregarArchivoAdjunto(IdAccionCorrectiva, TituloAdjunto, datosAdjunto[0], tipoAdjunto))!=-1){
+            if((fDatos.AgregarArchivoAdjunto(IdAccionSeleccionada, TituloAdjunto, datosAdjunto[0], tipoAdjunto))!=-1){
                 actualizarListaAdjuntos();
                 this.TituloAdjunto = new String();
                 this.ArchivoAdjunto =  null;                
@@ -399,7 +399,7 @@ public class EditarAccionCorrectiva implements Serializable {
      */
     public void quitarAdjunto(int IdAdjunto) throws IOException{
         if(cArchivo.BorrarArchivo(this.MapAdjuntos.get(IdAdjunto).getUbicacion())){
-            if((fDatos.RemoverAdjunto(IdAccionCorrectiva, IdAdjunto))!=-1){
+            if((fDatos.RemoverAdjunto(IdAccionSeleccionada, IdAdjunto))!=-1){
                 this.MapAdjuntos.remove(IdAdjunto);
             }
         }
@@ -411,9 +411,9 @@ public class EditarAccionCorrectiva implements Serializable {
      * Si se creo se redirige a la pagina de listado de acciones.
      * @throws java.io.IOException
      */
-    public void editarAccionCorrectiva() throws IOException{
+    public void editarAccion() throws IOException{
         // actualizar accion
-        if(fDatos.EditarAccion(IdAccionCorrectiva, EnumAccion.CORRECTIVA, FechaDeteccion, Descripcion, TipoDesvioSeleccionado,
+        if(fDatos.EditarAccion(IdAccionSeleccionada, EnumAccion.CORRECTIVA, FechaDeteccion, Descripcion, TipoDesvioSeleccionado,
                 AreaSectorAccionSeleccionada, DeteccionSeleccionada, CodificacionSeleccionada) != -1){
             // Si no se actualizo muestra mensaje de error.
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
@@ -430,8 +430,8 @@ public class EditarAccionCorrectiva implements Serializable {
      * Se eliminan todos los datos relacionados (actividades, adjuntos, comprobaciones y productos)
      * @throws java.io.IOException
      */
-    public void eliminarAccionCorrectiva() throws IOException{
-        if(fAdmin.EliminarAccion(IdAccionCorrectiva)!=-1){
+    public void eliminarAccion() throws IOException{
+        if(fAdmin.EliminarAccion(IdAccionSeleccionada)!=-1){
             // Si no se elimino muestra mensaje de error.
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar la Accion", "No se pudo eliminar la Accion" ));
             FacesContext.getCurrentInstance().renderResponse();

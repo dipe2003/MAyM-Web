@@ -54,7 +54,7 @@ public class EditarAccionMejora implements Serializable {
     @Inject
     private CargarArchivo cArchivo;
     
-    private int IdAccionMejora;
+    private int IdAccionSeleccionada;
     
     private Date FechaDeteccion;
     private String strFechaDeteccion;
@@ -81,7 +81,7 @@ public class EditarAccionMejora implements Serializable {
     private String DescripcionNuevaCodificacion;
     
     //  Getters
-    public int getIdAccionMejora(){return IdAccionMejora;}
+    public int getIdAccionSeleccionada(){return IdAccionSeleccionada;}
     public Date getFechaDeteccion() {return FechaDeteccion;}
     public String getStrFechaDeteccion(){
         SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
@@ -114,7 +114,7 @@ public class EditarAccionMejora implements Serializable {
     public Integer getAreaSectorAccionSeleccionada() {return AreaSectorAccionSeleccionada;}
     
     //  Setters
-    public void serIdAccionCorrectiva(int IdAccionCorrectiva){this.IdAccionMejora = IdAccionCorrectiva;}
+    public void serIdAccionCorrectiva(int IdAccionCorrectiva){this.IdAccionSeleccionada = IdAccionCorrectiva;}
     public void setFechaDeteccion(Date FechaDeteccion) {this.FechaDeteccion = FechaDeteccion;}
     public void setStrFechaDeteccion(String strFechaDeteccion) {
         Calendar cal = Calendar.getInstance();
@@ -157,9 +157,9 @@ public class EditarAccionMejora implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         // recuperar el id para llenar datos de la accion de mejora y el resto de las propiedades.
-        IdAccionMejora = Integer.parseInt(request.getParameter("id"));
-        if(IdAccionMejora != 0){
-            Accion AccionMejora = (Mejora) fLectura.GetAccion(IdAccionMejora);
+        IdAccionSeleccionada = Integer.parseInt(request.getParameter("id"));
+        if(IdAccionSeleccionada != 0){
+            Accion AccionMejora = (Mejora) fLectura.GetAccion(IdAccionSeleccionada);
             FechaDeteccion = AccionMejora.getFechaDeteccion();
             Descripcion = AccionMejora.getDescripcion();
             AnalisisCausa = AccionMejora.getAnalisisCausa();
@@ -199,7 +199,7 @@ public class EditarAccionMejora implements Serializable {
     }
     
     private void actualizarListaAdjuntos(){
-        Accion AccionMejora = (Mejora) fLectura.GetAccion(IdAccionMejora);
+        Accion AccionMejora = (Mejora) fLectura.GetAccion(IdAccionSeleccionada);
         if(!AccionMejora.getAdjuntos().isEmpty()){
             List<Adjunto> listAdjuntos = AccionMejora.getAdjuntos();
             this.MapAdjuntos = new HashMap<>();
@@ -280,7 +280,7 @@ public class EditarAccionMejora implements Serializable {
      * Deja vacios los campos para un nuevo adjunto.
      */
     public void agregarAdjunto(){
-        String datosAdjunto[] = cArchivo.guardarArchivo("Mejora_"+ String.valueOf(IdAccionMejora), ArchivoAdjunto, TituloAdjunto, "Nombre Empresa");
+        String datosAdjunto[] = cArchivo.guardarArchivo("Mejora_"+ String.valueOf(IdAccionSeleccionada), ArchivoAdjunto, TituloAdjunto, "Nombre Empresa");
         // datosAdjunto[0]: ubicacion | datosAdjunto[1]: extension
         if(!datosAdjunto[0].isEmpty()){
             EnumTipoAdjunto tipoAdjunto = EnumTipoAdjunto.IMAGEN;
@@ -293,7 +293,7 @@ public class EditarAccionMejora implements Serializable {
             if(!tipos.contains(extension.toLowerCase().trim())){
                 tipoAdjunto = EnumTipoAdjunto.DOCUMENTO;
             }
-            if((fDatos.AgregarArchivoAdjunto(IdAccionMejora, TituloAdjunto, datosAdjunto[0], tipoAdjunto))!=-1){
+            if((fDatos.AgregarArchivoAdjunto(IdAccionSeleccionada, TituloAdjunto, datosAdjunto[0], tipoAdjunto))!=-1){
                 actualizarListaAdjuntos();
                 this.TituloAdjunto = new String();
                 this.ArchivoAdjunto =  null;
@@ -311,7 +311,7 @@ public class EditarAccionMejora implements Serializable {
      */
     public void quitarAdjunto(int IdAdjunto) throws IOException{
         if(cArchivo.BorrarArchivo(this.MapAdjuntos.get(IdAdjunto).getUbicacion())){
-            if((fDatos.RemoverAdjunto(IdAccionMejora, IdAdjunto))!=-1){
+            if((fDatos.RemoverAdjunto(IdAccionSeleccionada, IdAdjunto))!=-1){
                 this.MapAdjuntos.remove(IdAdjunto);
             }
         }
@@ -323,9 +323,9 @@ public class EditarAccionMejora implements Serializable {
      * Si se creo se redirige a la pagina de listado de acciones.
      * @throws java.io.IOException
      */
-    public void editarAccionMejora() throws IOException{
+    public void editarAccion() throws IOException{
         // actualizar accion
-        if(fDatos.EditarAccion(IdAccionMejora, EnumAccion.CORRECTIVA, FechaDeteccion, Descripcion, null,
+        if(fDatos.EditarAccion(IdAccionSeleccionada, EnumAccion.CORRECTIVA, FechaDeteccion, Descripcion, null,
                 AreaSectorAccionSeleccionada, DeteccionSeleccionada, CodificacionSeleccionada) != -1){
             // Si no se actualizo muestra mensaje de error.
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
@@ -342,8 +342,8 @@ public class EditarAccionMejora implements Serializable {
      * Se eliminan todos los datos relacionados (actividades, adjuntos, comprobaciones)
      * @throws java.io.IOException
      */
-    public void eliminarAccionMejora() throws IOException{
-        if(fAdmin.EliminarAccion(IdAccionMejora)!=-1){
+    public void eliminarAccion() throws IOException{
+        if(fAdmin.EliminarAccion(IdAccionSeleccionada)!=-1){
             // Si no se elimino muestra mensaje de error.
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar la Accion", "No se pudo eliminar la Accion" ));
             FacesContext.getCurrentInstance().renderResponse();

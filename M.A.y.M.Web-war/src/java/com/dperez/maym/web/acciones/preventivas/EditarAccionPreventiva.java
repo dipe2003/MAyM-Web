@@ -5,9 +5,13 @@
 */
 package com.dperez.maym.web.acciones.preventivas;
 
+import com.dperez.maym.web.herramientas.CargarArchivo;
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.acciones.EnumAccion;
+import com.dperez.maymweb.accion.acciones.Mejora;
 import com.dperez.maymweb.accion.acciones.Preventiva;
+import com.dperez.maymweb.accion.adjunto.Adjunto;
+import com.dperez.maymweb.accion.adjunto.EnumTipoAdjunto;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
@@ -19,6 +23,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -34,6 +39,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
 
 
 
@@ -46,8 +52,10 @@ public class EditarAccionPreventiva implements Serializable {
     private FacadeLectura fLectura;
     @Inject
     private FacadeDatos fDatos;
+    @Inject
+    private CargarArchivo cArchivo;
     
-    private int IdAccionPreventiva;
+    private int IdAccionSeleccionada;
     
     private Date FechaDeteccion;
     private String strFechaDeteccion;
@@ -55,23 +63,26 @@ public class EditarAccionPreventiva implements Serializable {
     private String AnalisisCausa;
     
     private String TituloAdjunto;
-    private String UbicacionAdjunto;
-    private Map<String, String> ListaAdjuntos;
+    private Map<Integer, Adjunto> MapAdjuntos;
+    private Part ArchivoAdjunto;
     
     private EnumTipoDeteccion[] TiposDeteccion;
     private EnumTipoDeteccion TipoDeDeteccionSeleccionada;
+    private EnumTipoDeteccion TipoNuevaDeteccion;
     private String NombreNuevaDeteccion;
     private Map<Integer, String> ListaDetecciones;
     private Integer DeteccionSeleccionada;
     
-    private Map<Integer, String> ListaAreasSectores;
+    private Map<Integer, Area> ListaAreasSectores;
     private Integer AreaSectorAccionSeleccionada;
     
     private Map<Integer, String> ListaCodificaciones;
     private Integer CodificacionSeleccionada;
+    private String NombreNuevaCodificacion;
+    private String DescripcionNuevaCodificacion;
     
     //  Getters
-    public int getIdAccionPreventiva(){return IdAccionPreventiva;}
+    public int getIdAccionSeleccionada(){return IdAccionSeleccionada;}
     public Date getFechaDeteccion() {return FechaDeteccion;}
     public String getStrFechaDeteccion(){
         SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
@@ -83,25 +94,28 @@ public class EditarAccionPreventiva implements Serializable {
     }
     public String getDescripcion() {return Descripcion;}
     public String getAnalisisCausa() {return AnalisisCausa;}
+    
     public String getTituloAdjunto(){return this.TituloAdjunto;}
-    public String getUbicacionAdjunto(){return this.UbicacionAdjunto;}
-    public Map<String, String> getAdjuntos() {return ListaAdjuntos;}
+    public Part getArchivoAdjunto() {return ArchivoAdjunto;}
+    public Map<Integer, Adjunto> getMapAdjuntos() {return MapAdjuntos;}
     
     public Map<Integer, String> getListaCodificaciones(){return this.ListaCodificaciones;}
     public Integer getCodificacionSeleccionada() {return CodificacionSeleccionada;}
+    public String getNombreNuevaCodificacion() {return NombreNuevaCodificacion;}
+    public String getDescripcionNuevaCodificacion() {return DescripcionNuevaCodificacion;}
     
     public EnumTipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
     public EnumTipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
     public Map<Integer, String> getListaDetecciones(){return this.ListaDetecciones;}
     public String getNombreNuevaDeteccion(){return this.NombreNuevaDeteccion;}
+    public EnumTipoDeteccion getTipoNuevaDeteccion() {return TipoNuevaDeteccion;}
     public Integer getDeteccionSeleccionada(){return this.DeteccionSeleccionada;}
     
-    public Map<Integer, String> getListaAreasSectores(){return this.ListaAreasSectores;}
+    public Map<Integer, Area> getListaAreasSectores(){return this.ListaAreasSectores;}
     public Integer getAreaSectorAccionSeleccionada() {return AreaSectorAccionSeleccionada;}
     
-    
     //  Setters
-    public void serIdAccionCorrectiva(int IdAccionCorrectiva){this.IdAccionPreventiva = IdAccionCorrectiva;}
+    public void serIdAccionCorrectiva(int IdAccionCorrectiva){this.IdAccionSeleccionada = IdAccionCorrectiva;}
     public void setFechaDeteccion(Date FechaDeteccion) {this.FechaDeteccion = FechaDeteccion;}
     public void setStrFechaDeteccion(String strFechaDeteccion) {
         Calendar cal = Calendar.getInstance();
@@ -114,20 +128,24 @@ public class EditarAccionPreventiva implements Serializable {
     }
     public void setDescripcion(String Descripcion) {this.Descripcion = Descripcion;}
     public void setAnalisisCausa(String AnalisisCausa) {this.AnalisisCausa = AnalisisCausa;}
+    
     public void setTituloAdjunto(String TituloAdjunto){this.TituloAdjunto = TituloAdjunto;}
-    public void setUbicacionAdjunto(String UbicacionAdjunto){this.UbicacionAdjunto = UbicacionAdjunto;}
-    public void setAdjuntos(Map<String, String> Adjuntos) {this.ListaAdjuntos = Adjuntos;}
+    public void setArchivoAdjunto(Part ArchivoAdjunto) {this.ArchivoAdjunto = ArchivoAdjunto;}
+    public void setMapAdjuntos(Map<Integer, Adjunto> MapAdjuntos) {this.MapAdjuntos = MapAdjuntos;}
     
     public void setListaCodificaciones(Map<Integer, String> ListaCodificaciones){this.ListaCodificaciones = ListaCodificaciones;}
     public void setCodificacionSeleccionada(Integer CodificacionSeleccionada) {this.CodificacionSeleccionada = CodificacionSeleccionada;}
+    public void setNombreNuevaCodificacion(String NombreNuevaCodificacion) {this.NombreNuevaCodificacion = NombreNuevaCodificacion;}
+    public void setDescripcionNuevaCodificacion(String DescripcionNuevaCodificacion) {this.DescripcionNuevaCodificacion = DescripcionNuevaCodificacion;}
     
     public void setTipoDeDeteccionSeleccionada(EnumTipoDeteccion TipoDeteccion){this.TipoDeDeteccionSeleccionada = TipoDeteccion;}
     public void setTiposDeteccion(EnumTipoDeteccion[] TiposDeteccion){this.TiposDeteccion = TiposDeteccion;}
     public void setListaDetecciones(Map<Integer, String> ListaDetecciones){this.ListaDetecciones = ListaDetecciones;}
     public void setNombreNuevaDeteccion(String NombreNuevaDeteccion){this.NombreNuevaDeteccion = NombreNuevaDeteccion;}
+    public void setTipoNuevaDeteccion(EnumTipoDeteccion TipoNuevaDeteccion) {this.TipoNuevaDeteccion = TipoNuevaDeteccion;}
     public void setDeteccionSeleccionada(Integer DeteccionSeleccionada){this.DeteccionSeleccionada = DeteccionSeleccionada;}
-    
-    public void setListaAreaSectores(Map<Integer, String> ListaAreasSectores){this.ListaAreasSectores = ListaAreasSectores;}
+
+    public void setListaAreaSectores(Map<Integer, Area> ListaAreasSectores){this.ListaAreasSectores = ListaAreasSectores;}
     public void setAreaSectorAccionSeleccionada(Integer AreaSectorAccionSeleccionada) {this.AreaSectorAccionSeleccionada = AreaSectorAccionSeleccionada;}
     
     //  Metodos
@@ -139,26 +157,27 @@ public class EditarAccionPreventiva implements Serializable {
     public void init(){
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        // recuperar el id para llenar datos de la accion preventiva y el resto de las propiedades.
-        int idAccion = 0;
-        idAccion = Integer.parseInt(request.getParameter("id"));
-        if(idAccion != 0){
-            Accion AccionPreventiva = (Preventiva) fLectura.GetAccion(idAccion);
-            FechaDeteccion = AccionPreventiva.getFechaDeteccion();
-            Descripcion = AccionPreventiva.getDescripcion();
-            AnalisisCausa = AccionPreventiva.getAnalisisCausa();
+        // recuperar el id para llenar datos de la accion de mejora y el resto de las propiedades.
+        IdAccionSeleccionada = Integer.parseInt(request.getParameter("id"));
+        if(IdAccionSeleccionada != 0){
+            Accion AccionMejora = (Preventiva) fLectura.GetAccion(IdAccionSeleccionada);
+            FechaDeteccion = AccionMejora.getFechaDeteccion();
+            Descripcion = AccionMejora.getDescripcion();
+            AnalisisCausa = AccionMejora.getAnalisisCausa();
             
             //  Codificaciones
             ListaCodificaciones = new HashMap<>();
             List<Codificacion> tmpCodificaciones = fLectura.ListarCodificaciones();
+            ListaCodificaciones.put(0, "--- Nueva ---");
             for(Codificacion codificacion:tmpCodificaciones){
                 ListaCodificaciones.put(codificacion.getId(), codificacion.getNombre());
             }
-            CodificacionSeleccionada = AccionPreventiva.getCodificacionAccion().getId();
+            CodificacionSeleccionada = AccionMejora.getCodificacionAccion().getId();
             
             //  Detecciones
             TiposDeteccion = EnumTipoDeteccion.values();
-            TipoDeDeteccionSeleccionada = EnumTipoDeteccion.INTERNA;
+            TipoDeDeteccionSeleccionada = AccionMejora.getGeneradaPor().getTipo();
+            
             this.ListaDetecciones = new HashMap<>();
             List<Deteccion> tmpDetecciones = fLectura.ListarDetecciones();
             ListaDetecciones.put(0, "--- Nueva ---");
@@ -167,17 +186,28 @@ public class EditarAccionPreventiva implements Serializable {
                     ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
                 }
             }
-            DeteccionSeleccionada = AccionPreventiva.getGeneradaPor().getId();
-            
+            DeteccionSeleccionada = AccionMejora.getGeneradaPor().getId();
+
             // Areas Sectores
             ListaAreasSectores = new HashMap<>();
             List<Area> tmpAreas = fLectura.ListarAreasSectores();
             for(Area area:tmpAreas){
-                this.ListaAreasSectores.put(area.getId(), area.getNombre());
+                this.ListaAreasSectores.put(area.getId(), area);
             }
-            AreaSectorAccionSeleccionada = AccionPreventiva.getAreaSectorAccion().getId();
+            AreaSectorAccionSeleccionada = AccionMejora.getAreaSectorAccion().getId();
+            actualizarListaAdjuntos();
         }
-        
+    }
+    
+    private void actualizarListaAdjuntos(){
+        Accion AccionMejora = (Preventiva) fLectura.GetAccion(IdAccionSeleccionada);
+        if(!AccionMejora.getAdjuntos().isEmpty()){
+            List<Adjunto> listAdjuntos = AccionMejora.getAdjuntos();
+            this.MapAdjuntos = new HashMap<>();
+            for(Adjunto adjunto: listAdjuntos){
+                this.MapAdjuntos.put(adjunto.getId(), adjunto);
+            }
+        }
     }
     
     /**
@@ -210,16 +240,93 @@ public class EditarAccionPreventiva implements Serializable {
         }
     }
     
+    /**
+     * Crea nueva codificacion.
+     * Se verifica que el nombre o la descripcion no esten vacios. Si estan vacios no se crea y se muestra un mensaje
+     */
+    public void nuevaCodificacion(){
+        if(NombreNuevaCodificacion.isEmpty() || DescripcionNuevaCodificacion.isEmpty()){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva codificacion", "No se pudo crear nueva codificacion" ));
+            FacesContext.getCurrentInstance().renderResponse();
+        }else{
+            // Crear Nueva Codificacion y actualizar lista
+            Codificacion cod = fAdmin.NuevaCodificacion(NombreNuevaCodificacion, DescripcionNuevaCodificacion);
+            if(cod != null){
+                actualizarCodificacion();
+                this.CodificacionSeleccionada = cod.getId();
+                this.NombreNuevaCodificacion = new String();
+                this.DescripcionNuevaCodificacion = new String();
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_INFO, "Se agrego nueva codificacion", "Se agrego nueva codificacion" ));
+                FacesContext.getCurrentInstance().renderResponse();
+            }else{
+                System.out.println("Error");
+            }
+        }
+    }
     
     /**
-     * Actualiza la accion preventiva con los datos nuevos.
+     * Actualiza la lista de codificaciones.
+     */
+    public void actualizarCodificacion(){
+        List<Codificacion> tmpCodificacion = fLectura.ListarCodificaciones();
+        this.ListaCodificaciones.clear();
+        this.ListaCodificaciones.put(0, " --- Nueva Codificacion --- ");
+        for(Codificacion codificacion:tmpCodificacion){
+            ListaCodificaciones.put(codificacion.getId(), codificacion.getNombre());
+        }
+    }    
+       
+    /**
+     * Carga el adjunto en la lista de adjuntos.
+     * Deja vacios los campos para un nuevo adjunto.
+     */
+    public void agregarAdjunto(){
+        String datosAdjunto[] = cArchivo.guardarArchivo("Preventiva_"+ String.valueOf(IdAccionSeleccionada), ArchivoAdjunto, TituloAdjunto, "Nombre Empresa");
+        // datosAdjunto[0]: ubicacion | datosAdjunto[1]: extension
+        if(!datosAdjunto[0].isEmpty()){
+            EnumTipoAdjunto tipoAdjunto = EnumTipoAdjunto.IMAGEN;
+            String extension = datosAdjunto[1];
+            List<String> tipos = new ArrayList<>();
+            tipos.add("jpeg");
+            tipos.add("jpg");
+            tipos.add("png");
+            tipos.add("gif");            
+            if(!tipos.contains(extension.toLowerCase().trim())){
+                tipoAdjunto = EnumTipoAdjunto.DOCUMENTO;
+            }
+            if((fDatos.AgregarArchivoAdjunto(IdAccionSeleccionada, TituloAdjunto, datosAdjunto[0], tipoAdjunto))!=-1){
+                actualizarListaAdjuntos();
+                this.TituloAdjunto = new String();
+                this.ArchivoAdjunto =  null;
+                
+            }else{
+                cArchivo.BorrarArchivo(datosAdjunto[0]);
+            }
+        }
+    }
+    
+    /**
+     * Quita el adjunto de la lista de adjuntos.
+     * @param IdAdjunto
+     * @throws IOException
+     */
+    public void quitarAdjunto(int IdAdjunto) throws IOException{
+        if(cArchivo.BorrarArchivo(this.MapAdjuntos.get(IdAdjunto).getUbicacion())){
+            if((fDatos.RemoverAdjunto(IdAccionSeleccionada, IdAdjunto))!=-1){
+                this.MapAdjuntos.remove(IdAdjunto);
+            }
+        }
+    }
+    
+    /**
+     * Actualiza la accion correctiva con los datos nuevos.
      * Si no se actualizo se muestra mensaje de error.
      * Si se creo se redirige a la pagina de listado de acciones.
      * @throws java.io.IOException
      */
-    public void editarAccionPreventiva() throws IOException{
+    public void editarAccion() throws IOException{
         // actualizar accion
-        if(fDatos.EditarAccion(IdAccionPreventiva, EnumAccion.PREVENTIVA, FechaDeteccion, Descripcion, null,
+        if(fDatos.EditarAccion(IdAccionSeleccionada, EnumAccion.CORRECTIVA, FechaDeteccion, Descripcion, null,
                 AreaSectorAccionSeleccionada, DeteccionSeleccionada, CodificacionSeleccionada) != -1){
             // Si no se actualizo muestra mensaje de error.
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
@@ -227,7 +334,7 @@ public class EditarAccionPreventiva implements Serializable {
         }else{
             // Si la actualizacion se realizo correctamente redirige a lista de acciones.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Preventivas/ListarPreventivas.xhtml");
         }
     }
     
@@ -236,15 +343,15 @@ public class EditarAccionPreventiva implements Serializable {
      * Se eliminan todos los datos relacionados (actividades, adjuntos, comprobaciones)
      * @throws java.io.IOException
      */
-    public void eliminarAccionPreventiva() throws IOException{
-        if(fAdmin.EliminarAccion(IdAccionPreventiva)!=-1){
+    public void eliminarAccion() throws IOException{
+        if(fAdmin.EliminarAccion(IdAccionSeleccionada)!=-1){
             // Si no se elimino muestra mensaje de error.
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar la Accion", "No se pudo eliminar la Accion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             // Si la eliminacion se realizo correctamente redirige a lista de acciones.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Preventivas/ListarPreventivas.xhtml");
         }
     }
     

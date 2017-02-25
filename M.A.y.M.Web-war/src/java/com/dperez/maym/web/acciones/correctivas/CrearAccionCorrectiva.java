@@ -49,8 +49,6 @@ public class CrearAccionCorrectiva implements Serializable {
     private FacadeLectura fLectura;
     @Inject
     private FacadeDatos fDatos;
-    @Inject
-    private CargarArchivo cargaArchivos;
     
     private Date FechaDeteccion;
     private String strFechaDeteccion;
