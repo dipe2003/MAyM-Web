@@ -174,7 +174,8 @@ public class EditarAccionMejora implements Serializable {
             
             //  Detecciones
             TiposDeteccion = EnumTipoDeteccion.values();
-            TipoDeDeteccionSeleccionada = EnumTipoDeteccion.INTERNA;
+            TipoDeDeteccionSeleccionada = AccionMejora.getGeneradaPor().getTipo();
+            
             this.ListaDetecciones = new HashMap<>();
             List<Deteccion> tmpDetecciones = fLectura.ListarDetecciones();
             ListaDetecciones.put(0, "--- Nueva ---");
