@@ -10,7 +10,6 @@ import com.dperez.maymweb.accion.acciones.EnumAccion;
 import com.dperez.maymweb.accion.acciones.EnumTipoDesvio;
 import com.dperez.maym.web.herramientas.CargarArchivo;
 import com.dperez.maymweb.area.Area;
-import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
 import com.dperez.maymweb.empresa.Empresa;
@@ -37,7 +36,6 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
 
 
 
@@ -57,13 +55,7 @@ public class CrearAccionCorrectiva implements Serializable {
     private Date FechaDeteccion;
     private String strFechaDeteccion;
     private String Descripcion;
-    
-    private String TituloAdjunto;
-    private String UbicacionAdjunto;
-    private Map<String, String> ListaAdjuntos;
-    private Part ArchivoAdjunto;
-    private Map<String, String> ArchivosAdjuntos;
-    
+        
     private EnumTipoDeteccion[] TiposDeteccion;
     private EnumTipoDeteccion TipoDeDeteccionSeleccionada;
     private EnumTipoDeteccion TipoNuevaDeteccion;
@@ -76,9 +68,6 @@ public class CrearAccionCorrectiva implements Serializable {
     
     private Map<Integer, Area> ListaAreasSectores;
     private Integer AreaSectorAccionSeleccionada;
-    
-    private Map<Integer, String> ListaCodificaciones;
-    private Integer CodificacionSeleccionada;
     
     private boolean hayProductoAfectado;
     private Map<String, String> ListaProductosAfectados;
@@ -96,15 +85,7 @@ public class CrearAccionCorrectiva implements Serializable {
             return fDate.format(FechaDeteccion);
         }
     }
-    public String getDescripcion() {return Descripcion;}
-    public String getTituloAdjunto(){return this.TituloAdjunto;}
-    public String getUbicacionAdjunto(){return this.UbicacionAdjunto;}
-    public Map<String, String> getAdjuntos() {return ListaAdjuntos;}
-    public Part getArchivoAdjunto() {return ArchivoAdjunto;}
-    public Map<String, String> getArchivosAdjuntos() {return ArchivosAdjuntos;}
-    
-    public Map<Integer, String> getListaCodificaciones(){return this.ListaCodificaciones;}
-    public Integer getCodificacionSeleccionada() {return CodificacionSeleccionada;}
+    public String getDescripcion() {return Descripcion;}   
     
     public EnumTipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
     public EnumTipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
@@ -137,14 +118,6 @@ public class CrearAccionCorrectiva implements Serializable {
         this.FechaDeteccion = cal.getTime();
     }
     public void setDescripcion(String Descripcion) {this.Descripcion = Descripcion;}
-    public void setTituloAdjunto(String TituloAdjunto){this.TituloAdjunto = TituloAdjunto;}
-    public void setUbicacionAdjunto(String UbicacionAdjunto){this.UbicacionAdjunto = UbicacionAdjunto;}
-    public void setAdjuntos(Map<String, String> Adjuntos) {this.ListaAdjuntos = Adjuntos;}
-    public void setArchivoAdjunto(Part ArchivoAdjunto) {this.ArchivoAdjunto = ArchivoAdjunto;}
-    public void setArchivosAdjuntos(Map<String, String> ArchivosAdjuntos) {this.ArchivosAdjuntos = ArchivosAdjuntos;}
-    
-    public void setListaCodificaciones(Map<Integer, String> ListaCodificaciones){this.ListaCodificaciones = ListaCodificaciones;}
-    public void setCodificacionSeleccionada(Integer CodificacionSeleccionada) {this.CodificacionSeleccionada = CodificacionSeleccionada;}
     
     public void setTipoDeDeteccionSeleccionada(EnumTipoDeteccion TipoDeteccion){this.TipoDeDeteccionSeleccionada = TipoDeteccion;}
     public void setTiposDeteccion(EnumTipoDeteccion[] TiposDeteccion){this.TiposDeteccion = TiposDeteccion;}
@@ -174,15 +147,6 @@ public class CrearAccionCorrectiva implements Serializable {
      */
     @PostConstruct
     public void init(){
-        this.ListaAdjuntos = new HashMap<>();
-        //  Codificaciones
-        ListaCodificaciones = new HashMap<>();
-        List<Codificacion> tmpCodificaciones = fLectura.ListarCodificaciones();
-        this.ListaCodificaciones.put(0, " --- Nueva Codificacion --- ");
-        for(Codificacion codificacion:tmpCodificaciones){
-            ListaCodificaciones.put(codificacion.getId(), codificacion.getNombre());
-        }
-        
         //  Detecciones
         TiposDeteccion = EnumTipoDeteccion.values();
         TipoDeDeteccionSeleccionada = EnumTipoDeteccion.INTERNA;
@@ -284,7 +248,7 @@ public class CrearAccionCorrectiva implements Serializable {
      * Crea la accion correctiva con los datos ingresados.
      * Agrega los productos involucrados si existen {hayProductoAfectado = True}
      * Si no se creo se muestra mensaje de error.
-     * Si se creo se redirige a la pagina de listado de acciones.
+     * Si se creo se redirige a la pagina de edicion para agregar mas datos.
      * @throws java.io.IOException
      */
     public void crearAccionCorrectiva() throws IOException{
@@ -301,7 +265,7 @@ public class CrearAccionCorrectiva implements Serializable {
                     fDatos.AgregarProductoInvolucrado(accion.getId(), (String)entry.getKey(), (String)entry.getValue());
                 }
             }
-            // redirigir a la lista de las acciones correctivas.
+            // redirigir a la edicion de la accion correctiva.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/EditarAccionCorrectiva.xhtml?id="+accion.getId());
         }else{

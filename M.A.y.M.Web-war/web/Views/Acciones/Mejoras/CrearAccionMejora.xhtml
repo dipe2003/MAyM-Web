@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../../../index.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"          
+                xmlns:f="http://xmlns.jcp.org/jsf/core"                    
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                
+                xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+    <ui:define name="page_content">
+        <div class="container-fluid" style="padding: 1%">
+            <div class="jumbotron">
+                <h1>Bienvenido a <abbr title="Medicion Analisis y Mejora" >M.A.Y.M.</abbr> </h1>      
+                <p>Este es el sitio para crear nuevas acciones de mejora.</p>  
+            </div>                        
+        </div>
+        <div class="container-fluid" style="padding: 1%">
+            <h:form id="form_nueva_mejora" enctype="multipart/form-data">
+                
+                <!-- Descripcion -->
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Descripcion</div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <strong><label for="fecha_deteccion">Fecha Deteccion:</label></strong>
+                            <h:inputText id="fecha_deteccion" class="form-control calendario" p:placeholder="Fecha de deteccion de la mejora." value="#{crearAccionMejora.strFechaDeteccion}" required="true"/>
+                        </div>
+                        <div class="form-group">
+                            <strong><label for="area">Area / Sector:</label></strong>
+                            <h:selectOneMenu id="area" class="form-control" value="#{crearAccionMejora.areaSectorAccionSeleccionada}" required="true">
+                                <f:selectItem itemValue="-- Seleccionar Area ---"  itemDisabled="false"  noSelectionOption="true"  />
+                                <c:forEach items="#{crearAccionMejora.listaAreasSectores}" var="area">
+                                    <f:selectItem itemLabel="#{area.value.nombre}" itemValue="#{area.value.id}" />
+                                </c:forEach>
+                            </h:selectOneMenu>
+                        </div>
+                        <div class="form-group">
+                            <strong><label for="tipo_deteccion">Tipo de Deteccion:</label></strong>                                    
+                            <h:selectOneRadio id="tipo_deteccion" value="#{crearAccionMejora.tipoDeDeteccionSeleccionada}" required="true">
+                                <c:forEach items="#{crearAccionMejora.tiposDeteccion}" var="tipo">
+                                    <div class="radio" >
+                                        <f:selectItem itemLabel="#{tipo}" itemValue="#{tipo}" />
+                                    </div>
+                                </c:forEach>
+                                <f:ajax execute="@this"/>
+                                <f:ajax render="deteccion" listener="#{crearAccionMejora.actualizarDeteccion()}" onevent="indicador"/>
+                            </h:selectOneRadio>
+                        </div> 
+                        <div class="form-group">
+                            <strong><label for="deteccion">Generada Por:</label></strong>                                    
+                            <h:selectOneMenu id="deteccion" class="form-control" value="#{crearAccionMejora.deteccionSeleccionada}" required="true">
+                                <f:selectItem itemLabel="-- Seleccionar Deteccion ---" itemValue="-1" itemDisabled="false"  noSelectionOption="false"  />
+                                <c:forEach items="#{crearAccionMejora.listaDetecciones}" var="deteccion">
+                                    <f:selectItem itemLabel="#{deteccion.value}" itemValue="#{deteccion.key}" />
+                                </c:forEach>
+                                <f:ajax execute="@this"/>
+                                <f:ajax render="panel_nueva_deteccion"/>
+                            </h:selectOneMenu>
+                        </div>                                              
+                        <h:panelGroup id="panel_nueva_deteccion" >
+                            <c:if test="#{(crearAccionMejora.deteccionSeleccionada == 0) and (crearAccionMejora.deteccionSeleccionada ne -1) }">
+                                <div class="form-group">
+                                    <strong><label for="tipo_nueva_deteccion" >Tipo de Deteccion:</label></strong>
+                                    <h:selectOneRadio id="tipo_nueva_deteccion" value="#{crearAccionCorrectiva.tipoNuevaDeteccion}">
+                                        <f:selectItem itemLabel="Interna" itemValue="INTERNA"/>
+                                        <f:selectItem itemLabel="Externa" itemValue="EXTERNA"/>
+                                    </h:selectOneRadio>
+                                </div>
+                                <div class="form-group">
+                                    <strong><label for="nombre_nueva_deteccion">Nombre de Deteccion:</label></strong>
+                                    <h:inputText id="nombre_nueva_deteccion" class="form-control" p:placeholder="Nombre de nueva deteccion." value="#{crearAccionMejora.nombreNuevaDeteccion}"/>
+                                </div>
+                                <div class="form-group">
+                                    <h:commandButton action="#{crearAccionMejora.nuevaDeteccion()}" value="Nueva">
+                                        <f:ajax execute="panel_nueva_deteccion" render="deteccion panel_nueva_deteccion"/>
+                                    </h:commandButton>
+                                </div>                                
+                            </c:if>                            
+                        </h:panelGroup>
+                        
+                        <div class="form-group">
+                            <strong><label for="descripcion">Descripcion:</label></strong>                                    
+                            <h:inputTextarea class="form-control" id="descripcion" p:placeholder="Descripcion de la situacion o desvio." value="#{crearAccionMejora.descripcion}" required="true"/>
+                        </div>
+                    </div>
+                </div>    
+                
+                <div class="form-group-sm">
+                    <h:commandButton id="boton_guardar_ac" class="form-control" value="Guardar" >
+                        <f:ajax execute="@form" event="click" listener="#{crearAccionMejora.crearAccionCorrectiva()}" onevent="indicador" render="panel_mensajes"/>
+                    </h:commandButton>
+                    <h:commandButton class="form-control" value="Reset" type="reset" />
+                </div>
+                <h:panelGroup id="panel_mensajes">
+                    <div id="mensajes">
+                        <h:messages class="error"/>
+                    </div>
+                </h:panelGroup>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>
+

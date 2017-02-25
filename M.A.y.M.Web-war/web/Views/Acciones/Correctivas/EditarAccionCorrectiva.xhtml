@@ -16,7 +16,7 @@
             </div>                        
         </div>
         <div class="container-fluid" style="padding: 1%">
-            <h:form id="form_nueva_correctiva" enctype="multipart/form-data">
+            <h:form id="form_editar_correctiva" enctype="multipart/form-data">
                 <!-- Descripcion -->
                 <div class="panel panel-primary">
                     <div class="panel-heading">Descripcion</div>
@@ -267,7 +267,7 @@
                                                                     <span class="caret"></span>
                                                                 </button>
                                                                 <ul class="dropdown-menu" role="menu">
-                                                                    <li><h:commandLink action="#{editarAccionCorrectiva.quitarAdjunto(adjunto.key)}" value="Eliminar Adjunto" onclick="if (! confirm('Seguro que desea quitar este adjunto? Se elimnara inmediatamente de la accion.')) return false">
+                                                                    <li><h:commandLink action="#{editarAccionCorrectiva.quitarAdjunto(adjunto.key)}" value="Eliminar Adjunto" onclick="if (! confirm('Seguro que desea quitar este adjunto? Se eliminara inmediatamente de la accion.')) return false">
                                                                             <f:ajax render="panel_lista_adjuntos"  onevent="indicador"/>
                                                                         </h:commandLink>
                                                                     </li>

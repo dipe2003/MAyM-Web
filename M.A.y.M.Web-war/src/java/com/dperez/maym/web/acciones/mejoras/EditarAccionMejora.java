@@ -5,9 +5,12 @@
 */
 package com.dperez.maym.web.acciones.mejoras;
 
+import com.dperez.maym.web.herramientas.CargarArchivo;
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.acciones.EnumAccion;
 import com.dperez.maymweb.accion.acciones.Mejora;
+import com.dperez.maymweb.accion.adjunto.Adjunto;
+import com.dperez.maymweb.accion.adjunto.EnumTipoAdjunto;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
@@ -34,6 +37,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
 
 
 
@@ -46,6 +50,8 @@ public class EditarAccionMejora implements Serializable {
     private FacadeLectura fLectura;
     @Inject
     private FacadeDatos fDatos;
+    @Inject
+    private CargarArchivo cArchivo;
     
     private int IdAccionMejora;
     
@@ -55,20 +61,23 @@ public class EditarAccionMejora implements Serializable {
     private String AnalisisCausa;
     
     private String TituloAdjunto;
-    private String UbicacionAdjunto;
-    private Map<String, String> ListaAdjuntos;
+    private Map<Integer, Adjunto> MapAdjuntos;
+    private Part ArchivoAdjunto;
     
     private EnumTipoDeteccion[] TiposDeteccion;
     private EnumTipoDeteccion TipoDeDeteccionSeleccionada;
+    private EnumTipoDeteccion TipoNuevaDeteccion;
     private String NombreNuevaDeteccion;
     private Map<Integer, String> ListaDetecciones;
     private Integer DeteccionSeleccionada;
     
-    private Map<Integer, String> ListaAreasSectores;
+    private Map<Integer, Area> ListaAreasSectores;
     private Integer AreaSectorAccionSeleccionada;
     
     private Map<Integer, String> ListaCodificaciones;
     private Integer CodificacionSeleccionada;
+    private String NombreNuevaCodificacion;
+    private String DescripcionNuevaCodificacion;
     
     //  Getters
     public int getIdAccionMejora(){return IdAccionMejora;}
@@ -83,22 +92,25 @@ public class EditarAccionMejora implements Serializable {
     }
     public String getDescripcion() {return Descripcion;}
     public String getAnalisisCausa() {return AnalisisCausa;}
+    
     public String getTituloAdjunto(){return this.TituloAdjunto;}
-    public String getUbicacionAdjunto(){return this.UbicacionAdjunto;}
-    public Map<String, String> getAdjuntos() {return ListaAdjuntos;}
+    public Part getArchivoAdjunto() {return ArchivoAdjunto;}
+    public Map<Integer, Adjunto> getMapAdjuntos() {return MapAdjuntos;}
     
     public Map<Integer, String> getListaCodificaciones(){return this.ListaCodificaciones;}
     public Integer getCodificacionSeleccionada() {return CodificacionSeleccionada;}
+    public String getNombreNuevaCodificacion() {return NombreNuevaCodificacion;}
+    public String getDescripcionNuevaCodificacion() {return DescripcionNuevaCodificacion;}
     
     public EnumTipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
     public EnumTipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
     public Map<Integer, String> getListaDetecciones(){return this.ListaDetecciones;}
     public String getNombreNuevaDeteccion(){return this.NombreNuevaDeteccion;}
+    public EnumTipoDeteccion getTipoNuevaDeteccion() {return TipoNuevaDeteccion;}
     public Integer getDeteccionSeleccionada(){return this.DeteccionSeleccionada;}
     
-    public Map<Integer, String> getListaAreasSectores(){return this.ListaAreasSectores;}
+    public Map<Integer, Area> getListaAreasSectores(){return this.ListaAreasSectores;}
     public Integer getAreaSectorAccionSeleccionada() {return AreaSectorAccionSeleccionada;}
-    
     
     //  Setters
     public void serIdAccionCorrectiva(int IdAccionCorrectiva){this.IdAccionMejora = IdAccionCorrectiva;}
@@ -114,20 +126,24 @@ public class EditarAccionMejora implements Serializable {
     }
     public void setDescripcion(String Descripcion) {this.Descripcion = Descripcion;}
     public void setAnalisisCausa(String AnalisisCausa) {this.AnalisisCausa = AnalisisCausa;}
+    
     public void setTituloAdjunto(String TituloAdjunto){this.TituloAdjunto = TituloAdjunto;}
-    public void setUbicacionAdjunto(String UbicacionAdjunto){this.UbicacionAdjunto = UbicacionAdjunto;}
-    public void setAdjuntos(Map<String, String> Adjuntos) {this.ListaAdjuntos = Adjuntos;}
+    public void setArchivoAdjunto(Part ArchivoAdjunto) {this.ArchivoAdjunto = ArchivoAdjunto;}
+    public void setMapAdjuntos(Map<Integer, Adjunto> MapAdjuntos) {this.MapAdjuntos = MapAdjuntos;}
     
     public void setListaCodificaciones(Map<Integer, String> ListaCodificaciones){this.ListaCodificaciones = ListaCodificaciones;}
     public void setCodificacionSeleccionada(Integer CodificacionSeleccionada) {this.CodificacionSeleccionada = CodificacionSeleccionada;}
+    public void setNombreNuevaCodificacion(String NombreNuevaCodificacion) {this.NombreNuevaCodificacion = NombreNuevaCodificacion;}
+    public void setDescripcionNuevaCodificacion(String DescripcionNuevaCodificacion) {this.DescripcionNuevaCodificacion = DescripcionNuevaCodificacion;}
     
     public void setTipoDeDeteccionSeleccionada(EnumTipoDeteccion TipoDeteccion){this.TipoDeDeteccionSeleccionada = TipoDeteccion;}
     public void setTiposDeteccion(EnumTipoDeteccion[] TiposDeteccion){this.TiposDeteccion = TiposDeteccion;}
     public void setListaDetecciones(Map<Integer, String> ListaDetecciones){this.ListaDetecciones = ListaDetecciones;}
     public void setNombreNuevaDeteccion(String NombreNuevaDeteccion){this.NombreNuevaDeteccion = NombreNuevaDeteccion;}
+    public void setTipoNuevaDeteccion(EnumTipoDeteccion TipoNuevaDeteccion) {this.TipoNuevaDeteccion = TipoNuevaDeteccion;}
     public void setDeteccionSeleccionada(Integer DeteccionSeleccionada){this.DeteccionSeleccionada = DeteccionSeleccionada;}
-    
-    public void setListaAreaSectores(Map<Integer, String> ListaAreasSectores){this.ListaAreasSectores = ListaAreasSectores;}
+
+    public void setListaAreaSectores(Map<Integer, Area> ListaAreasSectores){this.ListaAreasSectores = ListaAreasSectores;}
     public void setAreaSectorAccionSeleccionada(Integer AreaSectorAccionSeleccionada) {this.AreaSectorAccionSeleccionada = AreaSectorAccionSeleccionada;}
     
     //  Metodos
@@ -140,10 +156,9 @@ public class EditarAccionMejora implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         // recuperar el id para llenar datos de la accion de mejora y el resto de las propiedades.
-        int idAccion = 0;
-        idAccion = Integer.parseInt(request.getParameter("id"));
-        if(idAccion != 0){
-            Accion AccionMejora = (Mejora) fLectura.GetAccion(idAccion);
+        IdAccionMejora = Integer.parseInt(request.getParameter("id"));
+        if(IdAccionMejora != 0){
+            Accion AccionMejora = (Mejora) fLectura.GetAccion(IdAccionMejora);
             FechaDeteccion = AccionMejora.getFechaDeteccion();
             Descripcion = AccionMejora.getDescripcion();
             AnalisisCausa = AccionMejora.getAnalisisCausa();
@@ -151,6 +166,7 @@ public class EditarAccionMejora implements Serializable {
             //  Codificaciones
             ListaCodificaciones = new HashMap<>();
             List<Codificacion> tmpCodificaciones = fLectura.ListarCodificaciones();
+            ListaCodificaciones.put(0, "--- Nueva ---");
             for(Codificacion codificacion:tmpCodificaciones){
                 ListaCodificaciones.put(codificacion.getId(), codificacion.getNombre());
             }
@@ -168,16 +184,27 @@ public class EditarAccionMejora implements Serializable {
                 }
             }
             DeteccionSeleccionada = AccionMejora.getGeneradaPor().getId();
-            
+
             // Areas Sectores
             ListaAreasSectores = new HashMap<>();
             List<Area> tmpAreas = fLectura.ListarAreasSectores();
             for(Area area:tmpAreas){
-                this.ListaAreasSectores.put(area.getId(), area.getNombre());
+                this.ListaAreasSectores.put(area.getId(), area);
             }
             AreaSectorAccionSeleccionada = AccionMejora.getAreaSectorAccion().getId();
+            actualizarListaAdjuntos();
         }
-        
+    }
+    
+    private void actualizarListaAdjuntos(){
+        Accion AccionMejora = (Mejora) fLectura.GetAccion(IdAccionMejora);
+        if(!AccionMejora.getAdjuntos().isEmpty()){
+            List<Adjunto> listAdjuntos = AccionMejora.getAdjuntos();
+            this.MapAdjuntos = new HashMap<>();
+            for(Adjunto adjunto: listAdjuntos){
+                this.MapAdjuntos.put(adjunto.getId(), adjunto);
+            }
+        }
     }
     
     /**
@@ -210,6 +237,78 @@ public class EditarAccionMejora implements Serializable {
         }
     }
     
+    /**
+     * Crea nueva codificacion.
+     * Se verifica que el nombre o la descripcion no esten vacios. Si estan vacios no se crea y se muestra un mensaje
+     */
+    public void nuevaCodificacion(){
+        if(NombreNuevaCodificacion.isEmpty() || DescripcionNuevaCodificacion.isEmpty()){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva codificacion", "No se pudo crear nueva codificacion" ));
+            FacesContext.getCurrentInstance().renderResponse();
+        }else{
+            // Crear Nueva Codificacion y actualizar lista
+            Codificacion cod = fAdmin.NuevaCodificacion(NombreNuevaCodificacion, DescripcionNuevaCodificacion);
+            if(cod != null){
+                actualizarCodificacion();
+                this.CodificacionSeleccionada = cod.getId();
+                this.NombreNuevaCodificacion = new String();
+                this.DescripcionNuevaCodificacion = new String();
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_INFO, "Se agrego nueva codificacion", "Se agrego nueva codificacion" ));
+                FacesContext.getCurrentInstance().renderResponse();
+            }else{
+                System.out.println("Error");
+            }
+        }
+    }
+    
+    /**
+     * Actualiza la lista de codificaciones.
+     */
+    public void actualizarCodificacion(){
+        List<Codificacion> tmpCodificacion = fLectura.ListarCodificaciones();
+        this.ListaCodificaciones.clear();
+        this.ListaCodificaciones.put(0, " --- Nueva Codificacion --- ");
+        for(Codificacion codificacion:tmpCodificacion){
+            ListaCodificaciones.put(codificacion.getId(), codificacion.getNombre());
+        }
+    }    
+       
+    /**
+     * Carga el adjunto en la lista de adjuntos.
+     * Deja vacios los campos para un nuevo adjunto.
+     */
+    public void agregarAdjunto(){
+        String datosAdjunto[] = cArchivo.guardarArchivo("Mejora_"+ String.valueOf(IdAccionMejora), ArchivoAdjunto, TituloAdjunto, "Nombre Empresa");
+        // datosAdjunto[0]: ubicacion | datosAdjunto[1]: extension
+        if(!datosAdjunto[0].isEmpty()){
+            EnumTipoAdjunto tipoAdjunto = EnumTipoAdjunto.IMAGEN;
+            String extension = datosAdjunto[1];
+            if(!extension.equalsIgnoreCase("jpg") || !extension.equalsIgnoreCase("png") || !extension.equalsIgnoreCase("gif") || !extension.equalsIgnoreCase("jpeg") ){
+                tipoAdjunto = EnumTipoAdjunto.DOCUMENTO;
+            }
+            if((fDatos.AgregarArchivoAdjunto(IdAccionMejora, TituloAdjunto, datosAdjunto[0], tipoAdjunto))!=-1){
+                actualizarListaAdjuntos();
+                this.TituloAdjunto = new String();
+                this.ArchivoAdjunto =  null;
+                
+            }else{
+                cArchivo.BorrarArchivo(datosAdjunto[0]);
+            }
+        }
+    }
+    
+    /**
+     * Quita el adjunto de la lista de adjuntos.
+     * @param IdAdjunto
+     * @throws IOException
+     */
+    public void quitarAdjunto(int IdAdjunto) throws IOException{
+        if(cArchivo.BorrarArchivo(this.MapAdjuntos.get(IdAdjunto).getUbicacion())){
+            if((fDatos.RemoverAdjunto(IdAccionMejora, IdAdjunto))!=-1){
+                this.MapAdjuntos.remove(IdAdjunto);
+            }
+        }
+    }
     
     /**
      * Actualiza la accion correctiva con los datos nuevos.
@@ -219,7 +318,7 @@ public class EditarAccionMejora implements Serializable {
      */
     public void editarAccionMejora() throws IOException{
         // actualizar accion
-        if(fDatos.EditarAccion(IdAccionMejora, EnumAccion.MEJORA, FechaDeteccion, Descripcion, null,
+        if(fDatos.EditarAccion(IdAccionMejora, EnumAccion.CORRECTIVA, FechaDeteccion, Descripcion, null,
                 AreaSectorAccionSeleccionada, DeteccionSeleccionada, CodificacionSeleccionada) != -1){
             // Si no se actualizo muestra mensaje de error.
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
@@ -227,7 +326,7 @@ public class EditarAccionMejora implements Serializable {
         }else{
             // Si la actualizacion se realizo correctamente redirige a lista de acciones.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Mejoras/ListarMejoras.xhtml");
         }
     }
     
@@ -244,7 +343,7 @@ public class EditarAccionMejora implements Serializable {
         }else{
             // Si la eliminacion se realizo correctamente redirige a lista de acciones.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Mejoras/ListarMejoras.xhtml");
         }
     }
     

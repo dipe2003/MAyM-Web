@@ -34,7 +34,6 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
 
 
 
@@ -53,25 +52,18 @@ public class CrearAccionMejora implements Serializable {
     private Date FechaDeteccion;
     private String strFechaDeteccion;
     private String Descripcion;
-    private String AnalisisCausa;
-    
-    private String TituloAdjunto;
-    private String UbicacionAdjunto;
-    private Map<String, String> ListaAdjuntos;
-    private Part ArchivoAdjunto;
-    private Map<String, Part> ArchivosAdjuntos;
     
     private EnumTipoDeteccion[] TiposDeteccion;
     private EnumTipoDeteccion TipoDeDeteccionSeleccionada;
+    private EnumTipoDeteccion TipoNuevaDeteccion;
     private String NombreNuevaDeteccion;
     private Map<Integer, String> ListaDetecciones;
     private Integer DeteccionSeleccionada;
-    
-    private Map<Integer, String> ListaAreasSectores;
+        
+    private Map<Integer, Area> ListaAreasSectores;
     private Integer AreaSectorAccionSeleccionada;
     
-    //  Getters
-    
+    //  Getters    
     public Date getFechaDeteccion() {return FechaDeteccion;}
     public String getStrFechaDeteccion(){
         SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
@@ -81,25 +73,19 @@ public class CrearAccionMejora implements Serializable {
             return fDate.format(FechaDeteccion);
         }
     }
-    public String getDescripcion() {return Descripcion;}
-    public String getAnalisisCausa() {return AnalisisCausa;}
-    public String getTituloAdjunto(){return this.TituloAdjunto;}
-    public String getUbicacionAdjunto(){return this.UbicacionAdjunto;}
-    public Map<String, String> getAdjuntos() {return ListaAdjuntos;}
-    public Part getArchivoAdjunto() {return ArchivoAdjunto;}
-    public Map<String, Part> getArchivosAdjuntos() {return ArchivosAdjuntos;}
+    public String getDescripcion() {return Descripcion;}   
     
     public EnumTipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
     public EnumTipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
     public Map<Integer, String> getListaDetecciones(){return this.ListaDetecciones;}
     public String getNombreNuevaDeteccion(){return this.NombreNuevaDeteccion;}
     public Integer getDeteccionSeleccionada(){return this.DeteccionSeleccionada;}
+    public EnumTipoDeteccion getTipoNuevaDeteccion() {return TipoNuevaDeteccion;}
     
-    public Map<Integer, String> getListaAreasSectores(){return this.ListaAreasSectores;}
+    public Map<Integer, Area> getListaAreasSectores(){return this.ListaAreasSectores;}
     public Integer getAreaSectorAccionSeleccionada() {return AreaSectorAccionSeleccionada;}
     
-    //  Setters
-    
+//  Setters    
     public void setFechaDeteccion(Date FechaDeteccion) {this.FechaDeteccion = FechaDeteccion;}
     public void setStrFechaDeteccion(String strFechaDeteccion) {
         Calendar cal = Calendar.getInstance();
@@ -111,21 +97,17 @@ public class CrearAccionMejora implements Serializable {
         this.FechaDeteccion = cal.getTime();
     }
     public void setDescripcion(String Descripcion) {this.Descripcion = Descripcion;}
-    public void setAnalisisCausa(String AnalisisCausa) {this.AnalisisCausa = AnalisisCausa;}
-    public void setTituloAdjunto(String TituloAdjunto){this.TituloAdjunto = TituloAdjunto;}
-    public void setUbicacionAdjunto(String UbicacionAdjunto){this.UbicacionAdjunto = UbicacionAdjunto;}
-    public void setAdjuntos(Map<String, String> Adjuntos) {this.ListaAdjuntos = Adjuntos;}
-    public void setArchivoAdjunto(Part ArchivoAdjunto) {this.ArchivoAdjunto = ArchivoAdjunto;}
-    public void setArchivosAdjuntos(Map<String, Part> ArchivosAdjuntos) {this.ArchivosAdjuntos = ArchivosAdjuntos;}
     
     public void setTipoDeDeteccionSeleccionada(EnumTipoDeteccion TipoDeteccion){this.TipoDeDeteccionSeleccionada = TipoDeteccion;}
     public void setTiposDeteccion(EnumTipoDeteccion[] TiposDeteccion){this.TiposDeteccion = TiposDeteccion;}
     public void setListaDetecciones(Map<Integer, String> ListaDetecciones){this.ListaDetecciones = ListaDetecciones;}
     public void setNombreNuevaDeteccion(String NombreNuevaDeteccion){this.NombreNuevaDeteccion = NombreNuevaDeteccion;}
     public void setDeteccionSeleccionada(Integer DeteccionSeleccionada){this.DeteccionSeleccionada = DeteccionSeleccionada;}
+    public void setTipoNuevaDeteccion(EnumTipoDeteccion TipoNuevaDeteccion) {this.TipoNuevaDeteccion = TipoNuevaDeteccion;}
     
-    public void setListaAreaSectores(Map<Integer, String> ListaAreasSectores){this.ListaAreasSectores = ListaAreasSectores;}
+    public void setListaAreaSectores(Map<Integer, Area> ListaAreasSectores){this.ListaAreasSectores = ListaAreasSectores;}
     public void setAreaSectorAccionSeleccionada(Integer AreaSectorAccionSeleccionada) {this.AreaSectorAccionSeleccionada = AreaSectorAccionSeleccionada;}
+
     
     //  Metodos
     
@@ -138,19 +120,19 @@ public class CrearAccionMejora implements Serializable {
         TiposDeteccion = EnumTipoDeteccion.values();
         TipoDeDeteccionSeleccionada = EnumTipoDeteccion.INTERNA;
         this.ListaDetecciones = new HashMap<>();
+        this.ListaDetecciones.put(0, " --- Nueva Deteccion --- ");
         List<Deteccion> tmpDetecciones = fLectura.ListarDetecciones();
-        ListaDetecciones.put(0, "--- Nueva ---");
         for(Deteccion deteccion:tmpDetecciones){
             if (deteccion.getTipo().equals(EnumTipoDeteccion.INTERNA)){
                 ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
             }
         }
-        
+                
         // Areas Sectores
         ListaAreasSectores = new HashMap<>();
         List<Area> tmpAreas = fLectura.ListarAreasSectores();
         for(Area area:tmpAreas){
-            this.ListaAreasSectores.put(area.getId(), area.getNombre());
+            this.ListaAreasSectores.put(area.getId(), area);
         }
     }
     
@@ -159,7 +141,8 @@ public class CrearAccionMejora implements Serializable {
      */
     public void actualizarDeteccion(){
         List<Deteccion> tmpDetecciones = fLectura.ListarDetecciones();
-        ListaDetecciones.put(0, "--- Nueva ---");
+        this.ListaDetecciones.clear();
+        this.ListaDetecciones.put(0, " --- Nueva Deteccion --- ");
         for(Deteccion deteccion:tmpDetecciones){
             if (deteccion.getTipo().equals(TipoDeDeteccionSeleccionada)){
                 ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
@@ -173,33 +156,40 @@ public class CrearAccionMejora implements Serializable {
      */
     public void nuevaDeteccion(){
         if(NombreNuevaDeteccion.isEmpty()){
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
+            FacesContext.getCurrentInstance().addMessage("form_nueva_mejora:deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             // Crear Nueva Deteccion y actualizar lista
-            fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoDeDeteccionSeleccionada);
-            actualizarDeteccion();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_INFO, "Se agrego nueva deteccion", "Se agrego nueva deteccion" ));
-            FacesContext.getCurrentInstance().renderResponse();
+            Deteccion det = fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoDeDeteccionSeleccionada);
+            if(det != null){
+                actualizarDeteccion();
+                this.DeteccionSeleccionada = det.getId();
+                this.NombreNuevaDeteccion = new String();
+                FacesContext.getCurrentInstance().addMessage("form_nueva_mejora:deteccion", new FacesMessage(SEVERITY_INFO, "Se agrego nueva deteccion", "Se agrego nueva deteccion" ));
+                FacesContext.getCurrentInstance().renderResponse();
+            }else{
+                FacesContext.getCurrentInstance().addMessage("form_nueva_mejora:deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
+                FacesContext.getCurrentInstance().renderResponse();
+            }
         }
-    }
+    }    
     
     /**
-     * Crea la accion de mejora con los datos ingresados.
+     * Crea la accion correctiva con los datos ingresados.
      * Si no se creo se muestra mensaje de error.
-     * Si se creo se redirige a la pagina de listado de acciones.
+     * Si se creo se redirige a la pagina de edicion para agregar mas datos.
      * @throws java.io.IOException
      */
-    public void crearAccionMejora() throws IOException{
+    public void crearAccionCorrectiva() throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         Empresa empresa = (Empresa)request.getSession().getAttribute("Empresa");
-        Accion accion = fDatos.NuevaAccion(EnumAccion.MEJORA, FechaDeteccion, Descripcion, null, AreaSectorAccionSeleccionada, DeteccionSeleccionada, empresa.getId());
+        Accion accion = fDatos.NuevaAccion(EnumAccion.MEJORA, FechaDeteccion,
+                Descripcion, null, AreaSectorAccionSeleccionada, DeteccionSeleccionada, 100);
         
-        if(accion != null){            
-            // redirigir a la lista de las acciones de mejoras.
+        if(accion != null){
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Mejoras/EditarMejora.xhtml?id="+accion.getId());
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Mejoras/EditarAccionMejora.xhtml?id="+accion.getId());
         }else{
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Accion", "No se pudo crear la Accion" ));
             FacesContext.getCurrentInstance().renderResponse();

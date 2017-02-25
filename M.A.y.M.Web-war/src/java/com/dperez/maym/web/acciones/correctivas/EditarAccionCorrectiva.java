@@ -367,7 +367,7 @@ public class EditarAccionCorrectiva implements Serializable {
      * Deja vacios los campos para un nuevo adjunto.
      */
     public void agregarAdjunto(){
-        String datosAdjunto[] = cArchivo.guardarArchivo("Correctiva_Id"+ String.valueOf(IdAccionCorrectiva) + "_", ArchivoAdjunto, TituloAdjunto, "Nombre Empresa");
+        String datosAdjunto[] = cArchivo.guardarArchivo("Correctiva_"+ String.valueOf(IdAccionCorrectiva), ArchivoAdjunto, TituloAdjunto, "Nombre Empresa");
         // datosAdjunto[0]: ubicacion | datosAdjunto[1]: extension
         if(!datosAdjunto[0].isEmpty()){
             EnumTipoAdjunto tipoAdjunto = EnumTipoAdjunto.IMAGEN;
@@ -415,7 +415,7 @@ public class EditarAccionCorrectiva implements Serializable {
         }else{
             // Si la actualizacion se realizo correctamente redirige a lista de acciones.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/ViewsAcciones/Correctivas/ListarCorrectivas.xhtml");
         }
     }
     
@@ -432,7 +432,7 @@ public class EditarAccionCorrectiva implements Serializable {
         }else{
             // Si la eliminacion se realizo correctamente redirige a lista de acciones.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/ListarCorrectivas.xhtml");
         }
     }
     

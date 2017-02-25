@@ -1,0 +1,208 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../../../index.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"          
+                xmlns:f="http://xmlns.jcp.org/jsf/core"                    
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                
+                xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+    <ui:define name="page_content">
+        <div class="container-fluid" style="padding: 1%">
+            <div class="jumbotron">
+                <h1>Bienvenido a <abbr title="Medicion Analisis y Mejora" >M.A.Y.M.</abbr> </h1>      
+                <p>Este es el sitio para crear editar acciones correctivas.</p>  
+            </div>                        
+        </div>
+        <div class="container-fluid" style="padding: 1%">
+            <h:form id="form_editar_mejora" enctype="multipart/form-data">
+                <!-- Descripcion -->
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Descripcion</div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <strong><label for="fecha_deteccion">Fecha Deteccion:</label></strong>
+                            <h:inputText id="fecha_deteccion" class="form-control calendario" p:placeholder="Fecha de deteccion de la mejora." value="#{editarAccionMejora.strFechaDeteccion}" required="true"/>
+                        </div>
+                        <div class="form-group">
+                            <strong><label for="area">Area / Sector:</label></strong>
+                            <h:selectOneMenu id="area" class="form-control" value="#{editarAccionMejora.areaSectorAccionSeleccionada}" required="true">
+                                <f:selectItem itemValue="-- Seleccionar Area ---"  itemDisabled="false"  noSelectionOption="true"  />
+                                <c:forEach items="#{editarAccionMejora.listaAreasSectores}" var="area">
+                                    <f:selectItem itemLabel="#{area.value.nombre}" itemValue="#{area.value.id}" />
+                                </c:forEach>
+                            </h:selectOneMenu>
+                        </div>
+                        <div class="form-group">
+                            <strong><label for="tipo_deteccion">Tipo de Deteccion:</label></strong>                                    
+                            <h:selectOneRadio id="tipo_deteccion" value="#{editarAccionMejora.tipoDeDeteccionSeleccionada}" required="true">
+                                <c:forEach items="#{editarAccionMejora.tiposDeteccion}" var="tipo">
+                                    <div class="radio" >
+                                        <f:selectItem itemLabel="#{tipo}" itemValue="#{tipo}" />
+                                    </div>
+                                </c:forEach>
+                                <f:ajax execute="@this"/>
+                                <f:ajax render="deteccion" listener="#{editarAccionMejora.actualizarDeteccion()}" onevent="indicador"/>
+                            </h:selectOneRadio>
+                        </div> 
+                        <div class="form-group">
+                            <strong><label for="deteccion">Generada Por:</label></strong>                                    
+                            <h:selectOneMenu id="deteccion" class="form-control" value="#{editarAccionMejora.deteccionSeleccionada}" required="true">
+                                <f:selectItem itemLabel="-- Seleccionar Deteccion ---" itemValue="-1" itemDisabled="false"  noSelectionOption="false"  />
+                                <c:forEach items="#{editarAccionMejora.listaDetecciones}" var="deteccion">
+                                    <f:selectItem itemLabel="#{deteccion.value}" itemValue="#{deteccion.key}" />
+                                </c:forEach>
+                                <f:ajax execute="@this"/>
+                                <f:ajax render="panel_nueva_deteccion"/>
+                            </h:selectOneMenu>
+                        </div>                                              
+                        <h:panelGroup id="panel_nueva_deteccion" >
+                            <c:if test="#{(editarAccionMejora.deteccionSeleccionada == 0) and (editarAccionMejora.deteccionSeleccionada ne -1) }">
+                                <div class="form-group">
+                                    <strong><label for="tipo_nueva_deteccion" >Tipo de Deteccion:</label></strong>
+                                    <h:selectOneRadio id="tipo_nueva_deteccion" value="#{editarAccionMejora.tipoNuevaDeteccion}">
+                                        <f:selectItem itemLabel="Interna" itemValue="INTERNA"/>
+                                        <f:selectItem itemLabel="Externa" itemValue="EXTERNA"/>
+                                    </h:selectOneRadio>
+                                </div>
+                                <div class="form-group">
+                                    <strong><label for="nombre_nueva_deteccion">Nombre de Deteccion:</label></strong>
+                                    <h:inputText id="nombre_nueva_deteccion" class="form-control" p:placeholder="Nombre de nueva deteccion." value="#{editarAccionMejora.nombreNuevaDeteccion}"/>
+                                </div>
+                                <div class="form-group">
+                                    <h:commandButton action="#{editarAccionMejora.nuevaDeteccion()}" value="Nueva">
+                                        <f:ajax execute="panel_nueva_deteccion" render="deteccion panel_nueva_deteccion"/>
+                                    </h:commandButton>
+                                </div>                                
+                            </c:if>                            
+                        </h:panelGroup>
+                        
+                        <div class="form-group">
+                            <strong><label for="descripcion">Descripcion:</label></strong>                                    
+                            <h:inputTextarea class="form-control" id="descripcion" p:placeholder="Descripcion de la situacion." value="#{editarAccionMejora.descripcion}" required="true"/>
+                        </div>
+                    </div>
+                </div> 
+                
+                <!-- Analisis de Causa -->
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Analisis de Causa</div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <strong><label for="analisis_causa">Analisis de Causa Raiz:</label></strong>                                    
+                            <h:inputTextarea class="form-control" id="analisis_caousa"  p:placeholder="Analisis de causa raiz utilizando por ejemplo la tecnica de 5 porques." value="#{editarAccionMejora.analisisCausa}"/>
+                        </div>
+                        <div class="form-group">
+                            <strong><label for="codificacion">Codificacion:</label></strong>                                    
+                            <h:selectOneMenu id="codificacion" class="form-control" value="#{editarAccionMejora.codificacionSeleccionada}">
+                                <f:selectItem itemLabel="-- Seleccionar Codificacion ---" itemValue="-1" itemDisabled="false"  noSelectionOption="false"  />
+                                <c:forEach items="#{editarAccionMejora.listaCodificaciones}" var="codificacion">
+                                    <f:selectItem itemLabel="#{codificacion.value}" itemValue="#{codificacion.key}" />
+                                </c:forEach>
+                                <f:ajax execute="@this"/>
+                                <f:ajax render="panel_nueva_codificacion"/>
+                            </h:selectOneMenu>
+                        </div>
+                        
+                        <h:panelGroup id="panel_nueva_codificacion" >
+                            <c:if test="#{(editarAccionMejora.codificacionSeleccionada == 0) and (editarAccionMejora.codificacionSeleccionada ne -1) }">
+                                <div class="form-group">
+                                    <strong><label for="nombre_nueva_codificacion">Nombre de Codificacion:</label></strong>
+                                    <h:inputText id="nombre_nueva_codificacion" class="form-control" p:placeholder="Nombre de nueva codificacion." value="#{editarAccionMejora}" />
+                                </div>
+                                <div class="form-group">
+                                    <strong><label for="descripcion_nueva_codificacion">Descripcion de Codificacion:</label></strong>
+                                    <h:inputText id="descripcion_nueva_codificacion" class="form-control" p:placeholder="Descripcion de nueva codificacion." value="#{editarAccionMejora.descripcionNuevaCodificacion}" />
+                                </div>
+                                <div class="form-group">
+                                    <h:commandButton action="#{editarAccionMejora.nuevaCodificacion()}" value="Nueva">
+                                        <f:ajax execute="panel_nueva_codificacion" render="codificacion panel_nueva_codificacion"/>
+                                    </h:commandButton>
+                                </div>
+                            </c:if>
+                        </h:panelGroup>
+                        
+                        
+                    </div>
+                </div>
+                
+                <!-- Adjuntos -->
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Archivos Adjuntos / Anexos:</div>
+                    <div class="panel-body">
+                        <h:panelGroup id="panel_datos_adjunto">
+                            <div class="form-group">
+                                <strong><label for="titulo_adjunto">Titulo:</label></strong>
+                                <h:inputText id="titulo_adjunto" class="form-control" p:placeholder="Titulo que describe el adjunto." value="#{editarAccionMejora.tituloAdjunto}">
+                                    <f:ajax execute="@this"  onevent="indicador"/>
+                                    <f:ajax render="panel_titulo_adjunto" />
+                                </h:inputText>
+                            </div>
+                            <h:panelGroup id="panel_titulo_adjunto" >
+                                <c:if test="#{not empty editarAccionMejora.tituloAdjunto}">
+                                    <div class="form-group">
+                                        <h:inputFile value="#{editarAccionMejora.archivoAdjunto}" p:accept="image/x-png,image/gif,image/jpeg,application/pdf">
+                                            <f:ajax event="change" listener="#{editarAccionMejora.setArchivoAdjunto(editarAccionMejora.archivoAdjunto)}" />
+                                            <f:ajax event="change" listener="#{editarAccionMejora.agregarAdjunto()}" render="panel_lista_adjuntos panel_datos_adjunto" onevent="indicador"/>
+                                        </h:inputFile>
+                                    </div>
+                                </c:if>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                        
+                        <h:panelGroup id="panel_lista_adjuntos">
+                            <c:if test="#{not empty editarAccionMejora.mapAdjuntos}"> 
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <table class="table table-hover table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th width="30%">Titulo del Adjunto:</th>
+                                                    <th width="60%">Adjunto:</th>
+                                                    <th width="20%"></th>
+                                                </tr>                                                
+                                            </thead>
+                                            <tbody>
+                                                <c:forEach items="#{editarAccionMejora.mapAdjuntos}" var="adjunto">
+                                                    <tr>
+                                                        <td>#{adjunto.value.titulo}</td>
+                                                        <td>
+                                                            <c:choose>
+                                                                <c:when test="#{adjunto.value.tipoAdjunto == 'IMAGEN'}" >
+                                                                    <a href="#{adjunto.value.ubicacion}" target="blank"><img alt="#{adjunto.value.ubicacion}" src="#{adjunto.value.ubicacion}" class="img-responsive img-thumbnail" width="10%"/></a>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <a href="#{adjunto.value.ubicacion}" target="blank" >Ver Documento</a>
+                                                                </c:otherwise> 
+                                                            </c:choose>                                                            
+                                                        </td>
+                                                        <td><div class="btn-group">
+                                                                <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
+                                                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                                    <span class="caret"></span>
+                                                                </button>
+                                                                <ul class="dropdown-menu" role="menu">
+                                                                    <li><h:commandLink action="#{editarAccionMejora.quitarAdjunto(adjunto.key)}" value="Eliminar Adjunto" onclick="if (! confirm('Seguro que desea quitar este adjunto? Se eliminara inmediatamente de la accion.')) return false">
+                                                                            <f:ajax render="panel_lista_adjuntos"  onevent="indicador"/>
+                                                                        </h:commandLink>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </c:if>
+                        </h:panelGroup>
+                    </div>
+                </div>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>
+
+

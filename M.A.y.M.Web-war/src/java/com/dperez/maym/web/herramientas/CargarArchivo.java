@@ -46,13 +46,13 @@ public class CargarArchivo implements Serializable{
         String[] realPath = new String[2];
         if (Archivo != null) {
             try{
-                String resPath = "MAyM_Web"+separator+"Adjuntos"+separator+NombreEmpresa+separator;                
+                String resPath = "MAyM_Web"+separator+"Adjuntos"+separator+NombreEmpresa+separator+DirectorioArchivo+separator;                
                 String extensionArchivo = FilenameUtils.getExtension(Archivo.getSubmittedFileName());
                 realPath[1] = extensionArchivo;
-                NombreArchivo = DirectorioArchivo + NombreArchivo + "."+extensionArchivo;
+                NombreArchivo = NombreArchivo + "."+extensionArchivo;
                 //String baseDatos = "/img/"+DirectorioArchivo+"/"+NombreArchivo;
                 realPath[0] = homeDir+separator+resPath+NombreArchivo;                
-                String[] baseDatos = {"/adjuntos/"+NombreEmpresa+"/"+NombreArchivo, extensionArchivo};
+                String[] baseDatos = {"/adjuntos/"+NombreEmpresa+"/"+DirectorioArchivo+"/"+NombreArchivo, extensionArchivo};
                 Archivo.write(realPath[0]);
                 return baseDatos;
             }catch(FileNotFoundException ex){
