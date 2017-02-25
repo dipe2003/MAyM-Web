@@ -7,12 +7,16 @@ package com.dperez.maym.web.acciones.preventivas;
 
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.empresa.Empresa;
+import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -26,29 +30,23 @@ import javax.servlet.http.HttpServletRequest;
 @Named
 @ViewScoped
 public class ListarPreventivas implements Serializable{
-    @Inject
+     @Inject
     private FacadeLectura fLectura;
+    @Inject
+    private FacadeAdministrador fAdmin;
     
     private Map<Integer, Accion> ListaAcciones;
     
+    //  Getters    
+    public Map<Integer, Accion> getListaAcciones() {return ListaAcciones;}
     
-    //  Getters
-    
-    public Map<Integer, Accion> getListaAcciones() {
-        return ListaAcciones;
-    }
-    
-    
-    //  Setters
-    
-    public void setListaAcciones(Map<Integer, Accion> ListaAcciones) {
-        this.ListaAcciones = ListaAcciones;
-    }
-    
+    //  Setters    
+    public void setListaAcciones(Map<Integer, Accion> ListaAcciones) {this.ListaAcciones = ListaAcciones;}
     
     // Metodos
     
     //  Inicializacion
+    @PostConstruct
     public void init(){
         // recuperar Empresa para filtrar las acciones
         FacesContext context = FacesContext.getCurrentInstance();
@@ -59,7 +57,7 @@ public class ListarPreventivas implements Serializable{
         ListaAcciones = new HashMap<>();
         List<Accion> acciones = fLectura.ListarAccionesPreventivas();
         for(Accion accion: acciones){
-            if(accion.getEmpresaAccion().getId() == empresa.getId())
+            if(accion.getEmpresaAccion().getId() == 100)
                 ListaAcciones.put(accion.getId(), accion);
         }
     }
@@ -80,6 +78,16 @@ public class ListarPreventivas implements Serializable{
      */
     public void abrirEdicion(int IdAccionSeleccionada) throws IOException{
         String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-        FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml?id="+IdAccionSeleccionada);
+        FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Preventiva/EditarAccionPreventiva.xhtml?id="+IdAccionSeleccionada);
+    }
+    
+    public void eliminarAccion(int IdAccionSeleccoiondada) throws IOException{
+        if((fAdmin.EliminarAccion(IdAccionSeleccoiondada))!= -1){
+        String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+        FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Preventivas/ListarPreventivas.xhtml");
+        }else{
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo eliminar la accion", "No se pudo eliminar la accion" ));
+            FacesContext.getCurrentInstance().renderResponse();
+        }
     }
 }

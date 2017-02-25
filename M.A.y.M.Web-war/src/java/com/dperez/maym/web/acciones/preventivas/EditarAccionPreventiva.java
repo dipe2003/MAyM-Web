@@ -182,7 +182,7 @@ public class EditarAccionPreventiva implements Serializable {
             List<Deteccion> tmpDetecciones = fLectura.ListarDetecciones();
             ListaDetecciones.put(0, "--- Nueva ---");
             for(Deteccion deteccion:tmpDetecciones){
-                if (deteccion.getTipo().equals(EnumTipoDeteccion.INTERNA)){
+                if (deteccion.getTipo().equals(TipoDeDeteccionSeleccionada)){
                     ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
                 }
             }
