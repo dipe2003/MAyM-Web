@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -373,14 +374,18 @@ public class EditarAccionCorrectiva implements Serializable {
         if(!datosAdjunto[0].isEmpty()){
             EnumTipoAdjunto tipoAdjunto = EnumTipoAdjunto.IMAGEN;
             String extension = datosAdjunto[1];
-            if(!extension.equalsIgnoreCase("jpg") || !extension.equalsIgnoreCase("png") || !extension.equalsIgnoreCase("gif") || !extension.equalsIgnoreCase("jpeg") ){
+            List<String> tipos = new ArrayList<>();
+            tipos.add("jpeg");
+            tipos.add("jpg");
+            tipos.add("png");
+            tipos.add("gif");            
+            if(!tipos.contains(extension.toLowerCase().trim())){
                 tipoAdjunto = EnumTipoAdjunto.DOCUMENTO;
             }
             if((fDatos.AgregarArchivoAdjunto(IdAccionCorrectiva, TituloAdjunto, datosAdjunto[0], tipoAdjunto))!=-1){
                 actualizarListaAdjuntos();
                 this.TituloAdjunto = new String();
-                this.ArchivoAdjunto =  null;
-                
+                this.ArchivoAdjunto =  null;                
             }else{
                 cArchivo.BorrarArchivo(datosAdjunto[0]);
             }
