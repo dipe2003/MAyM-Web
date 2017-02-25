@@ -296,7 +296,11 @@ public class CrearAccionCorrectiva implements Serializable {
         
         if(accion != null){
             // agrega los productos afectados
-            if(hayProductoAfectado) fDatos.AgregarProductoInvolucrado(accion.getId(), ListaProductosAfectados);
+            if(hayProductoAfectado) {
+                for(Map.Entry entry: ListaProductosAfectados.entrySet()){
+                    fDatos.AgregarProductoInvolucrado(accion.getId(), (String)entry.getKey(), (String)entry.getValue());
+                }
+            }
             // redirigir a la lista de las acciones correctivas.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/EditarAccionCorrectiva.xhtml?id="+accion.getId());

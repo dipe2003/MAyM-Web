@@ -8,6 +8,7 @@ package com.dperez.maymweb.facades;
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.acciones.EnumAccion;
 import com.dperez.maymweb.accion.acciones.EnumTipoDesvio;
+import com.dperez.maymweb.accion.adjunto.EnumTipoAdjunto;
 import com.dperez.maymweb.controlador.registro.ControladorEdicionRegistro;
 import com.dperez.maymweb.controlador.registro.ControladorRegistro;
 import com.dperez.maymweb.fortaleza.Fortaleza;
@@ -51,11 +52,12 @@ public class FacadeDatos {
     /**
      * Crea el/los productos involucrados en el desvio, los agrega a la accion correctiva y actualiza la base de datos.
      * @param AccionCorrectiva
-     * @param productos Map.Key = Nombre del producto | Map.Value = Datos del producto
+     * @param NombreProducto
+     * @param DatosProducto
      * @return -1 si no se creo.
      */
-    public int AgregarProductoInvolucrado(int AccionCorrectiva, Map<String, String> productos){
-        return cReg.AgregarProductoInvolucrado(AccionCorrectiva, productos);
+    public int AgregarProductoInvolucrado(int AccionCorrectiva, String NombreProducto, String DatosProducto){
+        return cReg.AgregarProductoInvolucrado(AccionCorrectiva, NombreProducto, DatosProducto);
     }
     
     /**
@@ -63,10 +65,11 @@ public class FacadeDatos {
      * @param IdAccion
      * @param TituloAdjunto
      * @param UbicacionAdjunto
+     * @param TipoAdjunto
      * @return -1 si no se creo.
      */
-    public int AgregarArchivoAdjunto(int IdAccion, String TituloAdjunto, String UbicacionAdjunto){
-        return cReg.AgregarArchivoAdjunto(IdAccion, TituloAdjunto, UbicacionAdjunto);
+    public int AgregarArchivoAdjunto(int IdAccion, String TituloAdjunto, String UbicacionAdjunto, EnumTipoAdjunto TipoAdjunto){
+        return cReg.AgregarArchivoAdjunto(IdAccion, TituloAdjunto, UbicacionAdjunto, TipoAdjunto);
     }
     
     /**

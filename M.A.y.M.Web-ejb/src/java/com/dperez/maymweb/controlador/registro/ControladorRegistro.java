@@ -17,20 +17,25 @@ import com.dperez.maymweb.accion.acciones.Preventiva;
 import com.dperez.maymweb.accion.adjunto.Adjunto;
 import com.dperez.maymweb.accion.actividad.ManejadorActividad;
 import com.dperez.maymweb.accion.actividad.Actividad;
+import com.dperez.maymweb.accion.adjunto.EnumTipoAdjunto;
 import com.dperez.maymweb.accion.adjunto.ManejadorAdjunto;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.area.ManejadorArea;
+import com.dperez.maymweb.codificacion.Codificacion;
+import com.dperez.maymweb.codificacion.ManejadorCodificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.ManejadorDeteccion;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.empresa.ManejadorEmpresa;
 import com.dperez.maymweb.fortaleza.Fortaleza;
 import com.dperez.maymweb.fortaleza.ManejadorFortaleza;
+import com.dperez.maymweb.producto.ManejadorProducto;
 import com.dperez.maymweb.producto.Producto;
 import com.dperez.maymweb.usuario.ManejadorUsuario;
 import com.dperez.maymweb.usuario.Usuario;
 import java.security.InvalidParameterException;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -59,12 +64,17 @@ public class ControladorRegistro {
     private ManejadorEmpresa mEmpresa;
     @Inject
     private ManejadorFortaleza mFortaleza;
+    @Inject
+    private ManejadorCodificacion mCodificacion;
+    @Inject
+    private ManejadorProducto mProducto;
     
     //  Constructores
     public ControladorRegistro(){}
     
     /**
      * Crea una nueva accion en estado pendiente y la persiste en la base de datos.
+     * Se codifica automaticamente la accion como 'Sin Codificar'. Si la codificacon no existe se crea.
      * @param TipoAccion
      * @param FechaDeteccion
      * @param Descripcion
@@ -97,6 +107,22 @@ public class ControladorRegistro {
             Deteccion deteccion = mDeteccion.GetDeteccion(IdDeteccion);
             accion.setGeneradaPor(deteccion);
             accion.setEmpresaAccion(empresa);
+            // codificacion
+            List<Codificacion> cods = mCodificacion.ListarCodificaciones();
+            int existe = 0;
+            for(Codificacion cod: cods){
+                if(cod.getNombre().equalsIgnoreCase("Sin Codificar")) existe = cod.getId();
+            }
+            if(existe==0){
+                Codificacion codificacion = new Codificacion("Sin Codificar", "No se ha asignado codificacion aun.");
+                codificacion.setId(mCodificacion.CrearCodificacion(codificacion));
+                empresa.addCodificacionEmpresa(codificacion);
+                mEmpresa.ActualizarEmpresa(empresa);
+                accion.setCodificacionAccion(codificacion);
+            }else{
+                Codificacion codificacion = mCodificacion.GetCodificacion(existe);
+                accion.setCodificacionAccion(codificacion);
+            }            
             accion.setId(mAccion.CrearAccion(accion));
         }
         if(accion.getId()!=-1){
@@ -109,14 +135,15 @@ public class ControladorRegistro {
     /**
      * Crea el/los productos involucrados en el desvio, los agrega a la accion correctiva y actualiza la base de datos.
      * @param AccionCorrectiva
-     * @param productos Map.Key = Nombre del producto | Map.Value = Datos del producto
+     * @param NombreProducto
+     * @param DatosProducto
      * @return -1 si no se creo.
      */
-    public int AgregarProductoInvolucrado(int AccionCorrectiva, Map<String, String> productos){
+    public int AgregarProductoInvolucrado(int AccionCorrectiva, String NombreProducto, String DatosProducto){
         Correctiva correctiva = (Correctiva) mAccion.GetAccion(AccionCorrectiva);
-        for(Map.Entry<String, String> entry : productos.entrySet()){
-            Producto ProductoInvolucrado = new Producto(entry.getKey(), entry.getValue());
-            correctiva.addProductoAfectado(ProductoInvolucrado);
+        Producto producto = new Producto(NombreProducto, DatosProducto);
+        if(mProducto.CrearProducto(producto)!=-1){
+            correctiva.addProductoAfectado(producto);
         }
         return mAccion.ActualizarAccion(correctiva);
     }
@@ -126,11 +153,12 @@ public class ControladorRegistro {
      * @param IdAccion
      * @param TituloAdjunto
      * @param UbicacionAdjunto
+     * @param TipoAdjunto
      * @return -1 si no se creo.
      */
-    public int AgregarArchivoAdjunto(int IdAccion, String TituloAdjunto, String UbicacionAdjunto){
+    public int AgregarArchivoAdjunto(int IdAccion, String TituloAdjunto, String UbicacionAdjunto, EnumTipoAdjunto TipoAdjunto){
         Accion accion = mAccion.GetAccion(IdAccion);
-        Adjunto adjunto = new Adjunto(TituloAdjunto, UbicacionAdjunto);
+        Adjunto adjunto = new Adjunto(TituloAdjunto, UbicacionAdjunto, TipoAdjunto);
         if(mAdjunto.CrearAdjunto(adjunto)!=-1){
             accion.addAdjunto(adjunto);
         }        

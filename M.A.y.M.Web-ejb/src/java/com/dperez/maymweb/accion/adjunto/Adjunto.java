@@ -25,15 +25,17 @@ public class Adjunto implements Serializable{
     private int Id;
     private String Titulo = new String();
     private String Ubicacion = new String();
+    private EnumTipoAdjunto TipoAdjunto;
     
     @ManyToOne
     private Accion AccionAdjunto;
     
     // Constructores
     public Adjunto(){}
-    public Adjunto(String TituloAdjunto, String UbicacionArchivo){
+    public Adjunto(String TituloAdjunto, String UbicacionArchivo, EnumTipoAdjunto TipoAdjunto){
         this.Titulo = TituloAdjunto;
         this.Ubicacion = UbicacionArchivo;
+        this.TipoAdjunto = TipoAdjunto;
     }
     
     // Getters
@@ -41,6 +43,7 @@ public class Adjunto implements Serializable{
     public String getTitulo() {return this.Titulo;}
     public String getUbicacion() {return this.Ubicacion;}
     public Accion getAccionAdjunto() {return AccionAdjunto;}
+    public EnumTipoAdjunto getTipoAdjunto(){return this.TipoAdjunto;}
     
     // Setters
     public void setId(int Id) {this.Id = Id;}
@@ -58,5 +61,5 @@ public class Adjunto implements Serializable{
             }
         }
     }
-    
+    public void setTipoAdjunto(EnumTipoAdjunto TipoAdjunto){this.TipoAdjunto = TipoAdjunto;}
 }

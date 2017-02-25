@@ -6,6 +6,7 @@
 package com.dperez.maymweb.accion;
 
 import com.dperez.maymweb.accion.adjunto.Adjunto;
+import com.dperez.maymweb.accion.adjunto.EnumTipoAdjunto;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
@@ -28,7 +29,7 @@ import static org.junit.Assert.*;
  * @author Diego
  */
 public class AccionTest {
-    private final Adjunto adjunto = new Adjunto("Titulo Adjunto", "Ubicacion Adjunto");
+    private final Adjunto adjunto = new Adjunto("Titulo Adjunto", "Ubicacion Adjunto", EnumTipoAdjunto.IMAGEN);
     private final Area area = new Area("Nombre Del Area", "Correo@Area.com");
     private final Codificacion codificacion = new Codificacion("Nombre Codificacion", "Descripcion Codificacion");
     private final Deteccion GeneradaPor = new Deteccion("Aud. Ejemplo", EnumTipoDeteccion.INTERNA);
@@ -240,7 +241,7 @@ public class AccionTest {
     public void testSetAdjuntos() {
         System.out.println("setAdjuntos");
         List<Adjunto> Adjuntos = new ArrayList<>();
-        Adjunto adj = new Adjunto("Titulo del Adjunto", "url de ubicacion del adjunto");
+        Adjunto adj = new Adjunto("Titulo del Adjunto", "url de ubicacion del adjunto", EnumTipoAdjunto.IMAGEN);
         Adjuntos.add(adj);
         Accion instance = new AccionImpl();
         instance.setAdjuntos(Adjuntos);

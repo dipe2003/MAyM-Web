@@ -69,11 +69,35 @@
                                             comprobacion eficacia
                                         </td>
                                         <td>
-                                            #{accion.value.codificacionAccion}
+                                            #{accion.value.codificacionAccion.nombre}
                                         </td>
-                                        <td>
-                                            #{accion.value.estadoAccion}
-                                        </td>
+                                        <c:choose>
+                                            <c:when test="#{accion.value.estadoAccion == 'PENDIENTE'}">
+                                                <td style="background-color: red; color: white">
+                                                    #{accion.value.estadoAccion}
+                                                </td>
+                                            </c:when>
+                                            <c:when test="#{accion.value.estadoAccion == 'CERRADA'}" >
+                                                <td style="background-color: green; color: white">
+                                                    #{accion.value.estadoAccion}
+                                                </td>
+                                            </c:when>
+                                            <c:when test="#{accion.value.estadoAccion == 'DESESTIMADA'}" >
+                                                <td style="background-color: black; color: white">
+                                                    #{accion.value.estadoAccion}
+                                                </td>
+                                            </c:when>
+                                            <c:when test="#{accion.value.estadoAccion == 'PROCESO_IMP'}" >
+                                                <td style="background-color: #ff9900; color: white">
+                                                    #{accion.value.estadoAccion}
+                                                </td>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <td style="background-color: yellow; color: #ff9900">
+                                                    #{accion.value.estadoAccion}
+                                                </td>
+                                            </c:otherwise>
+                                        </c:choose>
                                         <td>
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>

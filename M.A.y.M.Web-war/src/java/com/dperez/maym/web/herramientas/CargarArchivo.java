@@ -40,26 +40,27 @@ public class CargarArchivo implements Serializable{
      * @param DirectorioArchivo
      * @param NombreArchivo Nombre del archivo + extension
      * @param NombreEmpresa
-     * @return Devuelve la ubicacion del archivo guardado. Retorna una cadena vacia si no se pudo guardar.
+     * @return Devuelve un arreglo arr[] es la ubicacion del archivo guardado, arr[1] es la extension. Retorna un arreglo vacio si no se pudo guardar.
      */
-    public String guardarArchivo(String DirectorioArchivo, Part Archivo, String NombreArchivo, String NombreEmpresa){
-        String realPath = new String();
+    public String[] guardarArchivo(String DirectorioArchivo, Part Archivo, String NombreArchivo, String NombreEmpresa){
+        String[] realPath = new String[2];
         if (Archivo != null) {
             try{
                 String resPath = "MAyM_Web"+separator+"Adjuntos"+separator+NombreEmpresa+separator;                
                 String extensionArchivo = FilenameUtils.getExtension(Archivo.getSubmittedFileName());
+                realPath[1] = extensionArchivo;
                 NombreArchivo = DirectorioArchivo + NombreArchivo + "."+extensionArchivo;
                 //String baseDatos = "/img/"+DirectorioArchivo+"/"+NombreArchivo;
-                realPath = homeDir+separator+resPath+NombreArchivo;
-                String baseDatos = "/adjuntos/"+NombreEmpresa+"/"+NombreArchivo;
-                Archivo.write(realPath);
+                realPath[0] = homeDir+separator+resPath+NombreArchivo;                
+                String[] baseDatos = {"/adjuntos/"+NombreEmpresa+"/"+NombreArchivo, extensionArchivo};
+                Archivo.write(realPath[0]);
                 return baseDatos;
             }catch(FileNotFoundException ex){
                 System.out.println("Archivo no econtrado: " + ex.getMessage());
-                realPath = new String();
+                realPath = new String[2];
             }catch(IOException ex){
                 System.out.println("Error IO: " + ex.getMessage());
-                realPath = new String();
+                realPath = new String[2];
             }
         }
         return realPath;

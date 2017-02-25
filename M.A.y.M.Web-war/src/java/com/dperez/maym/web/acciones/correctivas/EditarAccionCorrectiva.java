@@ -11,6 +11,7 @@ import com.dperez.maymweb.accion.acciones.Correctiva;
 import com.dperez.maymweb.accion.acciones.EnumAccion;
 import com.dperez.maymweb.accion.acciones.EnumTipoDesvio;
 import com.dperez.maymweb.accion.adjunto.Adjunto;
+import com.dperez.maymweb.accion.adjunto.EnumTipoAdjunto;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
@@ -62,12 +63,12 @@ public class EditarAccionCorrectiva implements Serializable {
     private String AnalisisCausa;
     
     private String TituloAdjunto;
-    private Map<String, String> ListaAdjuntos;
     private Map<Integer, Adjunto> MapAdjuntos;
     private Part ArchivoAdjunto;
     
     private EnumTipoDeteccion[] TiposDeteccion;
     private EnumTipoDeteccion TipoDeDeteccionSeleccionada;
+    private EnumTipoDeteccion TipoNuevaDeteccion;
     private String NombreNuevaDeteccion;
     private Map<Integer, String> ListaDetecciones;
     private Integer DeteccionSeleccionada;
@@ -101,9 +102,10 @@ public class EditarAccionCorrectiva implements Serializable {
     }
     public String getDescripcion() {return Descripcion;}
     public String getAnalisisCausa() {return AnalisisCausa;}
+    
     public String getTituloAdjunto(){return this.TituloAdjunto;}
-    public Map<String, String> getListaAdjuntos() {return ListaAdjuntos;}
     public Part getArchivoAdjunto() {return ArchivoAdjunto;}
+    public Map<Integer, Adjunto> getMapAdjuntos() {return MapAdjuntos;}
     
     public Map<Integer, String> getListaCodificaciones(){return this.ListaCodificaciones;}
     public Integer getCodificacionSeleccionada() {return CodificacionSeleccionada;}
@@ -114,6 +116,7 @@ public class EditarAccionCorrectiva implements Serializable {
     public EnumTipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
     public Map<Integer, String> getListaDetecciones(){return this.ListaDetecciones;}
     public String getNombreNuevaDeteccion(){return this.NombreNuevaDeteccion;}
+    public EnumTipoDeteccion getTipoNuevaDeteccion() {return TipoNuevaDeteccion;}
     public Integer getDeteccionSeleccionada(){return this.DeteccionSeleccionada;}
     
     public EnumTipoDesvio[] getTiposDesvios(){return this.TiposDesvios;}
@@ -126,7 +129,6 @@ public class EditarAccionCorrectiva implements Serializable {
     public Map<String, String> getListaProductosAfectados(){return this.ListaProductosAfectados;}
     public String getNombreProductoAfectado(){return this.NombreProductoAfectado;}
     public String getDatosProductoAfectado(){return this.DatosProductoAfectado;}
-    
     
     //  Setters
     public void serIdAccionCorrectiva(int IdAccionCorrectiva){this.IdAccionCorrectiva = IdAccionCorrectiva;}
@@ -142,9 +144,10 @@ public class EditarAccionCorrectiva implements Serializable {
     }
     public void setDescripcion(String Descripcion) {this.Descripcion = Descripcion;}
     public void setAnalisisCausa(String AnalisisCausa) {this.AnalisisCausa = AnalisisCausa;}
+    
     public void setTituloAdjunto(String TituloAdjunto){this.TituloAdjunto = TituloAdjunto;}
-    public void setListaAdjuntos(Map<String, String> Adjuntos) {this.ListaAdjuntos = Adjuntos;}
     public void setArchivoAdjunto(Part ArchivoAdjunto) {this.ArchivoAdjunto = ArchivoAdjunto;}
+    public void setMapAdjuntos(Map<Integer, Adjunto> MapAdjuntos) {this.MapAdjuntos = MapAdjuntos;}
     
     public void setListaCodificaciones(Map<Integer, String> ListaCodificaciones){this.ListaCodificaciones = ListaCodificaciones;}
     public void setCodificacionSeleccionada(Integer CodificacionSeleccionada) {this.CodificacionSeleccionada = CodificacionSeleccionada;}
@@ -155,6 +158,7 @@ public class EditarAccionCorrectiva implements Serializable {
     public void setTiposDeteccion(EnumTipoDeteccion[] TiposDeteccion){this.TiposDeteccion = TiposDeteccion;}
     public void setListaDetecciones(Map<Integer, String> ListaDetecciones){this.ListaDetecciones = ListaDetecciones;}
     public void setNombreNuevaDeteccion(String NombreNuevaDeteccion){this.NombreNuevaDeteccion = NombreNuevaDeteccion;}
+    public void setTipoNuevaDeteccion(EnumTipoDeteccion TipoNuevaDeteccion) {this.TipoNuevaDeteccion = TipoNuevaDeteccion;}
     public void setDeteccionSeleccionada(Integer DeteccionSeleccionada){this.DeteccionSeleccionada = DeteccionSeleccionada;}
     
     public void setTiposDesvios(EnumTipoDesvio[] TiposDesvios){this.TiposDesvios = TiposDesvios;}
@@ -178,7 +182,6 @@ public class EditarAccionCorrectiva implements Serializable {
      */
     @PostConstruct
     public void init(){
-        this.ListaAdjuntos = new HashMap<>();
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         // recuperar el id para llenar datos de la accion correctiva y el resto de las propiedades.
@@ -222,7 +225,7 @@ public class EditarAccionCorrectiva implements Serializable {
                 this.ListaAreasSectores.put(area.getId(), area);
             }
             AreaSectorAccionSeleccionada = AccionCorrectiva.getAreaSectorAccion().getId();
-            
+            ListaProductosAfectados = new HashMap<>();
             if(!((Correctiva)AccionCorrectiva).getProductosAfectados().isEmpty()){
                 List<Producto> ProductosAfectados = ((Correctiva)AccionCorrectiva).getProductosAfectados();
                 for(Producto producto: ProductosAfectados){
@@ -230,22 +233,19 @@ public class EditarAccionCorrectiva implements Serializable {
                 }
                 hayProductoAfectado = true;
             }
-            
             actualizarListaAdjuntos();
         }
-        
     }
     
     private void actualizarListaAdjuntos(){
         Accion AccionCorrectiva = (Correctiva) fLectura.GetAccion(IdAccionCorrectiva);
         if(!AccionCorrectiva.getAdjuntos().isEmpty()){
-                List<Adjunto> listAdjuntos = AccionCorrectiva.getAdjuntos();
-                this.MapAdjuntos = new HashMap<>();
-                for(Adjunto adjunto: listAdjuntos){
-                    this.ListaAdjuntos.put(adjunto.getTitulo(), adjunto.getUbicacion());
-                    this.MapAdjuntos.put(adjunto.getId(), adjunto);
-                }
+            List<Adjunto> listAdjuntos = AccionCorrectiva.getAdjuntos();
+            this.MapAdjuntos = new HashMap<>();
+            for(Adjunto adjunto: listAdjuntos){
+                this.MapAdjuntos.put(adjunto.getId(), adjunto);
             }
+        }
     }
     
     /**
@@ -324,7 +324,11 @@ public class EditarAccionCorrectiva implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo agregar producto", "No se pudo agregar producto" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
-            this.ListaProductosAfectados.put(NombreProductoAfectado, DatosProductoAfectado);
+            if((fDatos.AgregarProductoInvolucrado(IdAccionCorrectiva, NombreProductoAfectado, DatosProductoAfectado))!=-1){
+                this.ListaProductosAfectados.put(NombreProductoAfectado, DatosProductoAfectado);
+                this.NombreProductoAfectado = new String();
+                this.DatosProductoAfectado = new String();
+            }
         }
     }
     
@@ -340,7 +344,22 @@ public class EditarAccionCorrectiva implements Serializable {
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             this.ListaProductosAfectados.remove(NombreProductoAfectado, DatosProductoAfectado);
+            this.NombreProductoAfectado = new String();
+            this.DatosProductoAfectado = new String();
         }
+    }
+    
+    /**
+     * Carga los datos del producto en los campos del formulario.
+     * Lo remueve de la lista.
+     * @param NombreProducto
+     */
+    public void editarProducto(String NombreProducto){
+        String nombre =NombreProducto;
+        String datos = this.ListaProductosAfectados.get(NombreProducto);
+        removerProductoAfectado(NombreProducto);
+        this.NombreProductoAfectado = nombre;
+        this.DatosProductoAfectado = datos;
     }
     
     /**
@@ -348,37 +367,36 @@ public class EditarAccionCorrectiva implements Serializable {
      * Deja vacios los campos para un nuevo adjunto.
      */
     public void agregarAdjunto(){
-        String ubicacion = cArchivo.guardarArchivo("Correctiva_Id"+ String.valueOf(IdAccionCorrectiva) + "_", ArchivoAdjunto, TituloAdjunto, "Nombre Empresa");
-        if(!ubicacion.isEmpty()){
-            this.ListaAdjuntos.put(TituloAdjunto, ubicacion);
-            if((fDatos.AgregarArchivoAdjunto(IdAccionCorrectiva, TituloAdjunto, ubicacion))!=-1){
+        String datosAdjunto[] = cArchivo.guardarArchivo("Correctiva_Id"+ String.valueOf(IdAccionCorrectiva) + "_", ArchivoAdjunto, TituloAdjunto, "Nombre Empresa");
+        // datosAdjunto[0]: ubicacion | datosAdjunto[1]: extension
+        if(!datosAdjunto[0].isEmpty()){
+            EnumTipoAdjunto tipoAdjunto = EnumTipoAdjunto.IMAGEN;
+            String extension = datosAdjunto[1];
+            if(!extension.equalsIgnoreCase("jpg") || !extension.equalsIgnoreCase("png") || !extension.equalsIgnoreCase("gif") || !extension.equalsIgnoreCase("jpeg") ){
+                tipoAdjunto = EnumTipoAdjunto.DOCUMENTO;
+            }
+            if((fDatos.AgregarArchivoAdjunto(IdAccionCorrectiva, TituloAdjunto, datosAdjunto[0], tipoAdjunto))!=-1){
                 actualizarListaAdjuntos();
                 this.TituloAdjunto = new String();
                 this.ArchivoAdjunto =  null;
                 
             }else{
-                cArchivo.BorrarArchivo(ubicacion);
+                cArchivo.BorrarArchivo(datosAdjunto[0]);
             }
         }
     }
     
     /**
      * Quita el adjunto de la lista de adjuntos.
-     * @param TituloAdjunto
+     * @param IdAdjunto
      * @throws IOException
      */
-    public void quitarAdjunto(String TituloAdjunto) throws IOException{
-        if(cArchivo.BorrarArchivo(this.ListaAdjuntos.get(TituloAdjunto))){
-            int idAdjunto = 0;
-            for(Adjunto adjunto: MapAdjuntos.values()){
-                if(adjunto.getTitulo().equals(TituloAdjunto))
-                    idAdjunto = adjunto.getId();
+    public void quitarAdjunto(int IdAdjunto) throws IOException{
+        if(cArchivo.BorrarArchivo(this.MapAdjuntos.get(IdAdjunto).getUbicacion())){
+            if((fDatos.RemoverAdjunto(IdAccionCorrectiva, IdAdjunto))!=-1){
+                this.MapAdjuntos.remove(IdAdjunto);
             }
-            if((fDatos.RemoverAdjunto(IdAccionCorrectiva, idAdjunto))!=-1){
-                this.ListaAdjuntos.remove(TituloAdjunto);
-                MapAdjuntos.remove(idAdjunto);
-            }
-        }        
+        }
     }
     
     /**

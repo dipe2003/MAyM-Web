@@ -56,7 +56,7 @@ public class Producto implements Serializable{
             if(AccionCorrectivaConProductoAfectado != null){
                 this.AccionCorrectivaConProductoAfectado = AccionCorrectivaConProductoAfectado;
                 if(!AccionCorrectivaConProductoAfectado.getProductosAfectados().contains(this))
-                    AccionCorrectivaConProductoAfectado.addProductoAfectado(this);
+                    this.AccionCorrectivaConProductoAfectado.addProductoAfectado(this);
             }
         }
     }

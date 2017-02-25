@@ -117,7 +117,7 @@ public class Correctiva extends Accion implements Serializable {
 //Productos Afectados
     public void addProductoAfectado(Producto ProductoAfectado){
         this.ProductosAfectados.add(ProductoAfectado);
-        if(ProductoAfectado.getAccionCorrectivaConProductoAfectado()!=null && !ProductoAfectado.getAccionCorrectivaConProductoAfectado().equals(this))
+        if(ProductoAfectado.getAccionCorrectivaConProductoAfectado()==null || !ProductoAfectado.getAccionCorrectivaConProductoAfectado().equals(this))
             ProductoAfectado.setAccionCorrectivaConProductoAfectado(this);
     }
     
