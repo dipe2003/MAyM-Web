@@ -7,7 +7,6 @@ package com.dperez.maym.web.acciones.mejoras;
 
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.acciones.EnumAccion;
-import com.dperez.maym.web.herramientas.CargarArchivo;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
@@ -154,7 +153,7 @@ public class CrearAccionMejora implements Serializable {
      */
     public void nuevaDeteccion(){
         if(NombreNuevaDeteccion.isEmpty()){
-            FacesContext.getCurrentInstance().addMessage("form_nueva_mejora:deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
+            FacesContext.getCurrentInstance().addMessage("form_nueva_accion:deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             // Crear Nueva Deteccion y actualizar lista
@@ -163,10 +162,8 @@ public class CrearAccionMejora implements Serializable {
                 actualizarDeteccion();
                 this.DeteccionSeleccionada = det.getId();
                 this.NombreNuevaDeteccion = new String();
-                FacesContext.getCurrentInstance().addMessage("form_nueva_mejora:deteccion", new FacesMessage(SEVERITY_INFO, "Se agrego nueva deteccion", "Se agrego nueva deteccion" ));
-                FacesContext.getCurrentInstance().renderResponse();
             }else{
-                FacesContext.getCurrentInstance().addMessage("form_nueva_mejora:deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
+                FacesContext.getCurrentInstance().addMessage("form_nueva_accion:deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
                 FacesContext.getCurrentInstance().renderResponse();
             }
         }
@@ -189,7 +186,7 @@ public class CrearAccionMejora implements Serializable {
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Mejoras/EditarAccionMejora.xhtml?id="+accion.getId());
         }else{
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Accion", "No se pudo crear la Accion" ));
+            FacesContext.getCurrentInstance().addMessage("form_nueva_accion:crear_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Accion", "No se pudo crear la Accion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }
     }

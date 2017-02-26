@@ -16,7 +16,7 @@
             </div>                        
         </div>
         <div class="container-fluid" style="padding: 1%">
-            <h:form id="form_nueva_correctiva" enctype="multipart/form-data">
+            <h:form id="form_nueva_accion" enctype="multipart/form-data">
                 
                 <!-- Descripcion -->
                 <div class="panel panel-primary">
@@ -24,12 +24,14 @@
                     <div class="panel-body">
                         <div class="form-group">
                             <strong><label for="fecha_deteccion">Fecha Deteccion:</label></strong>
-                            <h:inputText id="fecha_deteccion" class="form-control calendario" p:placeholder="Fecha de deteccion del desvio." value="#{crearAccionCorrectiva.strFechaDeteccion}" required="true"/>
+                            <h:inputText id="fecha_deteccion" class="form-control calendario" p:placeholder="Fecha de deteccion del desvio." 
+                                         value="#{crearAccionCorrectiva.strFechaDeteccion}" required="true" requiredMessage="No se ingreso fecha de deteccion."/>
                         </div>
                         <div class="form-group">
                             <strong><label for="area">Area / Sector:</label></strong>
-                            <h:selectOneMenu id="area" class="form-control" value="#{crearAccionCorrectiva.areaSectorAccionSeleccionada}" required="true">
-                                <f:selectItem itemValue="-- Seleccionar Area ---"  itemDisabled="false"  noSelectionOption="true"  />
+                            <h:selectOneMenu id="area" class="form-control" value="#{crearAccionPreventiva.areaSectorAccionSeleccionada}"
+                                             required="true" requiredMessage="No se selecciono area">
+                                <f:selectItem itemLabel="-- Seleccionar Area ---"  itemDisabled="true"  noSelectionOption="true"  />
                                 <c:forEach items="#{crearAccionCorrectiva.listaAreasSectores}" var="area">
                                     <f:selectItem itemLabel="#{area.value.nombre}" itemValue="#{area.value.id}" />
                                 </c:forEach>
@@ -37,7 +39,7 @@
                         </div>
                         <div class="form-group">
                             <strong><label for="tipo_deteccion">Tipo de Deteccion:</label></strong>                                    
-                            <h:selectOneRadio id="tipo_deteccion" value="#{crearAccionCorrectiva.tipoDeDeteccionSeleccionada}" required="true">
+                            <h:selectOneRadio id="tipo_deteccion" value="#{crearAccionCorrectiva.tipoDeDeteccionSeleccionada}" >
                                 <c:forEach items="#{crearAccionCorrectiva.tiposDeteccion}" var="tipo">
                                     <div class="radio" >
                                         <f:selectItem itemLabel="#{tipo}" itemValue="#{tipo}" />
@@ -49,8 +51,9 @@
                         </div> 
                         <div class="form-group">
                             <strong><label for="deteccion">Generada Por:</label></strong>                                    
-                            <h:selectOneMenu id="deteccion" class="form-control" value="#{crearAccionCorrectiva.deteccionSeleccionada}" required="true">
-                                <f:selectItem itemLabel="-- Seleccionar Deteccion ---" itemValue="-1" itemDisabled="false"  noSelectionOption="false"  />
+                            <h:selectOneMenu id="deteccion" class="form-control" value="#{crearAccionCorrectiva.deteccionSeleccionada}" 
+                                             required="true" requiredMessage="No se selecciono Deteccion.">
+                                <f:selectItem itemLabel="-- Seleccionar Deteccion ---" itemDisabled="true"  noSelectionOption="false"  />
                                 <c:forEach items="#{crearAccionCorrectiva.listaDetecciones}" var="deteccion">
                                     <f:selectItem itemLabel="#{deteccion.value}" itemValue="#{deteccion.key}" />
                                 </c:forEach>
@@ -62,18 +65,20 @@
                             <c:if test="#{(crearAccionCorrectiva.deteccionSeleccionada == 0) and (crearAccionCorrectiva.deteccionSeleccionada ne -1) }">
                                 <div class="form-group">
                                     <strong><label for="tipo_nueva_deteccion" >Tipo de Deteccion:</label></strong>
-                                    <h:selectOneRadio id="tipo_nueva_deteccion" value="#{crearAccionCorrectiva.tipoNuevaDeteccion}">
+                                    <h:selectOneRadio id="tipo_nueva_deteccion" value="#{crearAccionCorrectiva.tipoNuevaDeteccion}" 
+                                                      required="true" requiredMessage="No se Selecciono tipo de deteccion.">
                                         <f:selectItem itemLabel="Interna" itemValue="INTERNA"/>
                                         <f:selectItem itemLabel="Externa" itemValue="EXTERNA"/>
                                     </h:selectOneRadio>
                                 </div>
                                 <div class="form-group">
                                     <strong><label for="nombre_nueva_deteccion">Nombre de Deteccion:</label></strong>
-                                    <h:inputText id="nombre_nueva_deteccion" class="form-control" p:placeholder="Nombre de nueva deteccion." value="#{crearAccionCorrectiva.nombreNuevaDeteccion}"/>
+                                    <h:inputText id="nombre_nueva_deteccion" class="form-control" p:placeholder="Nombre de nueva deteccion." 
+                                                 value="#{crearAccionCorrectiva.nombreNuevaDeteccion}" required="true" requiredMessage="No se ingreso nombre de nueva deteccion."/>
                                 </div>
                                 <div class="form-group">
                                     <h:commandButton action="#{crearAccionCorrectiva.nuevaDeteccion()}" value="Nueva">
-                                        <f:ajax execute="panel_nueva_deteccion" render="deteccion panel_nueva_deteccion"/>
+                                        <f:ajax execute="panel_nueva_deteccion" render="deteccion panel_nueva_deteccion panel_mensajes"/>
                                     </h:commandButton>
                                 </div>                                
                             </c:if>                            
@@ -81,7 +86,7 @@
                         
                         <div class="form-group">
                             <strong><label for="clasificacion">Clasificacion:</label></strong>                                    
-                            <h:selectOneRadio id="clasificacion" value="#{crearAccionCorrectiva.tipoDesvioSeleccionado}" required="true">
+                            <h:selectOneRadio id="clasificacion" value="#{crearAccionCorrectiva.tipoDesvioSeleccionado}">
                                 <div class="radio" >
                                     <f:selectItem itemLabel="Menor/Observacion" itemValue="NC_MENOR_OBS" />
                                     <f:selectItem itemLabel="Mayor" itemValue="NC_MAYOR" />
@@ -92,7 +97,8 @@
                         
                         <div class="form-group">
                             <strong><label for="descripcion">Descripcion:</label></strong>                                    
-                            <h:inputTextarea class="form-control" id="descripcion" p:placeholder="Descripcion de la situacion o desvio." value="#{crearAccionCorrectiva.descripcion}" required="true"/>
+                            <h:inputTextarea class="form-control" id="descripcion" p:placeholder="Descripcion de la situacion o desvio." value="#{crearAccionCorrectiva.descripcion}" 
+                                             required="true" requiredMessage="No se ingreso descripcion."/>
                         </div>
                         <div class="form-group">
                             <strong><label for="producto_afectado">Hay Producto Afectado?</label></strong>
@@ -108,17 +114,19 @@
                                 <h:panelGroup id="panel_datos_producto">
                                     <div class="form-group">
                                         <strong><label for="nombre_producto">Nombre:</label></strong>
-                                        <h:inputText id="nombre_producto" class="form-control" p:placeholder="Nombre del producto involucrado." value="#{crearAccionCorrectiva.nombreProductoAfectado}" />
+                                        <h:inputText id="nombre_producto" class="form-control" p:placeholder="Nombre del producto involucrado." 
+                                                     value="#{crearAccionCorrectiva.nombreProductoAfectado}" 
+                                                     required="true" requiredMessage="No se ingreso nombre de producto involucrado." />
                                     </div>
                                     <div class="form-group">
                                         <strong><label for="datos_producto">Datos del Producto:</label></strong>
-                                        <h:inputText id="datos_producto" class="form-control" p:placeholder="Datos o informacion sobre el producto (fechas de produccion, especificaciones, etc.)" value="#{crearAccionCorrectiva.datosProductoAfectado}" />
-                                    </div>
-                                </h:panelGroup>
+                                        <h:inputText id="datos_producto" class="form-control" p:placeholder="Datos o informacion sobre el producto (fechas de produccion, especificaciones, etc.)" 
+                                                     value="#{crearAccionCorrectiva.datosProductoAfectado}" required="true" requiredMessage="No se ingresaron datos del producto." />
+                                    </div>                                    
+                                </h:panelGroup>                                
                                 <div class="form-group">
                                     <h:commandButton action="#{crearAccionCorrectiva.nuevoProductoAfectado()}" value="Agregar">
-                                        <f:ajax execute="panel_datos_producto"/>
-                                        <f:ajax render="panel_lista_productos panel_datos_producto"/>
+                                        <f:ajax execute="panel_datos_producto" render="panel_mensajes nombre_producto datos_producto panel_lista_productos"/>
                                     </h:commandButton>
                                 </div>
                                 <h:panelGroup id="panel_lista_productos">
@@ -145,11 +153,11 @@
                                                                         </button>
                                                                         <ul class="dropdown-menu" role="menu">
                                                                             <li><h:commandLink action="#{crearAccionCorrectiva.editarProducto(producto.key)}" value="Editar Producto">
-                                                                                    <f:ajax render="panel_datos_producto panel_lista_productos"/>
+                                                                                    <f:ajax render="panel_datos_producto panel_lista_productos panel_mensajes"/>
                                                                                 </h:commandLink>
                                                                             </li>
                                                                             <li><h:commandLink action="#{crearAccionCorrectiva.quitarProducto(producto.key)}" value="Eliminar Producto">
-                                                                                    <f:ajax render="panel_lista_productos"/>
+                                                                                    <f:ajax render="panel_lista_productos panel_mensajes"/>
                                                                                 </h:commandLink>
                                                                             </li>
                                                                         </ul>
@@ -169,17 +177,48 @@
                     </div>
                 </div>    
                 
-                <div class="form-group-sm">
-                    <h:commandButton id="boton_guardar_ac" class="form-control" value="Guardar" >
-                        <f:ajax execute="@form" event="click" listener="#{crearAccionCorrectiva.crearAccionCorrectiva()}" onevent="indicador" render="panel_mensajes"/>
-                    </h:commandButton>
-                    <h:commandButton class="form-control" value="Reset" type="reset" />
-                </div>
                 <h:panelGroup id="panel_mensajes">
-                    <div id="mensajes">
-                        <h:messages class="error"/>
+                    <div class="form-group-sm">
+                        <h:message for="fecha_deteccion" class="msj_error"/>
+                    </div>
+                    <div class="form-group-sm">
+                        <h:message for="area" class="msj_error"/>
+                    </div>
+                    <div class="form-group-sm">
+                        <h:message for="deteccion" class="msj_error"/>
+                    </div>
+                    <div class="form-group-sm">
+                        <h:message for="nombre_nueva_deteccion" class="msj_error"/>
+                    </div>
+                    <div class="form-group-sm">
+                        <h:message for="tipo_nueva_deteccion" class="msj_error"/>
+                    </div>
+                    <div class="form-group-sm">
+                        <h:message for="descripcion" class="msj_error"/>
+                    </div>
+                    <div class="form-group-sm">
+                        <h:message for="producto_afectado" class="msj_error"/>
+                    </div>
+                    <div class="form-group-sm">
+                        <h:message for="nombre_producto" class="msj_error"/>
+                    </div>
+                    <div class="form-group-sm">
+                        <h:message for="datos_producto" class="msj_error"/>
+                    </div>
+                    <div class="form-group-sm">
+                        <h:message for="crear_accion" class="msj_error"/>
                     </div>
                 </h:panelGroup>
+                
+                <div class="form-group-sm">
+                    <h:commandButton id="crear_accion" class="form-control btn-success" value="Guardar" >
+                        <f:ajax execute="@form" event="click" listener="#{crearAccionCorrectiva.crearAccionCorrectiva()}" onevent="indicador" render="panel_mensajes"/>
+                    </h:commandButton>
+                    <h:commandButton class="form-control btn-default" value="Reset" type="reset" >
+                        <f:ajax render="panel_mensajes" />
+                    </h:commandButton>
+                </div>
+                
             </h:form>
         </div>
     </ui:define>

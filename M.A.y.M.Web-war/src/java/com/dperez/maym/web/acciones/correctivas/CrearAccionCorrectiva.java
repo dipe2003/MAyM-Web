@@ -53,7 +53,7 @@ public class CrearAccionCorrectiva implements Serializable {
     private Date FechaDeteccion;
     private String strFechaDeteccion;
     private String Descripcion;
-        
+    
     private EnumTipoDeteccion[] TiposDeteccion;
     private EnumTipoDeteccion TipoDeDeteccionSeleccionada;
     private EnumTipoDeteccion TipoNuevaDeteccion;
@@ -83,7 +83,7 @@ public class CrearAccionCorrectiva implements Serializable {
             return fDate.format(FechaDeteccion);
         }
     }
-    public String getDescripcion() {return Descripcion;}   
+    public String getDescripcion() {return Descripcion;}
     
     public EnumTipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
     public EnumTipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
@@ -189,7 +189,7 @@ public class CrearAccionCorrectiva implements Serializable {
      */
     public void nuevaDeteccion(){
         if(NombreNuevaDeteccion.isEmpty()){
-            FacesContext.getCurrentInstance().addMessage("form_nueva_correctiva:deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
+            FacesContext.getCurrentInstance().addMessage("form_nueva_accion:deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             // Crear Nueva Deteccion y actualizar lista
@@ -198,10 +198,8 @@ public class CrearAccionCorrectiva implements Serializable {
                 actualizarDeteccion();
                 this.DeteccionSeleccionada = det.getId();
                 this.NombreNuevaDeteccion = new String();
-                FacesContext.getCurrentInstance().addMessage("form_nueva_correctiva:deteccion", new FacesMessage(SEVERITY_INFO, "Se agrego nueva deteccion", "Se agrego nueva deteccion" ));
-                FacesContext.getCurrentInstance().renderResponse();
             }else{
-                FacesContext.getCurrentInstance().addMessage("form_nueva_correctiva:deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
+                FacesContext.getCurrentInstance().addMessage("form_nueva_accion:deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
                 FacesContext.getCurrentInstance().renderResponse();
             }
         }
@@ -213,13 +211,15 @@ public class CrearAccionCorrectiva implements Serializable {
      * Si el nombre o el datos estan vacios no se crea y se muestra el mensaje correspondiente.
      */
     public void nuevoProductoAfectado(){
-        if(NombreProductoAfectado.isEmpty() || DatosProductoAfectado.isEmpty()){
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo agregar producto", "No se pudo agregar producto" ));
-            FacesContext.getCurrentInstance().renderResponse();
-        }else{
-            this.ListaProductosAfectados.put(NombreProductoAfectado, DatosProductoAfectado);
-            this.NombreProductoAfectado = new String();
-            this.DatosProductoAfectado = new String();
+        if(NombreProductoAfectado!= null && DatosProductoAfectado !=null){
+            if(NombreProductoAfectado.isEmpty() || DatosProductoAfectado.isEmpty()){
+                FacesContext.getCurrentInstance().addMessage("form_nueva_accion:producto_afectado", new FacesMessage(SEVERITY_FATAL, "No se pudo agregar producto", "No se pudo agregar producto" ));
+                FacesContext.getCurrentInstance().renderResponse();
+            }else{
+                this.ListaProductosAfectados.put(NombreProductoAfectado, DatosProductoAfectado);
+                this.NombreProductoAfectado = new String();
+                this.DatosProductoAfectado = new String();
+            }
         }
     }
     
@@ -267,7 +267,7 @@ public class CrearAccionCorrectiva implements Serializable {
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/EditarAccionCorrectiva.xhtml?id="+accion.getId());
         }else{
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Accion", "No se pudo crear la Accion" ));
+            FacesContext.getCurrentInstance().addMessage("form_nueva_accion:crear_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Accion", "No se pudo crear la Accion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }
     }

@@ -7,7 +7,6 @@ package com.dperez.maym.web.acciones.preventivas;
 
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.acciones.EnumAccion;
-import com.dperez.maym.web.herramientas.CargarArchivo;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
@@ -40,7 +39,7 @@ import javax.servlet.http.HttpServletRequest;
 @Named
 @ViewScoped
 public class CrearAccionPreventiva implements Serializable {
-     @Inject
+    @Inject
     private FacadeAdministrador fAdmin;
     @Inject
     private FacadeLectura fLectura;
@@ -57,11 +56,11 @@ public class CrearAccionPreventiva implements Serializable {
     private String NombreNuevaDeteccion;
     private Map<Integer, String> ListaDetecciones;
     private Integer DeteccionSeleccionada;
-        
+    
     private Map<Integer, Area> ListaAreasSectores;
     private Integer AreaSectorAccionSeleccionada;
     
-    //  Getters    
+    //  Getters
     public Date getFechaDeteccion() {return FechaDeteccion;}
     public String getStrFechaDeteccion(){
         SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
@@ -71,7 +70,7 @@ public class CrearAccionPreventiva implements Serializable {
             return fDate.format(FechaDeteccion);
         }
     }
-    public String getDescripcion() {return Descripcion;}   
+    public String getDescripcion() {return Descripcion;}
     
     public EnumTipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
     public EnumTipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
@@ -83,7 +82,7 @@ public class CrearAccionPreventiva implements Serializable {
     public Map<Integer, Area> getListaAreasSectores(){return this.ListaAreasSectores;}
     public Integer getAreaSectorAccionSeleccionada() {return AreaSectorAccionSeleccionada;}
     
-//  Setters    
+//  Setters
     public void setFechaDeteccion(Date FechaDeteccion) {this.FechaDeteccion = FechaDeteccion;}
     public void setStrFechaDeteccion(String strFechaDeteccion) {
         Calendar cal = Calendar.getInstance();
@@ -105,7 +104,7 @@ public class CrearAccionPreventiva implements Serializable {
     
     public void setListaAreaSectores(Map<Integer, Area> ListaAreasSectores){this.ListaAreasSectores = ListaAreasSectores;}
     public void setAreaSectorAccionSeleccionada(Integer AreaSectorAccionSeleccionada) {this.AreaSectorAccionSeleccionada = AreaSectorAccionSeleccionada;}
-
+    
     
     //  Metodos
     
@@ -125,7 +124,7 @@ public class CrearAccionPreventiva implements Serializable {
                 ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
             }
         }
-                
+        
         // Areas Sectores
         ListaAreasSectores = new HashMap<>();
         List<Area> tmpAreas = fLectura.ListarAreasSectores();
@@ -154,7 +153,7 @@ public class CrearAccionPreventiva implements Serializable {
      */
     public void nuevaDeteccion(){
         if(NombreNuevaDeteccion.isEmpty()){
-            FacesContext.getCurrentInstance().addMessage("form_nueva_preventiva:deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
+            FacesContext.getCurrentInstance().addMessage("form_nueva_accion:deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             // Crear Nueva Deteccion y actualizar lista
@@ -163,14 +162,12 @@ public class CrearAccionPreventiva implements Serializable {
                 actualizarDeteccion();
                 this.DeteccionSeleccionada = det.getId();
                 this.NombreNuevaDeteccion = new String();
-                FacesContext.getCurrentInstance().addMessage("form_nueva_preventiva:deteccion", new FacesMessage(SEVERITY_INFO, "Se agrego nueva deteccion", "Se agrego nueva deteccion" ));
-                FacesContext.getCurrentInstance().renderResponse();
             }else{
-                FacesContext.getCurrentInstance().addMessage("form_nueva_preventiva:deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
+                FacesContext.getCurrentInstance().addMessage("form_nueva_accion:deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
                 FacesContext.getCurrentInstance().renderResponse();
             }
         }
-    }    
+    }
     
     /**
      * Crea la accion correctiva con los datos ingresados.
@@ -189,7 +186,7 @@ public class CrearAccionPreventiva implements Serializable {
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Preventivas/EditarAccionPreventiva.xhtml?id="+accion.getId());
         }else{
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Accion", "No se pudo crear la Accion" ));
+            FacesContext.getCurrentInstance().addMessage("form_nueva_accion:crear_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Accion", "No se pudo crear la Accion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }
     }
