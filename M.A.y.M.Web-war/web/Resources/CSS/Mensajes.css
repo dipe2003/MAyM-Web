@@ -21,7 +21,7 @@
     background-image: url(../Images/Attention.png);
 }
 .msj_error {
-    color: #D8000C;
-    background-color: #FFBABA;
+    color: #FFF;
+    background-color: #D8000C;
     background-image: url(../Images/Error.png);
 }

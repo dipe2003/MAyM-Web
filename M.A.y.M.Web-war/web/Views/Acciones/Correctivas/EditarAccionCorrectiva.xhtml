@@ -16,19 +16,21 @@
             </div>                        
         </div>
         <div class="container-fluid" style="padding: 1%">
-            <h:form id="form_editar_correctiva" enctype="multipart/form-data">
+            <h:form id="form_editar_accion" enctype="multipart/form-data">
                 <!-- Descripcion -->
                 <div class="panel panel-primary">
                     <div class="panel-heading">Descripcion</div>
                     <div class="panel-body">
                         <div class="form-group">
                             <strong><label for="fecha_deteccion">Fecha Deteccion:</label></strong>
-                            <h:inputText id="fecha_deteccion" class="form-control calendario" p:placeholder="Fecha de deteccion del desvio." value="#{editarAccionCorrectiva.strFechaDeteccion}" required="true"/>
+                            <h:inputText id="fecha_deteccion" class="form-control calendario" p:placeholder="Fecha de deteccion del desvio." 
+                                         value="#{editarAccionCorrectiva.strFechaDeteccion}" required="true" requiredMessage="No se ingreso fecha de deteccion."/>
                         </div>
                         <div class="form-group">
                             <strong><label for="area">Area / Sector:</label></strong>
-                            <h:selectOneMenu id="area" class="form-control" value="#{editarAccionCorrectiva.areaSectorAccionSeleccionada}" required="true">
-                                <f:selectItem itemValue="-- Seleccionar Area ---"  itemDisabled="false"  noSelectionOption="true"  />
+                            <h:selectOneMenu id="area" class="form-control" value="#{editarAccionCorrectiva.areaSectorAccionSeleccionada}"
+                                             required="true" requiredMessage="No se selecciono area">
+                                <f:selectItem itemLabel="-- Seleccionar Area ---"  itemDisabled="true"  noSelectionOption="true"  />
                                 <c:forEach items="#{editarAccionCorrectiva.listaAreasSectores}" var="area">
                                     <f:selectItem itemLabel="#{area.value.nombre}" itemValue="#{area.value.id}" />
                                 </c:forEach>
@@ -36,7 +38,7 @@
                         </div>
                         <div class="form-group">
                             <strong><label for="tipo_deteccion">Tipo de Deteccion:</label></strong>                                    
-                            <h:selectOneRadio id="tipo_deteccion" value="#{editarAccionCorrectiva.tipoDeDeteccionSeleccionada}" required="true">
+                            <h:selectOneRadio id="tipo_deteccion" value="#{editarAccionCorrectiva.tipoDeDeteccionSeleccionada}">
                                 <c:forEach items="#{editarAccionCorrectiva.tiposDeteccion}" var="tipo">
                                     <div class="radio" >
                                         <f:selectItem itemLabel="#{tipo}" itemValue="#{tipo}" />
@@ -48,8 +50,9 @@
                         </div> 
                         <div class="form-group">
                             <strong><label for="deteccion">Generada Por:</label></strong>                                    
-                            <h:selectOneMenu id="deteccion" class="form-control" value="#{editarAccionCorrectiva.deteccionSeleccionada}" required="true">
-                                <f:selectItem itemLabel="-- Seleccionar Deteccion ---" itemValue="-1" itemDisabled="false"  noSelectionOption="false"  />
+                            <h:selectOneMenu id="deteccion" class="form-control" value="#{editarAccionCorrectiva.deteccionSeleccionada}" 
+                                             required="true" requiredMessage="No se selecciono Deteccion.">
+                                <f:selectItem itemLabel="-- Seleccionar Deteccion ---" itemDisabled="true"  noSelectionOption="false"  />
                                 <c:forEach items="#{editarAccionCorrectiva.listaDetecciones}" var="deteccion">
                                     <f:selectItem itemLabel="#{deteccion.value}" itemValue="#{deteccion.key}" />
                                 </c:forEach>
@@ -61,21 +64,23 @@
                             <c:if test="#{(editarAccionCorrectiva.deteccionSeleccionada == 0) and (editarAccionCorrectiva.deteccionSeleccionada ne -1) }">
                                 <div class="form-group">
                                     <strong><label for="tipo_nueva_deteccion" >Tipo de Deteccion:</label></strong>
-                                    <h:selectOneRadio id="tipo_nueva_deteccion" value="#{editarAccionCorrectiva.tipoNuevaDeteccion}">
+                                    <h:selectOneRadio id="tipo_nueva_deteccion" value="#{editarAccionCorrectiva.tipoNuevaDeteccion}" 
+                                                      required="true" requiredMessage="No se Selecciono Tipo de nueva Deteccion.">
                                         <f:selectItem itemLabel="Interna" itemValue="INTERNA"/>
                                         <f:selectItem itemLabel="Externa" itemValue="EXTERNA"/>
                                     </h:selectOneRadio>
                                 </div>
                                 <div class="form-group">
                                     <strong><label for="nombre_nueva_deteccion">Nombre de Deteccion:</label></strong>
-                                    <h:inputText id="nombre_nueva_deteccion" class="form-control" p:placeholder="Nombre de nueva deteccion." value="#{editarAccionCorrectiva.nombreNuevaDeteccion}"/>
+                                    <h:inputText id="nombre_nueva_deteccion" class="form-control" p:placeholder="Nombre de nueva deteccion." 
+                                                 value="#{editarAccionCorrectiva.nombreNuevaDeteccion}" required="true" requiredMessage="No se ingreso nombre de nueva deteccion."/>
                                 </div>
                                 <div class="form-group">
                                     <h:commandButton action="#{editarAccionCorrectiva.nuevaDeteccion()}" value="Nueva">
-                                        <f:ajax execute="panel_nueva_deteccion" render="deteccion panel_nueva_deteccion"/>
+                                        <f:ajax execute="panel_nueva_deteccion" render="deteccion panel_nueva_deteccion panel_mensajes"/>
                                     </h:commandButton>
                                 </div>                                
-                            </c:if>                            
+                            </c:if>                               
                         </h:panelGroup>
                         
                         <div class="form-group">
@@ -91,7 +96,8 @@
                         
                         <div class="form-group">
                             <strong><label for="descripcion">Descripcion:</label></strong>                                    
-                            <h:inputTextarea class="form-control" id="descripcion" p:placeholder="Descripcion de la situacion o desvio." value="#{editarAccionCorrectiva.descripcion}" required="true"/>
+                            <h:inputTextarea class="form-control" id="descripcion" p:placeholder="Descripcion de la situacion o desvio."
+                                             value="#{editarAccionCorrectiva.descripcion}" required="true" requiredMessage="No se ingreso descripcion."/>
                         </div>
                         <div class="form-group">
                             <strong><label for="producto_afectado">Hay Producto Afectado?</label></strong>
@@ -107,17 +113,18 @@
                                 <h:panelGroup id="panel_datos_producto">
                                     <div class="form-group">
                                         <strong><label for="nombre_producto">Nombre:</label></strong>
-                                        <h:inputText id="nombre_producto" class="form-control" p:placeholder="Nombre del producto involucrado." value="#{editarAccionCorrectiva.nombreProductoAfectado}" />
+                                        <h:inputText id="nombre_producto" class="form-control" p:placeholder="Nombre del producto involucrado." 
+                                                     value="#{editarAccionCorrectiva.nombreProductoAfectado}"  />
                                     </div>
                                     <div class="form-group">
                                         <strong><label for="datos_producto">Datos del Producto:</label></strong>
-                                        <h:inputText id="datos_producto" class="form-control" p:placeholder="Datos o informacion sobre el producto (fechas de produccion, especificaciones, etc.)" value="#{editarAccionCorrectiva.datosProductoAfectado}" />
-                                    </div>
-                                </h:panelGroup>
+                                        <h:inputText id="datos_producto" class="form-control" p:placeholder="Datos o informacion sobre el producto (fechas de produccion, especificaciones, etc.)" 
+                                                     value="#{editarAccionCorrectiva.datosProductoAfectado}"/>
+                                    </div>                                    
+                                </h:panelGroup>                                
                                 <div class="form-group">
                                     <h:commandButton action="#{editarAccionCorrectiva.nuevoProductoAfectado()}" value="Agregar">
-                                        <f:ajax execute="panel_datos_producto"/>
-                                        <f:ajax render="panel_lista_productos panel_datos_producto"/>
+                                        <f:ajax execute="panel_datos_producto" render="panel_mensajes nombre_producto datos_producto panel_lista_productos"/>
                                     </h:commandButton>
                                 </div>
                                 <h:panelGroup id="panel_lista_productos">
@@ -144,12 +151,11 @@
                                                                         </button>
                                                                         <ul class="dropdown-menu" role="menu">
                                                                             <li><h:commandLink action="#{editarAccionCorrectiva.editarProducto(producto.key)}" value="Editar Producto">
-                                                                                    <f:ajax render="panel_datos_producto" onevent="indicador"/>
-                                                                                    <f:ajax render="panel_lista_productos" onevent="indicador"/>
+                                                                                    <f:ajax render="panel_datos_producto panel_lista_productos panel_mensajes"/>
                                                                                 </h:commandLink>
                                                                             </li>
-                                                                            <li><h:commandLink action="#{editarAccionCorrectiva.removerProductoAfectado(producto.key)}" value="Eliminar Producto">
-                                                                                    <f:ajax render="panel_lista_productos" onevent="indicador"/>
+                                                                            <li><h:commandLink action="#{editarAccionCorrectiva.quitarProducto(producto.key)}" value="Eliminar Producto">
+                                                                                    <f:ajax render="panel_lista_productos panel_mensajes"/>
                                                                                 </h:commandLink>
                                                                             </li>
                                                                         </ul>
@@ -175,12 +181,13 @@
                     <div class="panel-body">
                         <div class="form-group">
                             <strong><label for="analisis_causa">Analisis de Causa Raiz:</label></strong>                                    
-                            <h:inputTextarea class="form-control" id="analisis_caousa"  p:placeholder="Analisis de causa raiz utilizando por ejemplo la tecnica de 5 porques." value="#{editarAccionCorrectiva.analisisCausa}"/>
+                            <h:inputTextarea class="form-control" id="analisis_caousa"  p:placeholder="Analisis de causa raiz utilizando por ejemplo la tecnica de 5 porques." 
+                                             value="#{editarAccionCorrectiva.analisisCausa}"/>
                         </div>
                         <div class="form-group">
                             <strong><label for="codificacion">Codificacion:</label></strong>                                    
                             <h:selectOneMenu id="codificacion" class="form-control" value="#{editarAccionCorrectiva.codificacionSeleccionada}">
-                                <f:selectItem itemLabel="-- Seleccionar Codificacion ---" itemValue="-1" itemDisabled="false"  noSelectionOption="false"  />
+                                <f:selectItem itemLabel="-- Seleccionar Codificacion ---" itemDisabled="true"  noSelectionOption="false"  />
                                 <c:forEach items="#{editarAccionCorrectiva.listaCodificaciones}" var="codificacion">
                                     <f:selectItem itemLabel="#{codificacion.value}" itemValue="#{codificacion.key}" />
                                 </c:forEach>
@@ -193,11 +200,13 @@
                             <c:if test="#{(editarAccionCorrectiva.codificacionSeleccionada == 0) and (editarAccionCorrectiva.codificacionSeleccionada ne -1) }">
                                 <div class="form-group">
                                     <strong><label for="nombre_nueva_codificacion">Nombre de Codificacion:</label></strong>
-                                    <h:inputText id="nombre_nueva_codificacion" class="form-control" p:placeholder="Nombre de nueva codificacion." value="#{editarAccionCorrectivaacion}" />
+                                    <h:inputText id="nombre_nueva_codificacion" class="form-control" p:placeholder="Nombre de nueva codificacion."
+                                                 value="#{editarAccionCorrectivaacion}" required="true" requiredMessage="No se ingreso Nombre de nueva Codificacion." />
                                 </div>
                                 <div class="form-group">
                                     <strong><label for="descripcion_nueva_codificacion">Descripcion de Codificacion:</label></strong>
-                                    <h:inputText id="descripcion_nueva_codificacion" class="form-control" p:placeholder="Descripcion de nueva codificacion." value="#{editarAccionCorrectiva.descripcionNuevaCodificacion}" />
+                                    <h:inputText id="descripcion_nueva_codificacion" class="form-control" p:placeholder="Descripcion de nueva codificacion." 
+                                                 value="#{editarAccionCorrectiva.descripcionNuevaCodificacion}" required="true" requiredMessage="No se ingreso Descripcion de nueva Codificacio."/>
                                 </div>
                                 <div class="form-group">
                                     <h:commandButton action="#{editarAccionCorrectiva.nuevaCodificacion()}" value="Nueva">
@@ -283,6 +292,47 @@
                             </c:if>
                         </h:panelGroup>
                     </div>
+                </div>
+                <h:panelGroup id="panel_mensajes">
+                    <div class="form-group-sm">
+                        <h:message for="fecha_deteccion" class="msj_error"/>
+                    </div>
+                    <div class="form-group-sm">
+                        <h:message for="area" class="msj_error"/>
+                    </div>
+                    <div class="form-group-sm">
+                        <h:message for="deteccion" class="msj_error"/>
+                    </div>
+                    <div class="form-group-sm">
+                        <h:message for="nombre_nueva_deteccion" class="msj_error"/>
+                    </div>
+                    <div class="form-group-sm">
+                        <h:message for="tipo_nueva_deteccion" class="msj_error"/>
+                    </div>
+                    <div class="form-group-sm">
+                        <h:message for="descripcion" class="msj_error"/>
+                    </div>
+                    <div class="form-group-sm">
+                        <h:message for="producto_afectado" class="msj_error"/>
+                    </div>
+                    <div class="form-group-sm">
+                        <h:message for="nombre_producto" class="msj_error"/>
+                    </div>
+                    <div class="form-group-sm">
+                        <h:message for="datos_producto" class="msj_error"/>
+                    </div>
+                    <div class="form-group-sm">
+                        <h:message for="guardar_accion" class="msj_error"/>
+                    </div>
+                </h:panelGroup>
+                
+                <div class="form-group-sm">
+                    <h:commandButton id="guardar_accion" class="form-control btn-success" value="Guardar" >
+                        <f:ajax execute="@form" event="click" listener="#{editarAccionCorrectiva.editarAccion()}" onevent="indicador" render="panel_mensajes"/>
+                    </h:commandButton>
+                    <h:commandButton id="eliminar_accion" class="form-control btn-danger" value="Eliminar" onclick="if (! confirm('Seguro que va a eliminar esta accion? Se eliminaran todos los datos relacionados.')) return false" >
+                        <f:ajax event="click" listener="#{editarAccionCorrectiva.eliminarAccion()}" onevent="indicador" render="panel_mensajes"/>
+                    </h:commandButton>
                 </div>
             </h:form>
         </div>

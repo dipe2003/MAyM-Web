@@ -80,14 +80,4 @@ public class ListarPreventivas implements Serializable{
         String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
         FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Preventiva/EditarAccionPreventiva.xhtml?id="+IdAccionSeleccionada);
     }
-    
-    public void eliminarAccion(int IdAccionSeleccoiondada) throws IOException{
-        if((fAdmin.EliminarAccion(IdAccionSeleccoiondada))!= -1){
-        String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-        FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Preventivas/ListarPreventivas.xhtml");
-        }else{
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo eliminar la accion", "No se pudo eliminar la accion" ));
-            FacesContext.getCurrentInstance().renderResponse();
-        }
-    }
 }

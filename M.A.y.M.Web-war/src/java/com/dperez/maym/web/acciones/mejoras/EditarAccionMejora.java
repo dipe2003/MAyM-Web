@@ -41,7 +41,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 
 
-
 @Named
 @ViewScoped
 public class EditarAccionMejora implements Serializable {
@@ -110,11 +109,11 @@ public class EditarAccionMejora implements Serializable {
     public EnumTipoDeteccion getTipoNuevaDeteccion() {return TipoNuevaDeteccion;}
     public Integer getDeteccionSeleccionada(){return this.DeteccionSeleccionada;}
     
-    public Map<Integer, Area> getListaAreasSectores(){return this.ListaAreasSectores;}
+    public Map<Integer, Area> getListaAreasSectores() {return this.ListaAreasSectores;}
     public Integer getAreaSectorAccionSeleccionada() {return AreaSectorAccionSeleccionada;}
     
     //  Setters
-    public void serIdAccionCorrectiva(int IdAccionCorrectiva){this.IdAccionSeleccionada = IdAccionCorrectiva;}
+    public void setIdAccionSeleccionada(int IdAccionSeleccionada) {this.IdAccionSeleccionada = IdAccionSeleccionada;}
     public void setFechaDeteccion(Date FechaDeteccion) {this.FechaDeteccion = FechaDeteccion;}
     public void setStrFechaDeteccion(String strFechaDeteccion) {
         Calendar cal = Calendar.getInstance();
@@ -143,7 +142,7 @@ public class EditarAccionMejora implements Serializable {
     public void setNombreNuevaDeteccion(String NombreNuevaDeteccion){this.NombreNuevaDeteccion = NombreNuevaDeteccion;}
     public void setTipoNuevaDeteccion(EnumTipoDeteccion TipoNuevaDeteccion) {this.TipoNuevaDeteccion = TipoNuevaDeteccion;}
     public void setDeteccionSeleccionada(Integer DeteccionSeleccionada){this.DeteccionSeleccionada = DeteccionSeleccionada;}
-
+    
     public void setListaAreaSectores(Map<Integer, Area> ListaAreasSectores){this.ListaAreasSectores = ListaAreasSectores;}
     public void setAreaSectorAccionSeleccionada(Integer AreaSectorAccionSeleccionada) {this.AreaSectorAccionSeleccionada = AreaSectorAccionSeleccionada;}
     
@@ -159,10 +158,10 @@ public class EditarAccionMejora implements Serializable {
         // recuperar el id para llenar datos de la accion de mejora y el resto de las propiedades.
         IdAccionSeleccionada = Integer.parseInt(request.getParameter("id"));
         if(IdAccionSeleccionada != 0){
-            Accion AccionMejora = (Mejora) fLectura.GetAccion(IdAccionSeleccionada);
-            FechaDeteccion = AccionMejora.getFechaDeteccion();
-            Descripcion = AccionMejora.getDescripcion();
-            AnalisisCausa = AccionMejora.getAnalisisCausa();
+            Accion AccionSeleccionada = (Mejora) fLectura.GetAccion(IdAccionSeleccionada);
+            FechaDeteccion = AccionSeleccionada.getFechaDeteccion();
+            Descripcion = AccionSeleccionada.getDescripcion();
+            AnalisisCausa = AccionSeleccionada.getAnalisisCausa();
             
             //  Codificaciones
             ListaCodificaciones = new HashMap<>();
@@ -171,11 +170,11 @@ public class EditarAccionMejora implements Serializable {
             for(Codificacion codificacion:tmpCodificaciones){
                 ListaCodificaciones.put(codificacion.getId(), codificacion.getNombre());
             }
-            CodificacionSeleccionada = AccionMejora.getCodificacionAccion().getId();
+            CodificacionSeleccionada = AccionSeleccionada.getCodificacionAccion().getId();
             
             //  Detecciones
             TiposDeteccion = EnumTipoDeteccion.values();
-            TipoDeDeteccionSeleccionada = AccionMejora.getGeneradaPor().getTipo();
+            TipoDeDeteccionSeleccionada = AccionSeleccionada.getGeneradaPor().getTipo();
             
             this.ListaDetecciones = new HashMap<>();
             List<Deteccion> tmpDetecciones = fLectura.ListarDetecciones();
@@ -184,17 +183,17 @@ public class EditarAccionMejora implements Serializable {
                 if (deteccion.getTipo().equals(TipoDeDeteccionSeleccionada)){
                     ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
                 }
-            }                        
-           
-            DeteccionSeleccionada = AccionMejora.getGeneradaPor().getId();
-
+            }
+            
+            DeteccionSeleccionada = AccionSeleccionada.getGeneradaPor().getId();
+            
             // Areas Sectores
             ListaAreasSectores = new HashMap<>();
             List<Area> tmpAreas = fLectura.ListarAreasSectores();
             for(Area area:tmpAreas){
                 this.ListaAreasSectores.put(area.getId(), area);
             }
-            AreaSectorAccionSeleccionada = AccionMejora.getAreaSectorAccion().getId();
+            AreaSectorAccionSeleccionada = AccionSeleccionada.getAreaSectorAccion().getId();
             actualizarListaAdjuntos();
         }
     }
@@ -274,8 +273,8 @@ public class EditarAccionMejora implements Serializable {
         for(Codificacion codificacion:tmpCodificacion){
             ListaCodificaciones.put(codificacion.getId(), codificacion.getNombre());
         }
-    }    
-       
+    }
+    
     /**
      * Carga el adjunto en la lista de adjuntos.
      * Deja vacios los campos para un nuevo adjunto.
@@ -290,7 +289,7 @@ public class EditarAccionMejora implements Serializable {
             tipos.add("jpeg");
             tipos.add("jpg");
             tipos.add("png");
-            tipos.add("gif");            
+            tipos.add("gif");
             if(!tipos.contains(extension.toLowerCase().trim())){
                 tipoAdjunto = EnumTipoAdjunto.DOCUMENTO;
             }
@@ -326,10 +325,10 @@ public class EditarAccionMejora implements Serializable {
      */
     public void editarAccion() throws IOException{
         // actualizar accion
-        if(fDatos.EditarAccion(IdAccionSeleccionada, EnumAccion.CORRECTIVA, FechaDeteccion, Descripcion, null,
-                AreaSectorAccionSeleccionada, DeteccionSeleccionada, CodificacionSeleccionada) != -1){
+        if(fDatos.EditarAccion(IdAccionSeleccionada, EnumAccion.MEJORA, FechaDeteccion, Descripcion, AnalisisCausa,null,
+                AreaSectorAccionSeleccionada, DeteccionSeleccionada, CodificacionSeleccionada) == -1){
             // Si no se actualizo muestra mensaje de error.
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
+            FacesContext.getCurrentInstance().addMessage("form_editar_accion:guardar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             // Si la actualizacion se realizo correctamente redirige a lista de acciones.
@@ -344,11 +343,15 @@ public class EditarAccionMejora implements Serializable {
      * @throws java.io.IOException
      */
     public void eliminarAccion() throws IOException{
-        if(fAdmin.EliminarAccion(IdAccionSeleccionada)!=-1){
+        if(fAdmin.EliminarAccion(IdAccionSeleccionada)==-1){
             // Si no se elimino muestra mensaje de error.
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar la Accion", "No se pudo eliminar la Accion" ));
+            FacesContext.getCurrentInstance().addMessage("form_editar_accion:eliminar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar la Accion", "No se pudo eliminar la Accion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
+            // Eliminar todos los archivos adjuntos del disco.
+            for(Adjunto adjunto: MapAdjuntos.values()){
+                cArchivo.BorrarArchivo(adjunto.getUbicacion());
+            }
             // Si la eliminacion se realizo correctamente redirige a lista de acciones.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Mejoras/ListarMejoras.xhtml");

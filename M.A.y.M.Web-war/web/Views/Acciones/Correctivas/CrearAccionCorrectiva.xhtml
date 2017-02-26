@@ -29,9 +29,9 @@
                         </div>
                         <div class="form-group">
                             <strong><label for="area">Area / Sector:</label></strong>
-                            <h:selectOneMenu id="area" class="form-control" value="#{crearAccionPreventiva.areaSectorAccionSeleccionada}"
+                            <h:selectOneMenu id="area" class="form-control" value="#{crearAccionCorrectiva.areaSectorAccionSeleccionada}"
                                              required="true" requiredMessage="No se selecciono area">
-                                <f:selectItem itemLabel="-- Seleccionar Area ---"  itemDisabled="true"  noSelectionOption="true"  />
+                                <f:selectItem itemLabel="-- Seleccionar Area ---" itemDisabled="true"  noSelectionOption="true"  />
                                 <c:forEach items="#{crearAccionCorrectiva.listaAreasSectores}" var="area">
                                     <f:selectItem itemLabel="#{area.value.nombre}" itemValue="#{area.value.id}" />
                                 </c:forEach>
@@ -115,13 +115,12 @@
                                     <div class="form-group">
                                         <strong><label for="nombre_producto">Nombre:</label></strong>
                                         <h:inputText id="nombre_producto" class="form-control" p:placeholder="Nombre del producto involucrado." 
-                                                     value="#{crearAccionCorrectiva.nombreProductoAfectado}" 
-                                                     required="true" requiredMessage="No se ingreso nombre de producto involucrado." />
+                                                     value="#{crearAccionCorrectiva.nombreProductoAfectado}" />
                                     </div>
                                     <div class="form-group">
                                         <strong><label for="datos_producto">Datos del Producto:</label></strong>
                                         <h:inputText id="datos_producto" class="form-control" p:placeholder="Datos o informacion sobre el producto (fechas de produccion, especificaciones, etc.)" 
-                                                     value="#{crearAccionCorrectiva.datosProductoAfectado}" required="true" requiredMessage="No se ingresaron datos del producto." />
+                                                     value="#{crearAccionCorrectiva.datosProductoAfectado}"  />
                                     </div>                                    
                                 </h:panelGroup>                                
                                 <div class="form-group">

@@ -6,6 +6,7 @@
 package com.dperez.maym.web.acciones.correctivas;
 
 import com.dperez.maymweb.accion.Accion;
+import com.dperez.maymweb.accion.adjunto.Adjunto;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeLectura;
@@ -81,13 +82,4 @@ public class ListarCorrectivas implements Serializable{
         FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml?id="+IdAccionSeleccionada);
     }
     
-    public void eliminarAccion(int IdAccionSeleccoiondada) throws IOException{
-        if((fAdmin.EliminarAccion(IdAccionSeleccoiondada))!= -1){
-        String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-        FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/ListarCorrectivas.xhtml");
-        }else{
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo eliminar la accion", "No se pudo eliminar la accion" ));
-            FacesContext.getCurrentInstance().renderResponse();
-        }
-    }
 }

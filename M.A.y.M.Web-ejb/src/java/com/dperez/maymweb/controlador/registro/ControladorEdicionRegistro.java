@@ -77,13 +77,14 @@ public class ControladorEdicionRegistro {
      * @param TipoAccion
      * @param FechaDeteccion
      * @param Descripcion
+     * @param AnalisisCausa
      * @param TipoDesvio
      * @param IdAreaSector
      * @param IdDeteccion
      * @param IdCodificacion
      * @return -1 si no se actualizo.
      */
-    public int EditarAccion(int IdAccion, EnumAccion TipoAccion, Date FechaDeteccion, String Descripcion, EnumTipoDesvio TipoDesvio,
+    public int EditarAccion(int IdAccion, EnumAccion TipoAccion, Date FechaDeteccion, String Descripcion, String AnalisisCausa, EnumTipoDesvio TipoDesvio,
             int IdAreaSector, int IdDeteccion, int IdCodificacion){
         Accion accion = mAccion.GetAccion(IdAccion);
         //  Comprobar si hay cambio en el valor para "ahorrar" llamada a la base de datos.
@@ -104,6 +105,7 @@ public class ControladorEdicionRegistro {
         if(TipoAccion == EnumAccion.CORRECTIVA){
             ((Correctiva)accion).setTipo(TipoDesvio);
         }
+        accion.setAnalisisCausa(AnalisisCausa);
         return mAccion.ActualizarAccion(accion);
     }
     

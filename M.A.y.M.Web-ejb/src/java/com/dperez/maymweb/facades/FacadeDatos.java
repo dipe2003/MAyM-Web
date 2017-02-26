@@ -246,15 +246,16 @@ public class FacadeDatos {
      * @param TipoAccion
      * @param FechaDeteccion
      * @param Descripcion
+     * @param AnalisisCausa
      * @param TipoDesvio
      * @param IdAreaSector
      * @param IdDeteccion
      * @param IdCodificacion
      * @return -1 si no se actualizo.
      */
-    public int EditarAccion(int IdAccion, EnumAccion TipoAccion, Date FechaDeteccion, String Descripcion, EnumTipoDesvio TipoDesvio,
+    public int EditarAccion(int IdAccion, EnumAccion TipoAccion, Date FechaDeteccion, String Descripcion, String AnalisisCausa, EnumTipoDesvio TipoDesvio,
             int IdAreaSector, int IdDeteccion, int IdCodificacion){
-        return cEdicion.EditarAccion(IdAccion, TipoAccion, FechaDeteccion, Descripcion, TipoDesvio, IdAreaSector, IdDeteccion, IdCodificacion);
+        return cEdicion.EditarAccion(IdAccion, TipoAccion, FechaDeteccion, Descripcion, AnalisisCausa, TipoDesvio, IdAreaSector, IdDeteccion, IdCodificacion);
     }
     
     /**

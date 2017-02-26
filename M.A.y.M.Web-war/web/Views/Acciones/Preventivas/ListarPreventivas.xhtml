@@ -121,16 +121,6 @@
                                                             </li>
                                                         </c:when>
                                                     </c:choose>
-                                                    <!--<c:choose>
-                                                        <c:when test="#{sesion.permiso == 'Verificador'}"> -->
-                                                    
-                                                    <li><h:commandLink action="#{listarPreventivas.eliminarAccion(accion.value.id)}" value="Eliminar" onclick="if (! confirm('Seguro que desea quitar esta accion y todos los datos relacionados?')) return false" >
-                                                            <f:ajax onevent="indicador" />
-                                                        </h:commandLink>
-                                                    </li>
-                                                    
-                                                    <!--</c:when>
-                                                </c:choose>-->
                                                 </ul>
                                             </div>
                                         </td>

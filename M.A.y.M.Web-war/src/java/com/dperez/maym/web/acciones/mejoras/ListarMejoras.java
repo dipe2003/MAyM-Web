@@ -80,14 +80,4 @@ public class ListarMejoras implements Serializable{
         String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
         FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Mejoras/EditarAccionMejora.xhtml?id="+IdAccionSeleccionada);
     }
-    
-    public void eliminarAccion(int IdAccionSeleccoiondada) throws IOException{
-        if((fAdmin.EliminarAccion(IdAccionSeleccoiondada))!= -1){
-        String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-        FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Mejoras/ListarMejorass.xhtml");
-        }else{
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo eliminar la accion", "No se pudo eliminar la accion" ));
-            FacesContext.getCurrentInstance().renderResponse();
-        }
-    }
 }

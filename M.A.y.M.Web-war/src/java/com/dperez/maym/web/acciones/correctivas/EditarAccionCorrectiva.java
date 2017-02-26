@@ -132,7 +132,7 @@ public class EditarAccionCorrectiva implements Serializable {
     public String getDatosProductoAfectado(){return this.DatosProductoAfectado;}
     
     //  Setters
-    public void serIdAccionCorrectiva(int IdAccionCorrectiva){this.IdAccionSeleccionada = IdAccionCorrectiva;}
+    public void setIdAccionSeleccionada(int IdAccionSeleccionada) {this.IdAccionSeleccionada = IdAccionSeleccionada;}
     public void setFechaDeteccion(Date FechaDeteccion) {this.FechaDeteccion = FechaDeteccion;}
     public void setStrFechaDeteccion(String strFechaDeteccion) {
         Calendar cal = Calendar.getInstance();
@@ -165,7 +165,7 @@ public class EditarAccionCorrectiva implements Serializable {
     public void setTiposDesvios(EnumTipoDesvio[] TiposDesvios){this.TiposDesvios = TiposDesvios;}
     public void setTipoDesvioSeleccionado(EnumTipoDesvio TipoDesvioSeleccionado){this.TipoDesvioSeleccionado = TipoDesvioSeleccionado;}
     
-    public void setListaAreaSectores(Map<Integer, Area> ListaAreasSectores){this.ListaAreasSectores = ListaAreasSectores;}
+    public void setListaAreasSectores(Map<Integer, Area> ListaAreasSectores) {this.ListaAreasSectores = ListaAreasSectores;}
     public void setAreaSectorAccionSeleccionada(Integer AreaSectorAccionSeleccionada) {this.AreaSectorAccionSeleccionada = AreaSectorAccionSeleccionada;}
     
     public void setHayProductoAfectado(boolean hayProductoAfectado){
@@ -188,10 +188,10 @@ public class EditarAccionCorrectiva implements Serializable {
         // recuperar el id para llenar datos de la accion correctiva y el resto de las propiedades.
         IdAccionSeleccionada = Integer.parseInt(request.getParameter("id"));
         if(IdAccionSeleccionada != 0){
-            Accion AccionCorrectiva = (Correctiva) fLectura.GetAccion(IdAccionSeleccionada);
-            FechaDeteccion = AccionCorrectiva.getFechaDeteccion();
-            Descripcion = AccionCorrectiva.getDescripcion();
-            AnalisisCausa = AccionCorrectiva.getAnalisisCausa();
+            Accion AccionSeleccionada = (Correctiva) fLectura.GetAccion(IdAccionSeleccionada);
+            FechaDeteccion = AccionSeleccionada.getFechaDeteccion();
+            Descripcion = AccionSeleccionada.getDescripcion();
+            AnalisisCausa = AccionSeleccionada.getAnalisisCausa();
             
             //  Codificaciones
             ListaCodificaciones = new HashMap<>();
@@ -200,11 +200,11 @@ public class EditarAccionCorrectiva implements Serializable {
             for(Codificacion codificacion:tmpCodificaciones){
                 ListaCodificaciones.put(codificacion.getId(), codificacion.getNombre());
             }
-            CodificacionSeleccionada = AccionCorrectiva.getCodificacionAccion().getId();
+            CodificacionSeleccionada = AccionSeleccionada.getCodificacionAccion().getId();
             
             //  Detecciones
             TiposDeteccion = EnumTipoDeteccion.values();
-            TipoDeDeteccionSeleccionada = AccionCorrectiva.getGeneradaPor().getTipo();
+            TipoDeDeteccionSeleccionada = AccionSeleccionada.getGeneradaPor().getTipo();
             
             this.ListaDetecciones = new HashMap<>();
             List<Deteccion> tmpDetecciones = fLectura.ListarDetecciones();
@@ -214,11 +214,11 @@ public class EditarAccionCorrectiva implements Serializable {
                     ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
                 }
             }
-            DeteccionSeleccionada = AccionCorrectiva.getGeneradaPor().getId();
+            DeteccionSeleccionada = AccionSeleccionada.getGeneradaPor().getId();
             
             //  Tipo de desvios
             TiposDesvios = EnumTipoDesvio.values();
-            TipoDesvioSeleccionado = ((Correctiva)AccionCorrectiva).getTipo();
+            TipoDesvioSeleccionado = ((Correctiva)AccionSeleccionada).getTipo();
             
             // Areas Sectores
             ListaAreasSectores = new HashMap<>();
@@ -226,10 +226,10 @@ public class EditarAccionCorrectiva implements Serializable {
             for(Area area:tmpAreas){
                 this.ListaAreasSectores.put(area.getId(), area);
             }
-            AreaSectorAccionSeleccionada = AccionCorrectiva.getAreaSectorAccion().getId();
+            AreaSectorAccionSeleccionada = AccionSeleccionada.getAreaSectorAccion().getId();
             ListaProductosAfectados = new HashMap<>();
-            if(!((Correctiva)AccionCorrectiva).getProductosAfectados().isEmpty()){
-                List<Producto> ProductosAfectados = ((Correctiva)AccionCorrectiva).getProductosAfectados();
+            if(!((Correctiva)AccionSeleccionada).getProductosAfectados().isEmpty()){
+                List<Producto> ProductosAfectados = ((Correctiva)AccionSeleccionada).getProductosAfectados();
                 for(Producto producto: ProductosAfectados){
                     ListaProductosAfectados.put(producto.getNombre(), producto.getDatos());
                 }
@@ -378,14 +378,14 @@ public class EditarAccionCorrectiva implements Serializable {
             tipos.add("jpeg");
             tipos.add("jpg");
             tipos.add("png");
-            tipos.add("gif");            
+            tipos.add("gif");
             if(!tipos.contains(extension.toLowerCase().trim())){
                 tipoAdjunto = EnumTipoAdjunto.DOCUMENTO;
             }
             if((fDatos.AgregarArchivoAdjunto(IdAccionSeleccionada, TituloAdjunto, datosAdjunto[0], tipoAdjunto))!=-1){
                 actualizarListaAdjuntos();
                 this.TituloAdjunto = new String();
-                this.ArchivoAdjunto =  null;                
+                this.ArchivoAdjunto =  null;
             }else{
                 cArchivo.BorrarArchivo(datosAdjunto[0]);
             }
@@ -413,15 +413,15 @@ public class EditarAccionCorrectiva implements Serializable {
      */
     public void editarAccion() throws IOException{
         // actualizar accion
-        if(fDatos.EditarAccion(IdAccionSeleccionada, EnumAccion.CORRECTIVA, FechaDeteccion, Descripcion, TipoDesvioSeleccionado,
-                AreaSectorAccionSeleccionada, DeteccionSeleccionada, CodificacionSeleccionada) != -1){
+        if(fDatos.EditarAccion(IdAccionSeleccionada, EnumAccion.CORRECTIVA, FechaDeteccion, Descripcion, AnalisisCausa, TipoDesvioSeleccionado,
+                AreaSectorAccionSeleccionada, DeteccionSeleccionada, CodificacionSeleccionada) == -1){
             // Si no se actualizo muestra mensaje de error.
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
+            FacesContext.getCurrentInstance().addMessage("form_editar_accion:guardar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             // Si la actualizacion se realizo correctamente redirige a lista de acciones.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/ViewsAcciones/Correctivas/ListarCorrectivas.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/ListarCorrectivas.xhtml");
         }
     }
     
@@ -431,11 +431,15 @@ public class EditarAccionCorrectiva implements Serializable {
      * @throws java.io.IOException
      */
     public void eliminarAccion() throws IOException{
-        if(fAdmin.EliminarAccion(IdAccionSeleccionada)!=-1){
+        if(fAdmin.EliminarAccion(IdAccionSeleccionada)==-1){
             // Si no se elimino muestra mensaje de error.
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar la Accion", "No se pudo eliminar la Accion" ));
+            FacesContext.getCurrentInstance().addMessage("form_editar_accion:eliminar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar la Accion", "No se pudo eliminar la Accion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
+            // Eliminar todos los archivos adjuntos del disco.
+            for(Adjunto adjunto: MapAdjuntos.values()){
+                cArchivo.BorrarArchivo(adjunto.getUbicacion());
+            }
             // Si la eliminacion se realizo correctamente redirige a lista de acciones.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/ListarCorrectivas.xhtml");
