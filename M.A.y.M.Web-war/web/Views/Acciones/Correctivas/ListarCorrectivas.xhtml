@@ -10,11 +10,8 @@
                 >
     <ui:define name="page_content">
         
-        <div class="container-fluid">
-            <div class="jumbotron">
-                <h1>Bienvenido a <abbr title="Medicion Analisis y Mejora" >M.A.Y.M.</abbr> </h1>      
-                <p>Este es el sitio de inicio donde podras ver un listado de las acciones correctivas generadas.</p>  
-            </div>                        
+        <div class="container-fluid">            
+            <h1>Este es el sitio de inicio donde podras ver un listado de las acciones correctivas generadas.</h1>             
         </div>
         
         <div class="container-fluid" style="padding: 1%">
@@ -105,7 +102,7 @@
                                                     <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu" role="menu">
-                                                    <li><h:link value="Ver Accion" >                                                        
+                                                    <li><h:link value="Ver Accion" outcome="VerAccionCorrectiva.xhtml?id=#{accion.value.id}">                                                        
                                                             <f:ajax onevent="indicador" />
                                                         </h:link>
                                                     </li>

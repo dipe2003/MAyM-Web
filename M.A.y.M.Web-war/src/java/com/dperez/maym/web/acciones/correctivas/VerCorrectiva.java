@@ -7,8 +7,8 @@ package com.dperez.maym.web.acciones.correctivas;
 
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.Comprobacion;
-import com.dperez.maymweb.accion.EnumComprobacion;
 import com.dperez.maymweb.accion.acciones.Correctiva;
+import com.dperez.maymweb.accion.acciones.EnumTipoDesvio;
 import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.deteccion.Deteccion;
@@ -17,8 +17,13 @@ import com.dperez.maymweb.estado.EnumEstado;
 import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.facades.FacadeVerificador;
+import com.dperez.maymweb.producto.Producto;
 import com.dperez.maymweb.usuario.Usuario;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -45,10 +50,16 @@ public class VerCorrectiva implements Serializable {
     private FacadeVerificador fVerif;
     
     private Date FechaDeteccion;
+    private String strFechaDeteccion;
+    
     private Deteccion GeneradaPor;
     private Area AreaSector;
     private String Descripcion;
     private String AnalisisCausa;
+    
+    private List<Producto> ListaProductos;
+    
+    private String TipoDesvio;
     
     private Map<Integer, Actividad> MedidasCorrectivas;
     private Map<Integer, Actividad> MedidasPreventivas;
@@ -60,9 +71,7 @@ public class VerCorrectiva implements Serializable {
     
     private Comprobacion ComprobacionImplementacion;
     private Comprobacion ComprobacionEficacia;
-    
-    private Usuario ResponsableEficacia;
-    
+
     private Accion AccionSeleccionada;
     
     private Empresa EmpresaAccion;
@@ -71,11 +80,23 @@ public class VerCorrectiva implements Serializable {
     
     //  Getters
     public Date getFechaDeteccion() {return FechaDeteccion;}
+    public String getStrFechaDeteccion(){
+        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
+        if (FechaDeteccion == null) {
+            return this.strFechaDeteccion;
+        }else{
+            return fDate.format(FechaDeteccion);
+        }
+    }
     public Deteccion getGeneradaPor() {return GeneradaPor;}
     public Area getAreaSector() {return AreaSector;}
     public String getDescripcion() {return Descripcion;}
     public String getAnalisisCausa() {return AnalisisCausa;}
-    public Usuario getResponsableEficacia() {return ResponsableEficacia;}
+    
+    public List<Producto> getListaProductos() {return ListaProductos;}
+    
+    public String getTipoDesvio() {return TipoDesvio;}
+    
     public Map<Integer, Actividad> getMedidasCorrectivas() {return MedidasCorrectivas;}
     public Map<Integer, Actividad> getMedidasPreventivas() {return MedidasPreventivas;}
     public Date getFechaImplementacion(){return this.FechaImplementacion;}
@@ -89,11 +110,24 @@ public class VerCorrectiva implements Serializable {
     
     //  Setters
     public void setFechaDeteccion(Date FechaDeteccion) {this.FechaDeteccion = FechaDeteccion;}
+    public void setStrFechaDeteccion(String strFechaDeteccion) {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try{
+            cal.setTime(sdf.parse(strFechaDeteccion));
+        }catch(ParseException ex){}
+        this.strFechaDeteccion = strFechaDeteccion;
+        this.FechaDeteccion = cal.getTime();
+    }
     public void setGeneradaPor(Deteccion GeneradaPor) {this.GeneradaPor = GeneradaPor;}
     public void setAreaSector(Area AreaSector) {this.AreaSector = AreaSector;}
     public void setDescripcion(String Descripcion) {this.Descripcion = Descripcion;}
     public void setAnalisisCausa(String AnalisisCausa) {this.AnalisisCausa = AnalisisCausa;}
-    public void setResponsableEficacia(Usuario ResponsableEficacia) {this.ResponsableEficacia = ResponsableEficacia;}
+    
+    public void setListaProductos(List<Producto> ListaProductos) {this.ListaProductos = ListaProductos;}
+    
+    public void setTipoDesvio(String TipoDesvio) {this.TipoDesvio = TipoDesvio;}
+
     public void setMedidasCorrectivas(Map<Integer, Actividad> MedidasCorrectivas) {this.MedidasCorrectivas = MedidasCorrectivas;}
     public void setMedidasPreventivas(Map<Integer, Actividad> MedidasPreventivas) {this.MedidasPreventivas = MedidasPreventivas;}
     public void setFechaImplementacion(Date FechaImplementacion){this.FechaImplementacion = FechaImplementacion;}
@@ -135,7 +169,26 @@ public class VerCorrectiva implements Serializable {
                 MedidasPreventivas.put(act.getIdActividad(), act);
             }
             EmpresaAccion = (Empresa) request.getSession().getAttribute("Empresa");
-            ResponsableEficacia = AccionSeleccionada.getComprobacionEficacia().getResponsable();
+            
+            ListaProductos = new ArrayList<>();
+            if(!((Correctiva)AccionSeleccionada).getProductosAfectados().isEmpty()){
+                ListaProductos = ((Correctiva)AccionSeleccionada).getProductosAfectados();
+            }
+            
+            EnumTipoDesvio tipo = ((Correctiva)AccionSeleccionada).getTipo();
+            switch(tipo){
+                case NC_MENOR_OBS:
+                    TipoDesvio = "No Conformidad Menor / Observacion";
+                    break;
+                case NC_MAYOR:
+                    TipoDesvio = "No Conformidad Mayor";
+                    break;
+                    
+                case NC_CRITICA:
+                    TipoDesvio = "No Conformidad Critica";
+                    break;
+                default: break;
+            }
         }
     }
     
