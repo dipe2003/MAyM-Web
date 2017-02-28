@@ -4,7 +4,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition >
         <div class="row" style="background-color: #000">
             <div class="col-sm-4">
@@ -31,51 +32,84 @@
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">Correctivas<span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/Correctivas/CrearAccionCorrectiva.xhtml">Nueva</a></li>
+                                <c:if test="#{sesionUsuario.usuarioLogueado != null}">
+                                    <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/Correctivas/CrearAccionCorrectiva.xhtml">Nueva</a></li>
+                                </c:if>
                                 <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/Correctivas/ListarCorrectivas.xhtml">Listado</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">Preventivas<span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                               <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/Preventivas/CrearAccionPreventiva.xhtml">Nueva</a></li>
+                                <c:if test="#{sesionUsuario.usuarioLogueado != null}">
+                                    <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/Preventivas/CrearAccionPreventiva.xhtml">Nueva</a></li>
+                                </c:if>
                                 <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/Preventivas/ListarPreventivas.xhtml">Listado</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">Mejoras<span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/Mejoras/CrearAccionMejora.xhtml">Nueva</a></li>
+                                <c:if test="#{sesionUsuario.usuarioLogueado != null}">
+                                    <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/Mejoras/CrearAccionMejora.xhtml">Nueva</a></li>
+                                </c:if>
                                 <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/Mejoras/ListarMejoras.xhtml">Listado</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">Fortalezas<span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="#">Nueva</a></li>
+                                <c:if test="#{sesionUsuario.usuarioLogueado != null}">
+                                    <li><a href="#">Nueva</a></li>
+                                </c:if>
                                 <li><a href="#">Listado</a></li>
                             </ul>
                         </li>
                     </ul>
-                    <a class="navbar-brand" href="#"><span class="glyphicon glyphicon-cog"></span>Configuracion</a>
-                    <ul class="nav navbar-nav navbar-right">                        
+                    <c:if test="#{sesionUsuario.usuarioLogueado != null}">
+                        <a class="navbar-brand" href="#"><span class="glyphicon glyphicon-cog"></span> Configuracion</a>
+                    </c:if>
+                    <ul class="nav navbar-nav navbar-right">
                         <c:choose>
-                            <c:when test="#{sesionUsuario.usuario != ''}">
-                                <li><a href="#"><span class="glyphicon glyphicon-log-out"></span>Salir</a></li>
+                            <c:when test="#{sesionUsuario.usuarioLogueado != null}">
+                                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">#{sesionUsuario.usuarioLogueado.nombre} #{sesionUsuario.usuarioLogueado.apellido} <span class="glyphicon glyphicon-user"></span></a>
+                                    <div class="dropdown-menu">
+                                        <h:form id="formlout" class="form container-fluid">                                                
+                                            <h:commandButton id="btnLogout" class="btn btn-block" value="Salir" action="#{ingresoUsuario.logout()}">
+                                                <f:ajax execute="@form" render="myNavbar" />
+                                            </h:commandButton>
+                                            <h:commandButton id="btnEditarPerfil" class="btn btn-block" value="Editar Perfil">
+                                                <f:ajax execute="@form" render="myNavbar" />
+                                            </h:commandButton>
+                                        </h:form>
+                                    </div>
+                                </li>
                             </c:when>
                             <c:otherwise>
-                                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Login <span class="glyphicon glyphicon-log-in"></span></a>
+                                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Iniciar Sesion <span class="glyphicon glyphicon-log-in"></span></a>
                                     <div class="dropdown-menu">
                                         <h:form id="formlogin" class="form container-fluid">
                                             <div class="form-group">
                                                 <label for="usr">Operario:</label>
-                                                <h:inputText class="form-control" p:placeholder="Padron" id="usr"></h:inputText>
+                                                <h:inputText class="form-control" p:placeholder="Padron" id="usr" value="#{ingresoUsuario.usuarioSeleccionado}">
+                                                    <f:ajax event="change" execute="@this" listener="#{ingresoUsuario.comprobarIdUsuario()}" render="panel_nombre_usuario" />
+                                                </h:inputText>
+                                                <h:panelGroup id="panel_nombre_usuario">
+                                                    <c:if test="#{not empty ingresoUsuario.nombreUsuario}">
+                                                        <h:inputText class="msj_info" value="#{ingresoUsuario.nombreUsuario}" readonly="true"/>
+                                                    </c:if>
+                                                </h:panelGroup>
                                             </div>
-                                            <div class="form-group">
+                                            <div class="form-group" >
                                                 <label for="pwd">Contraseña:</label>
-                                                <h:inputSecret class="form-control" id="pwd"/>
+                                                <h:inputSecret class="form-control" p:placeholder='Contraseña' id="pwd" value="#{ingresoUsuario.passwordUsuario}"/>
+                                                <h:panelGroup id="panel_mensaje_password">
+                                                    <h:message for="pwd" class="msj_error" />
+                                                </h:panelGroup>
                                             </div>
-                                            <button type="button" id="btnLogin" class="btn btn-block">Ingresar</button>
+                                            <h:commandButton id="btnLogin" class="btn btn-block" value="Ingresar" action="#{ingresoUsuario.ingresar()}">
+                                                <f:ajax execute="@form" render="panel_mensaje_password myNavbar" />
+                                            </h:commandButton>
                                         </h:form>
                                     </div>
                                 </li>

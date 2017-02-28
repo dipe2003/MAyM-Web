@@ -123,7 +123,7 @@ public class ControladorConfiguracion {
     public boolean ComprobarValidezPassword(int IdUsuario, String Password){
         Usuario usuario = mUsuario.GetUsuario(IdUsuario);
         String PasswordStored = cSeg.getPasswordSeguro(Password, usuario.getCredencialUsuario().getPasswordKey());
-        return PasswordStored.equals(Password);
+        return PasswordStored.equals(usuario.getCredencialUsuario().getPassword());
     }
     
     /**

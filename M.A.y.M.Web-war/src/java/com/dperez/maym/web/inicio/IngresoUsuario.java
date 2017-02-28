@@ -32,10 +32,12 @@ public class IngresoUsuario implements Serializable {
     private FacadeMain facadeMain ;
     @Inject
     private FacadeLectura fLectura;
+    @Inject
+    private SesionUsuario sesion;
     
     private String UsuarioSeleccionado;
     private String PasswordUsuario;
-    private Map<String, Integer> ListaEmpresa;
+    private Map<Integer, Empresa> ListaEmpresa;
     private int EmpresaSeleccionada;
     private String NombreUsuario;
     private Map<Integer, String> Usuarios;
@@ -43,14 +45,14 @@ public class IngresoUsuario implements Serializable {
     //  Getters
     public String getUsuarioSeleccionado() {return UsuarioSeleccionado;}
     public void setPasswordUsuario(String PasswordUsuario) {this.PasswordUsuario = PasswordUsuario;}
-    public Map<String, Integer> getListaEmpresa(){return this.ListaEmpresa;}
+    public Map<Integer, Empresa> getListaEmpresa(){return this.ListaEmpresa;}
     public int getEmpresaSeleccionada(){return this.EmpresaSeleccionada;}
     public String getNombreUsuario(){return this.NombreUsuario;}
     
     //  Setters
     public void setUsuarioSeleccionado(String UsuarioSeleccionado) {this.UsuarioSeleccionado = UsuarioSeleccionado;}
     public String getPasswordUsuario() {return PasswordUsuario;}
-    public void setListaEmpresa(Map<String, Integer> ListaEmpresa){this.ListaEmpresa = ListaEmpresa;}
+    public void setListaEmpresa(Map<Integer, Empresa> ListaEmpresa){this.ListaEmpresa = ListaEmpresa;}
     public void setEmpresaSeleccionada(int EmpresaSeleccionada){this.EmpresaSeleccionada = EmpresaSeleccionada;}
     public void setNombreUsuario(String NombreUsuario){this.NombreUsuario = NombreUsuario;}
     
@@ -60,12 +62,12 @@ public class IngresoUsuario implements Serializable {
         this.ListaEmpresa = new HashMap<>();
         List<Empresa> empresas = fLectura.ListaEmpresasRegistradas();
         for(Empresa empresa: empresas){
-            ListaEmpresa.put(empresa.getNombreEmpresa(), empresa.getId());
+            ListaEmpresa.put(empresa.getId(), empresa);
         }
     }
     
     //  Metodos
-    public void Ingresar() throws IOException{
+    public void ingresar() throws IOException{
         String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
         if(facadeMain.ComprobarValidezPassword(Integer.valueOf(UsuarioSeleccionado),PasswordUsuario)){
             FacesContext context = FacesContext.getCurrentInstance();
@@ -74,11 +76,24 @@ public class IngresoUsuario implements Serializable {
             request.getSession().setAttribute("Usuario", usuario);
             Empresa empresa = fLectura.GetEmpresa(EmpresaSeleccionada);
             request.getSession().setAttribute("Empresa", empresa);
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");
+            sesion.setUsuarioLogueado(usuario);
+            sesion.setEmpresaSeleccionada(empresa);
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/index.xhtml");
         }else{
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No Existe Usuario", "Los datos del usuario no son correctos"));
+            FacesContext.getCurrentInstance().addMessage("formlogin:pwd", new FacesMessage(SEVERITY_FATAL, "No Existe Usuario", "Los datos del usuario no son correctos"));
             FacesContext.getCurrentInstance().renderResponse();
         }
+    }
+    
+    public void logout(){
+        try{
+            FacesContext context = FacesContext.getCurrentInstance();
+            HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+            request.getSession().invalidate();
+            sesion.setEmpresaSeleccionada(null);
+            sesion.setUsuarioLogueado(null);
+            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath()+"/index.xhtml");
+        }catch(Exception ex){}
     }
     
     /**

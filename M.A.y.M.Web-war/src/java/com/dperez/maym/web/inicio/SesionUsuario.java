@@ -5,6 +5,8 @@
  */
 package com.dperez.maym.web.inicio;
 
+import com.dperez.maymweb.empresa.Empresa;
+import com.dperez.maymweb.usuario.Usuario;
 import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;
 
@@ -18,11 +20,14 @@ import javax.faces.bean.ManagedBean;
 @ManagedBean
 @SessionScoped
 public class SesionUsuario implements Serializable {
-    String Usuario = new String();
+    private static Usuario UsuarioLogueado;
+    private static Empresa EmpresaSeleccionada;
     
     public SesionUsuario(){}
     
-    public String getUsuario(){return this.Usuario;}
+    public Usuario getUsuarioLogueado(){return UsuarioLogueado;}
+    public Empresa getEmpresaSeleccionada(){return EmpresaSeleccionada;}
     
-    public void setUsuario(String Usuario){this.Usuario = Usuario;}
+    public void setUsuarioLogueado(Usuario UsuarioLogueado){this.UsuarioLogueado = UsuarioLogueado;}
+    public void setEmpresaSeleccionada(Empresa EmpresaSeleccionada){this.EmpresaSeleccionada = EmpresaSeleccionada;}
 }
