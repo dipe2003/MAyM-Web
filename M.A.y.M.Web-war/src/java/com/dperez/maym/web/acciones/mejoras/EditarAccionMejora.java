@@ -232,7 +232,7 @@ public class EditarAccionMejora implements Serializable {
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             // Crear Nueva Deteccion y actualizar lista
-            fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoDeDeteccionSeleccionada);
+            fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoNuevaDeteccion);
             actualizarDeteccion();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_INFO, "Se agrego nueva deteccion", "Se agrego nueva deteccion" ));
             FacesContext.getCurrentInstance().renderResponse();

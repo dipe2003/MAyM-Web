@@ -37,35 +37,23 @@ public class IngresoUsuario implements Serializable {
     
     private String UsuarioSeleccionado;
     private String PasswordUsuario;
-    private Map<Integer, Empresa> ListaEmpresa;
-    private int EmpresaSeleccionada;
+
+    private Empresa EmpresaSeleccionada;
     private String NombreUsuario;
     private Map<Integer, String> Usuarios;
     
     //  Getters
     public String getUsuarioSeleccionado() {return UsuarioSeleccionado;}
     public void setPasswordUsuario(String PasswordUsuario) {this.PasswordUsuario = PasswordUsuario;}
-    public Map<Integer, Empresa> getListaEmpresa(){return this.ListaEmpresa;}
-    public int getEmpresaSeleccionada(){return this.EmpresaSeleccionada;}
+    public Empresa getEmpresaSeleccionada(){return this.EmpresaSeleccionada;}
     public String getNombreUsuario(){return this.NombreUsuario;}
     
     //  Setters
     public void setUsuarioSeleccionado(String UsuarioSeleccionado) {this.UsuarioSeleccionado = UsuarioSeleccionado;}
     public String getPasswordUsuario() {return PasswordUsuario;}
-    public void setListaEmpresa(Map<Integer, Empresa> ListaEmpresa){this.ListaEmpresa = ListaEmpresa;}
-    public void setEmpresaSeleccionada(int EmpresaSeleccionada){this.EmpresaSeleccionada = EmpresaSeleccionada;}
     public void setNombreUsuario(String NombreUsuario){this.NombreUsuario = NombreUsuario;}
-    
-    // inicializacion
-    @PostConstruct
-    public void init(){
-        this.ListaEmpresa = new HashMap<>();
-        List<Empresa> empresas = fLectura.ListaEmpresasRegistradas();
-        for(Empresa empresa: empresas){
-            ListaEmpresa.put(empresa.getId(), empresa);
-        }
-    }
-    
+    public void setEmpresaSeleccionada(Empresa EmpresaSelecionada){this.EmpresaSeleccionada = EmpresaSeleccionada;}    
+
     //  Metodos
     public void ingresar() throws IOException{
         String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
@@ -74,10 +62,10 @@ public class IngresoUsuario implements Serializable {
             HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
             Usuario usuario = fLectura.GetUsuario(Integer.valueOf(UsuarioSeleccionado));
             request.getSession().setAttribute("Usuario", usuario);
-            Empresa empresa = fLectura.GetEmpresa(EmpresaSeleccionada);
-            request.getSession().setAttribute("Empresa", empresa);
+            
+            request.getSession().setAttribute("Empresa", EmpresaSeleccionada);
             sesion.setUsuarioLogueado(usuario);
-            sesion.setEmpresaSeleccionada(empresa);
+            sesion.setEmpresaSeleccionada(EmpresaSeleccionada);
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/index.xhtml");
         }else{
             FacesContext.getCurrentInstance().addMessage("formlogin:pwd", new FacesMessage(SEVERITY_FATAL, "No Existe Usuario", "Los datos del usuario no son correctos"));
@@ -104,7 +92,9 @@ public class IngresoUsuario implements Serializable {
         try{
             id = Integer.valueOf(UsuarioSeleccionado);
             if(id!=0 && facadeMain.ExisteUsuario(id)){
-                NombreUsuario = fLectura.GetUsuario(Integer.valueOf(UsuarioSeleccionado)).GetNombreCompleto();
+                Usuario usuario = fLectura.GetUsuario(Integer.valueOf(UsuarioSeleccionado));
+                NombreUsuario = usuario.GetNombreCompleto();
+                EmpresaSeleccionada = usuario.getEmpresaUsuario();
             }
         }catch(NumberFormatException ex){
             System.out.println("Error: " +ex.getLocalizedMessage());

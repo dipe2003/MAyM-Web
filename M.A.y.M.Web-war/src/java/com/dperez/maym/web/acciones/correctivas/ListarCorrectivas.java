@@ -35,10 +35,10 @@ public class ListarCorrectivas implements Serializable{
     
     private Map<Integer, Accion> ListaAcciones;
     
-    //  Getters    
+    //  Getters
     public Map<Integer, Accion> getListaAcciones() {return ListaAcciones;}
     
-    //  Setters    
+    //  Setters
     public void setListaAcciones(Map<Integer, Accion> ListaAcciones) {this.ListaAcciones = ListaAcciones;}
     
     // Metodos
@@ -55,8 +55,12 @@ public class ListarCorrectivas implements Serializable{
         ListaAcciones = new HashMap<>();
         List<Accion> acciones = fLectura.ListarAccionesCorrectivas();
         for(Accion accion: acciones){
-            if(accion.getEmpresaAccion().getId() == 100)
+            if(empresa!=null){
+                if(accion.getEmpresaAccion().getId() == empresa.getId())
+                    ListaAcciones.put(accion.getId(), accion);
+            }else{
                 ListaAcciones.put(accion.getId(), accion);
+            }
         }
     }
     

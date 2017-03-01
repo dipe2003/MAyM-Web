@@ -9,90 +9,119 @@
                 xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
     <ui:define name="page_content">
         <div class="container-fluid" style="padding: 1%">  
-                <h1>Este es el sitio para ver las acciones correctivas.</h1>                       
+            <h1>Este es el sitio para ver las acciones correctivas.</h1>                       
         </div>
         <div class="container-fluid" style="padding: 1%">
             <h:form id="form_ver_accion">
                 
-                <!-- Descripcion -->                
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">Descripcion</div>
-                        <div class="panel-body">
-                            <div class="form-group">
-                                <strong><label for="fecha_deteccion">Fecha Deteccion:</label></strong>
-                                <h:outputText id="fecha_deteccion" class="form-control" value="#{verCorrectiva.strFechaDeteccion}" />
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Empresa</div>
+                    <div class="panel-body">   
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <h:outputText value="#{verCorrectiva.empresaAccion.nombreEmpresa}" />
                             </div>
-                            <div class="form-group">
-                                <strong><label for="area">Area / Sector:</label></strong>
-                                <h:outputText id="area" class="form-control" value="#{verCorrectiva.areaSector.nombre}" />
+                            <div class="col-sm-4">
+                                <h:outputText value="#{verCorrectiva.empresaAccion.descripcion}" />
                             </div>
-                            <div class="form-group">
-                                <strong><label for="tipo_deteccion">Tipo de Deteccion:</label></strong>                                    
-                                <h:outputText id="tipo_deteccion" class="form-control" value="#{verCorrectiva.generadaPor.tipo}" />
-                            </div> 
-                            <div class="form-group">
-                                <strong><label for="deteccion">Generada Por:</label></strong>
-                                <h:outputText id="deteccion" class="form-control" value="#{verCorrectiva.generadaPor.nombre}" />
+                            <div class="col-sm-4">
+                                <h:outputText value="Establecimiento #{verCorrectiva.empresaAccion.id}" />
                             </div>
                             
-                            <div class="form-group">
-                                <strong><label for="clasificacion">Clasificacion:</label></strong>                                    
-                                <h:outputText id="clasificacion" class="form-control" value="#{verCorrectiva.tipoDesvio}" />
-                            </div> 
-                            
-                            <div class="form-group">
-                                <strong><label for="descripcion">Descripcion:</label></strong>   
-                                <h:inputTextarea readonly="true" id="descripcion" class="form-control" value="#{verCorrectiva.descripcion}" />
-                            </div>
-                            <div class="form-group">
-                                <strong><label for="producto_afectado">Hay Producto Afectado?</label></strong>
-                                <c:choose>
-                                    <c:when test="#{not empty verCorrectiva.listaProductos}">
-                                        Si
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <table class="table table-hover table-striped">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Nombre del Producto:</th>
-                                                            <th>Datos del Producto:</th>
-                                                        </tr>                                                
-                                                    </thead>
-                                                    <tbody>
-                                                        <c:forEach items="#{verCorrectiva.listaProductos}" var="producto">
-                                                            <tr>
-                                                                <td>#{producto.key}</td>
-                                                                <td>#{producto.value}</td>
-                                                            </tr>
-                                                        </c:forEach>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </c:when>
-                                    <c:otherwise>
-                                        No
-                                    </c:otherwise>
-                                </c:choose>                            
-                            </div>                        
                         </div>
                     </div> 
-                <!-- Analisis de Causa -->
-
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">Analisis de Causa</div>
-                        <div class="panel-body">
-                            <div class="form-group">
-                                <strong><label for="analisis_causa">Analisis de Causa Raiz:</label></strong>                                    
-                                <h:inputTextarea readonly="true" id="analisis_caousa" class="form-control" value="#{verCorrectiva.analisisCausa}" />
+                </div>
+                
+                <!-- Descripcion -->                
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Descripcion</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <strong><label for="fecha_deteccion">Fecha Deteccion:</label></strong>
+                                    <h:outputText id="fecha_deteccion" class="form-control" value="#{verCorrectiva.strFechaDeteccion}" />
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <strong><label for="codificacion">Codificacion:</label></strong>                                    
-                                <h:outputText id="codificacion" class="form-control" value="#{verCorrectiva.accionSeleccionada.codificacionAccion.nombre}" />
-                            </div>                        
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <strong><label for="area">Area / Sector:</label></strong>
+                                    <h:outputText id="area" class="form-control" value="#{verCorrectiva.areaSector.nombre}" />
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <strong><label for="tipo_deteccion">Tipo de Deteccion:</label></strong>                                    
+                                    <h:outputText id="tipo_deteccion" class="form-control" value="#{verCorrectiva.generadaPor.tipo}" />
+                                </div> 
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <strong><label for="deteccion">Generada Por:</label></strong>
+                                    <h:outputText id="deteccion" class="form-control" value="#{verCorrectiva.generadaPor.nombre}" />
+                                </div>
+                            </div>
                         </div>
+                        
+                        
+                        <div class="form-group">
+                            <strong><label for="clasificacion">Clasificacion:</label></strong>                                    
+                            <h:outputText id="clasificacion" value=" #{verCorrectiva.tipoDesvio}" />
+                        </div> 
+                        
+                        <div class="form-group">
+                            <strong><label for="descripcion">Descripcion:</label></strong>   
+                            <h:inputTextarea readonly="true" id="descripcion" class="form-control" style="background-color: white;" value="#{verCorrectiva.descripcion}" />
+                        </div>
+                        <div class="form-group">
+                            <strong><label for="producto_afectado">Hay Producto Afectado?</label></strong>
+                            <c:choose>
+                                <c:when test="#{not empty verCorrectiva.listaProductos}">
+                                    Si
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <table class="table table-hover table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Nombre del Producto:</th>
+                                                        <th>Datos del Producto:</th>
+                                                    </tr>                                                
+                                                </thead>
+                                                <tbody>
+                                                    <c:forEach items="#{verCorrectiva.listaProductos}" var="producto">
+                                                        <tr>
+                                                            <td>#{producto.nombre}</td>
+                                                            <td>#{producto.datos}</td>
+                                                        </tr>
+                                                    </c:forEach>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </c:when>
+                                <c:otherwise>
+                                    No
+                                </c:otherwise>
+                            </c:choose>                            
+                        </div>                        
                     </div>
-    
+                </div> 
+                <!-- Analisis de Causa -->
+                
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Analisis de Causa</div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <strong><label for="analisis_causa">Analisis de Causa Raiz:</label></strong>                                    
+                            <h:inputTextarea readonly="true" id="analisis_caousa" class="form-control" value="#{verCorrectiva.analisisCausa}" />
+                        </div>
+                        <div class="form-group">
+                            <strong><label for="codificacion">Codificacion:</label></strong>                                    
+                            <h:outputText id="codificacion" class="form-control" style="background-color: white;" value="#{verCorrectiva.accionSeleccionada.codificacionAccion.nombre}" />
+                        </div>                        
+                    </div>
+                </div>
+                
                 <!-- Adjuntos -->
                 <div class="panel panel-primary">
                     <div class="panel-heading">Archivos Adjuntos / Anexos:</div>

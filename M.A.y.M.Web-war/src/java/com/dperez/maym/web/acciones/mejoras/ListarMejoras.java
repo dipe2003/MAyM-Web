@@ -15,8 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -57,8 +55,12 @@ public class ListarMejoras implements Serializable{
         ListaAcciones = new HashMap<>();
         List<Accion> acciones = fLectura.ListarAccionesMejoras();
         for(Accion accion: acciones){
-            if(accion.getEmpresaAccion().getId() == 100)
+            if(empresa!=null){
+                if(accion.getEmpresaAccion().getId() == empresa.getId())
+                    ListaAcciones.put(accion.getId(), accion);
+            }else{
                 ListaAcciones.put(accion.getId(), accion);
+            }
         }
     }
     

@@ -191,7 +191,7 @@ public class CrearAccionCorrectiva implements Serializable {
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             // Crear Nueva Deteccion y actualizar lista
-            Deteccion det = fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoDeDeteccionSeleccionada);
+            Deteccion det = fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoNuevaDeteccion);
             if(det != null){
                 actualizarDeteccion();
                 this.DeteccionSeleccionada = det.getId();
@@ -252,7 +252,7 @@ public class CrearAccionCorrectiva implements Serializable {
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         Empresa empresa = (Empresa)request.getSession().getAttribute("Empresa");
         Accion accion = fDatos.NuevaAccion(EnumAccion.CORRECTIVA, FechaDeteccion,
-                Descripcion, TipoDesvioSeleccionado, AreaSectorAccionSeleccionada, DeteccionSeleccionada, 100);
+                Descripcion, TipoDesvioSeleccionado, AreaSectorAccionSeleccionada, DeteccionSeleccionada, empresa.getId());
         
         if(accion != null){
             // agrega los productos afectados

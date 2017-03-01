@@ -27,7 +27,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
-import static javax.faces.application.FacesMessage.SEVERITY_INFO;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -157,7 +156,7 @@ public class CrearAccionPreventiva implements Serializable {
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             // Crear Nueva Deteccion y actualizar lista
-            Deteccion det = fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoDeDeteccionSeleccionada);
+            Deteccion det = fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoNuevaDeteccion);
             if(det != null){
                 actualizarDeteccion();
                 this.DeteccionSeleccionada = det.getId();
@@ -180,7 +179,7 @@ public class CrearAccionPreventiva implements Serializable {
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         Empresa empresa = (Empresa)request.getSession().getAttribute("Empresa");
         Accion accion = fDatos.NuevaAccion(EnumAccion.PREVENTIVA, FechaDeteccion,
-                Descripcion, null, AreaSectorAccionSeleccionada, DeteccionSeleccionada, 100);
+                Descripcion, null, AreaSectorAccionSeleccionada, DeteccionSeleccionada, empresa.getId());
         
         if(accion != null){
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();

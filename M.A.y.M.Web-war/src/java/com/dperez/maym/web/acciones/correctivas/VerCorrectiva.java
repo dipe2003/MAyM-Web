@@ -168,7 +168,7 @@ public class VerCorrectiva implements Serializable {
             for(Actividad act: actividades){
                 MedidasPreventivas.put(act.getIdActividad(), act);
             }
-            EmpresaAccion = (Empresa) request.getSession().getAttribute("Empresa");
+            EmpresaAccion = AccionSeleccionada.getEmpresaAccion();
             
             ListaProductos = new ArrayList<>();
             if(!((Correctiva)AccionSeleccionada).getProductosAfectados().isEmpty()){
