@@ -56,10 +56,27 @@
                                             #{accion.value.analisisCausa}
                                         </td>
                                         <td>
-                                            actividades
+                                            <c:choose>
+                                                <c:when test="#{accion.value.getComprobacionEficacia() != null and accion.value.getComprobacionEficacia().fechaEstimada != null }">
+                                                    #{accion.value.getComprobacionEficacia().fechaEstimada}
+                                                </c:when>
+                                                <c:otherwise>
+                                                    No se ha definido.
+                                                </c:otherwise>
+                                            </c:choose>
                                         </td>
                                         <td>
-                                            comprobacion eficacia
+                                            <c:choose>
+                                                <c:when test="#{accion.value.comprobacionEficiacia != null and accion.value.comprobacionEficiacia.fechaComprobacion != null }">
+                                                    #{accion.value.comprobacionEficiacia.fechaComprobacion}
+                                                </c:when>
+                                                <c:when test="#{accion.value.comprobacionEficiacia != null and accion.value.comprobacionEficiacia.fechaComprobacion == null}">
+                                                    No se ha comprobado.
+                                                </c:when>
+                                                <c:otherwise>
+                                                    No se han definido.
+                                                </c:otherwise>
+                                            </c:choose>
                                         </td>
                                         <td>
                                             #{accion.value.codificacionAccion.nombre}

@@ -113,12 +113,94 @@
                     <div class="panel-body">
                         <div class="form-group">
                             <strong><label for="analisis_causa">Analisis de Causa Raiz:</label></strong>                                    
-                            <h:inputTextarea readonly="true" id="analisis_caousa" class="form-control" value="#{verCorrectiva.analisisCausa}" />
+                            <h:inputTextarea readonly="true" id="analisis_causa" class="form-control" style="background-color: white;" value="#{verCorrectiva.analisisCausa}" />
                         </div>
                         <div class="form-group">
                             <strong><label for="codificacion">Codificacion:</label></strong>                                    
                             <h:outputText id="codificacion" class="form-control" style="background-color: white;" value="#{verCorrectiva.accionSeleccionada.codificacionAccion.nombre}" />
                         </div>                        
+                    </div>
+                </div>
+                
+                <!-- Medidas Correctivas -->
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Medidas Correctivas / Correcciones:</div>
+                    <div class="panel-body">
+                        <c:choose>
+                            <c:when test="#{not empty verCorrectiva.medidasCorrectivas}">
+                                <table class="table table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Descripcion:</th>
+                                            <th>Fecha Estimada:</th>
+                                            <th>Responsable Implementacion:</th>
+                                            <th>Implementada:</th>
+                                        </tr>                                                
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach items="#{verCorrectiva.medidasCorrectivas}" var="correctiva" >
+                                            <tr>
+                                                <td>#{correctiva.value.descripcion}</td>
+                                                <td>#{correctiva.value.fechaEstimadaImplementacion}</td>
+                                                <td>#{correctiva.value.responsableImplementacion.nombre} #{correctiva.value.responsableImplementacion.apellido}</td>
+                                                <td>
+                                                    <c:if test="#{correctiva.fechaImplementacion == null}" >
+                                                        Sin Implementar
+                                                    </c:if>
+                                                    <c:if test="#{correctiva.fechaImplementacion != null}" >
+                                                        #{correctiva.fechaImplementacion}
+                                                    </c:if>
+                                                </td>
+                                            </tr>                                            
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+                            </c:when>
+                            <c:otherwise>
+                                <h:outputText id="sin_correctivas" class="form-control" value="No se definieron medidas correctivas." />
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+                </div>
+                
+                <!-- Medidas Preventivas -->
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Medidas Preventivas / Prevencion de Recurrencia</div>
+                    <div class="panel-body">
+                        <c:choose>
+                            <c:when test="#{not empty verCorrectiva.medidasPreventivas}">
+                                <table class="table table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Descripcion:</th>
+                                            <th>Fecha Estimada:</th>
+                                            <th>Responsable Implementacion:</th>
+                                            <th>Implementada:</th>
+                                        </tr>                                                
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach items="#{verCorrectiva.medidasPreventivas}" var="preventivas" >
+                                            <tr>
+                                                <td>#{preventivas.value.descripcion}</td>
+                                                <td>#{preventivas.value.fechaEstimadaImplementacion}</td>
+                                                <td>#{preventivas.value.responsableImplementacion.nombre} #{preventivas.value.responsableImplementacion.apellido}</td>
+                                                <td>
+                                                    <c:if test="#{preventivas.fechaImplementacion == null}" >
+                                                        Sin Implementar
+                                                    </c:if>
+                                                    <c:if test="#{preventivas.fechaImplementacion != null}" >
+                                                        #{preventivas.fechaImplementacion}
+                                                    </c:if>
+                                                </td>
+                                            </tr>                                            
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+                            </c:when>
+                            <c:otherwise>
+                                <h:outputText id="sin_preventivas" class="form-control" value="No se definieron medidas preventivas." />
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                 </div>
                 

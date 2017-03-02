@@ -29,8 +29,8 @@
                                     <th>Generada Por</th>
                                     <th>Descripcion</th>
                                     <th>Analisis de Causa</th>
-                                    <th>Medida Correctiva</th>
-                                    <th>Medida Preventiva</th>
+                                    <th>Medidas Correctivas</th>
+                                    <th>Medidas Preventivas</th>
                                     <th>Plazo Eficacia</th>
                                     <th>Codificacion</th>
                                     <th>Estado</th>
@@ -57,13 +57,42 @@
                                             #{accion.value.analisisCausa}
                                         </td>
                                         <td>
-                                            medidas correctivas
+                                            <c:choose>
+                                                <c:when test="#{not empty accion.value.medidasCorrectivas}">
+                                                    <c:forEach items="#{accion.value.medidasCorrectivas}" var="correctiva">
+                                                        <div class="form-group-sm">
+                                                            #{correctiva.descripcion}
+                                                        </div>
+                                                    </c:forEach>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    No se han definido.
+                                                </c:otherwise>
+                                            </c:choose>
                                         </td>
                                         <td>
-                                            medidas preventivas
+                                            <c:choose>
+                                                <c:when test="#{not empty accion.value.medidasPreventivas}">
+                                                    <c:forEach items="#{accion.value.medidasPreventivas}" var="preventiva">
+                                                        <div class="form-group-sm">
+                                                            #{preventiva.descripcion}
+                                                        </div>
+                                                    </c:forEach>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    No se han definido.
+                                                </c:otherwise>
+                                            </c:choose>
                                         </td>
                                         <td>
-                                            comprobacion eficacia
+                                            <c:choose>
+                                                <c:when test="#{accion.value.getComprobacionEficacia() != null and accion.value.getComprobacionEficacia().fechaEstimada != null }">
+                                                    #{accion.value.getComprobacionEficacia().fechaEstimada}
+                                                </c:when>
+                                                <c:otherwise>
+                                                    No se ha definido.
+                                                </c:otherwise>
+                                            </c:choose>
                                         </td>
                                         <td>
                                             #{accion.value.codificacionAccion.nombre}

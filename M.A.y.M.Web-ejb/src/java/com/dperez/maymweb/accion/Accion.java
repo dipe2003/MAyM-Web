@@ -56,7 +56,7 @@ public abstract class Accion implements Serializable{
     @ManyToOne
     private Codificacion CodificacionAccion;
     
-    @OneToOne(orphanRemoval = true)
+    @OneToOne(orphanRemoval = true, fetch = FetchType.EAGER)
     private Comprobacion ComprobacionEficacia;
     
     @OneToOne( orphanRemoval = true)
