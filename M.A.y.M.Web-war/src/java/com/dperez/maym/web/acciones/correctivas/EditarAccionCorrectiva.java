@@ -10,6 +10,7 @@ import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.acciones.Correctiva;
 import com.dperez.maymweb.accion.acciones.EnumAccion;
 import com.dperez.maymweb.accion.acciones.EnumTipoDesvio;
+import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.accion.adjunto.Adjunto;
 import com.dperez.maymweb.accion.adjunto.EnumTipoAdjunto;
 import com.dperez.maymweb.area.Area;
@@ -90,6 +91,10 @@ public class EditarAccionCorrectiva implements Serializable {
     private String NombreProductoAfectado;
     private String DatosProductoAfectado;
     
+    
+    private Map<Integer, Actividad> MedidasCorrectivas;
+    private Map<Integer, Actividad> MedidasPreventivas;
+    
     //  Getters
     public int getIdAccionSeleccionada(){return IdAccionSeleccionada;}
     public Date getFechaDeteccion() {return FechaDeteccion;}
@@ -130,6 +135,9 @@ public class EditarAccionCorrectiva implements Serializable {
     public Map<String, String> getListaProductosAfectados(){return this.ListaProductosAfectados;}
     public String getNombreProductoAfectado(){return this.NombreProductoAfectado;}
     public String getDatosProductoAfectado(){return this.DatosProductoAfectado;}
+    
+    public Map<Integer, Actividad> getMedidasCorrectivas() {return MedidasCorrectivas;}
+    public Map<Integer, Actividad> getMedidasPreventivas() {return MedidasPreventivas;}
     
     //  Setters
     public void setIdAccionSeleccionada(int IdAccionSeleccionada) {this.IdAccionSeleccionada = IdAccionSeleccionada;}
@@ -176,6 +184,9 @@ public class EditarAccionCorrectiva implements Serializable {
     public void setNombreProductoAfectado(String NombreProductoAfectado){this.NombreProductoAfectado = NombreProductoAfectado;}
     public void setDatosProductoAfectado(String DatosProductoAfectado){this.DatosProductoAfectado = DatosProductoAfectado;}
     
+    public void setMedidasCorrectivas(Map<Integer, Actividad> MedidasCorrectivas) {this.MedidasCorrectivas = MedidasCorrectivas;}
+    public void setMedidasPreventivas(Map<Integer, Actividad> MedidasPreventivas) {this.MedidasPreventivas = MedidasPreventivas;}
+    
     //  Metodos
     
     /**
@@ -219,6 +230,19 @@ public class EditarAccionCorrectiva implements Serializable {
             //  Tipo de desvios
             TiposDesvios = EnumTipoDesvio.values();
             TipoDesvioSeleccionado = ((Correctiva)AccionSeleccionada).getTipo();
+            
+            // Actividades: Medidas Correctivas y Preventivas
+            List<Actividad> actividades = ((Correctiva)AccionSeleccionada).getMedidasCorrectivas();
+            MedidasCorrectivas = new HashMap<>();
+            for(Actividad act: actividades){
+                MedidasCorrectivas.put(act.getIdActividad(), act);
+            }
+            actividades.clear();
+            actividades = ((Correctiva)AccionSeleccionada).getMedidasPreventivas();
+            MedidasPreventivas = new HashMap<>();
+            for(Actividad act: actividades){
+                MedidasPreventivas.put(act.getIdActividad(), act);
+            }
             
             // Areas Sectores
             ListaAreasSectores = new HashMap<>();

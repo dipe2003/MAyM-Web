@@ -18,7 +18,6 @@ import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.facades.FacadeVerificador;
 import com.dperez.maymweb.producto.Producto;
-import com.dperez.maymweb.usuario.Usuario;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

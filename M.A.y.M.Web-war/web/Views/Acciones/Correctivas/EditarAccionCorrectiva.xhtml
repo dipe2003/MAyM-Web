@@ -73,7 +73,7 @@
                                                  value="#{editarAccionCorrectiva.nombreNuevaDeteccion}" required="true" requiredMessage="No se ingreso nombre de nueva deteccion."/>
                                 </div>
                                 <div class="form-group">
-                                    <h:commandButton action="#{editarAccionCorrectiva.nuevaDeteccion()}" value="Nueva">
+                                    <h:commandButton action="#{editarAccionCorrectiva.nuevaDeteccion()}" class="btn btn-primary" value="Nueva">
                                         <f:ajax execute="panel_nueva_deteccion" render="deteccion panel_nueva_deteccion panel_mensajes"/>
                                     </h:commandButton>
                                 </div>                                
@@ -120,7 +120,7 @@
                                     </div>                                    
                                 </h:panelGroup>                                
                                 <div class="form-group">
-                                    <h:commandButton action="#{editarAccionCorrectiva.nuevoProductoAfectado()}" value="Agregar">
+                                    <h:commandButton action="#{editarAccionCorrectiva.nuevoProductoAfectado()}" class="btn btn-primary" value="Agregar">
                                         <f:ajax execute="panel_datos_producto" render="panel_mensajes nombre_producto datos_producto panel_lista_productos"/>
                                     </h:commandButton>
                                 </div>
@@ -128,7 +128,7 @@
                                     <c:if test="#{not empty editarAccionCorrectiva.listaProductosAfectados}">
                                         <div class="row">
                                             <div class="col-sm-12">
-                                                <table class="table table-hover table-striped">
+                                                <table class="table table-hover table-striped table-responsive">
                                                     <thead>
                                                         <tr>
                                                             <th>Nombre del Producto:</th>
@@ -206,13 +206,168 @@
                                                  value="#{editarAccionCorrectiva.descripcionNuevaCodificacion}" required="true" requiredMessage="No se ingreso Descripcion de nueva Codificacio."/>
                                 </div>
                                 <div class="form-group">
-                                    <h:commandButton action="#{editarAccionCorrectiva.nuevaCodificacion()}" value="Nueva">
+                                    <h:commandButton action="#{editarAccionCorrectiva.nuevaCodificacion()}" class="btn btn-primary" value="Nueva">
                                         <f:ajax execute="panel_nueva_codificacion" render="codificacion panel_nueva_codificacion"/>
                                     </h:commandButton>
                                 </div>
                             </c:if>
                         </h:panelGroup>
+                    </div>
+                </div>
+                
+                <!-- Medidas Correctivas -->
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Medidas Correctivas / Correcciones:</div>
+                    <div class="panel-body">
+                        <c:choose>
+                            <c:when test="#{not empty editarAccionCorrectiva.medidasCorrectivas}">
+                                <table class="table table-hover table-striped table-responsive">
+                                    <thead>
+                                        <tr>
+                                            <th>Descripcion:</th>
+                                            <th>Fecha Estimada:</th>
+                                            <th>Responsable Implementacion:</th>
+                                            <th>Implementada:</th>
+                                            <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA'}">
+                                                <th></th>
+                                            </c:if>
+                                            
+                                        </tr>                                                
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach items="#{editarAccionCorrectiva.medidasCorrectivas}" var="correctiva" >
+                                            <tr>
+                                                <td>#{correctiva.value.descripcion}</td>
+                                                <td>#{correctiva.value.fechaEstimadaImplementacion}</td>
+                                                <td>#{correctiva.value.responsableImplementacion.nombre} #{correctiva.value.responsableImplementacion.apellido}</td>
+                                                <td>
+                                                    <c:if test="#{correctiva.value.fechaImplementacion == null}" >
+                                                        Sin Implementar
+                                                    </c:if>
+                                                    <c:if test="#{correctiva.fechaImplementacion != null}" >
+                                                        #{correctiva.value.fechaImplementacion}
+                                                    </c:if>
+                                                </td>
+                                                <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA'}">
+                                                    <td>
+                                                        <div class="btn-group">
+                                                            <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
+                                                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                            <ul class="dropdown-menu" role="menu">                               
+                                                                <c:choose>
+                                                                    <c:when test="#{correctiva.value.fechaImplementacion == null}">
+                                                                        <li><h:link value="Editar Actividad" >                                                                
+                                                                                <f:ajax onevent="indicador" />
+                                                                            </h:link>
+                                                                        </li>
+                                                                        <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'Administrador' ||  sesionUsuario.usuarioLogueado.permisoUsuario == 'Verificador'}">
+                                                                            <li><h:link value="Quitar Actividad" >                                                                
+                                                                                    <f:ajax onevent="indicador" />
+                                                                                </h:link>
+                                                                            </li>
+                                                                        </c:if>
+                                                                    </c:when>
+                                                                </c:choose>
+                                                            </ul>
+                                                        </div>
+                                                    </td>
+                                                </c:if>
+                                            </tr>                                            
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+                            </c:when>
+                            <c:otherwise>
+                               <div class="alert alert-info">
+                                    <strong>Info!</strong> No se definieron medidas preventivas.
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
+                        <div class="form-group-sm">
+                            <h:link id="agregar_medida_correctiva" value="Agregar Medida Correctiva" class="btn btn-primary" outcome="AgregarActividadCorrectiva.xhtml?id=#{correctiva.value.id}&amp;tipo=correctiva">
+                                <f:ajax onevent="indicador"/>
+                            </h:link>
+                        </div>
                         
+                    </div>
+                </div>
+                
+                <!-- Medidas Preventivas -->
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Medidas Preventivas / Prevencion de Recurrencia:</div>
+                    <div class="panel-body">
+                        <c:choose>
+                            <c:when test="#{not empty editarAccionCorrectiva.medidasPreventivas}">
+                                <table class="table table-hover table-striped table-responsive">
+                                    <thead>
+                                        <tr>
+                                            <th>Descripcion:</th>
+                                            <th>Fecha Estimada:</th>
+                                            <th>Responsable Implementacion:</th>
+                                            <th>Implementada:</th>
+                                            <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA'}">
+                                                <th></th>
+                                            </c:if>                                            
+                                        </tr>                                                
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach items="#{editarAccionCorrectiva.medidasPreventivas}" var="preventiva" >
+                                            <tr>
+                                                <td>#{preventiva.value.descripcion}</td>
+                                                <td>#{preventiva.value.fechaEstimadaImplementacion}</td>
+                                                <td>#{preventiva.value.responsableImplementacion.nombre} #{preventiva.value.responsableImplementacion.apellido}</td>
+                                                <td>
+                                                    <c:if test="#{preventiva.value.fechaImplementacion == null}" >
+                                                        Sin Implementar
+                                                    </c:if>
+                                                    <c:if test="#{preventiva.value.fechaImplementacion != null}" >
+                                                        #{preventiva.value.fechaImplementacion}
+                                                    </c:if>
+                                                </td>
+                                                <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA'}">
+                                                    <td>
+                                                        <div class="btn-group">
+                                                            <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
+                                                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                            <ul class="dropdown-menu" role="menu">                               
+                                                                <c:choose>
+                                                                    <c:when test="#{preventiva.value.fechaImplementacion == null}">
+                                                                        <li><h:link value="Editar Actividad" >                                                                
+                                                                                <f:ajax onevent="indicador" />
+                                                                            </h:link>
+                                                                        </li>
+                                                                        <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'Administrador' ||  sesionUsuario.usuarioLogueado.permisoUsuario == 'Verificador'}">
+                                                                            <li><h:link value="Quitar Actividad" >                                                                
+                                                                                    <f:ajax onevent="indicador" />
+                                                                                </h:link>
+                                                                            </li>
+                                                                        </c:if>
+                                                                    </c:when>
+                                                                </c:choose>
+                                                            </ul>
+                                                        </div>
+                                                    </td>
+                                                </c:if>
+                                            </tr>                                            
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="alert alert-info">
+                                    <strong>Info!</strong> No se definieron medidas preventivas.
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
+                        <div class="form-group-sm">
+                            <h:link id="agregar_medida_preventiva" value="Agregar Medida Preventiva" class="btn btn-primary" outcome="AgregarActividadCorrectiva.xhtml?id=#{correctiva.value.id}&amp;tipo=correctiva">
+                                <f:ajax onevent="indicador"/>
+                            </h:link>
+                        </div>
                         
                     </div>
                 </div>
@@ -232,7 +387,7 @@
                             <h:panelGroup id="panel_titulo_adjunto" >
                                 <c:if test="#{not empty editarAccionCorrectiva.tituloAdjunto}">
                                     <div class="form-group">
-                                        <h:inputFile value="#{editarAccionCorrectiva.archivoAdjunto}" p:accept="image/x-png,image/gif,image/jpeg,application/pdf">
+                                        <h:inputFile value="#{editarAccionCorrectiva.archivoAdjunto}" class="btn btn-primary" p:accept="image/x-png,image/gif,image/jpeg,application/pdf">
                                             <f:ajax event="change" listener="#{editarAccionCorrectiva.setArchivoAdjunto(editarAccionCorrectiva.archivoAdjunto)}" />
                                             <f:ajax event="change" listener="#{editarAccionCorrectiva.agregarAdjunto()}" render="panel_lista_adjuntos panel_datos_adjunto" onevent="indicador"/>
                                         </h:inputFile>
@@ -245,7 +400,7 @@
                             <c:if test="#{not empty editarAccionCorrectiva.mapAdjuntos}"> 
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <table class="table table-hover table-striped">
+                                        <table class="table table-hover table-striped table-responsive">
                                             <thead>
                                                 <tr>
                                                     <th width="30%">Titulo del Adjunto:</th>

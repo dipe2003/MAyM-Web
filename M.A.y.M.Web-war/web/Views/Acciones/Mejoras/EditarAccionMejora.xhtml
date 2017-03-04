@@ -72,7 +72,7 @@
                                                  value="#{editarAccionMejora.nombreNuevaDeteccion}" required="true" requiredMessage="No se ingreso Nombre de nueva Deteccion."/>
                                 </div>
                                 <div class="form-group">
-                                    <h:commandButton action="#{editarAccionMejora.nuevaDeteccion()}" value="Nueva">
+                                    <h:commandButton action="#{editarAccionMejora.nuevaDeteccion()}" class="btn btn-primary" value="Nueva">
                                         <f:ajax execute="panel_nueva_deteccion" render="deteccion panel_nueva_deteccion"/>
                                     </h:commandButton>
                                 </div>                                
@@ -120,13 +120,12 @@
                                                  value="#{editarAccionMejora.descripcionNuevaCodificacion}" required="true" requiredMessage="No se ingreso Descripcion de nueva Codificacion."/>
                                 </div>
                                 <div class="form-group">
-                                    <h:commandButton action="#{editarAccionMejora.nuevaCodificacion()}" value="Nueva">
+                                    <h:commandButton action="#{editarAccionMejora.nuevaCodificacion()}" class="btn btn-primary" value="Nueva">
                                         <f:ajax execute="panel_nueva_codificacion" render="codificacion panel_nueva_codificacion"/>
                                     </h:commandButton>
                                 </div>
                             </c:if>
                         </h:panelGroup>
-                        
                         
                     </div>
                 </div>
@@ -146,7 +145,7 @@
                             <h:panelGroup id="panel_titulo_adjunto" >
                                 <c:if test="#{not empty editarAccionMejora.tituloAdjunto}">
                                     <div class="form-group">
-                                        <h:inputFile value="#{editarAccionMejora.archivoAdjunto}" p:accept="image/x-png,image/gif,image/jpeg,application/pdf">
+                                        <h:inputFile value="#{editarAccionMejora.archivoAdjunto}" class="btn btn-primary" p:accept="image/x-png,image/gif,image/jpeg,application/pdf">
                                             <f:ajax event="change" listener="#{editarAccionMejora.setArchivoAdjunto(editarAccionMejora.archivoAdjunto)}" />
                                             <f:ajax event="change" listener="#{editarAccionMejora.agregarAdjunto()}" render="panel_lista_adjuntos panel_datos_adjunto" onevent="indicador"/>
                                         </h:inputFile>
@@ -159,7 +158,7 @@
                             <c:if test="#{not empty editarAccionMejora.mapAdjuntos}"> 
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <table class="table table-hover table-striped">
+                                        <table class="table table-hover table-striped table-responsive">
                                             <thead>
                                                 <tr>
                                                     <th width="30%">Titulo del Adjunto:</th>

@@ -80,7 +80,7 @@
                                     Si
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <table class="table table-hover table-striped">
+                                            <table class="table table-hover table-striped table-responsive">
                                                 <thead>
                                                     <tr>
                                                         <th>Nombre del Producto:</th>
@@ -128,7 +128,7 @@
                     <div class="panel-body">
                         <c:choose>
                             <c:when test="#{not empty verCorrectiva.medidasCorrectivas}">
-                                <table class="table table-hover table-striped">
+                                <table class="table table-hover table-striped table-responsive">
                                     <thead>
                                         <tr>
                                             <th>Descripcion:</th>
@@ -144,11 +144,11 @@
                                                 <td>#{correctiva.value.fechaEstimadaImplementacion}</td>
                                                 <td>#{correctiva.value.responsableImplementacion.nombre} #{correctiva.value.responsableImplementacion.apellido}</td>
                                                 <td>
-                                                    <c:if test="#{correctiva.fechaImplementacion == null}" >
+                                                    <c:if test="#{correctiva.value.fechaImplementacion == null}" >
                                                         Sin Implementar
                                                     </c:if>
-                                                    <c:if test="#{correctiva.fechaImplementacion != null}" >
-                                                        #{correctiva.fechaImplementacion}
+                                                    <c:if test="#{correctiva.value.fechaImplementacion != null}" >
+                                                        #{correctiva.value.fechaImplementacion}
                                                     </c:if>
                                                 </td>
                                             </tr>                                            
@@ -157,7 +157,9 @@
                                 </table>
                             </c:when>
                             <c:otherwise>
-                                <h:outputText id="sin_correctivas" class="form-control" value="No se definieron medidas correctivas." />
+                                <div class="alert alert-info">
+                                    <strong>Info!</strong> No se definieron medidas correctivas.
+                                </div>
                             </c:otherwise>
                         </c:choose>
                     </div>
@@ -169,7 +171,7 @@
                     <div class="panel-body">
                         <c:choose>
                             <c:when test="#{not empty verCorrectiva.medidasPreventivas}">
-                                <table class="table table-hover table-striped">
+                                <table class="table table-hover table-striped table-responsive">
                                     <thead>
                                         <tr>
                                             <th>Descripcion:</th>
@@ -185,11 +187,11 @@
                                                 <td>#{preventivas.value.fechaEstimadaImplementacion}</td>
                                                 <td>#{preventivas.value.responsableImplementacion.nombre} #{preventivas.value.responsableImplementacion.apellido}</td>
                                                 <td>
-                                                    <c:if test="#{preventivas.fechaImplementacion == null}" >
+                                                    <c:if test="#{preventivas.value.fechaImplementacion == null}" >
                                                         Sin Implementar
                                                     </c:if>
-                                                    <c:if test="#{preventivas.fechaImplementacion != null}" >
-                                                        #{preventivas.fechaImplementacion}
+                                                    <c:if test="#{preventivas.value.fechaImplementacion != null}" >
+                                                        #{preventivas.value.fechaImplementacion}
                                                     </c:if>
                                                 </td>
                                             </tr>                                            
@@ -198,7 +200,9 @@
                                 </table>
                             </c:when>
                             <c:otherwise>
-                                <h:outputText id="sin_preventivas" class="form-control" value="No se definieron medidas preventivas." />
+                                <div class="alert alert-info">
+                                    <strong>Info!</strong> No se definieron medidas preventivas.
+                                </div>
                             </c:otherwise>
                         </c:choose>
                     </div>
@@ -212,7 +216,7 @@
                             <c:when test="#{not empty verCorrectiva.accionSeleccionada.adjuntos}">
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <table class="table table-hover table-striped">
+                                        <table class="table table-hover table-striped table-responsive">
                                             <thead>
                                                 <tr>
                                                     <th width="30%">Titulo del Adjunto:</th>
@@ -241,7 +245,9 @@
                                 </div>
                             </c:when>
                             <c:otherwise>
-                                <h:outputText id="sin_adjunto" class="form-control" value="No hay adjuntos." />
+                                <div class="alert alert-info">
+                                    <strong>Info!</strong> No se han agregado archivos adjuntos.
+                                </div>
                             </c:otherwise>
                         </c:choose>
                     </div>

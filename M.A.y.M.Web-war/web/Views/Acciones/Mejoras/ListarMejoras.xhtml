@@ -21,7 +21,7 @@
                 </c:when>
                 <c:otherwise>
                     <h:form id="form_tabla_acciones" >
-                        <table class="table table-hover table-striped">
+                        <table class="table table-hover table-striped table-responsive">
                             <thead>
                                 <tr>
                                     <th>Fecha</th>
@@ -33,6 +33,7 @@
                                     <th>Plazo Eficacia</th>
                                     <th>Codificacion</th>
                                     <th>Estado</th>
+                                    <th></th>
                                 </tr>
                                 
                             </thead>
@@ -120,22 +121,22 @@
                                                             <f:ajax onevent="indicador" />
                                                         </h:link>
                                                     </li>
-                                                    <li><h:link value="Editar Datos" outcome="EditarAccionMejora.xhtml?id=#{accion.value.id}" >                                                        
-                                                            <f:ajax onevent="indicador" />
-                                                        </h:link>
-                                                    </li>
-                                                    <li><h:link  value="Agregar Actividades" >                                                        
-                                                            <f:ajax onevent="indicador" />
-                                                        </h:link>
-                                                    </li>                                    
-                                                    <c:choose>
-                                                        <c:when test="#{accion.value.estadoAccion != 'CERRADA'}">
+                                                    <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != null}">
+                                                        <li><h:link value="Editar Datos" outcome="EditarAccionMejora.xhtml?id=#{accion.value.id}" >                                                        
+                                                                <f:ajax onevent="indicador" />
+                                                            </h:link>
+                                                        </li>
+                                                        <c:if test="#{accion.value.estadoAccion != 'CERRADA'}">
+                                                            <li><h:link  value="Agregar Actividades" >                                                        
+                                                                    <f:ajax onevent="indicador" />
+                                                                </h:link>
+                                                            </li> 
                                                             <li><h:link value="Realizar Seguimiento" >                                                                
                                                                     <f:ajax onevent="indicador" />
                                                                 </h:link>
                                                             </li>
-                                                        </c:when>
-                                                    </c:choose>
+                                                        </c:if>
+                                                    </c:if>
                                                 </ul>
                                             </div>
                                         </td>
