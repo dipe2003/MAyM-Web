@@ -14,6 +14,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
@@ -26,7 +28,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name="Empresas")
 public class Empresa implements Serializable {
-    @Id
+    @Id@GeneratedValue(strategy = GenerationType.AUTO)
     private int Id;
     private String NombreEmpresa = new String();
     private String DireccionEmpresa = new String();
@@ -35,6 +37,7 @@ public class Empresa implements Serializable {
     private String FaxEmpresa = new String();
     private String DescripcionEmpresa = new String();
     private String ImagenEmpresa = new String();
+    private String NumeroEmpresa = new String();
     
     @OneToMany(mappedBy = "EmpresaUsuario" )
     private List<Usuario> UsuariosEmpresa;
@@ -60,7 +63,7 @@ public class Empresa implements Serializable {
         this.AreasEmpresa = new ArrayList<>();
     }
     public Empresa(int idEmpresa, String NombreEmpresa, String DireccionEmpresa, String TelefonoEmpresa, String CorreoEmpresa, 
-            String FaxEmpresa, String DescripcionEmpresa){
+            String FaxEmpresa, String DescripcionEmpresa, String NumeroEmpresa){
         this.Id = idEmpresa;
         this.NombreEmpresa = NombreEmpresa;
         this.DireccionEmpresa = DireccionEmpresa;
@@ -73,6 +76,7 @@ public class Empresa implements Serializable {
         this.AccionesEmpresa = new ArrayList<>();
         this.CodificacionesEmpresa = new ArrayList<>();
         this.AreasEmpresa = new ArrayList<>();
+        this.NumeroEmpresa = NumeroEmpresa;
     }
     
     //  Getters
@@ -82,8 +86,10 @@ public class Empresa implements Serializable {
     public String getTelefonoEmpresa() {return TelefonoEmpresa;}
     public String getCorreoEmpresa() {return CorreoEmpresa;}
     public String getFaxEmpresa(){return this.FaxEmpresa;}
-    public String getDescripcion(){return this.DescripcionEmpresa;}
     public String getImagenEmpresa(){return this.ImagenEmpresa;}
+    public String getDescripcionEmpresa() {return DescripcionEmpresa;}
+    public String getNumeroEmpresa() {return NumeroEmpresa;}
+    
     public List<Usuario> getUsuariosEmpresa(){return this.UsuariosEmpresa;}
     public List<Fortaleza> getFortalezasEmpresa(){return this.FortalezasEmpresa;}
     public List<Accion> getAccionesEmpresa(){return this.AccionesEmpresa;}
@@ -99,6 +105,9 @@ public class Empresa implements Serializable {
     public void setFaxEmpresa(String FaxEmpresa){this.FaxEmpresa = FaxEmpresa;}
     public void setDescripcion(String DescripcionEmpresa){this.DescripcionEmpresa = DescripcionEmpresa;}
     public void setImagenEmpresa(String ImagenEmpresa){this.ImagenEmpresa = ImagenEmpresa;}
+    public void setDescripcionEmpresa(String DescripcionEmpresa) {this.DescripcionEmpresa = DescripcionEmpresa;}
+    public void setNumeroEmpresa(String NumeroEmpresa) {this.NumeroEmpresa = NumeroEmpresa;}
+    
     public void setUsuariosEmpresa(List<Usuario> UsuariosEmpresa){this.UsuariosEmpresa = UsuariosEmpresa;}
     public void setFortalezasEmpresa(List<Fortaleza> FortalezasEmpresa){this.FortalezasEmpresa = FortalezasEmpresa;}
     public void setAccionesEmpresa(List<Accion> AccionesEmpresa){this.AccionesEmpresa = AccionesEmpresa;}

@@ -115,6 +115,18 @@ public class EmpresaTest {
         String result = instance.getCorreoEmpresa();
         assertEquals(expResult, result);
     }
+    /**
+     * Test of getNumeroEmpresa method, of class Empresa.
+     */
+    @Test
+    public void testGetNumeroEmpresa() {
+        System.out.println("getNumeroEmpresa");
+        Empresa instance = new Empresa();
+        instance.setNumeroEmpresa("Numero Empresa");
+        String expResult = "Numero Empresa";
+        String result = instance.getNumeroEmpresa();
+        assertEquals(expResult, result);
+    }
 
     /**
      * Test of getUsuariosEmpresa method, of class Empresa.
@@ -216,6 +228,16 @@ public class EmpresaTest {
         String CorreoEmpresa = "Correo Empresa";
         Empresa instance = new Empresa();
         instance.setCorreoEmpresa(CorreoEmpresa);
+    }
+    /**
+     * Test of setNumeroEmpresa method, of class Empresa.
+     */
+    @Test
+    public void testSetNumeroEmpresa() {
+        System.out.println("setNumeroEmpresa");
+        String NumeroEmpresa = "Numero Empresa";
+        Empresa instance = new Empresa();
+        instance.setNumeroEmpresa(NumeroEmpresa);
     }
 
     /**

@@ -488,11 +488,12 @@ public class ControladorConfiguracion {
      * @param CorreoEmpresa
      * @param FaxEmpresa
      * @param Descripcion
+     * @param NumeroEmpresa
      * @return Null si no se creo la empresa.
      */
     public Empresa NuevaEmpresa(int Id, String NombreEmpresa, String DireccionEmpresa, String TelefonoEmpresa, String CorreoEmpresa, 
-            String FaxEmpresa, String Descripcion){
-        Empresa empresa = new Empresa(Id, NombreEmpresa, DireccionEmpresa, TelefonoEmpresa, CorreoEmpresa, FaxEmpresa, Descripcion);
+            String FaxEmpresa, String Descripcion, String NumeroEmpresa){
+        Empresa empresa = new Empresa(Id, NombreEmpresa, DireccionEmpresa, TelefonoEmpresa, CorreoEmpresa, FaxEmpresa, Descripcion, NumeroEmpresa);
         if(mEmpresa.CrearEmpresa(empresa)!=-1){
             return empresa;
         }else{
