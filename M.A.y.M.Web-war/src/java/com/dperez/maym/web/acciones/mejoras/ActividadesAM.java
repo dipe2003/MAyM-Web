@@ -44,6 +44,7 @@ public class ActividadesAM implements Serializable {
     private FacadeLectura fLectura;
     
     private Accion AccionSeleccionada;
+    private int IdActividadEditar;
     
     private Map<Integer, Usuario> ListaUsuariosEmpresa;
     
@@ -73,6 +74,8 @@ public class ActividadesAM implements Serializable {
     
     public Accion getAccionSeleccionada() {return AccionSeleccionada;}
     
+    public int getIdActividadEditar() {return IdActividadEditar;}
+    
     //  Setters
     public void setListaUsuariosEmpresa(Map<Integer, Usuario> ListaUsuariosEmpresa) {this.ListaUsuariosEmpresa = ListaUsuariosEmpresa;}
     public void setListaActividades(Map<Integer, Actividad> ListaActividades) {this.ListaActividades = ListaActividades;}
@@ -92,6 +95,8 @@ public class ActividadesAM implements Serializable {
     
     public void setAccionSeleccionada(Accion AccionSeleccionada) {this.AccionSeleccionada = AccionSeleccionada;}
     
+    public void setIdActividadEditar(int IdActividadEditar) {this.IdActividadEditar = IdActividadEditar;}
+    
     //  Metodos
     /**
      * Agrega una actividad a la accion de mejora.
@@ -100,9 +105,8 @@ public class ActividadesAM implements Serializable {
      * @throws java.io.IOException
      */
     public void agregarActividad() throws IOException{
-        int id;
-        if((id = fDatos.AgregarActividadMejora(AccionSeleccionada.getId(), FechaEstimadaImplementacionActividad, DescripcionActividad,
-                ResponsableActividad))<0){
+        if(fDatos.AgregarActividadMejora(AccionSeleccionada.getId(), FechaEstimadaImplementacionActividad, DescripcionActividad,
+                ResponsableActividad)<0){
             FacesContext.getCurrentInstance().addMessage("form_agregar_actividades:btn_agregar_actividad", new FacesMessage(SEVERITY_FATAL, "No se pudo agregar Actividad", "No se pudo agregar Actividad" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
@@ -113,27 +117,37 @@ public class ActividadesAM implements Serializable {
     }
     
     /**
-     * Remueve la actividad de mejora de la lista de actividades si la fecha de implementacion no esta definida.
      * Remueve la actividad de la accion de mejora.
      * Se persisten los cambios.
      * Muestra un mensaje de error si no se pudo completar correctamente.
-     * @param IdActividadMejora
+     * @throws java.io.IOException
      */
-    public void removerActividadMejora(int IdActividadMejora){
-        if(IdActividadMejora!=0 && ListaActividades.get(IdActividadMejora).getFechaImplementacion() == null){
-            int res;
-            if((res = fDatos.RemoverActividadMejora(AccionSeleccionada.getId(), IdActividadMejora))> 0){
-                ListaActividades.remove(res);
-            }else{
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo quitar la Actividad", "No se pudo quitar la Actividad" ));
-                FacesContext.getCurrentInstance().renderResponse();
-            }
-        }else{
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se puede quitar porque ya fue implementada", "No se puede quitar porque ya fue implementada" ));
+    public void removerActividad() throws IOException{
+        if(fDatos.RemoverActividadMejora(AccionSeleccionada.getId(), IdActividadEditar)< 0){
+            FacesContext.getCurrentInstance().addMessage("form_agregar_actividades:btn_remover_actividad", new FacesMessage(SEVERITY_FATAL, "No se pudo quitar la Actividad", "No se pudo quitar la Actividad" ));
             FacesContext.getCurrentInstance().renderResponse();
+        }else{
+            // redirigir a la edicion de la accion de mejora.
+            String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Mejoras/EditarAccionMejora.xhtml?id="+AccionSeleccionada.getId());
         }
     }
     
+    /**
+     * Guarda los cambios realizados en la medida correctiva y los persiste.
+     * Se redirige a la vista de editar la accion correctiva correspondiente si se guardo, de lo contrario muestra un mensaje.
+     * @throws IOException
+     */
+    public void guardarActividad() throws IOException{
+        if(fDatos.EditarActividad(IdActividadEditar, DescripcionActividad, ResponsableActividad, FechaEstimadaImplementacionActividad) < 0){
+            FacesContext.getCurrentInstance().addMessage("form_agregar_actividades:btn_guardar_actividad", new FacesMessage(SEVERITY_FATAL, "No se pudo guardar Actividad", "No se pudo guardar Actividad" ));
+            FacesContext.getCurrentInstance().renderResponse();
+        }else{
+            // redirigir a la edicion de la accion correctiva.
+            String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Mejoras/EditarAccionMejora.xhtml?id="+AccionSeleccionada.getId());
+        }
+    }
     
     //  Inicializacion del bean
     @PostConstruct
@@ -143,15 +157,26 @@ public class ActividadesAM implements Serializable {
         // recuperar el id para llenar datos de la accion de mejora y el resto de las propiedades.
         int idAccion = 0;
         idAccion = Integer.parseInt(request.getParameter("id"));
+        try{
+            IdActividadEditar = Integer.parseInt(request.getParameter("editar"));
+        }catch(Exception ex){
+            IdActividadEditar = 0;
+        }
         if(idAccion != 0){
             AccionSeleccionada = (Mejora) fLectura.GetAccion(idAccion);
-            //  Actividades de Mejora
-            ListaActividades = new HashMap<>();
-            if(!((Mejora)AccionSeleccionada).getActividades().isEmpty()){
-                List<Actividad> actividades = ((Mejora)AccionSeleccionada).getActividades();
-                for(Actividad actividad: actividades ){
-                    ListaActividades.put(actividad.getIdActividad(), actividad);
+            if(IdActividadEditar > 0){
+                //  Actividades de Mejora
+                ListaActividades = new HashMap<>();
+                if(!((Mejora)AccionSeleccionada).getActividades().isEmpty()){
+                    List<Actividad> actividades = ((Mejora)AccionSeleccionada).getActividades();
+                    for(Actividad actividad: actividades ){
+                        ListaActividades.put(actividad.getIdActividad(), actividad);
+                    }
                 }
+                Actividad actividad = ListaActividades.get(IdActividadEditar);
+                FechaEstimadaImplementacionActividad = actividad.getFechaEstimadaImplementacion();
+                DescripcionActividad =  actividad.getDescripcion();
+                ResponsableActividad = actividad.getResponsableImplementacion().getId();
             }
             
             //  Usuarios

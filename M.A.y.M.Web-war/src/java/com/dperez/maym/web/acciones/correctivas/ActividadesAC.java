@@ -261,7 +261,11 @@ public class ActividadesAC implements Serializable {
         int idAccion = 0;
         idAccion = Integer.parseInt(request.getParameter("id"));
         TipoActividad = (String)request.getParameter("tipo");
-        IdActividadEditar = Integer.parseInt(request.getParameter("editar"));
+        try{
+            IdActividadEditar = Integer.parseInt(request.getParameter("editar"));
+        }catch(Exception ex){
+            IdActividadEditar = 0;
+        }
         if(idAccion != 0){
             AccionSeleccionada = (Correctiva) fLectura.GetAccion(idAccion);
             if(IdActividadEditar > 0){

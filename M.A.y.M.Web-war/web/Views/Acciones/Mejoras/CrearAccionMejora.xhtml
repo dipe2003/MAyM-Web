@@ -26,7 +26,7 @@
                         </div>
                         <div class="form-group">
                             <strong><label for="area">Area / Sector:</label></strong>
-                            <h:selectOneMenu id="area" class="form-control" value="#{crearAccionMerjora.areaSectorAccionSeleccionada}"
+                            <h:selectOneMenu id="area" class="form-control" value="#{crearAccionMejora.areaSectorAccionSeleccionada}"
                                              required="true" requiredMessage="No se selecciono area">
                                 <f:selectItem itemLabel="-- Seleccionar Area ---"  itemDisabled="true"  noSelectionOption="true"  />
                                 <c:forEach items="#{crearAccionMejora.listaAreasSectores}" var="area">
@@ -62,7 +62,7 @@
                             <c:if test="#{(crearAccionMejora.deteccionSeleccionada == 0) and (crearAccionMejora.deteccionSeleccionada ne -1) }">
                                 <div class="form-group">
                                     <strong><label for="tipo_nueva_deteccion" >Tipo de Deteccion:</label></strong>
-                                    <h:selectOneRadio id="tipo_nueva_deteccion" value="#{crearAccionCorrectiva.tipoNuevaDeteccion}" 
+                                    <h:selectOneRadio id="tipo_nueva_deteccion" value="#{crearAccionMejora.tipoNuevaDeteccion}" 
                                                       required="true" requiredMessage="No se Selecciono tipo de deteccion.">
                                         <f:selectItem itemLabel="Interna" itemValue="INTERNA"/>
                                         <f:selectItem itemLabel="Externa" itemValue="EXTERNA"/>

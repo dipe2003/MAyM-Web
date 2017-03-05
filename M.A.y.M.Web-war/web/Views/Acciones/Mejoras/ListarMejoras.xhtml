@@ -63,7 +63,7 @@
                                                 <c:when test="#{not empty accion.value.actividades}">
                                                     <c:forEach items="#{accion.value.actividades}" var="actividad">
                                                         <div class="form-group-sm">
-                                                            #{actividades.descripcion}
+                                                            #{actividad.descripcion}
                                                         </div>
                                                     </c:forEach>
                                                 </c:when>
@@ -124,12 +124,12 @@
                                                         </h:link>
                                                     </li>
                                                     <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != null}">
-                                                        <li><h:link value="Editar Datos" outcome="EditarAccionMejora.xhtml?id=#{accion.value.id}" >                                                        
+                                                        <li><h:link value="Editar Datos" outcome="EditarAccionMejora.xhtml?id=#{accion.key}" >                                                        
                                                                 <f:ajax onevent="indicador" />
                                                             </h:link>
                                                         </li>
                                                         <c:if test="#{accion.value.estadoAccion != 'CERRADA'}">
-                                                            <li><h:link  value="Agregar Actividades" >                                                        
+                                                            <li><h:link  value="Agregar Actividades" outcome="ActividadesMejora.xhtml?id=#{accion.key}&amp;editar=0" >                                                        
                                                                     <f:ajax onevent="indicador" />
                                                                 </h:link>
                                                             </li> 

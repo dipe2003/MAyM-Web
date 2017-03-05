@@ -173,7 +173,7 @@
                                                             <ul class="dropdown-menu" role="menu">                               
                                                                 <c:choose>
                                                                     <c:when test="#{actividad.value.fechaImplementacion == null}">
-                                                                        <li><h:link value="Editar Actividad" >                                                                
+                                                                        <li><h:link value="Editar Actividad" outcome="ActividadesMejora.xhtml?id=#{editarAccionMejora.idAccionSeleccionada}&amp;editar=#{actividad.key}" >                                                                
                                                                                 <f:ajax onevent="indicador" />
                                                                             </h:link>
                                                                         </li>
@@ -201,7 +201,7 @@
                             </c:otherwise>
                         </c:choose>
                         <div class="form-group-sm">
-                            <h:link id="agregar_actividad" value="Agregar Actividad" class="btn btn-primary" outcome="AgregarActividadMejora.xhtml?id=#{editarAccionMejora.idAccionSeleccionada}">
+                            <h:link id="agregar_actividad" value="Agregar Actividad" class="btn btn-primary" outcome="ActividadesMejora.xhtml?id=#{editarAccionMejora.idAccionSeleccionada}&amp;editar=0">
                                 <f:ajax onevent="indicador"/>
                             </h:link>
                         </div>                        
