@@ -9,6 +9,7 @@ import com.dperez.maym.web.herramientas.CargarArchivo;
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.acciones.EnumAccion;
 import com.dperez.maymweb.accion.acciones.Preventiva;
+import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.accion.adjunto.Adjunto;
 import com.dperez.maymweb.accion.adjunto.EnumTipoAdjunto;
 import com.dperez.maymweb.area.Area;
@@ -28,6 +29,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
@@ -79,6 +81,8 @@ public class EditarAccionPreventiva implements Serializable {
     private String NombreNuevaCodificacion;
     private String DescripcionNuevaCodificacion;
     
+    private Map<Integer, Actividad> ListaActividades;
+    
     //  Getters
     public int getIdAccionSeleccionada(){return IdAccionSeleccionada;}
     public Date getFechaDeteccion() {return FechaDeteccion;}
@@ -111,6 +115,8 @@ public class EditarAccionPreventiva implements Serializable {
     
     public Map<Integer, Area> getListaAreasSectores(){return this.ListaAreasSectores;}
     public Integer getAreaSectorAccionSeleccionada() {return AreaSectorAccionSeleccionada;}
+    
+    public Map<Integer, Actividad> getListaActividades() {return ListaActividades;}
     
     //  Setters
     public void setIdAccionSeleccionada(int IdAccionSeleccionada) {this.IdAccionSeleccionada = IdAccionSeleccionada;}
@@ -145,8 +151,10 @@ public class EditarAccionPreventiva implements Serializable {
     public void setTipoNuevaDeteccion(EnumTipoDeteccion TipoNuevaDeteccion) {this.TipoNuevaDeteccion = TipoNuevaDeteccion;}
     public void setDeteccionSeleccionada(Integer DeteccionSeleccionada){this.DeteccionSeleccionada = DeteccionSeleccionada;}
     
-    public void setListaAreasSectores(Map<Integer, Area> ListaAreasSectores) {this.ListaAreasSectores = ListaAreasSectores;}    
+    public void setListaAreasSectores(Map<Integer, Area> ListaAreasSectores) {this.ListaAreasSectores = ListaAreasSectores;}
     public void setAreaSectorAccionSeleccionada(Integer AreaSectorAccionSeleccionada) {this.AreaSectorAccionSeleccionada = AreaSectorAccionSeleccionada;}
+    
+    public void setListaActividades(Map<Integer, Actividad> ListaActividades) {this.ListaActividades = ListaActividades;}
     
     //  Metodos
     
@@ -172,6 +180,7 @@ public class EditarAccionPreventiva implements Serializable {
             for(Codificacion codificacion:tmpCodificaciones){
                 ListaCodificaciones.put(codificacion.getId(), codificacion.getNombre());
             }
+            ListaCodificaciones = new TreeMap<>(ListaCodificaciones);
             CodificacionSeleccionada = AccionSeleccionada.getCodificacionAccion().getId();
             
             //  Detecciones
@@ -186,14 +195,23 @@ public class EditarAccionPreventiva implements Serializable {
                     ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
                 }
             }
+            ListaDetecciones = new TreeMap<>(ListaDetecciones);
             DeteccionSeleccionada = AccionSeleccionada.getGeneradaPor().getId();
-
+            
+            // Actividades
+            List<Actividad> actividades = ((Preventiva)AccionSeleccionada).getActividades();
+            this.ListaActividades = new HashMap<>();
+            for(Actividad act:actividades){
+                ListaActividades.put(act.getIdActividad(), act);
+            }
+            
             // Areas Sectores
             ListaAreasSectores = new HashMap<>();
             List<Area> tmpAreas = fLectura.ListarAreasSectores();
             for(Area area:tmpAreas){
                 this.ListaAreasSectores.put(area.getId(), area);
             }
+            ListaAreasSectores = new TreeMap<>(ListaAreasSectores);
             AreaSectorAccionSeleccionada = AccionSeleccionada.getAreaSectorAccion().getId();
             actualizarListaAdjuntos();
         }
@@ -221,6 +239,7 @@ public class EditarAccionPreventiva implements Serializable {
                 ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
             }
         }
+        ListaDetecciones = new TreeMap<>(ListaDetecciones);
     }
     
     /**
@@ -274,8 +293,9 @@ public class EditarAccionPreventiva implements Serializable {
         for(Codificacion codificacion:tmpCodificacion){
             ListaCodificaciones.put(codificacion.getId(), codificacion.getNombre());
         }
-    }    
-       
+        ListaCodificaciones = new TreeMap<>(ListaCodificaciones);
+    }
+    
     /**
      * Carga el adjunto en la lista de adjuntos.
      * Deja vacios los campos para un nuevo adjunto.
@@ -290,7 +310,7 @@ public class EditarAccionPreventiva implements Serializable {
             tipos.add("jpeg");
             tipos.add("jpg");
             tipos.add("png");
-            tipos.add("gif");            
+            tipos.add("gif");
             if(!tipos.contains(extension.toLowerCase().trim())){
                 tipoAdjunto = EnumTipoAdjunto.DOCUMENTO;
             }

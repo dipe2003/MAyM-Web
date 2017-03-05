@@ -127,7 +127,84 @@
                                 </div>
                             </c:if>
                         </h:panelGroup>
-                        
+                    </div>
+                </div>
+                
+                <!-- Actividades -->
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Actividades para la Preventiva:</div>
+                    <div class="panel-body">
+                        <c:choose>
+                            <c:when test="#{not empty editarAccionPreventiva.listaActividades}">
+                                <table class="table table-hover table-striped table-responsive">
+                                    <thead>
+                                        <tr>
+                                            <th>Descripcion:</th>
+                                            <th>Fecha Estimada:</th>
+                                            <th>Responsable Implementacion:</th>
+                                            <th>Implementacion:</th>
+                                            <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA'}">
+                                                <th></th>
+                                            </c:if>
+                                            
+                                        </tr>                                                
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach items="#{editarAccionPreventiva.listaActividades}" var="actividad" >
+                                            <tr>
+                                                <td>#{actividad.value.descripcion}</td>
+                                                <td>#{actividad.value.fechaEstimadaImplementacion}</td>
+                                                <td>#{actividad.value.responsableImplementacion.nombre} #{actividad.value.responsableImplementacion.apellido}</td>
+                                                <td>
+                                                    <c:if test="#{actividad.value.fechaImplementacion == null}" >
+                                                        Sin Implementar
+                                                    </c:if>
+                                                    <c:if test="#{actividad.value.fechaImplementacion != null}" >
+                                                        #{actividad.value.fechaImplementacion}
+                                                    </c:if>
+                                                </td>
+                                                <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA'}">
+                                                    <td>
+                                                        <div class="btn-group">
+                                                            <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
+                                                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                            <ul class="dropdown-menu" role="menu">                               
+                                                                <c:choose>
+                                                                    <c:when test="#{actividad.value.fechaImplementacion == null}">
+                                                                        <li><h:link value="Editar Actividad" >                                                                
+                                                                                <f:ajax onevent="indicador" />
+                                                                            </h:link>
+                                                                        </li>
+                                                                        <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'Administrador' ||  sesionUsuario.usuarioLogueado.permisoUsuario == 'Verificador'}">
+                                                                            <li><h:link value="Quitar Actividad" >                                                                
+                                                                                    <f:ajax onevent="indicador" />
+                                                                                </h:link>
+                                                                            </li>
+                                                                        </c:if>
+                                                                    </c:when>
+                                                                </c:choose>
+                                                            </ul>
+                                                        </div>
+                                                    </td>
+                                                </c:if>
+                                            </tr>                                            
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="alert alert-info">
+                                    <strong>Info!</strong> No se han definido Actividades.
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
+                        <div class="form-group-sm">
+                            <h:link id="agregar_actividad" value="Agregar Actividad" class="btn btn-primary" outcome="AgregarActividadPreventiva.xhtml?id=#{editarAccionPreventiva.idAccionSeleccionada}">
+                                <f:ajax onevent="indicador"/>
+                            </h:link>
+                        </div>
                         
                     </div>
                 </div>

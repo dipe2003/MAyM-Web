@@ -17,7 +17,9 @@
         <div class="container-fluid" style="padding: 1%">
             <c:choose>
                 <c:when test="#{empty listarMejoras.listaAcciones}">
-                    <p>No hay acciones registradas</p>
+                    <div class="alert alert-info">
+                        <strong>Info!</strong> No hay registros para listar.
+                    </div>
                 </c:when>
                 <c:otherwise>
                     <h:form id="form_tabla_acciones" >

@@ -227,7 +227,7 @@
                                             <th>Descripcion:</th>
                                             <th>Fecha Estimada:</th>
                                             <th>Responsable Implementacion:</th>
-                                            <th>Implementada:</th>
+                                            <th>Implementacion:</th>
                                             <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA'}">
                                                 <th></th>
                                             </c:if>
@@ -286,7 +286,7 @@
                             </c:otherwise>
                         </c:choose>
                         <div class="form-group-sm">
-                            <h:link id="agregar_medida_correctiva" value="Agregar Medida Correctiva" class="btn btn-primary" outcome="AgregarActividadCorrectiva.xhtml?id=#{correctiva.value.id}&amp;tipo=correctiva">
+                            <h:link id="agregar_medida_correctiva" value="Agregar Medida Correctiva" class="btn btn-primary" outcome="AgregarActividadCorrectiva.xhtml?id=#{editarAccionCorrectiva.idAccionSeleccionada}&amp;tipo=correctiva">
                                 <f:ajax onevent="indicador"/>
                             </h:link>
                         </div>
@@ -306,7 +306,7 @@
                                             <th>Descripcion:</th>
                                             <th>Fecha Estimada:</th>
                                             <th>Responsable Implementacion:</th>
-                                            <th>Implementada:</th>
+                                            <th>Implementacion:</th>
                                             <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA'}">
                                                 <th></th>
                                             </c:if>                                            
@@ -364,7 +364,7 @@
                             </c:otherwise>
                         </c:choose>
                         <div class="form-group-sm">
-                            <h:link id="agregar_medida_preventiva" value="Agregar Medida Preventiva" class="btn btn-primary" outcome="AgregarActividadCorrectiva.xhtml?id=#{correctiva.value.id}&amp;tipo=correctiva">
+                            <h:link id="agregar_medida_preventiva" value="Agregar Medida Preventiva" class="btn btn-primary" outcome="AgregarActividadCorrectiva.xhtml?id=#{editarAccionCorrectiva.idAccionSeleccionada}&amp;tipo=preventiva">
                                 <f:ajax onevent="indicador"/>
                             </h:link>
                         </div>

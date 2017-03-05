@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
@@ -153,6 +154,7 @@ public class CrearAccionCorrectiva implements Serializable {
             if (deteccion.getTipo().equals(EnumTipoDeteccion.INTERNA)){
                 ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
             }
+            ListaDetecciones = new TreeMap<>(ListaDetecciones);
         }
         
         //  Tipo de desvios
@@ -165,6 +167,7 @@ public class CrearAccionCorrectiva implements Serializable {
         for(Area area:tmpAreas){
             this.ListaAreasSectores.put(area.getId(), area);
         }
+        ListaAreasSectores = new TreeMap<>(ListaAreasSectores);
     }
     
     /**

@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
@@ -25,7 +26,7 @@ import javax.persistence.OneToMany;
  */
 @Entity
 public class Mejora extends Accion implements Serializable {
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @JoinTable(name="mejoras_actividades",joinColumns={ @JoinColumn(name="Id", referencedColumnName="Id") },
             inverseJoinColumns={ @JoinColumn(name="IdActividad", referencedColumnName="IdActividad", unique=true) })
     private List<Actividad> Actividades;

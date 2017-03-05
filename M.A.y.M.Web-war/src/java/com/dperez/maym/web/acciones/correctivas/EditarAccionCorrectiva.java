@@ -31,6 +31,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
@@ -211,6 +212,7 @@ public class EditarAccionCorrectiva implements Serializable {
             for(Codificacion codificacion:tmpCodificaciones){
                 ListaCodificaciones.put(codificacion.getId(), codificacion.getNombre());
             }
+            ListaCodificaciones = new TreeMap<>(ListaCodificaciones);
             CodificacionSeleccionada = AccionSeleccionada.getCodificacionAccion().getId();
             
             //  Detecciones
@@ -225,6 +227,7 @@ public class EditarAccionCorrectiva implements Serializable {
                     ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
                 }
             }
+            ListaDetecciones = new TreeMap<>(ListaDetecciones);
             DeteccionSeleccionada = AccionSeleccionada.getGeneradaPor().getId();
             
             //  Tipo de desvios
@@ -250,6 +253,7 @@ public class EditarAccionCorrectiva implements Serializable {
             for(Area area:tmpAreas){
                 this.ListaAreasSectores.put(area.getId(), area);
             }
+            ListaAreasSectores = new TreeMap<>(ListaAreasSectores);
             AreaSectorAccionSeleccionada = AccionSeleccionada.getAreaSectorAccion().getId();
             ListaProductosAfectados = new HashMap<>();
             if(!((Correctiva)AccionSeleccionada).getProductosAfectados().isEmpty()){

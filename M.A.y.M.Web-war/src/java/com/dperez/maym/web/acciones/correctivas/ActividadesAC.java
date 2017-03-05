@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
@@ -268,6 +269,7 @@ public class ActividadesAC implements Serializable {
                 for(Usuario usuario: tmpUsuarios){
                     ListaUsuariosEmpresa.put(usuario.getId(), usuario);
                 }
+                ListaUsuariosEmpresa = new TreeMap<>(ListaUsuariosEmpresa);
             }
         }
     }

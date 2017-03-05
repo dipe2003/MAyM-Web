@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
@@ -55,11 +56,11 @@ public class CrearAccionMejora implements Serializable {
     private String NombreNuevaDeteccion;
     private Map<Integer, String> ListaDetecciones;
     private Integer DeteccionSeleccionada;
-        
+    
     private Map<Integer, Area> ListaAreasSectores;
     private Integer AreaSectorAccionSeleccionada;
     
-    //  Getters    
+    //  Getters
     public Date getFechaDeteccion() {return FechaDeteccion;}
     public String getStrFechaDeteccion(){
         SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
@@ -69,7 +70,7 @@ public class CrearAccionMejora implements Serializable {
             return fDate.format(FechaDeteccion);
         }
     }
-    public String getDescripcion() {return Descripcion;}   
+    public String getDescripcion() {return Descripcion;}
     
     public EnumTipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
     public EnumTipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
@@ -81,7 +82,7 @@ public class CrearAccionMejora implements Serializable {
     public Map<Integer, Area> getListaAreasSectores(){return this.ListaAreasSectores;}
     public Integer getAreaSectorAccionSeleccionada() {return AreaSectorAccionSeleccionada;}
     
-//  Setters    
+//  Setters
     public void setFechaDeteccion(Date FechaDeteccion) {this.FechaDeteccion = FechaDeteccion;}
     public void setStrFechaDeteccion(String strFechaDeteccion) {
         Calendar cal = Calendar.getInstance();
@@ -103,7 +104,7 @@ public class CrearAccionMejora implements Serializable {
     
     public void setListaAreaSectores(Map<Integer, Area> ListaAreasSectores){this.ListaAreasSectores = ListaAreasSectores;}
     public void setAreaSectorAccionSeleccionada(Integer AreaSectorAccionSeleccionada) {this.AreaSectorAccionSeleccionada = AreaSectorAccionSeleccionada;}
-
+    
     
     //  Metodos
     
@@ -123,13 +124,14 @@ public class CrearAccionMejora implements Serializable {
                 ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
             }
         }
-                
+        ListaDetecciones = new TreeMap<>(ListaDetecciones);
         // Areas Sectores
         ListaAreasSectores = new HashMap<>();
         List<Area> tmpAreas = fLectura.ListarAreasSectores();
         for(Area area:tmpAreas){
             this.ListaAreasSectores.put(area.getId(), area);
         }
+        ListaAreasSectores = new TreeMap<>(ListaAreasSectores);
     }
     
     /**
@@ -144,6 +146,7 @@ public class CrearAccionMejora implements Serializable {
                 ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
             }
         }
+        ListaDetecciones = new TreeMap<>(ListaDetecciones);
     }
     
     /**
@@ -166,7 +169,7 @@ public class CrearAccionMejora implements Serializable {
                 FacesContext.getCurrentInstance().renderResponse();
             }
         }
-    }    
+    }
     
     /**
      * Crea la accion correctiva con los datos ingresados.

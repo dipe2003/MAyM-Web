@@ -37,7 +37,7 @@ public class IngresoUsuario implements Serializable {
     
     private String UsuarioSeleccionado;
     private String PasswordUsuario;
-
+    
     private Empresa EmpresaSeleccionada;
     private String NombreUsuario;
     private Map<Integer, String> Usuarios;
@@ -52,24 +52,24 @@ public class IngresoUsuario implements Serializable {
     public void setUsuarioSeleccionado(String UsuarioSeleccionado) {this.UsuarioSeleccionado = UsuarioSeleccionado;}
     public String getPasswordUsuario() {return PasswordUsuario;}
     public void setNombreUsuario(String NombreUsuario){this.NombreUsuario = NombreUsuario;}
-    public void setEmpresaSeleccionada(Empresa EmpresaSelecionada){this.EmpresaSeleccionada = EmpresaSeleccionada;}    
-
+    public void setEmpresaSeleccionada(Empresa EmpresaSeleccionada){this.EmpresaSeleccionada = EmpresaSeleccionada;}
+    
     //  Metodos
     public void ingresar() throws IOException{
-        String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        String url = context.getExternalContext().getRequestContextPath();
         if(facadeMain.ComprobarValidezPassword(Integer.valueOf(UsuarioSeleccionado),PasswordUsuario)){
-            FacesContext context = FacesContext.getCurrentInstance();
-            HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
             Usuario usuario = fLectura.GetUsuario(Integer.valueOf(UsuarioSeleccionado));
             request.getSession().setAttribute("Usuario", usuario);
             
             request.getSession().setAttribute("Empresa", EmpresaSeleccionada);
             sesion.setUsuarioLogueado(usuario);
             sesion.setEmpresaSeleccionada(EmpresaSeleccionada);
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/index.xhtml");
+            context.getExternalContext().redirect(url);
         }else{
-            FacesContext.getCurrentInstance().addMessage("formlogin:pwd", new FacesMessage(SEVERITY_FATAL, "No Existe Usuario", "Los datos del usuario no son correctos"));
-            FacesContext.getCurrentInstance().renderResponse();
+            context.addMessage("formlogin:pwd", new FacesMessage(SEVERITY_FATAL, "No Existe Usuario", "Los datos del usuario no son correctos"));
+            context.renderResponse();
         }
     }
     

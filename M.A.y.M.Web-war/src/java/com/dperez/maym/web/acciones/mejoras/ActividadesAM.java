@@ -12,11 +12,17 @@ import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.usuario.Usuario;
+import java.io.IOException;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
 import javax.faces.context.FacesContext;
@@ -37,7 +43,7 @@ public class ActividadesAM implements Serializable {
     @Inject
     private FacadeLectura fLectura;
     
-    private Accion AccionMejora;
+    private Accion AccionSeleccionada;
     
     private Map<Integer, Usuario> ListaUsuariosEmpresa;
     
@@ -45,51 +51,66 @@ public class ActividadesAM implements Serializable {
     private int ActividadSeleccionada;
     
     private Date FechaEstimadaImplementacionActividad;
+    private String StrFechaEstimada;
     private String DescripcionActividad;
     private int ResponsableActividad;
-        
+    
     //  Getters
     public Map<Integer, Usuario> getListaUsuariosEmpresa() {return ListaUsuariosEmpresa;}
     public Map<Integer, Actividad> getListaActividades() {return ListaActividades;}
     public int getActividadSeleccionada() {return ActividadSeleccionada;}
     public Date getFechaEstimadaImplementacionActividad() {return FechaEstimadaImplementacionActividad;}
+    public String getStrFechaEstimada(){
+        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
+        if (FechaEstimadaImplementacionActividad == null) {
+            return this.StrFechaEstimada;
+        }else{
+            return fDate.format(FechaEstimadaImplementacionActividad);
+        }
+    }
     public String getDescripcionActividad() {return DescripcionActividad;}
     public int getResponsableActividad() {return ResponsableActividad;}
+    
+    public Accion getAccionSeleccionada() {return AccionSeleccionada;}
     
     //  Setters
     public void setListaUsuariosEmpresa(Map<Integer, Usuario> ListaUsuariosEmpresa) {this.ListaUsuariosEmpresa = ListaUsuariosEmpresa;}
     public void setListaActividades(Map<Integer, Actividad> ListaActividades) {this.ListaActividades = ListaActividades;}
     public void setActividadSeleccionada(int ActividadSeleccionada) {this.ActividadSeleccionada = ActividadSeleccionada;}
     public void setFechaEstimadaImplementacionActividad(Date FechaEstimadaImplementacionActividad) {this.FechaEstimadaImplementacionActividad = FechaEstimadaImplementacionActividad;}
+    public void setStrFechaEstimada(String StrFechaEstimada) {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try{
+            cal.setTime(sdf.parse(StrFechaEstimada));
+        }catch(ParseException ex){}
+        this.StrFechaEstimada = StrFechaEstimada;
+        this.FechaEstimadaImplementacionActividad = cal.getTime();
+    }
     public void setDescripcionActividad(String DescripcionActividad) {this.DescripcionActividad = DescripcionActividad;}
     public void setResponsableActividad(int ResponsableActividad) {this.ResponsableActividad = ResponsableActividad;}
+    
+    public void setAccionSeleccionada(Accion AccionSeleccionada) {this.AccionSeleccionada = AccionSeleccionada;}
     
     //  Metodos
     /**
      * Agrega una actividad a la accion de mejora.
-     * Se actualiza la lista de actividades del bean.
      * Se persisten los cambios.
      * Muestra un mensaje de error si no se pudo completar correctamente.
+     * @throws java.io.IOException
      */
-    public void agregarActividadMejora(){
-        if(!DescripcionActividad.isEmpty() && FechaEstimadaImplementacionActividad != null && ResponsableActividad != 0){
-            Actividad actividad  = new Actividad();
-            Usuario responsable = ListaUsuariosEmpresa.get(ResponsableActividad);
-            actividad.setDescripcion(DescripcionActividad);
-            actividad.setFechaEstimadaImplementacion(FechaEstimadaImplementacionActividad);
-            actividad.setResponsableImplementacion(responsable);
-            int id;
-            if((id = fDatos.AgregarActividadMejora(AccionMejora.getId(), actividad.getFechaEstimadaImplementacion(), actividad.getDescripcion(),
-                    actividad.getResponsableImplementacion().getId()))<0){
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo agregar Actividad", "No se pudo agregar Actividad" ));
-                FacesContext.getCurrentInstance().renderResponse();
-            }else{
-                // agregar a la lista de actividades del bean
-                actividad.setIdActividad(id);
-                ListaActividades.put(actividad.getIdActividad(), actividad);
-            }
+    public void agregarActividad() throws IOException{
+        int id;
+        if((id = fDatos.AgregarActividadMejora(AccionSeleccionada.getId(), FechaEstimadaImplementacionActividad, DescripcionActividad,
+                ResponsableActividad))<0){
+            FacesContext.getCurrentInstance().addMessage("form_agregar_actividades:btn_agregar_actividad", new FacesMessage(SEVERITY_FATAL, "No se pudo agregar Actividad", "No se pudo agregar Actividad" ));
+            FacesContext.getCurrentInstance().renderResponse();
+        }else{
+            // redirigir a la edicion de la accion correctiva.
+            String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Mejoras/EditarAccionMejora.xhtml?id="+AccionSeleccionada.getId());
         }
-    }    
+    }
     
     /**
      * Remueve la actividad de mejora de la lista de actividades si la fecha de implementacion no esta definida.
@@ -101,7 +122,7 @@ public class ActividadesAM implements Serializable {
     public void removerActividadMejora(int IdActividadMejora){
         if(IdActividadMejora!=0 && ListaActividades.get(IdActividadMejora).getFechaImplementacion() == null){
             int res;
-            if((res = fDatos.RemoverActividadMejora(AccionMejora.getId(), IdActividadMejora))> 0){
+            if((res = fDatos.RemoverActividadMejora(AccionSeleccionada.getId(), IdActividadMejora))> 0){
                 ListaActividades.remove(res);
             }else{
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo quitar la Actividad", "No se pudo quitar la Actividad" ));
@@ -113,8 +134,9 @@ public class ActividadesAM implements Serializable {
         }
     }
     
-       
+    
     //  Inicializacion del bean
+    @PostConstruct
     public void init(){
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
@@ -122,16 +144,16 @@ public class ActividadesAM implements Serializable {
         int idAccion = 0;
         idAccion = Integer.parseInt(request.getParameter("id"));
         if(idAccion != 0){
-            AccionMejora = (Mejora) fLectura.GetAccion(idAccion);
+            AccionSeleccionada = (Mejora) fLectura.GetAccion(idAccion);
             //  Actividades de Mejora
             ListaActividades = new HashMap<>();
-            if(!((Mejora)AccionMejora).getActividades().isEmpty()){
-                List<Actividad> actividades = ((Mejora)AccionMejora).getActividades();
+            if(!((Mejora)AccionSeleccionada).getActividades().isEmpty()){
+                List<Actividad> actividades = ((Mejora)AccionSeleccionada).getActividades();
                 for(Actividad actividad: actividades ){
                     ListaActividades.put(actividad.getIdActividad(), actividad);
                 }
             }
-                        
+            
             //  Usuarios
             this.ListaUsuariosEmpresa = new HashMap<>();
             Empresa empresa = (Empresa) request.getSession().getAttribute("Empresa");
@@ -141,6 +163,7 @@ public class ActividadesAM implements Serializable {
                 for(Usuario usuario: tmpUsuarios){
                     ListaUsuariosEmpresa.put(usuario.getId(), usuario);
                 }
+                ListaUsuariosEmpresa = new TreeMap<>(ListaUsuariosEmpresa);
             }
         }
     }

@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../../../index.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"          
+                xmlns:f="http://xmlns.jcp.org/jsf/core"                    
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"                
+                xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+    <ui:define name="page_content">
+        <div class="container-fluid" style="padding: 1%">  
+            <h1>Este es el sitio para agregar actividades a la mejora.</h1>                       
+        </div>
+        <div class="container-fluid" style="padding: 1%">
+            <h:form id="form_agregar_actividades">
+                
+                <!-- Descripcion -->                
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Datos Registrados</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <strong><label for="fecha_deteccion">Fecha Deteccion:</label></strong>
+                                    <h:outputText id="fecha_deteccion" class="form-control" value="#{actividadesAM.accionSeleccionada.fechaDeteccion}" />
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <strong><label for="area">Area / Sector:</label></strong>
+                                    <h:outputText id="area" class="form-control" value="#{actividadesAM.accionSeleccionada.areaSectorAccion.nombre}" />
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <strong><label for="tipo_deteccion">Tipo de Deteccion:</label></strong>                                    
+                                    <h:outputText id="tipo_deteccion" class="form-control" value="#{actividadesAM.accionSeleccionada.generadaPor.tipo}" />
+                                </div> 
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <strong><label for="deteccion">Generada Por:</label></strong>
+                                    <h:outputText id="deteccion" class="form-control" value="#{actividadesAM.accionSeleccionada.generadaPor.nombre}" />
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <strong><label for="descripcion">Descripcion:</label></strong>   
+                            <h:inputTextarea readonly="true" id="descripcion" class="form-control" style="background-color: white;" value="#{actividadesAM.accionSeleccionada.descripcion}" />
+                        </div>                      
+                        <div class="form-group">
+                            <strong><label for="analisis_causa">Analisis de Causa Raiz:</label></strong>                                    
+                            <h:inputTextarea readonly="true" id="analisis_causa" class="form-control" style="background-color: white;" value="#{actividadesAM.accionSeleccionada.analisisCausa}" />
+                        </div>                         
+                    </div>
+                </div> 
+                
+                <!-- Medidas Correctivas -->                        
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Actividades para la Mejora:</div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <strong><label for="descripcion_actividad">Descripcion:</label></strong>                                    
+                            <h:inputTextarea id="descripcion_actividad" class="form-control" value="#{actividadesAM.descripcionActividad}"
+                                             required="true" requiredMessage="Se debe ingresar Descripcion de la Actividad." />
+                        </div>
+                        <div class="form-group">
+                            <strong><label for="responsable_actividad">Responsable de Implementacion:</label></strong>                                    
+                            <h:selectOneMenu id="responsable_actividad" class="form-control" value="#{actividadesAM.responsableActividad}"
+                                             required="true" requiredMessage="No se selecciono Responsable de Implementacion.">
+                                <f:selectItem itemLabel="--- Seleccionar Usuario ---" itemDisabled="true" noSelectionOption="true" />
+                                <c:forEach items="#{actividadesAM.listaUsuariosEmpresa}" var="entry">
+                                    <f:selectItem itemLabel="#{entry.value.nombre} #{entry.value.apellido}" itemValue="#{entry.key}" />
+                                </c:forEach>
+                            </h:selectOneMenu>
+                        </div>
+                        <div class="form-group">
+                            <strong><label for="fecha_estimada_actividad">Responsable de Implementacion:</label></strong>                                    
+                            <h:inputText id="fecha_estimada_actividad" class="form-control calendario" p:placeholder="Fecha Estimada de Implementacion" 
+                                         value="#{actividadesAM.strFechaEstimada}" required="true" requiredMessage="No se ingreso Fecha Estimada de Implementacion"/>
+                        </div>
+                        <div class="form-group">
+                            <h:commandButton id="btn_agregar_actividad_mejora" class="btn btn-primary" value="Agregar Actividad a la Mejora">
+                                <f:ajax execute="@form" event="click" listener="#{actividadesAM.agregarActividad()}" onevent="indicador" render="panel_mensajes_actividades"/>
+                            </h:commandButton>
+                            
+                            <h:panelGroup id="panel_mensajes_actividades">
+                                <div class="form-group-sm">
+                                    <h:message for="descripcion_actividad" class="msj_error"/>
+                                </div>
+                                <div class="form-group-sm">
+                                    <h:message for="responsable_actividad" class="msj_error"/>
+                                </div>
+                                <div class="form-group-sm">
+                                    <h:message for="fecha_estimada_actividad" class="msj_error"/>
+                                </div>                   
+                                <div class="form-group-sm">
+                                    <h:message for="btn_agregar_actividad" class="msj_error"/>
+                                </div>               
+                            </h:panelGroup>
+                        </div>
+                    </div>
+                </div>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>
+
+

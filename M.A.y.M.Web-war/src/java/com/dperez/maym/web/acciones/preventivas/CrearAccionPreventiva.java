@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
@@ -123,6 +124,7 @@ public class CrearAccionPreventiva implements Serializable {
                 ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
             }
         }
+        ListaDetecciones = new TreeMap<>(ListaDetecciones);
         
         // Areas Sectores
         ListaAreasSectores = new HashMap<>();
@@ -130,6 +132,7 @@ public class CrearAccionPreventiva implements Serializable {
         for(Area area:tmpAreas){
             this.ListaAreasSectores.put(area.getId(), area);
         }
+        ListaAreasSectores = new TreeMap<>(ListaAreasSectores);
     }
     
     /**
@@ -144,6 +147,7 @@ public class CrearAccionPreventiva implements Serializable {
                 ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
             }
         }
+        ListaDetecciones = new TreeMap<>(ListaDetecciones);
     }
     
     /**

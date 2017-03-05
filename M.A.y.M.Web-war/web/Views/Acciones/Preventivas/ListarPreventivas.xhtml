@@ -17,7 +17,9 @@
         <div class="container-fluid" style="padding: 1%">
             <c:choose>
                 <c:when test="#{empty listarPreventivas.listaAcciones}">
-                    <p>No hay acciones registradas</p>
+                    <div class="alert alert-info">
+                        <strong>Info!</strong> No hay registros para listar.
+                    </div>
                 </c:when>
                 <c:otherwise>
                     <h:form id="form_tabla_acciones" >
@@ -55,6 +57,20 @@
                                         </td>
                                         <td>
                                             #{accion.value.analisisCausa}
+                                        </td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="#{not empty accion.value.actividades}">
+                                                    <c:forEach items="#{accion.value.actividades}" var="actividad">
+                                                        <div class="form-group-sm">
+                                                            #{actividad.descripcion}
+                                                        </div>
+                                                    </c:forEach>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    No se han definido.
+                                                </c:otherwise>
+                                            </c:choose>
                                         </td>
                                         <td>
                                             <c:choose>
