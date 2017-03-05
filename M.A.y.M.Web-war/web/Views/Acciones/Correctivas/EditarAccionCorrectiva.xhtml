@@ -244,7 +244,7 @@
                                                     <c:if test="#{correctiva.value.fechaImplementacion == null}" >
                                                         Sin Implementar
                                                     </c:if>
-                                                    <c:if test="#{correctiva.fechaImplementacion != null}" >
+                                                    <c:if test="#{correctiva.value.fechaImplementacion != null}" >
                                                         #{correctiva.value.fechaImplementacion}
                                                     </c:if>
                                                 </td>
@@ -258,11 +258,11 @@
                                                             <ul class="dropdown-menu" role="menu">                               
                                                                 <c:choose>
                                                                     <c:when test="#{correctiva.value.fechaImplementacion == null}">
-                                                                        <li><h:link value="Editar Actividad" >                                                                
+                                                                        <li><h:link value="Editar Actividad" outcome="ActividadesCorrectiva.xhtml?id=#{editarAccionCorrectiva.idAccionSeleccionada}&amp;tipo=correctiva&amp;editar=#{correctiva.key}" >                                                                
                                                                                 <f:ajax onevent="indicador" />
                                                                             </h:link>
                                                                         </li>
-                                                                        <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'Administrador' ||  sesionUsuario.usuarioLogueado.permisoUsuario == 'Verificador'}">
+                                                                        <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR' ||  sesionUsuario.usuarioLogueado.permisoUsuario == 'VERIFICADOR'}">
                                                                             <li><h:link value="Quitar Actividad" >                                                                
                                                                                     <f:ajax onevent="indicador" />
                                                                                 </h:link>
@@ -286,7 +286,7 @@
                             </c:otherwise>
                         </c:choose>
                         <div class="form-group-sm">
-                            <h:link id="agregar_medida_correctiva" value="Agregar Medida Correctiva" class="btn btn-primary" outcome="AgregarActividadCorrectiva.xhtml?id=#{editarAccionCorrectiva.idAccionSeleccionada}&amp;tipo=correctiva">
+                            <h:link id="agregar_medida_correctiva" value="Agregar Medida Correctiva" class="btn btn-primary" outcome="ActividadesCorrectiva.xhtml?id=#{editarAccionCorrectiva.idAccionSeleccionada}&amp;tipo=correctiva&amp;editar=0">
                                 <f:ajax onevent="indicador"/>
                             </h:link>
                         </div>
@@ -336,11 +336,11 @@
                                                             <ul class="dropdown-menu" role="menu">                               
                                                                 <c:choose>
                                                                     <c:when test="#{preventiva.value.fechaImplementacion == null}">
-                                                                        <li><h:link value="Editar Actividad" >                                                                
+                                                                        <li><h:link value="Editar Actividad" outcome="ActividadesCorrectiva.xhtml?id=#{editarAccionCorrectiva.idAccionSeleccionada}&amp;tipo=preventiva&amp;editar=#{preventiva.key}" >                                                                
                                                                                 <f:ajax onevent="indicador" />
                                                                             </h:link>
                                                                         </li>
-                                                                        <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'Administrador' ||  sesionUsuario.usuarioLogueado.permisoUsuario == 'Verificador'}">
+                                                                        <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR' ||  sesionUsuario.usuarioLogueado.permisoUsuario == 'VERIFICADOR'}">
                                                                             <li><h:link value="Quitar Actividad" >                                                                
                                                                                     <f:ajax onevent="indicador" />
                                                                                 </h:link>
@@ -364,7 +364,7 @@
                             </c:otherwise>
                         </c:choose>
                         <div class="form-group-sm">
-                            <h:link id="agregar_medida_preventiva" value="Agregar Medida Preventiva" class="btn btn-primary" outcome="AgregarActividadCorrectiva.xhtml?id=#{editarAccionCorrectiva.idAccionSeleccionada}&amp;tipo=preventiva">
+                            <h:link id="agregar_medida_preventiva" value="Agregar Medida Preventiva" class="btn btn-primary" outcome="ActividadesCorrectiva.xhtml?id=#{editarAccionCorrectiva.idAccionSeleccionada}&amp;tipo=preventiva&amp;editar=0">
                                 <f:ajax onevent="indicador"/>
                             </h:link>
                         </div>

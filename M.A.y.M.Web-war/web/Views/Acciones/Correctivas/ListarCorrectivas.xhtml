@@ -145,12 +145,12 @@
                                                         </li>
                                                         <c:if test="#{accion.value.estadoAccion != 'CERRADA'}">
                                                             <li>                                                            
-                                                                <h:link  value="Agregar Medida Correctiva" outcome="AgregarActividadCorrectiva.xhtml?id=#{accion.value.id}&amp;tipo=correctiva">                                                        
+                                                                <h:link  value="Agregar Medida Correctiva" outcome="ActividadesCorrectiva.xhtml?id=#{accion.value.id}&amp;tipo=correctiva&amp;editar=0">                                                        
                                                                     <f:ajax onevent="indicador" />
                                                                 </h:link>                                                            
                                                             </li>
                                                             <li>                                                            
-                                                                <h:link  value="Agregar Medida Preventiva" outcome="AgregarActividadCorrectiva.xhtml?id=#{accion.value.id}&amp;tipo=preventiva">                                                        
+                                                                <h:link  value="Agregar Medida Preventiva" outcome="ActividadesCorrectiva.xhtml?id=#{accion.value.id}&amp;tipo=preventiva&amp;editar=0">                                                        
                                                                     <f:ajax onevent="indicador" />
                                                                 </h:link>                                                            
                                                             </li>                                                            

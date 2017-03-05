@@ -109,10 +109,23 @@
                                                  value="#{actividadesAC.strFechaEstimadaCorrectiva}" required="true" requiredMessage="No se ingreso Fecha Estimada de Implementacion"/>
                                 </div>
                                 <div class="form-group">
-                                    <h:commandButton id="btn_agregar_medida_correctiva" class="btn btn-primary" value="Agregar Medida Correctiva">
-                                        <f:ajax execute="@form" event="click" listener="#{actividadesAC.agregarMedidaCorrectiva()}" onevent="indicador" render="panel_mensajes_correctivas"/>
-                                    </h:commandButton>
-                                    
+                                    <c:choose>
+                                        <c:when test="#{actividadesAC.idActividadEditar > 0}">
+                                            <h:commandButton id="btn_guardar_medida_correctiva" class="btn btn-primary" value="Guardar Medida Correctiva">
+                                                <f:ajax execute="@form" event="click" listener="#{actividadesAC.guardarMedidaCorrectiva()}" render="panel_mensajes_correctivas"/>
+                                            </h:commandButton>
+                                            <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR' ||  sesionUsuario.usuarioLogueado.permisoUsuario == 'VERIFICADOR'}">
+                                                <h:commandButton id="btn_remover_medida_correctiva" class="btn btn-danger" value="Eliminar Medida Correctiva" onclick="if (! confirm('Seguro que va a eliminar esta medida corectiva? Se eliminaran todos los datos relacionados.')) return false">
+                                                    <f:ajax execute="@form" event="click" listener="#{actividadesAC.removerMedidaCorrectiva()}" onevent="indicador" render="panel_mensajes_correctivas"/>
+                                                </h:commandButton>  
+                                            </c:if>                                            
+                                        </c:when>
+                                        <c:otherwise>
+                                            <h:commandButton id="btn_agregar_medida_correctiva" class="btn btn-primary" value="Agregar Medida Correctiva">
+                                                <f:ajax execute="@form" event="click" listener="#{actividadesAC.agregarMedidaCorrectiva()}" onevent="indicador" render="panel_mensajes_correctivas"/>
+                                            </h:commandButton>
+                                        </c:otherwise>
+                                    </c:choose>
                                     <h:panelGroup id="panel_mensajes_correctivas">
                                         <div class="form-group-sm">
                                             <h:message for="descripcion_correctiva" class="msj_error"/>
@@ -157,9 +170,23 @@
                                                  value="#{actividadesAC.strFechaEstimadaPreventiva}" required="true" requiredMessage="No se ingreso Fecha Estimada de Implementacion"/>
                                 </div>
                                 <div class="form-group">
-                                    <h:commandButton id="btn_agregar_medida_preventiva" class="btn btn-primary" value="Agregar Medida Preventiva">
-                                        <f:ajax execute="@form" event="click" listener="#{actividadesAC.agregarMedidaPreventiva()}" onevent="indicador" render="panel_mensajes_preventivas"/>
-                                    </h:commandButton>                                    
+                                    <c:choose>
+                                        <c:when test="#{actividadesAC.idActividadEditar > 0}">
+                                            <h:commandButton id="btn_guardar_medida_preventiva" class="btn btn-primary" value="Guardar Medida Preventiva">
+                                                <f:ajax execute="@form" event="click" listener="#{actividadesAC.guardarMedidaPreventiva()}" render="panel_mensajes_preventivas"/>
+                                            </h:commandButton>
+                                            <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'Administrador' ||  sesionUsuario.usuarioLogueado.permisoUsuario == 'Verificador'}">
+                                                <h:commandButton id="btn_remover_medida_preventiva" class="btn btn-danger" value="Eliminar Medida Preventiva" onclick="if (! confirm('Seguro que va a eliminar esta medida preventiva? Se eliminaran todos los datos relacionados.')) return false">
+                                                    <f:ajax execute="@form" event="click" listener="#{actividadesAC.removerMedidaPreventiva()}" onevent="indicador" render="panel_mensajes_preventivas"/>
+                                                </h:commandButton>  
+                                            </c:if>                                            
+                                        </c:when>
+                                        <c:otherwise>
+                                            <h:commandButton id="btn_agregar_medida_preventiva" class="btn btn-primary" value="Agregar Medida Preventiva">
+                                                <f:ajax execute="@form" event="click" listener="#{actividadesAC.agregarMedidaPreventiva()}" onevent="indicador" render="panel_mensajes_preventivas"/>
+                                            </h:commandButton>  
+                                        </c:otherwise>
+                                    </c:choose>
                                     <h:panelGroup id="panel_mensajes_preventivas">
                                         <div class="form-group-sm">
                                             <h:message for="descripcion_preventiva" class="msj_error"/>

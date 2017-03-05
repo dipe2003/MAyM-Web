@@ -46,6 +46,7 @@ public class ActividadesAC implements Serializable {
     
     private Accion AccionSeleccionada;
     private String TipoActividad;
+    private int IdActividadEditar;
     
     private EnumTipoDesvio TipoDesvio;
     
@@ -73,6 +74,8 @@ public class ActividadesAC implements Serializable {
     //  Getters
     public String getTipoActividad() {return TipoActividad;}
     public Accion getAccionSeleccionada() {return AccionSeleccionada;}
+    
+    public int getIdActividadEditar() {return IdActividadEditar;}
     
     public EnumTipoDesvio getTipoDesvio() {return TipoDesvio;}
     
@@ -109,6 +112,8 @@ public class ActividadesAC implements Serializable {
     //  Setters
     public void setTipoActividad(String TipoActividad) {this.TipoActividad = TipoActividad;}
     public void setAccionSeleccionada(Accion AccionSeleccionada) {this.AccionSeleccionada = AccionSeleccionada;}
+    
+    public void setIdActividadEditar(int IdActividadEditar) {this.IdActividadEditar = IdActividadEditar;}
     
     public void setTipoDesvio(EnumTipoDesvio TipoDesvio) {this.TipoDesvio = TipoDesvio;}
     
@@ -150,11 +155,11 @@ public class ActividadesAC implements Serializable {
      * Se persisten los cambios.
      * Se redirige a la vista de editar accion
      * Muestra un mensaje de error si no se pudo completar correctamente.
+     * @throws java.io.IOException
      */
     public void agregarMedidaCorrectiva() throws IOException{
-        int id;
-        if((id = fDatos.AgregarMedidaCorrectiva(AccionSeleccionada.getId(), FechaEstimadaImplementacionMedidaCorrectiva, DescripcionMedidaCorrectiva,
-                ResponsableMedidaCorrectiva))<0){
+        if(fDatos.AgregarMedidaCorrectiva(AccionSeleccionada.getId(), FechaEstimadaImplementacionMedidaCorrectiva, DescripcionMedidaCorrectiva,
+                ResponsableMedidaCorrectiva)<0){
             FacesContext.getCurrentInstance().addMessage("form_agregar_actividades:btn_agregar_medida_correctiva", new FacesMessage(SEVERITY_FATAL, "No se pudo agregar Medida Correctiva", "No se pudo agregar Medida Correctiva" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
@@ -166,20 +171,14 @@ public class ActividadesAC implements Serializable {
     
     /**
      * Agrega una nueva medida preventiva a la accion correctiva.
-     * Se actualiza la lista de medidas preventivas del bean.
      * Se persisten los cambios.
      * Muestra un mensaje de error si no se pudo completar correctamente.
+     * @throws java.io.IOException
      */
     public void agregarMedidaPreventiva() throws IOException{
-        Actividad Medida  = new Actividad();
-        Usuario responsable = ListaUsuariosEmpresa.get(ResponsableMedidaPreventiva);
-        Medida.setDescripcion(DescripcionMedidaPreventiva);
-        Medida.setFechaEstimadaImplementacion(FechaEstimadaImplementacionMedidaPreventiva);
-        Medida.setResponsableImplementacion(responsable);
-        int id;
-        if(((id = fDatos.AgregarMedidaPreventiva(AccionSeleccionada.getId(), FechaEstimadaImplementacionMedidaPreventiva, DescripcionMedidaPreventiva,
-                ResponsableMedidaPreventiva)))<0){
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo agregar Medida Preventiva", "No se pudo agregar Medida Preventiva" ));
+        if((fDatos.AgregarMedidaPreventiva(AccionSeleccionada.getId(), FechaEstimadaImplementacionMedidaPreventiva, DescripcionMedidaPreventiva,
+                ResponsableMedidaPreventiva))<0){
+            FacesContext.getCurrentInstance().addMessage("form_agregar_actividades:btn_agregar_medida_preventiva", new FacesMessage(SEVERITY_FATAL, "No se pudo agregar Medida Preventiva", "No se pudo agregar Medida Preventiva" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             // redirigir a la edicion de la accion correctiva.
@@ -189,46 +188,67 @@ public class ActividadesAC implements Serializable {
     }
     
     /**
-     * Remueve la medida correctiva de la lista de medidas correctivas si la fecha de implementacion no esta definida.
      * Remueve la medida correctiva de la accion correctiva.
      * Se persisten los cambios.
      * Muestra un mensaje de error si no se pudo completar correctamente.
-     * @param IdMedidaCorrectiva
+     * @throws java.io.IOException
      */
-    public void removerMedidaCorrectiva(int IdMedidaCorrectiva){
-        if(IdMedidaCorrectiva!=0 && ListaMedidasCorrectivas.get(IdMedidaCorrectiva).getFechaImplementacion() == null){
-            int res;
-            if((res = fDatos.RemoverMedidaCorrectiva(AccionSeleccionada.getId(), IdMedidaCorrectiva))> 0){
-                ListaMedidasCorrectivas.remove(res);
-            }else{
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo quitar Medida Correctiva", "No se pudo quitar Medida Correctiva" ));
-                FacesContext.getCurrentInstance().renderResponse();
-            }
-        }else{
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se puede quitar porque ya fue implementada", "No se puede quitar porque ya fue implementada" ));
+    public void removerMedidaCorrectiva() throws IOException{
+        if(fDatos.RemoverMedidaCorrectiva(AccionSeleccionada.getId(), IdActividadEditar)<0){
+            FacesContext.getCurrentInstance().addMessage("form_agregar_actividades:btn_remover_medida_correctiva", new FacesMessage(SEVERITY_FATAL, "No se pudo quitar Medida Correctiva", "No se pudo quitar Medida Correctiva" ));
             FacesContext.getCurrentInstance().renderResponse();
+        }else{
+            // redirigir a la edicion de la accion correctiva.
+            String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/EditarAccionCorrectiva.xhtml?id="+AccionSeleccionada.getId());
         }
     }
     
     /**
-     * Remueve la medida preventiva de la lista de medidas preventivas si la fecha de implementacion no esta definida.
      * Remueve la medida Preventiva de la accion correctiva.
      * Se persisten los cambios.
      * Muestra un mensaje de error si no se pudo completar correctamente.
-     * @param IdMedidaPreventiva
+     * @throws java.io.IOException
      */
-    public void removerMedidaPreventiva(int IdMedidaPreventiva){
-        if(IdMedidaPreventiva!=0 && ListaMedidasPreventivas.get(IdMedidaPreventiva).getFechaImplementacion() == null){
-            int res;
-            if((res = fDatos.RemoverMedidaPreventiva(AccionSeleccionada.getId(), IdMedidaPreventiva))> 0){
-                ListaMedidasPreventivas.remove(res);
-            }else{
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo quitar Medida Preventiva", "No se pudo quitar Medida Preventiva" ));
-                FacesContext.getCurrentInstance().renderResponse();
-            }
-        }else{
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se puede quitar porque ya fue implementada", "No se puede quitar porque ya fue implementada" ));
+    public void removerMedidaPreventiva() throws IOException{
+        if(fDatos.RemoverMedidaPreventiva(AccionSeleccionada.getId(), IdActividadEditar)< 0){
+            FacesContext.getCurrentInstance().addMessage("form_agregar_actividades:btn_remover_medida_preventiva", new FacesMessage(SEVERITY_FATAL, "No se pudo quitar Medida Preventiva", "No se pudo quitar Medida Preventiva" ));
             FacesContext.getCurrentInstance().renderResponse();
+        }else{
+            // redirigir a la edicion de la accion correctiva.
+            String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/EditarAccionCorrectiva.xhtml?id="+AccionSeleccionada.getId());
+        }
+    }
+    
+    /**
+     * Guarda los cambios realizados en la medida correctiva y los persiste.
+     * Se redirige a la vista de editar la accion correctiva correspondiente si se guardo, de lo contrario muestra un mensaje.
+     * @throws IOException
+     */
+    public void guardarMedidaCorrectiva() throws IOException{
+        if(fDatos.EditarActividad(IdActividadEditar, DescripcionMedidaCorrectiva, ResponsableMedidaCorrectiva, FechaEstimadaImplementacionMedidaCorrectiva) < 0){
+            FacesContext.getCurrentInstance().addMessage("form_agregar_actividades:btn_agregar_medida_correctiva", new FacesMessage(SEVERITY_FATAL, "No se pudo guardar Medida Correctiva", "No se pudo guardar Medida Correctiva" ));
+            FacesContext.getCurrentInstance().renderResponse();
+        }else{
+            // redirigir a la edicion de la accion correctiva.
+            String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/EditarAccionCorrectiva.xhtml?id="+AccionSeleccionada.getId());
+        }
+    }
+    /**
+     * Guarda los cambios realizados en la medida preventiva y los persiste.
+     * Se redirige a la vista de editar la accion correctiva correspondiente si se guardo, de lo contrario muestra un mensaje.
+     * @throws IOException
+     */
+    public void guardarMedidaPreventiva() throws IOException{
+        if(fDatos.EditarActividad(IdActividadEditar, DescripcionMedidaPreventiva, ResponsableMedidaPreventiva, FechaEstimadaImplementacionMedidaPreventiva) < 0){
+            FacesContext.getCurrentInstance().addMessage("form_agregar_actividades:btn_agregar_medida_preventiva", new FacesMessage(SEVERITY_FATAL, "No se pudo Guardar Medida Preventiva", "No se pudo Guardar Medida Preventiva" ));
+            FacesContext.getCurrentInstance().renderResponse();
+        }else{
+            // redirigir a la edicion de la accion correctiva.
+            String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/EditarAccionCorrectiva.xhtml?id="+AccionSeleccionada.getId());
         }
     }
     
@@ -241,25 +261,38 @@ public class ActividadesAC implements Serializable {
         int idAccion = 0;
         idAccion = Integer.parseInt(request.getParameter("id"));
         TipoActividad = (String)request.getParameter("tipo");
+        IdActividadEditar = Integer.parseInt(request.getParameter("editar"));
         if(idAccion != 0){
             AccionSeleccionada = (Correctiva) fLectura.GetAccion(idAccion);
-            //  Medidas Correctivas
-            ListaMedidasCorrectivas = new HashMap<>();
-            if(!((Correctiva)AccionSeleccionada).getMedidasCorrectivas().isEmpty()){
-                List<Actividad> medidas = ((Correctiva)AccionSeleccionada).getMedidasCorrectivas();
-                for(Actividad medida: medidas ){
-                    ListaMedidasCorrectivas.put(medida.getIdActividad(), medida);
+            if(IdActividadEditar > 0){
+                if(TipoActividad.equalsIgnoreCase("correctiva")){
+                    //  Medidas Correctivas
+                    ListaMedidasCorrectivas = new HashMap<>();
+                    if(!((Correctiva)AccionSeleccionada).getMedidasCorrectivas().isEmpty()){
+                        List<Actividad> medidas = ((Correctiva)AccionSeleccionada).getMedidasCorrectivas();
+                        for(Actividad medida: medidas ){
+                            ListaMedidasCorrectivas.put(medida.getIdActividad(), medida);
+                        }
+                    }
+                    Actividad actividad = ListaMedidasCorrectivas.get(IdActividadEditar);
+                    FechaEstimadaImplementacionMedidaCorrectiva = actividad.getFechaEstimadaImplementacion();
+                    DescripcionMedidaCorrectiva =  actividad.getDescripcion();
+                    ResponsableMedidaCorrectiva = actividad.getResponsableImplementacion().getId();
+                }else{
+                    //  Medidas Preventivas
+                    ListaMedidasPreventivas = new HashMap<>();
+                    if(!((Correctiva)AccionSeleccionada).getMedidasPreventivas().isEmpty()){
+                        List<Actividad> medidas = ((Correctiva)AccionSeleccionada).getMedidasPreventivas();
+                        for(Actividad medida: medidas ){
+                            ListaMedidasPreventivas.put(medida.getIdActividad(), medida);
+                        }
+                    }
+                    Actividad actividad = ListaMedidasPreventivas.get(IdActividadEditar);
+                    FechaEstimadaImplementacionMedidaPreventiva = actividad.getFechaEstimadaImplementacion();
+                    DescripcionMedidaPreventiva =  actividad.getDescripcion();
+                    ResponsableMedidaPreventiva = actividad.getResponsableImplementacion().getId();
                 }
             }
-            //  Medidas Preventivas
-            ListaMedidasPreventivas = new HashMap<>();
-            if(!((Correctiva)AccionSeleccionada).getMedidasPreventivas().isEmpty()){
-                List<Actividad> medidas = ((Correctiva)AccionSeleccionada).getMedidasPreventivas();
-                for(Actividad medida: medidas ){
-                    ListaMedidasPreventivas.put(medida.getIdActividad(), medida);
-                }
-            }
-            
             //  Usuarios
             this.ListaUsuariosEmpresa = new HashMap<>();
             Empresa empresa = (Empresa) request.getSession().getAttribute("Empresa");

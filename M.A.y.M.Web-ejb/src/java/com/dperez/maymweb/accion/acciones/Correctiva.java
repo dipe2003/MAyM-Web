@@ -142,31 +142,36 @@ public class Correctiva extends Accion implements Serializable {
     @Override
     public void CambiarEstado() {
         if(this.getEstadoAccion()!= EnumEstado.DESESTIMADA && this.getEstadoAccion()!= EnumEstado.CERRADA){
-            boolean medCorrectivaImp = true;
-            // chequear implementacion de todas las medidas correctivas
-            for(Actividad medida: this.MedidasCorrectivas){
-                if(medida.getFechaImplementacion()==null) medCorrectivaImp = false;
-            }
-            boolean medPreventivaImp = true;
-            // chequear implementacion de todas las medidas preventivas
-            for(Actividad medida: this.MedidasPreventivas){
-                if(medida.getFechaImplementacion()==null) medPreventivaImp = false;
-            }
-            
-            // comparar resultados de chequeos y setear nuevo estado
-            if(medCorrectivaImp == true && medPreventivaImp == true){
-                if(this.getComprobacionEficacia().getResultado()!= EnumComprobacion.NO_COMPROBADA) {
-                    this.setEstadoAccion(EnumEstado.CERRADA);
-                }else{
-                    this.setEstadoAccion(EnumEstado.PROCESO_VER);
-                }
+            // si ambas listas estan vacias el estado es pendiente
+            if(this.MedidasCorrectivas.isEmpty() && this.MedidasPreventivas.isEmpty()){
+                this.setEstadoAccion(EnumEstado.PENDIENTE);
             }else{
-                if(medCorrectivaImp == true && medPreventivaImp != true){
-                    if(this.getComprobacionImplementacion().getResultado() == EnumComprobacion.NO_COMPROBADA)
-                        this.setEstadoAccion(EnumEstado.PROCESO_IMP);
+                boolean medCorrectivaImp = true;
+                // chequear implementacion de todas las medidas correctivas
+                for(Actividad medida: this.MedidasCorrectivas){
+                    if(medida.getFechaImplementacion()==null) medCorrectivaImp = false;
+                }
+                boolean medPreventivaImp = true;
+                // chequear implementacion de todas las medidas preventivas
+                for(Actividad medida: this.MedidasPreventivas){
+                    if(medida.getFechaImplementacion()==null) medPreventivaImp = false;
+                }
+                
+                // comparar resultados de chequeos y setear nuevo estado
+                if(medCorrectivaImp == true && medPreventivaImp == true){
+                    if(this.getComprobacionEficacia().getResultado()!= EnumComprobacion.NO_COMPROBADA) {
+                        this.setEstadoAccion(EnumEstado.CERRADA);
+                    }else{
+                        this.setEstadoAccion(EnumEstado.PROCESO_VER);
+                    }
                 }else{
-                    if(medCorrectivaImp != true && medPreventivaImp != true){
-                        this.setEstadoAccion(EnumEstado.PENDIENTE);
+                    if(medCorrectivaImp == true && medPreventivaImp != true){
+                        if(this.getComprobacionImplementacion().getResultado() == EnumComprobacion.NO_COMPROBADA)
+                            this.setEstadoAccion(EnumEstado.PROCESO_IMP);
+                    }else{
+                        if(medCorrectivaImp != true && medPreventivaImp != true){
+                            this.setEstadoAccion(EnumEstado.PENDIENTE);
+                        }
                     }
                 }
             }
