@@ -137,12 +137,12 @@
                                                         </h:link>
                                                     </li>
                                                     <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != null}">
-                                                        <li><h:link value="Editar Datos" outcome="EditarAccionPreventiva.xhtml?id=#{accion.value.id}" >                                                        
+                                                        <li><h:link value="Editar Datos" outcome="EditarAccionPreventiva.xhtml?id=#{accion.key}"  >                                                        
                                                                 <f:ajax onevent="indicador" />
                                                             </h:link>
                                                         </li>
                                                         <c:if test="#{accion.value.estadoAccion != 'CERRADA'}">
-                                                            <li><h:link  value="Agregar Actividades" >                                                        
+                                                            <li><h:link  value="Agregar Actividades" outcome="ActividadesPreventiva.xhtml?id=#{accion.key}&amp;editar=0" >                                                        
                                                                     <f:ajax onevent="indicador" />
                                                                 </h:link>
                                                             </li>                                    
