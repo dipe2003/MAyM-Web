@@ -6,7 +6,6 @@
 package com.dperez.maym.web.acciones.preventivas;
 
 import com.dperez.maymweb.accion.Accion;
-import com.dperez.maymweb.accion.acciones.Mejora;
 import com.dperez.maymweb.accion.acciones.Preventiva;
 import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.empresa.Empresa;
@@ -22,7 +21,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
@@ -49,9 +47,6 @@ public class ActividadesAP implements Serializable {
     
     private Map<Integer, Usuario> ListaUsuariosEmpresa;
     
-    private Map<Integer, Actividad> ListaActividades;
-    private int ActividadSeleccionada;
-    
     private Date FechaEstimadaImplementacionActividad;
     private String StrFechaEstimada;
     private String DescripcionActividad;
@@ -59,8 +54,6 @@ public class ActividadesAP implements Serializable {
     
     //  Getters
     public Map<Integer, Usuario> getListaUsuariosEmpresa() {return ListaUsuariosEmpresa;}
-    public Map<Integer, Actividad> getListaActividades() {return ListaActividades;}
-    public int getActividadSeleccionada() {return ActividadSeleccionada;}
     public Date getFechaEstimadaImplementacionActividad() {return FechaEstimadaImplementacionActividad;}
     public String getStrFechaEstimada(){
         SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
@@ -78,8 +71,6 @@ public class ActividadesAP implements Serializable {
     
     //  Setters
     public void setListaUsuariosEmpresa(Map<Integer, Usuario> ListaUsuariosEmpresa) {this.ListaUsuariosEmpresa = ListaUsuariosEmpresa;}
-    public void setListaActividades(Map<Integer, Actividad> ListaActividades) {this.ListaActividades = ListaActividades;}
-    public void setActividadSeleccionada(int ActividadSeleccionada) {this.ActividadSeleccionada = ActividadSeleccionada;}
     public void setFechaEstimadaImplementacionActividad(Date FechaEstimadaImplementacionActividad) {this.FechaEstimadaImplementacionActividad = FechaEstimadaImplementacionActividad;}
     public void setStrFechaEstimada(String StrFechaEstimada) {
         Calendar cal = Calendar.getInstance();
@@ -163,17 +154,16 @@ public class ActividadesAP implements Serializable {
             AccionSeleccionada = (Preventiva) fLectura.GetAccion(idAccion);
             if(IdActividadEditar > 0){
                 //  Actividades Preventivas
-                ListaActividades = new HashMap<>();
                 if(!((Preventiva)AccionSeleccionada).getActividades().isEmpty()){
                     List<Actividad> actividades = ((Preventiva)AccionSeleccionada).getActividades();
                     for(Actividad actividad: actividades ){
-                        ListaActividades.put(actividad.getIdActividad(), actividad);
+                        if(actividad.getIdActividad() == IdActividadEditar){
+                            FechaEstimadaImplementacionActividad = actividad.getFechaEstimadaImplementacion();
+                            DescripcionActividad =  actividad.getDescripcion();
+                            ResponsableActividad = actividad.getResponsableImplementacion().getId();
+                        }
                     }
                 }
-                Actividad actividad = ListaActividades.get(IdActividadEditar);
-                FechaEstimadaImplementacionActividad = actividad.getFechaEstimadaImplementacion();
-                DescripcionActividad =  actividad.getDescripcion();
-                ResponsableActividad = actividad.getResponsableImplementacion().getId();
             }
             //  Usuarios
             this.ListaUsuariosEmpresa = new HashMap<>();
@@ -184,7 +174,6 @@ public class ActividadesAP implements Serializable {
                 for(Usuario usuario: tmpUsuarios){
                     ListaUsuariosEmpresa.put(usuario.getId(), usuario);
                 }
-                ListaUsuariosEmpresa = new TreeMap<>(ListaUsuariosEmpresa);
             }
         }
     }

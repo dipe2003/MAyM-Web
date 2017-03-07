@@ -338,8 +338,7 @@ public class EditarAccionMejora implements Serializable {
     
     /**
      * Actualiza la accion correctiva con los datos nuevos.
-     * Si no se actualizo se muestra mensaje de error.
-     * Si se creo se redirige a la pagina de listado de acciones.
+     * Si se muestra mensaje de confirmacion.
      * @throws java.io.IOException
      */
     public void editarAccion() throws IOException{
@@ -350,9 +349,8 @@ public class EditarAccionMejora implements Serializable {
             FacesContext.getCurrentInstance().addMessage("form_editar_accion:guardar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
-            // Si la actualizacion se realizo correctamente redirige a lista de acciones.
-            String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Mejoras/ListarMejoras.xhtml");
+            FacesContext.getCurrentInstance().addMessage("form_editar_accion:guardar_accion", new FacesMessage(SEVERITY_INFO, "Los datos se guardaron.", "Los datos se guardaron." ));
+            FacesContext.getCurrentInstance().renderResponse();
         }
     }
     

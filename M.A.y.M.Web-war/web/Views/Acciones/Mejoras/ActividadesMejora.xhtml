@@ -13,49 +13,7 @@
         </div>
         <div class="container-fluid" style="padding: 1%">
             <h:form id="form_agregar_actividades">
-                
-                <!-- Descripcion -->                
-                <div class="panel panel-primary">
-                    <div class="panel-heading">Datos Registrados</div>
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <strong><label for="fecha_deteccion">Fecha Deteccion:</label></strong>
-                                    <h:outputText id="fecha_deteccion" class="form-control" value="#{actividadesAM.accionSeleccionada.fechaDeteccion}" />
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <strong><label for="area">Area / Sector:</label></strong>
-                                    <h:outputText id="area" class="form-control" value="#{actividadesAM.accionSeleccionada.areaSectorAccion.nombre}" />
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <strong><label for="tipo_deteccion">Tipo de Deteccion:</label></strong>                                    
-                                    <h:outputText id="tipo_deteccion" class="form-control" value="#{actividadesAM.accionSeleccionada.generadaPor.tipo}" />
-                                </div> 
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <strong><label for="deteccion">Generada Por:</label></strong>
-                                    <h:outputText id="deteccion" class="form-control" value="#{actividadesAM.accionSeleccionada.generadaPor.nombre}" />
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <strong><label for="descripcion">Descripcion:</label></strong>   
-                            <h:inputTextarea readonly="true" id="descripcion" class="form-control" style="background-color: white;" value="#{actividadesAM.accionSeleccionada.descripcion}" />
-                        </div>                      
-                        <div class="form-group">
-                            <strong><label for="analisis_causa">Analisis de Causa Raiz:</label></strong>                                    
-                            <h:inputTextarea readonly="true" id="analisis_causa" class="form-control" style="background-color: white;" value="#{actividadesAM.accionSeleccionada.analisisCausa}" />
-                        </div>                         
-                    </div>
-                </div> 
-                
+                               
                 <!-- Actividades de Mejora -->                        
                 <div class="panel panel-primary">
                     <div class="panel-heading">Actividades para la Mejora:</div>

@@ -435,8 +435,7 @@ public class EditarAccionCorrectiva implements Serializable {
     
     /**
      * Actualiza la accion correctiva con los datos nuevos.
-     * Si no se actualizo se muestra mensaje de error.
-     * Si se creo se redirige a la pagina de listado de acciones.
+     * Si se muestra mensaje de confirmacion.
      * @throws java.io.IOException
      */
     public void editarAccion() throws IOException{
@@ -448,8 +447,8 @@ public class EditarAccionCorrectiva implements Serializable {
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             // Si la actualizacion se realizo correctamente redirige a lista de acciones.
-            String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/ListarCorrectivas.xhtml");
+            FacesContext.getCurrentInstance().addMessage("form_editar_accion:guardar_accion", new FacesMessage(SEVERITY_INFO, "Los datos se guardaron.", "Los datos se guardaron." ));
+            FacesContext.getCurrentInstance().renderResponse();
         }
     }
     

@@ -7,7 +7,6 @@ package com.dperez.maym.web.acciones.correctivas;
 
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.acciones.Correctiva;
-import com.dperez.maymweb.accion.acciones.EnumTipoDesvio;
 import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeDatos;
@@ -22,7 +21,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
@@ -48,21 +46,10 @@ public class ActividadesAC implements Serializable {
     private String TipoActividad;
     private int IdActividadEditar;
     
-    private EnumTipoDesvio TipoDesvio;
-    
-    private boolean hayProducto;
-    
-    private Map<Integer, Usuario> ListaUsuariosEmpresa;
-    
-    private Map<Integer, Actividad> ListaMedidasCorrectivas;
-    private int MedidaCorrectivaSeleccionada;
-    
-    private Map<Integer, Actividad> ListaMedidasPreventivas;
-    private int MedidaPreventivaSeleccionada;
+    private Map<Integer, Usuario> ListaUsuariosEmpresa;    
     
     private Date FechaEstimadaImplementacionMedidaCorrectiva;
-    private String strFechaEstimadaCorrectiva;
-    
+    private String strFechaEstimadaCorrectiva;    
     private String DescripcionMedidaCorrectiva;
     private int ResponsableMedidaCorrectiva;
     
@@ -77,15 +64,7 @@ public class ActividadesAC implements Serializable {
     
     public int getIdActividadEditar() {return IdActividadEditar;}
     
-    public EnumTipoDesvio getTipoDesvio() {return TipoDesvio;}
-    
-    public boolean isHayProducto() {return hayProducto;}
-    
     public Map<Integer, Usuario> getListaUsuariosEmpresa() {return ListaUsuariosEmpresa;}
-    public Map<Integer, Actividad> getListaMedidasCorrectivas() {return ListaMedidasCorrectivas;}
-    public int getMedidaCorrectivaSeleccionada() {return MedidaCorrectivaSeleccionada;}
-    public Map<Integer, Actividad> getListaMedidasPreventivas() {return ListaMedidasPreventivas;}
-    public int getMedidaPreventivaSeleccionada() {return MedidaPreventivaSeleccionada;}
     public Date getFechaEstimadaImplementacionMedidaCorrectiva() {return FechaEstimadaImplementacionMedidaCorrectiva;}
     public String getStrFechaEstimadaCorrectiva(){
         SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
@@ -115,15 +94,7 @@ public class ActividadesAC implements Serializable {
     
     public void setIdActividadEditar(int IdActividadEditar) {this.IdActividadEditar = IdActividadEditar;}
     
-    public void setTipoDesvio(EnumTipoDesvio TipoDesvio) {this.TipoDesvio = TipoDesvio;}
-    
-    public void setHayProducto(boolean hayProducto) {this.hayProducto = hayProducto;}
-    
     public void setListaUsuariosEmpresa(Map<Integer, Usuario> ListaUsuariosEmpresa) {this.ListaUsuariosEmpresa = ListaUsuariosEmpresa;}
-    public void setListaMedidasCorrectivas(Map<Integer, Actividad> ListaMedidasCorrectivas) {this.ListaMedidasCorrectivas = ListaMedidasCorrectivas;}
-    public void setMedidaCorrectivaSeleccionada(int MedidaCorrectivaSeleccionada) {this.MedidaCorrectivaSeleccionada = MedidaCorrectivaSeleccionada;}
-    public void setListaMedidasPreventivas(Map<Integer, Actividad> ListaMedidasPreventivas) {this.ListaMedidasPreventivas = ListaMedidasPreventivas;}
-    public void setMedidaPreventivaSeleccionada(int MedidaPreventivaSeleccionada) {this.MedidaPreventivaSeleccionada = MedidaPreventivaSeleccionada;}
     public void setFechaEstimadaImplementacionMedidaCorrectiva(Date FechaEstimadaImplementacionMedidaCorrectiva) {this.FechaEstimadaImplementacionMedidaCorrectiva = FechaEstimadaImplementacionMedidaCorrectiva;}
     public void setStrFechaEstimadaCorrectiva(String strFechaEstimadaCorrectiva) {
         Calendar cal = Calendar.getInstance();
@@ -271,30 +242,26 @@ public class ActividadesAC implements Serializable {
             if(IdActividadEditar > 0){
                 if(TipoActividad.equalsIgnoreCase("correctiva")){
                     //  Medidas Correctivas
-                    ListaMedidasCorrectivas = new HashMap<>();
                     if(!((Correctiva)AccionSeleccionada).getMedidasCorrectivas().isEmpty()){
                         List<Actividad> medidas = ((Correctiva)AccionSeleccionada).getMedidasCorrectivas();
                         for(Actividad medida: medidas ){
-                            ListaMedidasCorrectivas.put(medida.getIdActividad(), medida);
+                            if(medida.getIdActividad() == IdActividadEditar){
+                                FechaEstimadaImplementacionMedidaCorrectiva = medida.getFechaEstimadaImplementacion();
+                                DescripcionMedidaCorrectiva =  medida.getDescripcion();
+                                ResponsableMedidaCorrectiva = medida.getResponsableImplementacion().getId();
+                            }
                         }
                     }
-                    Actividad actividad = ListaMedidasCorrectivas.get(IdActividadEditar);
-                    FechaEstimadaImplementacionMedidaCorrectiva = actividad.getFechaEstimadaImplementacion();
-                    DescripcionMedidaCorrectiva =  actividad.getDescripcion();
-                    ResponsableMedidaCorrectiva = actividad.getResponsableImplementacion().getId();
                 }else{
                     //  Medidas Preventivas
-                    ListaMedidasPreventivas = new HashMap<>();
                     if(!((Correctiva)AccionSeleccionada).getMedidasPreventivas().isEmpty()){
                         List<Actividad> medidas = ((Correctiva)AccionSeleccionada).getMedidasPreventivas();
                         for(Actividad medida: medidas ){
-                            ListaMedidasPreventivas.put(medida.getIdActividad(), medida);
+                            FechaEstimadaImplementacionMedidaCorrectiva = medida.getFechaEstimadaImplementacion();
+                            DescripcionMedidaCorrectiva =  medida.getDescripcion();
+                            ResponsableMedidaCorrectiva = medida.getResponsableImplementacion().getId();
                         }
                     }
-                    Actividad actividad = ListaMedidasPreventivas.get(IdActividadEditar);
-                    FechaEstimadaImplementacionMedidaPreventiva = actividad.getFechaEstimadaImplementacion();
-                    DescripcionMedidaPreventiva =  actividad.getDescripcion();
-                    ResponsableMedidaPreventiva = actividad.getResponsableImplementacion().getId();
                 }
             }
             //  Usuarios

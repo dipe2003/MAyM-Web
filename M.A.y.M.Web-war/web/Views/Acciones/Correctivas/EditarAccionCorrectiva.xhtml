@@ -57,7 +57,7 @@
                                 <f:ajax render="panel_nueva_deteccion"/>
                             </h:selectOneMenu>
                         </div>                                              
-                        <h:panelGroup id="panel_nueva_deteccion" >
+                        <h:panelGroup id="panel_nueva_deteccion">
                             <c:if test="#{(editarAccionCorrectiva.deteccionSeleccionada == 0) and (editarAccionCorrectiva.deteccionSeleccionada ne -1) }">
                                 <div class="form-group">
                                     <strong><label for="tipo_nueva_deteccion" >Tipo de Deteccion:</label></strong>
@@ -258,7 +258,8 @@
                                                             <ul class="dropdown-menu" role="menu">                               
                                                                 <c:choose>
                                                                     <c:when test="#{correctiva.value.fechaImplementacion == null}">
-                                                                        <li><h:link value="Editar Actividad" outcome="ActividadesCorrectiva.xhtml?id=#{editarAccionCorrectiva.idAccionSeleccionada}&amp;tipo=correctiva&amp;editar=#{correctiva.key}" >                                                                
+                                                                        <li><h:link value="Editar Actividad" onclick="if (! confirm('Si se realizaron cambios y no se guardaron se perderan. Continuar?')) return false"
+                                                                                    outcome="ActividadesCorrectiva.xhtml?id=#{editarAccionCorrectiva.idAccionSeleccionada}&amp;tipo=correctiva&amp;editar=#{correctiva.key}" >                                                                
                                                                                 <f:ajax onevent="indicador" />
                                                                             </h:link>
                                                                         </li>
@@ -280,13 +281,14 @@
                                 </table>
                             </c:when>
                             <c:otherwise>
-                               <div class="alert alert-info">
+                                <div class="alert alert-info">
                                     <strong>Info!</strong> No se definieron medidas preventivas.
                                 </div>
                             </c:otherwise>
                         </c:choose>
                         <div class="form-group-sm">
-                            <h:link id="agregar_medida_correctiva" value="Agregar Medida Correctiva" class="btn btn-primary" outcome="ActividadesCorrectiva.xhtml?id=#{editarAccionCorrectiva.idAccionSeleccionada}&amp;tipo=correctiva&amp;editar=0">
+                            <h:link id="agregar_medida_correctiva" value="Agregar Medida Correctiva" class="btn btn-primary" onclick="if (! confirm('Si se realizaron cambios y no se guardaron se perderan. Continuar?')) return false"
+                                    outcome="ActividadesCorrectiva.xhtml?id=#{editarAccionCorrectiva.idAccionSeleccionada}&amp;tipo=correctiva&amp;editar=0">
                                 <f:ajax onevent="indicador"/>
                             </h:link>
                         </div>
@@ -336,7 +338,8 @@
                                                             <ul class="dropdown-menu" role="menu">                               
                                                                 <c:choose>
                                                                     <c:when test="#{preventiva.value.fechaImplementacion == null}">
-                                                                        <li><h:link value="Editar Actividad" outcome="ActividadesCorrectiva.xhtml?id=#{editarAccionCorrectiva.idAccionSeleccionada}&amp;tipo=preventiva&amp;editar=#{preventiva.key}" >                                                                
+                                                                        <li><h:link value="Editar Actividad" onclick="if (! confirm('Si se realizaron cambios y no se guardaron se perderan. Continuar?')) return false"
+                                                                                    outcome="ActividadesCorrectiva.xhtml?id=#{editarAccionCorrectiva.idAccionSeleccionada}&amp;tipo=preventiva&amp;editar=#{preventiva.key}" >                                                                
                                                                                 <f:ajax onevent="indicador" />
                                                                             </h:link>
                                                                         </li>
@@ -364,7 +367,8 @@
                             </c:otherwise>
                         </c:choose>
                         <div class="form-group-sm">
-                            <h:link id="agregar_medida_preventiva" value="Agregar Medida Preventiva" class="btn btn-primary" outcome="ActividadesCorrectiva.xhtml?id=#{editarAccionCorrectiva.idAccionSeleccionada}&amp;tipo=preventiva&amp;editar=0">
+                            <h:link id="agregar_medida_preventiva" value="Agregar Medida Preventiva" class="btn btn-primary" onclick="if (! confirm('Si se realizaron cambios y no se guardaron se perderan. Continuar?')) return false"
+                                    outcome="ActividadesCorrectiva.xhtml?id=#{editarAccionCorrectiva.idAccionSeleccionada}&amp;tipo=preventiva&amp;editar=0">
                                 <f:ajax onevent="indicador"/>
                             </h:link>
                         </div>
@@ -474,17 +478,27 @@
                         <h:message for="datos_producto" class="msj_error"/>
                     </div>
                     <div class="form-group-sm">
-                        <h:message for="guardar_accion" class="msj_error"/>
+                        <h:message for="guardar_accion" class="msj_info"/>
                     </div>
                 </h:panelGroup>
                 
-                <div class="form-group-sm">
-                    <h:commandButton id="guardar_accion" class="form-control btn-success" value="Guardar" >
-                        <f:ajax execute="@form" event="click" listener="#{editarAccionCorrectiva.editarAccion()}" onevent="indicador" render="panel_mensajes"/>
-                    </h:commandButton>
-                    <h:commandButton id="eliminar_accion" class="form-control btn-danger" value="Eliminar" onclick="if (! confirm('Seguro que va a eliminar esta accion? Se eliminaran todos los datos relacionados.')) return false" >
-                        <f:ajax event="click" listener="#{editarAccionCorrectiva.eliminarAccion()}" onevent="indicador" render="panel_mensajes"/>
-                    </h:commandButton>
+                <div class="row">
+                    <div class='col-lg-4' >
+                        <h:commandButton id="guardar_accion" class="btn btn-default" style="width: 99%" value="Guardar" >
+                            <f:ajax execute="@form" event="click" listener="#{editarAccionCorrectiva.editarAccion()}" onevent="indicador" render="panel_mensajes"/>
+                        </h:commandButton>
+                    </div>
+                    <div class='col-lg-4' >
+                        <h:link id="cerrar_accion" class="btn btn-default" style="width: 99%" value="Cerrar" onclick="if (! confirm('Los cambios no guardados se perderan. Continar?')) return false"
+                                outcome="ListarCorrectivas.xhtml" />
+                    </div>
+                    <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR'}">
+                        <div class='col-lg-4' >
+                            <h:commandButton id="eliminar_accion" class="btn btn-danger" style="width: 99%" value="Eliminar" onclick="if (! confirm('Seguro que va a eliminar esta accion? Se eliminaran todos los datos relacionados.')) return false" >
+                                <f:ajax event="click" listener="#{editarAccionCorrectiva.eliminarAccion()}" onevent="indicador" render="panel_mensajes"/>
+                            </h:commandButton>
+                        </div>
+                    </c:if>
                 </div>
             </h:form>
         </div>
