@@ -306,7 +306,6 @@ public class ActividadesAC implements Serializable {
                 for(Usuario usuario: tmpUsuarios){
                     ListaUsuariosEmpresa.put(usuario.getId(), usuario);
                 }
-                ListaUsuariosEmpresa = new TreeMap<>(ListaUsuariosEmpresa);
             }
         }
     }

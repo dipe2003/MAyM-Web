@@ -22,12 +22,11 @@
                                 <h:outputText value="#{verCorrectiva.empresaAccion.nombreEmpresa}" />
                             </div>
                             <div class="col-sm-4">
-                                <h:outputText value="#{verCorrectiva.empresaAccion.descripcion}" />
+                                <h:outputText value="#{verCorrectiva.empresaAccion.descripcionEmpresa}" />
                             </div>
                             <div class="col-sm-4">
-                                <h:outputText value="Establecimiento #{verCorrectiva.empresaAccion.id}" />
-                            </div>
-                            
+                                <h:outputText value="Establecimiento #{verCorrectiva.empresaAccion.numeroEmpresa}" />
+                            </div>                            
                         </div>
                     </div> 
                 </div>
@@ -122,92 +121,96 @@
                     </div>
                 </div>
                 
-                <!-- Medidas Correctivas -->
-                <div class="panel panel-primary">
-                    <div class="panel-heading">Medidas Correctivas / Correcciones:</div>
-                    <div class="panel-body">
-                        <c:choose>
-                            <c:when test="#{not empty verCorrectiva.medidasCorrectivas}">
-                                <table class="table table-hover table-striped table-responsive">
-                                    <thead>
-                                        <tr>
-                                            <th>Descripcion:</th>
-                                            <th>Fecha Estimada:</th>
-                                            <th>Responsable Implementacion:</th>
-                                            <th>Implementada:</th>
-                                        </tr>                                                
-                                    </thead>
-                                    <tbody>
-                                        <c:forEach items="#{verCorrectiva.medidasCorrectivas}" var="correctiva" >
-                                            <tr>
-                                                <td>#{correctiva.value.descripcion}</td>
-                                                <td>#{correctiva.value.fechaEstimadaImplementacion}</td>
-                                                <td>#{correctiva.value.responsableImplementacion.nombre} #{correctiva.value.responsableImplementacion.apellido}</td>
-                                                <td>
-                                                    <c:if test="#{correctiva.value.fechaImplementacion == null}" >
-                                                        Sin Implementar
-                                                    </c:if>
-                                                    <c:if test="#{correctiva.value.fechaImplementacion != null}" >
-                                                        #{correctiva.value.fechaImplementacion}
-                                                    </c:if>
-                                                </td>
-                                            </tr>                                            
-                                        </c:forEach>
-                                    </tbody>
-                                </table>
-                            </c:when>
-                            <c:otherwise>
-                                <div class="alert alert-info">
-                                    <strong>Info!</strong> No se definieron medidas correctivas.
-                                </div>
-                            </c:otherwise>
-                        </c:choose>
+                <!-- Medidas Correctivas y Preventivas -->                
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">Medidas Correctivas / Correcciones:</div>
+                            <div class="panel-body">
+                                <c:choose>
+                                    <c:when test="#{not empty verCorrectiva.medidasCorrectivas}">
+                                        <table class="table table-hover table-striped table-responsive">
+                                            <thead>
+                                                <tr>
+                                                    <th>Descripcion:</th>
+                                                    <th>Fecha Estimada:</th>
+                                                    <th>Responsable Implementacion:</th>
+                                                    <th>Implementada:</th>
+                                                </tr>                                                
+                                            </thead>
+                                            <tbody>
+                                                <c:forEach items="#{verCorrectiva.medidasCorrectivas}" var="correctiva" >
+                                                    <tr>
+                                                        <td>#{correctiva.value.descripcion}</td>
+                                                        <td>#{correctiva.value.fechaEstimadaImplementacion}</td>
+                                                        <td>#{correctiva.value.responsableImplementacion.nombre} #{correctiva.value.responsableImplementacion.apellido}</td>
+                                                        <td>
+                                                            <c:if test="#{correctiva.value.fechaImplementacion == null}" >
+                                                                Sin Implementar
+                                                            </c:if>
+                                                            <c:if test="#{correctiva.value.fechaImplementacion != null}" >
+                                                                #{correctiva.value.fechaImplementacion}
+                                                            </c:if>
+                                                        </td>
+                                                    </tr>                                            
+                                                </c:forEach>
+                                            </tbody>
+                                        </table>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="alert alert-info">
+                                            <strong>Info!</strong> No se definieron medidas correctivas.
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <!-- Medidas Preventivas -->
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">Medidas Preventivas / Prevencion de Recurrencia</div>
+                            <div class="panel-body">
+                                <c:choose>
+                                    <c:when test="#{not empty verCorrectiva.medidasPreventivas}">
+                                        <table class="table table-hover table-striped table-responsive">
+                                            <thead>
+                                                <tr>
+                                                    <th>Descripcion:</th>
+                                                    <th>Fecha Estimada:</th>
+                                                    <th>Responsable Implementacion:</th>
+                                                    <th>Implementada:</th>
+                                                </tr>                                                
+                                            </thead>
+                                            <tbody>
+                                                <c:forEach items="#{verCorrectiva.medidasPreventivas}" var="preventivas" >
+                                                    <tr>
+                                                        <td>#{preventivas.value.descripcion}</td>
+                                                        <td>#{preventivas.value.fechaEstimadaImplementacion}</td>
+                                                        <td>#{preventivas.value.responsableImplementacion.nombre} #{preventivas.value.responsableImplementacion.apellido}</td>
+                                                        <td>
+                                                            <c:if test="#{preventivas.value.fechaImplementacion == null}" >
+                                                                Sin Implementar
+                                                            </c:if>
+                                                            <c:if test="#{preventivas.value.fechaImplementacion != null}" >
+                                                                #{preventivas.value.fechaImplementacion}
+                                                            </c:if>
+                                                        </td>
+                                                    </tr>                                            
+                                                </c:forEach>
+                                            </tbody>
+                                        </table>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="alert alert-info">
+                                            <strong>Info!</strong> No se definieron medidas preventivas.
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                
-                <!-- Medidas Preventivas -->
-                <div class="panel panel-primary">
-                    <div class="panel-heading">Medidas Preventivas / Prevencion de Recurrencia</div>
-                    <div class="panel-body">
-                        <c:choose>
-                            <c:when test="#{not empty verCorrectiva.medidasPreventivas}">
-                                <table class="table table-hover table-striped table-responsive">
-                                    <thead>
-                                        <tr>
-                                            <th>Descripcion:</th>
-                                            <th>Fecha Estimada:</th>
-                                            <th>Responsable Implementacion:</th>
-                                            <th>Implementada:</th>
-                                        </tr>                                                
-                                    </thead>
-                                    <tbody>
-                                        <c:forEach items="#{verCorrectiva.medidasPreventivas}" var="preventivas" >
-                                            <tr>
-                                                <td>#{preventivas.value.descripcion}</td>
-                                                <td>#{preventivas.value.fechaEstimadaImplementacion}</td>
-                                                <td>#{preventivas.value.responsableImplementacion.nombre} #{preventivas.value.responsableImplementacion.apellido}</td>
-                                                <td>
-                                                    <c:if test="#{preventivas.value.fechaImplementacion == null}" >
-                                                        Sin Implementar
-                                                    </c:if>
-                                                    <c:if test="#{preventivas.value.fechaImplementacion != null}" >
-                                                        #{preventivas.value.fechaImplementacion}
-                                                    </c:if>
-                                                </td>
-                                            </tr>                                            
-                                        </c:forEach>
-                                    </tbody>
-                                </table>
-                            </c:when>
-                            <c:otherwise>
-                                <div class="alert alert-info">
-                                    <strong>Info!</strong> No se definieron medidas preventivas.
-                                </div>
-                            </c:otherwise>
-                        </c:choose>
-                    </div>
-                </div>
-                
                 <!-- Adjuntos -->
                 <div class="panel panel-primary">
                     <div class="panel-heading">Archivos Adjuntos / Anexos:</div>
