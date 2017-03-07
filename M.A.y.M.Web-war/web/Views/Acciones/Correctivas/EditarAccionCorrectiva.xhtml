@@ -483,17 +483,17 @@
                 </h:panelGroup>
                 
                 <div class="row">
-                    <div class='col-lg-4' >
+                    <div class='col-sm-4' >
                         <h:commandButton id="guardar_accion" class="btn btn-default" style="width: 99%" value="Guardar" >
                             <f:ajax execute="@form" event="click" listener="#{editarAccionCorrectiva.editarAccion()}" onevent="indicador" render="panel_mensajes"/>
                         </h:commandButton>
                     </div>
-                    <div class='col-lg-4' >
+                    <div class='col-sm-4' >
                         <h:link id="cerrar_accion" class="btn btn-default" style="width: 99%" value="Cerrar" onclick="if (! confirm('Los cambios no guardados se perderan. Continar?')) return false"
                                 outcome="ListarCorrectivas.xhtml" />
                     </div>
                     <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR'}">
-                        <div class='col-lg-4' >
+                        <div class='col-sm-4' >
                             <h:commandButton id="eliminar_accion" class="btn btn-danger" style="width: 99%" value="Eliminar" onclick="if (! confirm('Seguro que va a eliminar esta accion? Se eliminaran todos los datos relacionados.')) return false" >
                                 <f:ajax event="click" listener="#{editarAccionCorrectiva.eliminarAccion()}" onevent="indicador" render="panel_mensajes"/>
                             </h:commandButton>

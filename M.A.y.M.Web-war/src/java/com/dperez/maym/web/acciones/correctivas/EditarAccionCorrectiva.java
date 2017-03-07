@@ -264,6 +264,7 @@ public class EditarAccionCorrectiva implements Serializable {
                 hayProductoAfectado = true;
             }
             actualizarListaAdjuntos();
+            MapAdjuntos = new HashMap<>();
         }
     }
     
@@ -464,8 +465,10 @@ public class EditarAccionCorrectiva implements Serializable {
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             // Eliminar todos los archivos adjuntos del disco.
-            for(Adjunto adjunto: MapAdjuntos.values()){
-                cArchivo.BorrarArchivo(adjunto.getUbicacion());
+            if(!MapAdjuntos.isEmpty()){
+                for(Adjunto adjunto: MapAdjuntos.values()){
+                    cArchivo.BorrarArchivo(adjunto.getUbicacion());
+                }
             }
             // Si la eliminacion se realizo correctamente redirige a lista de acciones.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
