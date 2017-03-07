@@ -18,20 +18,27 @@
                 <div class="panel panel-primary">
                     <div class="panel-heading">Descripcion</div>
                     <div class="panel-body">
-                        <div class="form-group">
-                            <strong><label for="fecha_deteccion">Fecha Deteccion:</label></strong>
-                            <h:inputText id="fecha_deteccion" class="form-control calendario" p:placeholder="Fecha de deteccion de la mejora." 
-                                         value="#{editarAccionMejora.strFechaDeteccion}" required="true" requiredMessage="No se ingreso Fecha de Deteccion."/>
+                        <div class="row">
+                            <div class="col-sm-6" >
+                                <div class="form-group">
+                                    <strong><label for="fecha_deteccion">Fecha Deteccion:</label></strong>
+                                    <h:inputText id="fecha_deteccion" class="form-control calendario" p:placeholder="Fecha de deteccion de la mejora." 
+                                                 value="#{editarAccionMejora.strFechaDeteccion}" required="true" requiredMessage="No se ingreso Fecha de Deteccion."/>
+                                </div>
+                            </div>
+                            <div class="col-sm-6" >
+                                <div class="form-group">
+                                    <strong><label for="area">Area / Sector:</label></strong>
+                                    <h:selectOneMenu id="area" class="form-control" value="#{editarAccionMejora.areaSectorAccionSeleccionada}" required="true">
+                                        <f:selectItem itemLabel="-- Seleccionar Area ---"  itemDisabled="true"  noSelectionOption="true"  />
+                                        <c:forEach items="#{editarAccionMejora.listaAreasSectores}" var="area">
+                                            <f:selectItem itemLabel="#{area.value.nombre}" itemValue="#{area.value.id}" />
+                                        </c:forEach>
+                                    </h:selectOneMenu>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <strong><label for="area">Area / Sector:</label></strong>
-                            <h:selectOneMenu id="area" class="form-control" value="#{editarAccionMejora.areaSectorAccionSeleccionada}" required="true">
-                                <f:selectItem itemLabel="-- Seleccionar Area ---"  itemDisabled="true"  noSelectionOption="true"  />
-                                <c:forEach items="#{editarAccionMejora.listaAreasSectores}" var="area">
-                                    <f:selectItem itemLabel="#{area.value.nombre}" itemValue="#{area.value.id}" />
-                                </c:forEach>
-                            </h:selectOneMenu>
-                        </div>
+                                                
                         <div class="form-group">
                             <strong><label for="tipo_deteccion">Tipo de Deteccion:</label></strong>                                    
                             <h:selectOneRadio id="tipo_deteccion" value="#{editarAccionMejora.tipoDeDeteccionSeleccionada}">

@@ -17,21 +17,28 @@
                 <div class="panel panel-primary">
                     <div class="panel-heading">Descripcion</div>
                     <div class="panel-body">
-                        <div class="form-group">
-                            <strong><label for="fecha_deteccion">Fecha Deteccion:</label></strong>
-                            <h:inputText id="fecha_deteccion" class="form-control calendario" p:placeholder="Fecha de deteccion de la accion preventiva." 
-                                         value="#{editarAccionPreventiva.strFechaDeteccion}" required="true" requiredMessage="No se ingreso fecha de deteccion."/>
-                        </div>
-                        <div class="form-group">
-                            <strong><label for="area">Area / Sector:</label></strong>
-                            <h:selectOneMenu id="area" class="form-control" value="#{editarAccionPreventiva.areaSectorAccionSeleccionada}"
-                                             required="true" requiredMessage="No se selecciono area">
-                                <f:selectItem itemLabel="-- Seleccionar Area ---"  itemDisabled="true"  noSelectionOption="true"  />
-                                <c:forEach items="#{editarAccionPreventiva.listaAreasSectores}" var="area">
-                                    <f:selectItem itemLabel="#{area.value.nombre}" itemValue="#{area.value.id}" />
-                                </c:forEach>
-                            </h:selectOneMenu>
-                        </div>
+                        <div class="row">
+                            <div class="col-sm-6" >
+                                <div class="form-group">
+                                    <strong><label for="fecha_deteccion">Fecha Deteccion:</label></strong>
+                                    <h:inputText id="fecha_deteccion" class="form-control calendario" p:placeholder="Fecha de deteccion de la accion preventiva." 
+                                                 value="#{editarAccionPreventiva.strFechaDeteccion}" required="true" requiredMessage="No se ingreso fecha de deteccion."/>
+                                </div>
+                            </div>
+                            <div class="col-sm-6" >
+                                <div class="form-group">
+                                    <strong><label for="area">Area / Sector:</label></strong>
+                                    <h:selectOneMenu id="area" class="form-control" value="#{editarAccionPreventiva.areaSectorAccionSeleccionada}"
+                                                     required="true" requiredMessage="No se selecciono area">
+                                        <f:selectItem itemLabel="-- Seleccionar Area ---"  itemDisabled="true"  noSelectionOption="true"  />
+                                        <c:forEach items="#{editarAccionPreventiva.listaAreasSectores}" var="area">
+                                            <f:selectItem itemLabel="#{area.value.nombre}" itemValue="#{area.value.id}" />
+                                        </c:forEach>
+                                    </h:selectOneMenu>
+                                </div>
+                            </div>
+                        </div>                        
+                        
                         <div class="form-group">
                             <strong><label for="tipo_deteccion">Tipo de Deteccion:</label></strong>                                    
                             <h:selectOneRadio id="tipo_deteccion" value="#{editarAccionPreventiva.tipoDeDeteccionSeleccionada}">
@@ -314,7 +321,7 @@
                             <f:ajax execute="@form" event="click" listener="#{editarAccionPreventiva.editarAccion()}" onevent="indicador" render="panel_mensajes"/>
                         </h:commandButton>
                     </div>
-                   <div class='col-sm-4' >
+                    <div class='col-sm-4' >
                         <h:link id="cerrar_accion" class="btn btn-default" style="width: 99%" value="Cerrar" onclick="if (! confirm('Los cambios no guardados se perderan. Continar?')) return false"
                                 outcome="ListarPreventivas.xhtml" />
                     </div>
