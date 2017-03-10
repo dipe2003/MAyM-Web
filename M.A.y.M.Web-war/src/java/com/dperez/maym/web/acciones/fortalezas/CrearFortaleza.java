@@ -16,6 +16,9 @@ import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.fortaleza.Fortaleza;
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +27,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
-import static javax.faces.application.FacesMessage.SEVERITY_INFO;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -44,47 +46,67 @@ public class CrearFortaleza implements Serializable {
     private FacadeLectura fLectura;
     @Inject
     private FacadeDatos fDatos;
-    @Inject
-    private CargarArchivo cargaArchivos;
     
     private Date FechaDeteccion;
+    private String strFechaDeteccion;
+    
     private String Descripcion;
     
     private EnumTipoDeteccion[] TiposDeteccion;
     private EnumTipoDeteccion TipoDeDeteccionSeleccionada;
+    private EnumTipoDeteccion TipoNuevaDeteccion;
     private String NombreNuevaDeteccion;
-    private Map<Integer, String> ListaDetecciones;
+    private Map<Integer, Deteccion> ListaDetecciones;
     private Integer DeteccionSeleccionada;
     
-    private Map<Integer, String> ListaAreasSectores;
+    private Map<Integer, Area> ListaAreasSectores;
     private Integer AreaSectorAccionSeleccionada;
     
     //  Getters
     
     public Date getFechaDeteccion() {return FechaDeteccion;}
+    public String getStrFechaDeteccion(){
+        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
+        if (FechaDeteccion == null) {
+            return this.strFechaDeteccion;
+        }else{
+            return fDate.format(FechaDeteccion);
+        }
+    }
     public String getDescripcion() {return Descripcion;}
     
     public EnumTipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
     public EnumTipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
-    public Map<Integer, String> getListaDetecciones(){return this.ListaDetecciones;}
+    public EnumTipoDeteccion getTipoNuevaDeteccion(){return this.TipoNuevaDeteccion;}
+    public Map<Integer, Deteccion> getListaDetecciones(){return this.ListaDetecciones;}
     public String getNombreNuevaDeteccion(){return this.NombreNuevaDeteccion;}
     public Integer getDeteccionSeleccionada(){return this.DeteccionSeleccionada;}
     
-    public Map<Integer, String> getListaAreasSectores(){return this.ListaAreasSectores;}
+    public Map<Integer, Area> getListaAreasSectores(){return this.ListaAreasSectores;}
     public Integer getAreaSectorAccionSeleccionada() {return AreaSectorAccionSeleccionada;}
     
     //  Setters
     
     public void setFechaDeteccion(Date FechaDeteccion) {this.FechaDeteccion = FechaDeteccion;}
+    public void setStrFechaDeteccion(String strFechaDeteccion) {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try{
+            cal.setTime(sdf.parse(strFechaDeteccion));
+        }catch(ParseException ex){}
+        this.strFechaDeteccion = strFechaDeteccion;
+        this.FechaDeteccion = cal.getTime();
+    }
     public void setDescripcion(String Descripcion) {this.Descripcion = Descripcion;}
     
     public void setTipoDeDeteccionSeleccionada(EnumTipoDeteccion TipoDeteccion){this.TipoDeDeteccionSeleccionada = TipoDeteccion;}
     public void setTiposDeteccion(EnumTipoDeteccion[] TiposDeteccion){this.TiposDeteccion = TiposDeteccion;}
-    public void setListaDetecciones(Map<Integer, String> ListaDetecciones){this.ListaDetecciones = ListaDetecciones;}
+    public void setTipoNuevaDeteccion(EnumTipoDeteccion TipoNuevaDeteccion){this.TipoNuevaDeteccion = TipoNuevaDeteccion;}
+    public void setListaDetecciones(Map<Integer, Deteccion> ListaDetecciones){this.ListaDetecciones = ListaDetecciones;}
     public void setNombreNuevaDeteccion(String NombreNuevaDeteccion){this.NombreNuevaDeteccion = NombreNuevaDeteccion;}
     public void setDeteccionSeleccionada(Integer DeteccionSeleccionada){this.DeteccionSeleccionada = DeteccionSeleccionada;}
     
-    public void setListaAreaSectores(Map<Integer, String> ListaAreasSectores){this.ListaAreasSectores = ListaAreasSectores;}
+    public void setListaAreaSectores(Map<Integer, Area> ListaAreasSectores){this.ListaAreasSectores = ListaAreasSectores;}
     public void setAreaSectorAccionSeleccionada(Integer AreaSectorAccionSeleccionada) {this.AreaSectorAccionSeleccionada = AreaSectorAccionSeleccionada;}
     
     //  Metodos
@@ -100,10 +122,9 @@ public class CrearFortaleza implements Serializable {
         TipoDeDeteccionSeleccionada = EnumTipoDeteccion.INTERNA;
         this.ListaDetecciones = new HashMap<>();
         List<Deteccion> tmpDetecciones = fLectura.ListarDetecciones();
-        ListaDetecciones.put(0, "--- Nueva ---");
         for(Deteccion deteccion:tmpDetecciones){
             if (deteccion.getTipo().equals(EnumTipoDeteccion.INTERNA)){
-                ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
+                ListaDetecciones.put(deteccion.getId(), deteccion);
             }
         }
         
@@ -111,7 +132,7 @@ public class CrearFortaleza implements Serializable {
         ListaAreasSectores = new HashMap<>();
         List<Area> tmpAreas = fLectura.ListarAreasSectores();
         for(Area area:tmpAreas){
-            this.ListaAreasSectores.put(area.getId(), area.getNombre());
+            this.ListaAreasSectores.put(area.getId(), area);
         }
     }
     
@@ -120,10 +141,9 @@ public class CrearFortaleza implements Serializable {
      */
     public void actualizarDeteccion(){
         List<Deteccion> tmpDetecciones = fLectura.ListarDetecciones();
-        ListaDetecciones.put(0, "--- Nueva ---");
         for(Deteccion deteccion:tmpDetecciones){
             if (deteccion.getTipo().equals(TipoDeDeteccionSeleccionada)){
-                ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
+                ListaDetecciones.put(deteccion.getId(), deteccion);
             }
         }
     }
@@ -133,14 +153,14 @@ public class CrearFortaleza implements Serializable {
      * Se verifica que el nombre no sea vacio. Si es vacio no se crea y se muestra un mensaje
      */
     public void nuevaDeteccion(){
-        if(NombreNuevaDeteccion.isEmpty()){
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
-            FacesContext.getCurrentInstance().renderResponse();
-        }else{
-            // Crear Nueva Deteccion y actualizar lista
-            fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoDeDeteccionSeleccionada);
+        // Crear Nueva Deteccion y actualizar lista
+        Deteccion det = fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoNuevaDeteccion);
+        if(det != null){
             actualizarDeteccion();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_INFO, "Se agrego nueva deteccion", "Se agrego nueva deteccion" ));
+            this.DeteccionSeleccionada = det.getId();
+            this.NombreNuevaDeteccion = new String();
+        }else{
+            FacesContext.getCurrentInstance().addMessage("form_nueva_fortaleza:deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }
     }
@@ -148,7 +168,7 @@ public class CrearFortaleza implements Serializable {
     /**
      * Crea la fortaleza con los datos ingresados.
      * Si no se creo se muestra mensaje de error.
-     * Si se creo se redirige a la pagina de listado de fortalezas.
+     * Si se creo se redirige a la pagina de edicion de fortalezas.
      * @throws java.io.IOException
      */
     public void crearFortaleza() throws IOException{
@@ -160,9 +180,9 @@ public class CrearFortaleza implements Serializable {
         if(fortaleza != null){
             // redirigir a la lista de fortalezas.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Fortalezas/EditarFortaleza.xhtml?id="+fortaleza.getId());
         }else{
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Fortaleza", "No se pudo crear la Fortaleza" ));
+            FacesContext.getCurrentInstance().addMessage("form_nueva_fortaleza:crear_fortaleza", new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Fortaleza", "No se pudo crear la Fortaleza" ));
             FacesContext.getCurrentInstance().renderResponse();
         }
     }

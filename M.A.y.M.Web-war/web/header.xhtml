@@ -60,9 +60,9 @@
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">Fortalezas<span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <c:if test="#{sesionUsuario.usuarioLogueado != null}">
-                                    <li><a href="#">Nueva</a></li>
+                                    <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/Fortalezas/CrearFortaleza.xhtml">Nueva</a></li>
                                 </c:if>
-                                <li><a href="#">Listado</a></li>
+                                <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/Fortalezas/ListarFortalezas.xhtml">Listado</a></li>
                             </ul>
                         </li>
                     </ul>

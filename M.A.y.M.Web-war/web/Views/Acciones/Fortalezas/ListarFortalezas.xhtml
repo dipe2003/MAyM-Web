@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition template="../../../index.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"          
+                xmlns:f="http://xmlns.jcp.org/jsf/core"                    
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                >
+    <ui:define name="page_content">
+        
+        <div class="container-fluid">
+            <h1>Este es el sitio de inicio donde podras ver un listado de las Fortalezas generadas.</h1>                      
+        </div>
+        
+        <div class="container-fluid" style="padding: 1%">
+            <c:choose>
+                <c:when test="#{empty listarFortalezas.listaFortalezas}">
+                    <div class="alert alert-info">
+                        <strong>Info!</strong> No hay registros para listar.
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <h:form id="form_tabla_acciones" >
+                        <table class="table table-hover table-striped table-responsive">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Area</th>
+                                    <th>Generada Por</th>
+                                    <th>Descripcion</th>
+                                    <th></th>
+                                </tr>
+                                
+                            </thead>
+                            
+                            <tbody>
+                                <c:forEach items="#{listarFortalezas.listaFortalezas}" var="accion">
+                                    <tr>
+                                        <td>
+                                            #{accion.value.fechaDeteccion}
+                                        </td>
+                                        <td>
+                                            #{accion.value.areaSectorFortaleza.nombre}
+                                        </td>
+                                        <td>
+                                            #{accion.value.generadaPor.nombre}
+                                        </td>
+                                        <td>
+                                            #{accion.value.descripcion}
+                                        </td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
+                                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li><h:link value="Ver Fortaleza" >                                                        
+                                                            <f:ajax onevent="indicador" />
+                                                        </h:link>
+                                                    </li>
+                                                    <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != null}">
+                                                        <li><h:link value="Editar Datos" outcome="EditarAccionMejora.xhtml?id=#{accion.key}" >                                                        
+                                                                <f:ajax onevent="indicador" />
+                                                            </h:link>
+                                                        </li>
+                                                    </c:if>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table> 
+                    </h:form>
+                    <ul class="pagination">
+                        <li class="active"><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">5</a></li>
+                    </ul>
+                </c:otherwise>
+            </c:choose>
+        </div>
+        
+    </ui:define>
+</ui:composition>

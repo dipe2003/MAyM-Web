@@ -5,7 +5,6 @@
 */
 package com.dperez.maym.web.acciones.fortalezas;
 
-import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.fortaleza.Fortaleza;
@@ -14,6 +13,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -43,6 +43,7 @@ public class ListarFortalezas implements Serializable{
     // Metodos
     
     //  Inicializacion
+    @PostConstruct
     public void init(){
         // recuperar Empresa para filtrar las fortalezas
         FacesContext context = FacesContext.getCurrentInstance();
@@ -53,8 +54,12 @@ public class ListarFortalezas implements Serializable{
         ListaFortalezas = new HashMap<>();
         List<Fortaleza> fortalezas = fLectura.ListarFortalezas();
         for(Fortaleza fortaleza: fortalezas){
-            if(fortaleza.getEmpresaFortaleza().getId() == empresa.getId())
+            if(empresa == null){
                 ListaFortalezas.put(fortaleza.getId(), fortaleza);
+            }else{
+                if(fortaleza.getEmpresaFortaleza().getId() == empresa.getId())
+                    ListaFortalezas.put(fortaleza.getId(), fortaleza);
+            }
         }
     }
     
