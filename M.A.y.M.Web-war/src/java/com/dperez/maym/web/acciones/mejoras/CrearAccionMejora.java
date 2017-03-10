@@ -151,23 +151,18 @@ public class CrearAccionMejora implements Serializable {
     
     /**
      * Crea nueva deteccion con el tipo interna/externa seleccionado.
-     * Se verifica que el nombre no sea vacio. Si es vacio no se crea y se muestra un mensaje
+     * Se no se crea se muestra un mensaje
      */
     public void nuevaDeteccion(){
-        if(NombreNuevaDeteccion.isEmpty()){
+        // Crear Nueva Deteccion y actualizar lista
+        Deteccion det = fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoNuevaDeteccion);
+        if(det != null){
+            actualizarDeteccion();
+            this.DeteccionSeleccionada = det.getId();
+            this.NombreNuevaDeteccion = new String();
+        }else{
             FacesContext.getCurrentInstance().addMessage("form_nueva_accion:deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
             FacesContext.getCurrentInstance().renderResponse();
-        }else{
-            // Crear Nueva Deteccion y actualizar lista
-            Deteccion det = fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoNuevaDeteccion);
-            if(det != null){
-                actualizarDeteccion();
-                this.DeteccionSeleccionada = det.getId();
-                this.NombreNuevaDeteccion = new String();
-            }else{
-                FacesContext.getCurrentInstance().addMessage("form_nueva_accion:deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
-                FacesContext.getCurrentInstance().renderResponse();
-            }
         }
     }
     
