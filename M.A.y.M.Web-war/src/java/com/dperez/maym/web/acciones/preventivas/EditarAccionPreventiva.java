@@ -273,7 +273,7 @@ public class EditarAccionPreventiva implements Serializable {
             this.CodificacionSeleccionada = cod.getId();
             this.NombreNuevaCodificacion = new String();
             this.DescripcionNuevaCodificacion = new String();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_INFO, "Se agrego nueva codificacion", "Se agrego nueva codificacion" ));
+            FacesContext.getCurrentInstance().addMessage("form_editar_accion:btn_nueva_codificacion", new FacesMessage(SEVERITY_INFO, "Se agrego nueva codificacion", "Se agrego nueva codificacion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             System.out.println("Error");

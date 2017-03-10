@@ -127,7 +127,7 @@
                                                  value="#{editarAccionMejora.descripcionNuevaCodificacion}" required="true" requiredMessage="No se ingreso Descripcion de nueva Codificacion."/>
                                 </div>
                                 <div class="form-group">
-                                    <h:commandButton action="#{editarAccionMejora.nuevaCodificacion()}" class="btn btn-primary" value="Nueva">
+                                    <h:commandButton id="btn_nueva_codificacion" action="#{editarAccionMejora.nuevaCodificacion()}" class="btn btn-primary" value="Nueva">
                                         <f:ajax execute="panel_nueva_codificacion" render="codificacion panel_nueva_codificacion"/>
                                     </h:commandButton>
                                 </div>
@@ -305,6 +305,15 @@
                     </div>
                     <div class="form-group-sm">
                         <h:message for="tipo_nueva_deteccion" class="msj_error"/>
+                    </div>
+                    <div class="form-group-sm">
+                        <h:message for="nombre_nueva_codificacion" class="msj_error"/>
+                    </div>
+                    <div class="form-group-sm">
+                        <h:message for="descipcion_nueva_codificacion" class="msj_error"/>
+                    </div>
+                    <div class="form-group-sm">
+                        <h:message for="btn_nueva_codificacion" class="msj_error"/>
                     </div>
                     <div class="form-group-sm">
                         <h:message for="descripcion" class="msj_error"/>
