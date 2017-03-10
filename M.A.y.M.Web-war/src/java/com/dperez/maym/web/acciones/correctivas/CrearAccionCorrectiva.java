@@ -189,16 +189,16 @@ public class CrearAccionCorrectiva implements Serializable {
      * Si no se crea se muestra un mensaje
      */
     public void nuevaDeteccion(){
-            // Crear Nueva Deteccion y actualizar lista
-            Deteccion det = fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoNuevaDeteccion);
-            if(det != null){
-                actualizarDeteccion();
-                this.DeteccionSeleccionada = det.getId();
-                this.NombreNuevaDeteccion = new String();
-            }else{
-                FacesContext.getCurrentInstance().addMessage("form_nueva_accion:deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
-                FacesContext.getCurrentInstance().renderResponse();
-            }
+        // Crear Nueva Deteccion y actualizar lista
+        Deteccion det = fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoNuevaDeteccion);
+        if(det != null){
+            actualizarDeteccion();
+            this.DeteccionSeleccionada = det.getId();
+            this.NombreNuevaDeteccion = new String();
+        }else{
+            FacesContext.getCurrentInstance().addMessage("form_nueva_accion:deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
+            FacesContext.getCurrentInstance().renderResponse();
+        }
     }
     
     /**

@@ -297,39 +297,34 @@ public class EditarAccionCorrectiva implements Serializable {
      * Se verifica que el nombre no sea vacio. Si es vacio no se crea y se muestra un mensaje
      */
     public void nuevaDeteccion(){
-        if(NombreNuevaDeteccion.isEmpty()){
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
-            FacesContext.getCurrentInstance().renderResponse();
-        }else{
-            // Crear Nueva Deteccion y actualizar lista
-            fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoNuevaDeteccion);
+        // Crear Nueva Deteccion y actualizar lista
+        Deteccion det = fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoNuevaDeteccion);
+        if(det != null){
             actualizarDeteccion();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_INFO, "Se agrego nueva deteccion", "Se agrego nueva deteccion" ));
+            this.DeteccionSeleccionada = det.getId();
+            this.NombreNuevaDeteccion = new String();
+        }else{
+            FacesContext.getCurrentInstance().addMessage("form_nueva_accion:deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }
     }
     
     /**
      * Crea nueva codificacion.
-     * Se verifica que el nombre o la descripcion no esten vacios. Si estan vacios no se crea y se muestra un mensaje
+     * SSino se crea se muestra un mensaje
      */
     public void nuevaCodificacion(){
-        if(NombreNuevaCodificacion.isEmpty() || DescripcionNuevaCodificacion.isEmpty()){
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva codificacion", "No se pudo crear nueva codificacion" ));
+        // Crear Nueva Codificacion y actualizar lista
+        Codificacion cod = fAdmin.NuevaCodificacion(NombreNuevaCodificacion, DescripcionNuevaCodificacion);
+        if(cod != null){
+            actualizarCodificacion();
+            this.CodificacionSeleccionada = cod.getId();
+            this.NombreNuevaCodificacion = new String();
+            this.DescripcionNuevaCodificacion = new String();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_INFO, "Se agrego nueva codificacion", "Se agrego nueva codificacion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
-            // Crear Nueva Codificacion y actualizar lista
-            Codificacion cod = fAdmin.NuevaCodificacion(NombreNuevaCodificacion, DescripcionNuevaCodificacion);
-            if(cod != null){
-                actualizarCodificacion();
-                this.CodificacionSeleccionada = cod.getId();
-                this.NombreNuevaCodificacion = new String();
-                this.DescripcionNuevaCodificacion = new String();
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_INFO, "Se agrego nueva codificacion", "Se agrego nueva codificacion" ));
-                FacesContext.getCurrentInstance().renderResponse();
-            }else{
-                System.out.println("Error");
-            }
+            System.out.println("Error");
         }
     }
     
