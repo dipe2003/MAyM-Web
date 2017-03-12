@@ -5,7 +5,6 @@
 */
 package com.dperez.maym.web.acciones.fortalezas;
 
-import com.dperez.maym.web.herramientas.CargarArchivo;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
@@ -54,7 +53,7 @@ public class CrearFortaleza implements Serializable {
     
     private EnumTipoDeteccion[] TiposDeteccion;
     private EnumTipoDeteccion TipoDeDeteccionSeleccionada;
-    private EnumTipoDeteccion TipoNuevaDeteccion;
+
     private String NombreNuevaDeteccion;
     private Map<Integer, Deteccion> ListaDetecciones;
     private Integer DeteccionSeleccionada;
@@ -77,7 +76,6 @@ public class CrearFortaleza implements Serializable {
     
     public EnumTipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
     public EnumTipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
-    public EnumTipoDeteccion getTipoNuevaDeteccion(){return this.TipoNuevaDeteccion;}
     public Map<Integer, Deteccion> getListaDetecciones(){return this.ListaDetecciones;}
     public String getNombreNuevaDeteccion(){return this.NombreNuevaDeteccion;}
     public Integer getDeteccionSeleccionada(){return this.DeteccionSeleccionada;}
@@ -101,7 +99,6 @@ public class CrearFortaleza implements Serializable {
     
     public void setTipoDeDeteccionSeleccionada(EnumTipoDeteccion TipoDeteccion){this.TipoDeDeteccionSeleccionada = TipoDeteccion;}
     public void setTiposDeteccion(EnumTipoDeteccion[] TiposDeteccion){this.TiposDeteccion = TiposDeteccion;}
-    public void setTipoNuevaDeteccion(EnumTipoDeteccion TipoNuevaDeteccion){this.TipoNuevaDeteccion = TipoNuevaDeteccion;}
     public void setListaDetecciones(Map<Integer, Deteccion> ListaDetecciones){this.ListaDetecciones = ListaDetecciones;}
     public void setNombreNuevaDeteccion(String NombreNuevaDeteccion){this.NombreNuevaDeteccion = NombreNuevaDeteccion;}
     public void setDeteccionSeleccionada(Integer DeteccionSeleccionada){this.DeteccionSeleccionada = DeteccionSeleccionada;}
@@ -142,9 +139,7 @@ public class CrearFortaleza implements Serializable {
     public void actualizarDeteccion(){
         List<Deteccion> tmpDetecciones = fLectura.ListarDetecciones();
         for(Deteccion deteccion:tmpDetecciones){
-            if (deteccion.getTipo().equals(TipoDeDeteccionSeleccionada)){
-                ListaDetecciones.put(deteccion.getId(), deteccion);
-            }
+            ListaDetecciones.put(deteccion.getId(), deteccion);
         }
     }
     
@@ -154,9 +149,10 @@ public class CrearFortaleza implements Serializable {
      */
     public void nuevaDeteccion(){
         // Crear Nueva Deteccion y actualizar lista
-        Deteccion det = fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoNuevaDeteccion);
+        Deteccion det = fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoDeDeteccionSeleccionada);
         if(det != null){
             actualizarDeteccion();
+            this.TipoDeDeteccionSeleccionada = det.getTipo();
             this.DeteccionSeleccionada = det.getId();
             this.NombreNuevaDeteccion = new String();
         }else{

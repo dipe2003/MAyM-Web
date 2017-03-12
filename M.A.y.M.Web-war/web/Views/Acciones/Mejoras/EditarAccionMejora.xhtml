@@ -38,7 +38,7 @@
                                 </div>
                             </div>
                         </div>
-                                                
+                        
                         <div class="form-group">
                             <strong><label for="tipo_deteccion">Tipo de Deteccion:</label></strong>                                    
                             <h:selectOneRadio id="tipo_deteccion" value="#{editarAccionMejora.tipoDeDeteccionSeleccionada}">
@@ -51,40 +51,42 @@
                                 <f:ajax render="deteccion" listener="#{editarAccionMejora.actualizarDeteccion()}" onevent="indicador"/>
                             </h:selectOneRadio>
                         </div> 
-                        <div class="form-group">
-                            <strong><label for="deteccion">Generada Por:</label></strong>                                    
-                            <h:selectOneMenu id="deteccion" class="form-control" value="#{editarAccionMejora.deteccionSeleccionada}" 
-                                             required="true" requiredMessage="No se selecciono Deteccion.">
-                                <f:selectItem itemLabel="-- Seleccionar Deteccion ---" itemDisabled="true"  noSelectionOption="false"  />
-                                <c:forEach items="#{editarAccionMejora.listaDetecciones}" var="deteccion">
-                                    <f:selectItem itemLabel="#{deteccion.value}" itemValue="#{deteccion.key}" />
-                                </c:forEach>
-                                <f:ajax execute="@this"/>
-                                <f:ajax render="panel_nueva_deteccion"/>
-                            </h:selectOneMenu>
-                        </div>                                              
-                        <h:panelGroup id="panel_nueva_deteccion" >
-                            <c:if test="#{(editarAccionMejora.deteccionSeleccionada == 0) and (editarAccionMejora.deteccionSeleccionada ne -1) }">
+                        
+                        <div class="row">
+                            <div class="col-sm-6">
                                 <div class="form-group">
-                                    <strong><label for="tipo_nueva_deteccion" >Tipo de Deteccion:</label></strong>
-                                    <h:selectOneRadio id="tipo_nueva_deteccion" value="#{editarAccionMejora.tipoNuevaDeteccion}"
-                                                      required="true" requiredMessage="No se selecciono Tipo de nueva Deteccion.">
-                                        <f:selectItem itemLabel="Interna" itemValue="INTERNA"/>
-                                        <f:selectItem itemLabel="Externa" itemValue="EXTERNA"/>
-                                    </h:selectOneRadio>
-                                </div>
-                                <div class="form-group">
-                                    <strong><label for="nombre_nueva_deteccion">Nombre de Deteccion:</label></strong>
-                                    <h:inputText id="nombre_nueva_deteccion" class="form-control" p:placeholder="Nombre de nueva deteccion." 
-                                                 value="#{editarAccionMejora.nombreNuevaDeteccion}" required="true" requiredMessage="No se ingreso Nombre de nueva Deteccion."/>
-                                </div>
-                                <div class="form-group">
-                                    <h:commandButton action="#{editarAccionMejora.nuevaDeteccion()}" class="btn btn-primary" value="Nueva">
-                                        <f:ajax execute="panel_nueva_deteccion" render="deteccion panel_nueva_deteccion"/>
-                                    </h:commandButton>
-                                </div>                                
-                            </c:if>                            
-                        </h:panelGroup>
+                                    <strong><label for="deteccion">Generada Por:</label></strong>                                    
+                                    <h:selectOneMenu id="deteccion" class="form-control" value="#{editarAccionMejora.deteccionSeleccionada}" 
+                                                     required="true" requiredMessage="No se selecciono Deteccion.">
+                                        <f:selectItem itemLabel="-- Seleccionar Deteccion ---" itemDisabled="true"  noSelectionOption="false"  />
+                                        <c:forEach items="#{editarAccionMejora.listaDetecciones}" var="deteccion">
+                                            <f:selectItem itemLabel="#{deteccion.value}" itemValue="#{deteccion.key}" />
+                                        </c:forEach>
+                                        <f:ajax execute="@this"/>
+                                        <f:ajax render="panel_nueva_deteccion"/>
+                                    </h:selectOneMenu>
+                                </div> 
+                            </div>
+                            <div class="col-sm-6">
+                                <h:panelGroup id="panel_nueva_deteccion" >
+                                    <c:if test="#{(editarAccionMejora.deteccionSeleccionada == 0) and (editarAccionMejora.deteccionSeleccionada ne -1) }">
+                                        <div class="form-group">
+                                            <strong><label for="nombre_nueva_deteccion">Nombre de Deteccion:</label></strong>
+                                            <h:inputText id="nombre_nueva_deteccion" class="form-control" p:placeholder="Nombre de nueva deteccion." 
+                                                         value="#{editarAccionMejora.nombreNuevaDeteccion}" required="true" requiredMessage="No se ingreso Nombre de nueva Deteccion."/>
+                                        </div>
+                                        <div class="form-group-sm">
+                                            <h:message for="nombre_nueva_deteccion" class="msj_error"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <h:commandButton action="#{editarAccionMejora.nuevaDeteccion()}" class="btn btn-primary" value="Nueva">
+                                                <f:ajax execute="panel_nueva_deteccion" render="deteccion panel_nueva_deteccion"/>
+                                            </h:commandButton>
+                                        </div>                                
+                                    </c:if>                            
+                                </h:panelGroup>
+                            </div>
+                        </div>        
                         
                         <div class="form-group">
                             <strong><label for="descripcion">Descripcion:</label></strong>                                    
@@ -125,6 +127,15 @@
                                     <strong><label for="descripcion_nueva_codificacion">Descripcion de Codificacion:</label></strong>
                                     <h:inputText id="descripcion_nueva_codificacion" class="form-control" p:placeholder="Descripcion de nueva codificacion." 
                                                  value="#{editarAccionMejora.descripcionNuevaCodificacion}" required="true" requiredMessage="No se ingreso Descripcion de nueva Codificacion."/>
+                                </div>                                
+                                <div class="form-group-sm">
+                                    <h:message for="nombre_nueva_codificacion" class="msj_error"/>
+                                </div>
+                                <div class="form-group-sm">
+                                    <h:message for="descripcion_nueva_codificacion" class="msj_error"/>
+                                </div>
+                                <div class="form-group-sm">
+                                    <h:message for="btn_nueva_codificacion" class="msj_error"/>
                                 </div>
                                 <div class="form-group">
                                     <h:commandButton id="btn_nueva_codificacion" action="#{editarAccionMejora.nuevaCodificacion()}" class="btn btn-primary" value="Nueva">
@@ -299,22 +310,7 @@
                     </div>
                     <div class="form-group-sm">
                         <h:message for="deteccion" class="msj_error"/>
-                    </div>
-                    <div class="form-group-sm">
-                        <h:message for="nombre_nueva_deteccion" class="msj_error"/>
-                    </div>
-                    <div class="form-group-sm">
-                        <h:message for="tipo_nueva_deteccion" class="msj_error"/>
-                    </div>
-                    <div class="form-group-sm">
-                        <h:message for="nombre_nueva_codificacion" class="msj_error"/>
-                    </div>
-                    <div class="form-group-sm">
-                        <h:message for="descipcion_nueva_codificacion" class="msj_error"/>
-                    </div>
-                    <div class="form-group-sm">
-                        <h:message for="btn_nueva_codificacion" class="msj_error"/>
-                    </div>
+                    </div> 
                     <div class="form-group-sm">
                         <h:message for="descripcion" class="msj_error"/>
                     </div>
