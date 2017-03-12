@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../../../index.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"          
+                xmlns:f="http://xmlns.jcp.org/jsf/core"                    
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                
+                xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+    <ui:define name="page_content">
+        <div class="container-fluid" style="padding: 1%">   
+            <h1>Este es el sitio para realizar el seguimiento de la accion correctiva</h1>                    
+        </div>
+        <div class="container-fluid" style="padding: 1%">
+            <h:form id="form_segumiento_accion" enctype="multipart/form-data">
+                <!-- Descripcion -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">Descripcion</div>
+                    <div class="panel-body">
+                        <div class="row">                            
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <strong><label for="fecha_deteccion">Fecha de Deteccion</label></strong>
+                                    <h:outputText id="fecha_deteccion" class="form-control" value="#{seguimientoCorrectiva.accionSeleccionada.fechaDeteccion}" />   
+                                </div>                    
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <strong><label for="area_deteccion">Area / Sector:</label></strong>
+                                    <h:outputText id="area_deteccion" class="form-control" value="#{seguimientoCorrectiva.accionSeleccionada.areaSectorAccion.nombre}" />         
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <strong><label id="tipo_deteccion">Tipo de Deteccion:</label></strong>
+                                    <h:outputText id="tipo_deteccion" class="form-control" value="#{seguimientoCorrectiva.accionSeleccionada.generadaPor.tipo}" />         
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <strong><label id="deteccion">Generada por:</label></strong>
+                                    <h:outputText id="deteccion" class="form-control" value="#{seguimientoCorrectiva.accionSeleccionada.generadaPor.nombre}" />         
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-group">
+                                <strong><label for="descripcion_correctiva">Descripcion de la Accion Correctiva</label></strong>
+                                <h:inputTextarea id="descripcion_correctiva" class="form-control" readonly="true" style="background-color: rgb(255,255,255)" value="#{seguimientoCorrectiva.accionSeleccionada.descripcion}" />
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <strong><label for="codificacion_correctiva">Codificacion</label></strong>
+                                    <h:outputText id="codificacion_correctiva" class="form-control" value="#{seguimientoCorrectiva.accionSeleccionada.codificacionAccion.nombre}" />
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <strong><label for="clasificacion">Clasificacion: </label></strong>
+                                    <c:choose>
+                                        <c:when test="#{seguimientoCorrectiva.tipoDesvio == 'NC_MENOR_OBS' }">
+                                            <h:outputText id="clasificacion" class="form-control" value="Menor/Observacion" />
+                                        </c:when>
+                                        <c:when test="#{seguimientoCorrectiva.tipoDesvio == 'NC_MAYOR' }">
+                                            <h:outputText id="clasificacion" class="form-control" value="Mayor" />
+                                        </c:when>
+                                        <c:otherwise>
+                                            <h:outputText id="clasificacion" class="form-control" value="Critica" />
+                                        </c:otherwise>
+                                    </c:choose> 
+                                </div>
+                            </div>                            
+                        </div>
+                    </div>
+                </div> 
+                
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Comprobacion de Implementacion</div>
+                    <div class="panel-body">
+                        
+                    </div>
+                </div>
+                
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Comprobacion de Eficacia</div>
+                    <div class="panel-body">
+                        
+                    </div>
+                </div>
+                
+                <h:panelGroup id="panel_mensajes">
+                    <div class="form-group-sm">
+                        <h:message for="fecha_comprobacion" class="msj_error"/>
+                    </div>                   
+                    <div class="form-group-sm">
+                        <h:message for="observaciones" class="msj_error"/>
+                    </div>                    
+                    <div class="form-group-sm">
+                        <h:message for="guardar_accion" class="msj_info"/>
+                    </div>
+                </h:panelGroup>
+                
+                <div class="row">
+                    <div class='col-sm-4' >
+                        <h:commandButton id="comprobar_implementacion" class="btn btn-default" style="width: 99%" value="Guardar" >
+                            <f:ajax execute="@form" event="click" listener="#{seguimientoCorrectiva.comprobarImplementacionAccion()}" onevent="indicador" render="panel_mensajes"/>
+                        </h:commandButton>
+                    </div>
+                    <div class='col-sm-4' >
+                        <h:link id="cerrar_accion" class="btn btn-default" style="width: 99%" value="Cerrar" onclick="if (! confirm('Los cambios no guardados se perderan. Continar?')) return false"
+                                outcome="ListarCorrectivas.xhtml" />
+                    </div>
+                    <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR'}">
+                        <div class='col-sm-4' >
+                            <h:commandButton id="desetimar_accion" class="btn btn-danger" style="width: 99%" value="Eliminar" onclick="if (! confirm('Seguro que va a eliminar esta accion? Se eliminaran todos los datos relacionados.')) return false" >
+                                <f:ajax event="click" listener="#{seguimientoCorrectiva.desestimarAccion()}" onevent="indicador" render="panel_mensajes"/>
+                            </h:commandButton>
+                        </div>
+                    </c:if>
+                </div>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>
+
+

@@ -8,6 +8,7 @@ package com.dperez.maym.web.acciones.correctivas;
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.EnumComprobacion;
 import com.dperez.maymweb.accion.acciones.Correctiva;
+import com.dperez.maymweb.accion.acciones.EnumTipoDesvio;
 import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeDatos;
@@ -43,6 +44,8 @@ public class SeguimientoCorrectiva implements Serializable {
     @Inject
     private FacadeVerificador fVerif;
     
+    private EnumTipoDesvio TipoDesvio;
+    
     private Map<Integer, Actividad> MedidasCorrectivas;
     private Map<Integer, Actividad> MedidasPreventivas;
     
@@ -60,6 +63,8 @@ public class SeguimientoCorrectiva implements Serializable {
     
     
     //  Getters
+
+    public EnumTipoDesvio getTipoDesvio() {return TipoDesvio;}    
     
     public Map<Integer, Actividad> getMedidasCorrectivas() {return MedidasCorrectivas;}
     public Map<Integer, Actividad> getMedidasPreventivas() {return MedidasPreventivas;}
@@ -75,6 +80,8 @@ public class SeguimientoCorrectiva implements Serializable {
     
     
     //  Setters
+
+    public void setTipoDesvio(EnumTipoDesvio TipoDesvio) {this.TipoDesvio = TipoDesvio;}    
     
     public void setMedidasCorrectivas(Map<Integer, Actividad> MedidasCorrectivas) {this.MedidasCorrectivas = MedidasCorrectivas;}
     public void setMedidasPreventivas(Map<Integer, Actividad> MedidasPreventivas) {this.MedidasPreventivas = MedidasPreventivas;}
@@ -163,14 +170,14 @@ public class SeguimientoCorrectiva implements Serializable {
         // recuperar el id para llenar datos de la accion y el resto de las propiedades.
         int IdAccion = Integer.parseInt(request.getParameter("id"));
         if(IdAccion != 0){
-            Accion AccionSeguimiento = (Correctiva) fLectura.GetAccion(IdAccion);
-            List<Actividad> actividades = ((Correctiva)AccionSeguimiento).getMedidasCorrectivas();
+            AccionSeleccionada = (Correctiva) fLectura.GetAccion(IdAccion);
+            List<Actividad> actividades = ((Correctiva)AccionSeleccionada).getMedidasCorrectivas();
             MedidasCorrectivas = new HashMap<>();
             for(Actividad act: actividades){
                 MedidasCorrectivas.put(act.getIdActividad(), act);
             }
             actividades.clear();
-            actividades = ((Correctiva)AccionSeguimiento).getMedidasPreventivas();
+            actividades = ((Correctiva)AccionSeleccionada).getMedidasPreventivas();
             MedidasPreventivas = new HashMap<>();
             for(Actividad act: actividades){
                 MedidasPreventivas.put(act.getIdActividad(), act);
@@ -185,6 +192,7 @@ public class SeguimientoCorrectiva implements Serializable {
                     ListaUsuarios.put(usuario.getId(), usuario);
                 }
             }
+            TipoDesvio = ((Correctiva)AccionSeleccionada).getTipo();
         }
         
         //  Resultado de comprobaciones

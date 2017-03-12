@@ -12,8 +12,7 @@
             <h1>Este es el sitio para agregar medidas #{actividadesAC.tipoActividad}s.</h1>                       
         </div>
         <div class="container-fluid" style="padding: 1%">
-            <h:form id="form_agregar_actividades">
-                
+            <h:form id="form_agregar_actividades">                
                 <c:choose>
                     <c:when test="#{actividadesAC.tipoActividad == 'correctiva'}">
                         <!-- Medidas Correctivas -->                        
@@ -44,7 +43,7 @@
                                     <c:choose>
                                         <c:when test="#{actividadesAC.idActividadEditar > 0}">
                                             <h:commandButton id="btn_guardar_medida_correctiva" class="btn btn-primary" value="Guardar Medida Correctiva">
-                                                <f:ajax execute="@form" event="click" listener="#{actividadesAC.guardarMedidaCorrectiva()}" render="panel_mensajes_correctivas"/>
+                                                <f:ajax execute="@form" event="click" listener="#{actividadesAC.guardarMedidaCorrectiva()}" onevent="indicador" render="panel_mensajes_correctivas"/>
                                             </h:commandButton>
                                             <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR' ||  sesionUsuario.usuarioLogueado.permisoUsuario == 'VERIFICADOR'}">
                                                 <h:commandButton id="btn_remover_medida_correctiva" class="btn btn-danger" value="Eliminar Medida Correctiva" onclick="if (! confirm('Seguro que va a eliminar esta medida corectiva? Se eliminaran todos los datos relacionados.')) return false">
