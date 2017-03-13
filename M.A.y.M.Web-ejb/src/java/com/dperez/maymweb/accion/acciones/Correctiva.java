@@ -146,31 +146,42 @@ public class Correctiva extends Accion implements Serializable {
             if(this.MedidasCorrectivas.isEmpty() && this.MedidasPreventivas.isEmpty()){
                 this.setEstadoAccion(EnumEstado.PENDIENTE);
             }else{
-                boolean medCorrectivaImp = true;
-                // chequear implementacion de todas las medidas correctivas
+                boolean medCorrectivaImp = false;
+                // chequear implementacion de las medidas correctivas
+                int totalImplementadas = 0;
                 for(Actividad medida: this.MedidasCorrectivas){
-                    if(medida.getFechaImplementacion()==null) medCorrectivaImp = false;
+                    if(medida.getFechaImplementacion()!=null) {
+                        totalImplementadas++;
+                    }
                 }
+                if(totalImplementadas == this.MedidasCorrectivas.size()){
+                    medCorrectivaImp = true;
+                }
+                
                 boolean medPreventivaImp = true;
                 // chequear implementacion de todas las medidas preventivas
                 for(Actividad medida: this.MedidasPreventivas){
                     if(medida.getFechaImplementacion()==null) medPreventivaImp = false;
                 }
                 
-                // comparar resultados de chequeos y setear nuevo estado
-                if(medCorrectivaImp == true && medPreventivaImp == true){
-                    if(this.getComprobacionEficacia().getResultado()!= EnumComprobacion.NO_COMPROBADA) {
-                        this.setEstadoAccion(EnumEstado.CERRADA);
+                if((medCorrectivaImp == false && medCorrectivaImp == false) && totalImplementadas > 0 ){
+                    this.setEstadoAccion(EnumEstado.PROCESO_IMP);
+                }else{                    
+                    // comparar resultados de chequeos y setear nuevo estado
+                    if(medCorrectivaImp == true && medPreventivaImp == true){
+                        if(this.getComprobacionEficacia() !=null && this.getComprobacionEficacia().getResultado()!= EnumComprobacion.NO_COMPROBADA) {
+                            this.setEstadoAccion(EnumEstado.CERRADA);
+                        }else{
+                            this.setEstadoAccion(EnumEstado.PROCESO_VER);
+                        }
                     }else{
-                        this.setEstadoAccion(EnumEstado.PROCESO_VER);
-                    }
-                }else{
-                    if(medCorrectivaImp == true && medPreventivaImp != true){
-                        if(this.getComprobacionImplementacion().getResultado() == EnumComprobacion.NO_COMPROBADA)
-                            this.setEstadoAccion(EnumEstado.PROCESO_IMP);
-                    }else{
-                        if(medCorrectivaImp != true && medPreventivaImp != true){
-                            this.setEstadoAccion(EnumEstado.PENDIENTE);
+                        if(medCorrectivaImp == true && medPreventivaImp != true){
+                            if(this.getComprobacionImplementacion() != null && this.getComprobacionImplementacion().getResultado() == EnumComprobacion.NO_COMPROBADA)
+                                this.setEstadoAccion(EnumEstado.PROCESO_IMP);
+                        }else{
+                            if(medCorrectivaImp != true && medPreventivaImp != true){
+                                this.setEstadoAccion(EnumEstado.PENDIENTE);
+                            }
                         }
                     }
                 }
