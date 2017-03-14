@@ -70,4 +70,15 @@ public class ManejadorAccion {
         acciones = query.getResultList();
         return acciones;
     }
+    
+    //  Comprobaciones
+    public int crearComprobacion(Comprobacion comprobacion){
+         try{
+            em.persist(comprobacion);
+            return comprobacion.getId();
+        }catch(Exception ex){
+            System.out.println("Error al crear comprobacion: " + ex.getMessage());
+        }
+        return -1;
+    }
 }

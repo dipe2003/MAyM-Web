@@ -7,6 +7,7 @@ package com.dperez.maym.web.acciones.correctivas;
 
 import com.dperez.maym.web.herramientas.CargarArchivo;
 import com.dperez.maymweb.accion.Accion;
+import com.dperez.maymweb.accion.Comprobacion;
 import com.dperez.maymweb.accion.acciones.Correctiva;
 import com.dperez.maymweb.accion.acciones.EnumAccion;
 import com.dperez.maymweb.accion.acciones.EnumTipoDesvio;
@@ -17,10 +18,12 @@ import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
+import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.producto.Producto;
+import com.dperez.maymweb.usuario.Usuario;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.ParseException;
@@ -59,6 +62,7 @@ public class EditarAccionCorrectiva implements Serializable {
     private CargarArchivo cArchivo;
     
     private int IdAccionSeleccionada;
+    private Accion AccionSeleccionada;
     
     private Date FechaDeteccion;
     private String strFechaDeteccion;
@@ -91,9 +95,20 @@ public class EditarAccionCorrectiva implements Serializable {
     private String NombreProductoAfectado;
     private String DatosProductoAfectado;
     
-    
     private Map<Integer, Actividad> MedidasCorrectivas;
     private Map<Integer, Actividad> MedidasPreventivas;
+    
+    //comprobaciones
+    private List<Usuario> ListaUsuarios;
+    private int ResponsableImplementacion;
+    private int ResponsableEficacia;
+    private Date FechaEstimadaImplementacion;
+    private String strFechaEstimadaImplementacion;
+    private Date FechaEstimadaVerificacion;
+    private String strFechaEstimadaVerificacion;
+    
+    private Comprobacion ComprobacionImplementacion;
+    private Comprobacion ComprobacionEficacia;
     
     //  Getters
     public int getIdAccionSeleccionada(){return IdAccionSeleccionada;}
@@ -137,6 +152,32 @@ public class EditarAccionCorrectiva implements Serializable {
     
     public Map<Integer, Actividad> getMedidasCorrectivas() {return MedidasCorrectivas;}
     public Map<Integer, Actividad> getMedidasPreventivas() {return MedidasPreventivas;}
+    
+    //comprobaciones
+    
+    public List<Usuario> getListaUsuarios() {return ListaUsuarios;}
+    public int getResponsableImplementacion() {return ResponsableImplementacion;}
+    public int getResponsableEficacia() {return ResponsableEficacia;}
+    public Date getFechaEstimadaImplementacion() {return FechaEstimadaImplementacion;}
+    public String getStrFechaEstimadaImplementacion() {
+        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
+        if (FechaEstimadaImplementacion == null) {
+            return this.strFechaEstimadaImplementacion;
+        }else{
+            return fDate.format(FechaEstimadaImplementacion);
+        }
+    }
+    public Date getFechaEstimadaVerificacion() {return FechaEstimadaVerificacion;}
+    public String getStrFechaEstimadaVerificacion() {
+        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
+        if (FechaEstimadaVerificacion == null) {
+            return this.strFechaEstimadaVerificacion;
+        }else{
+            return fDate.format(FechaEstimadaVerificacion);
+        }
+    }
+    public Comprobacion getComprobacionImplementacion() {return ComprobacionImplementacion;}
+    public Comprobacion getComprobacionEficacia() {return ComprobacionEficacia;}
     
     //  Setters
     public void setIdAccionSeleccionada(int IdAccionSeleccionada) {this.IdAccionSeleccionada = IdAccionSeleccionada;}
@@ -185,6 +226,33 @@ public class EditarAccionCorrectiva implements Serializable {
     public void setMedidasCorrectivas(Map<Integer, Actividad> MedidasCorrectivas) {this.MedidasCorrectivas = MedidasCorrectivas;}
     public void setMedidasPreventivas(Map<Integer, Actividad> MedidasPreventivas) {this.MedidasPreventivas = MedidasPreventivas;}
     
+    // comprobaciones
+    public void setListaUsuarios(List<Usuario> ListaUsuarios) {this.ListaUsuarios = ListaUsuarios;}
+    public void setResponsableEficacia(int ResponsableEficacia) {this.ResponsableEficacia = ResponsableEficacia;}
+    public void setResponsableImplementacion(int ResponsableImplementacion) {this.ResponsableImplementacion = ResponsableImplementacion;}
+    public void setFechaEstimadaImplementacion(Date FechaEstimadaImplementacion) {this.FechaEstimadaImplementacion = FechaEstimadaImplementacion;}
+    public void setStrFechaEstimadaImplementacion(String strFechaEstimadaImplementacion) {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try{
+            cal.setTime(sdf.parse(strFechaEstimadaImplementacion));
+        }catch(ParseException ex){}
+        this.strFechaEstimadaImplementacion = strFechaEstimadaImplementacion;
+        this.FechaEstimadaImplementacion = cal.getTime();
+    }
+    public void setFechaEstimadaVerificacion(Date FechaEstimadaVerificacion) {this.FechaEstimadaVerificacion = FechaEstimadaVerificacion;}
+    public void setStrFechaEstimadaVerificacion(String strFechaEstimadaVerificacion) {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try{
+            cal.setTime(sdf.parse(strFechaEstimadaVerificacion));
+        }catch(ParseException ex){}
+        this.strFechaEstimadaVerificacion = strFechaEstimadaVerificacion;
+        this.FechaEstimadaVerificacion = cal.getTime();
+    }
+    public void setComprobacionImplementacion(Comprobacion ComprobacionImplementacion) {this.ComprobacionImplementacion = ComprobacionImplementacion;}
+    public void setComprobacionEficacia(Comprobacion ComprobacionEficacia) {this.ComprobacionEficacia = ComprobacionEficacia;}
+    
     //  Metodos
     
     /**
@@ -197,7 +265,7 @@ public class EditarAccionCorrectiva implements Serializable {
         // recuperar el id para llenar datos de la accion correctiva y el resto de las propiedades.
         IdAccionSeleccionada = Integer.parseInt(request.getParameter("id"));
         if(IdAccionSeleccionada != 0){
-            Accion AccionSeleccionada = (Correctiva) fLectura.GetAccion(IdAccionSeleccionada);
+            AccionSeleccionada = (Correctiva) fLectura.GetAccion(IdAccionSeleccionada);
             FechaDeteccion = AccionSeleccionada.getFechaDeteccion();
             Descripcion = AccionSeleccionada.getDescripcion();
             AnalisisCausa = AccionSeleccionada.getAnalisisCausa();
@@ -262,6 +330,27 @@ public class EditarAccionCorrectiva implements Serializable {
             }
             actualizarListaAdjuntos();
             MapAdjuntos = new HashMap<>();
+            
+            // Comprobaciones
+            Empresa empresa = (Empresa) request.getSession().getAttribute("Empresa");
+            ListaUsuarios = fLectura.GetUsuariosEmpresa(empresa.getId());
+            
+            ComprobacionImplementacion = AccionSeleccionada.getComprobacionImplementacion();
+            ComprobacionEficacia = AccionSeleccionada.getComprobacionEficacia();
+            
+            // para editar
+            if(ComprobacionImplementacion.getFechaEstimada() != null){
+                this.setFechaEstimadaImplementacion(ComprobacionImplementacion.getFechaEstimada());
+            }
+            if(ComprobacionImplementacion.getResponsable() != null){
+                this.ResponsableImplementacion = ComprobacionImplementacion.getResponsable().getId();
+            }
+            if(ComprobacionEficacia.getFechaEstimada() != null){
+                this.setFechaEstimadaVerificacion(ComprobacionEficacia.getFechaEstimada());
+            }
+            if(ComprobacionEficacia.getResponsable() != null){
+                this.ResponsableEficacia = ComprobacionEficacia.getResponsable().getId();
+            }
         }
     }
     
@@ -439,6 +528,24 @@ public class EditarAccionCorrectiva implements Serializable {
             FacesContext.getCurrentInstance().addMessage("form_editar_accion:guardar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
+            if(!this.MedidasCorrectivas.isEmpty() || !this.MedidasPreventivas.isEmpty()){
+                if(AccionSeleccionada.getComprobacionImplementacion() != null){
+                    if(AccionSeleccionada.getComprobacionImplementacion().getFechaEstimada() != this.FechaEstimadaImplementacion
+                            || AccionSeleccionada.getComprobacionImplementacion().getResponsable().getId() != this.ResponsableImplementacion){
+                        fDatos.SetEstimadoComprobacionImplementacion(this.FechaEstimadaImplementacion, this.ResponsableImplementacion, IdAccionSeleccionada);
+                    }
+                }else{
+                    fDatos.SetEstimadoComprobacionImplementacion(this.FechaEstimadaImplementacion, this.ResponsableImplementacion, IdAccionSeleccionada);
+                }
+                if(AccionSeleccionada.getComprobacionEficacia()!= null){
+                    if(AccionSeleccionada.getComprobacionEficacia().getFechaEstimada() != this.FechaEstimadaVerificacion
+                            || AccionSeleccionada.getComprobacionEficacia().getResponsable().getId() != this.ResponsableEficacia){
+                        fDatos.SetEstimadoComprobacionEficacia(this.FechaEstimadaVerificacion, this.ResponsableEficacia, IdAccionSeleccionada);
+                    }
+                }else{
+                    fDatos.SetEstimadoComprobacionEficacia(this.FechaEstimadaVerificacion, this.ResponsableEficacia, IdAccionSeleccionada);
+                }
+            }
             // Si la actualizacion se realizo correctamente redirige a lista de acciones.
             FacesContext.getCurrentInstance().addMessage("form_editar_accion:guardar_accion", new FacesMessage(SEVERITY_INFO, "Los datos se guardaron.", "Los datos se guardaron." ));
             FacesContext.getCurrentInstance().renderResponse();

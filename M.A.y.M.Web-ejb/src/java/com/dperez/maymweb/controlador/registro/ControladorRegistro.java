@@ -331,6 +331,7 @@ public class ControladorRegistro {
     public int SetEstimadoComprobacionImplementacion(Date FechaEstimada, int IdUsuarioResponsableImplementacion, int IdAccion){
         Usuario usuario = mUsuario.GetUsuario(IdUsuarioResponsableImplementacion);
         Comprobacion comprobacionImplementacion = new Comprobacion(FechaEstimada, usuario);
+        comprobacionImplementacion.setId(mAccion.crearComprobacion(comprobacionImplementacion));
         Accion accion = mAccion.GetAccion(IdAccion);
         accion.setComprobacionImplementacion(comprobacionImplementacion);
         return mAccion.ActualizarAccion(accion);
@@ -346,8 +347,9 @@ public class ControladorRegistro {
     public int SetEstimadoComprobacionEficacia(Date FechaEstimada, int IdUsuarioResponsableComprobacion, int IdAccion){
         Usuario usuario = mUsuario.GetUsuario(IdUsuarioResponsableComprobacion);
         Comprobacion comprobacionEficacia = new Comprobacion(FechaEstimada, usuario);
+        comprobacionEficacia.setId(mAccion.crearComprobacion(comprobacionEficacia));
         Accion accion = mAccion.GetAccion(IdAccion);
-        accion.setComprobacionImplementacion(comprobacionEficacia);
+        accion.setComprobacionEficacia(comprobacionEficacia);
         return mAccion.ActualizarAccion(accion);
     }
     

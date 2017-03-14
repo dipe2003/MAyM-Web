@@ -50,6 +50,7 @@ public class Comprobacion implements Serializable{
     public Comprobacion(Date FechaEstimada, Usuario ResponsableComprobacion){
         this.Resultado = EnumComprobacion.NO_COMPROBADA;
         this.Responsable = ResponsableComprobacion;
+        this.FechaEstimada = FechaEstimada;
     }
     
     //  Getters

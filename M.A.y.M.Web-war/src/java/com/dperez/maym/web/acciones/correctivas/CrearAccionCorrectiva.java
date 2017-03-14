@@ -15,6 +15,7 @@ import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
+import com.dperez.maymweb.usuario.Usuario;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.ParseException;
@@ -69,7 +70,7 @@ public class CrearAccionCorrectiva implements Serializable {
     private Map<String, String> ListaProductosAfectados;
     private String NombreProductoAfectado;
     private String DatosProductoAfectado;
-    
+       
     //  Getters
     
     public Date getFechaDeteccion() {return FechaDeteccion;}
@@ -100,7 +101,7 @@ public class CrearAccionCorrectiva implements Serializable {
     public String getNombreProductoAfectado(){return this.NombreProductoAfectado;}
     public String getDatosProductoAfectado(){return this.DatosProductoAfectado;}
     
-//  Setters
+    //  Setters
     
     public void setFechaDeteccion(Date FechaDeteccion) {this.FechaDeteccion = FechaDeteccion;}
     public void setStrFechaDeteccion(String strFechaDeteccion) {
@@ -133,6 +134,7 @@ public class CrearAccionCorrectiva implements Serializable {
     public void setListaProductosAfectados(Map<String, String> ListaProductosAfectados) {this.ListaProductosAfectados = ListaProductosAfectados;}
     public void setNombreProductoAfectado(String NombreProductoAfectado){this.NombreProductoAfectado = NombreProductoAfectado;}
     public void setDatosProductoAfectado(String DatosProductoAfectado){this.DatosProductoAfectado = DatosProductoAfectado;}
+    
     
     //  Metodos
     

@@ -8,6 +8,7 @@ package com.dperez.maym.web.inicio;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.usuario.Usuario;
 import java.io.Serializable;
+import java.util.Date;
 import javax.enterprise.context.SessionScoped;
 
 import javax.faces.bean.ManagedBean;
@@ -30,4 +31,8 @@ public class SesionUsuario implements Serializable {
     
     public void setUsuarioLogueado(Usuario UsuarioLogueado){this.UsuarioLogueado = UsuarioLogueado;}
     public void setEmpresaSeleccionada(Empresa EmpresaSeleccionada){this.EmpresaSeleccionada = EmpresaSeleccionada;}
+    
+    public Date getFechaActual(){
+        return new Date();
+    }
 }
