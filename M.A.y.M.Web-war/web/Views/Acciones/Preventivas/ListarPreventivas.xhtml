@@ -26,16 +26,16 @@
                         <table class="table table-hover table-striped table-responsive">
                             <thead>
                                 <tr>
-                                    <th>Fecha</th>
-                                    <th>Area</th>
-                                    <th>Generada Por</th>
-                                    <th>Descripcion</th>
-                                    <th>Analisis de Causa</th>
-                                    <th>Actividades</th>
-                                    <th>Plazo Eficacia</th>
-                                    <th>Codificacion</th>
-                                    <th>Estado</th>
-                                    <th></th>
+                                    <th style="width: 5%">Fecha</th>
+                                    <th style="width: 5%">Area</th>
+                                    <th style="width: 10%">Generada Por</th>
+                                    <th style="width: 18%">Descripcion</th>
+                                    <th style="width: 18%">Analisis de Causa</th>
+                                    <th style="width: 14%">Actividades</th>
+                                    <th style="width: 5%">Plazo Eficacia</th>
+                                    <th style="width: 6%">Codificacion</th>
+                                    <th style="width: 6%">Estado</th>
+                                    <th style="width: 13%"></th>
                                 </tr>
                                 
                             </thead>
@@ -79,19 +79,6 @@
                                                 </c:when>
                                                 <c:otherwise>
                                                     No se ha definido.
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </td>
-                                        <td>
-                                            <c:choose>
-                                                <c:when test="#{accion.value.getComprobacionEficacia() != null and accion.value.getComprobacionEficacia().fechaComprobacion != null }">
-                                                    #{accion.value.getComprobacionEficacia().fechaComprobacion}
-                                                </c:when>
-                                                <c:when test="#{accion.value.getComprobacionEficacia() != null and accion.value.getComprobacionEficacia().fechaComprobacion == null}">
-                                                    No se ha comprobado.
-                                                </c:when>
-                                                <c:otherwise>
-                                                    No se han definido.
                                                 </c:otherwise>
                                             </c:choose>
                                         </td>

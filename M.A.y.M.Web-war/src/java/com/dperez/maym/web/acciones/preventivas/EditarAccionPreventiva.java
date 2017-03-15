@@ -7,6 +7,7 @@ package com.dperez.maym.web.acciones.preventivas;
 
 import com.dperez.maym.web.herramientas.CargarArchivo;
 import com.dperez.maymweb.accion.Accion;
+import com.dperez.maymweb.accion.Comprobacion;
 import com.dperez.maymweb.accion.acciones.EnumAccion;
 import com.dperez.maymweb.accion.acciones.Preventiva;
 import com.dperez.maymweb.accion.actividad.Actividad;
@@ -16,9 +17,11 @@ import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
+import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
+import com.dperez.maymweb.usuario.Usuario;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.ParseException;
@@ -83,6 +86,18 @@ public class EditarAccionPreventiva implements Serializable {
     
     private Map<Integer, Actividad> ListaActividades;
     
+    //comprobaciones
+    private List<Usuario> ListaUsuarios;
+    private int ResponsableImplementacion;
+    private int ResponsableEficacia;
+    private Date FechaEstimadaImplementacion;
+    private String strFechaEstimadaImplementacion;
+    private Date FechaEstimadaVerificacion;
+    private String strFechaEstimadaVerificacion;
+    
+    private Comprobacion ComprobacionImplementacion;
+    private Comprobacion ComprobacionEficacia;
+    
     //  Getters
     public int getIdAccionSeleccionada(){return IdAccionSeleccionada;}
     public Date getFechaDeteccion() {return FechaDeteccion;}
@@ -117,6 +132,32 @@ public class EditarAccionPreventiva implements Serializable {
     public Integer getAreaSectorAccionSeleccionada() {return AreaSectorAccionSeleccionada;}
     
     public Map<Integer, Actividad> getListaActividades() {return ListaActividades;}
+    
+    //comprobaciones
+    
+    public List<Usuario> getListaUsuarios() {return ListaUsuarios;}
+    public int getResponsableImplementacion() {return ResponsableImplementacion;}
+    public int getResponsableEficacia() {return ResponsableEficacia;}
+    public Date getFechaEstimadaImplementacion() {return FechaEstimadaImplementacion;}
+    public String getStrFechaEstimadaImplementacion() {
+        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
+        if (FechaEstimadaImplementacion == null) {
+            return this.strFechaEstimadaImplementacion;
+        }else{
+            return fDate.format(FechaEstimadaImplementacion);
+        }
+    }
+    public Date getFechaEstimadaVerificacion() {return FechaEstimadaVerificacion;}
+    public String getStrFechaEstimadaVerificacion() {
+        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
+        if (FechaEstimadaVerificacion == null) {
+            return this.strFechaEstimadaVerificacion;
+        }else{
+            return fDate.format(FechaEstimadaVerificacion);
+        }
+    }
+    public Comprobacion getComprobacionImplementacion() {return ComprobacionImplementacion;}
+    public Comprobacion getComprobacionEficacia() {return ComprobacionEficacia;}
     
     //  Setters
     public void setIdAccionSeleccionada(int IdAccionSeleccionada) {this.IdAccionSeleccionada = IdAccionSeleccionada;}
@@ -155,6 +196,33 @@ public class EditarAccionPreventiva implements Serializable {
     public void setAreaSectorAccionSeleccionada(Integer AreaSectorAccionSeleccionada) {this.AreaSectorAccionSeleccionada = AreaSectorAccionSeleccionada;}
     
     public void setListaActividades(Map<Integer, Actividad> ListaActividades) {this.ListaActividades = ListaActividades;}
+    
+    // comprobaciones
+    public void setListaUsuarios(List<Usuario> ListaUsuarios) {this.ListaUsuarios = ListaUsuarios;}
+    public void setResponsableEficacia(int ResponsableEficacia) {this.ResponsableEficacia = ResponsableEficacia;}
+    public void setResponsableImplementacion(int ResponsableImplementacion) {this.ResponsableImplementacion = ResponsableImplementacion;}
+    public void setFechaEstimadaImplementacion(Date FechaEstimadaImplementacion) {this.FechaEstimadaImplementacion = FechaEstimadaImplementacion;}
+    public void setStrFechaEstimadaImplementacion(String strFechaEstimadaImplementacion) {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try{
+            cal.setTime(sdf.parse(strFechaEstimadaImplementacion));
+        }catch(ParseException ex){}
+        this.strFechaEstimadaImplementacion = strFechaEstimadaImplementacion;
+        this.FechaEstimadaImplementacion = cal.getTime();
+    }
+    public void setFechaEstimadaVerificacion(Date FechaEstimadaVerificacion) {this.FechaEstimadaVerificacion = FechaEstimadaVerificacion;}
+    public void setStrFechaEstimadaVerificacion(String strFechaEstimadaVerificacion) {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try{
+            cal.setTime(sdf.parse(strFechaEstimadaVerificacion));
+        }catch(ParseException ex){}
+        this.strFechaEstimadaVerificacion = strFechaEstimadaVerificacion;
+        this.FechaEstimadaVerificacion = cal.getTime();
+    }
+    public void setComprobacionImplementacion(Comprobacion ComprobacionImplementacion) {this.ComprobacionImplementacion = ComprobacionImplementacion;}
+    public void setComprobacionEficacia(Comprobacion ComprobacionEficacia) {this.ComprobacionEficacia = ComprobacionEficacia;}
     
     //  Metodos
     
@@ -216,6 +284,27 @@ public class EditarAccionPreventiva implements Serializable {
             actualizarListaAdjuntos();
             
             MapAdjuntos = new HashMap<>();
+            
+            // Comprobaciones
+            Empresa empresa = (Empresa) request.getSession().getAttribute("Empresa");
+            ListaUsuarios = fLectura.GetUsuariosEmpresa(empresa.getId());
+            
+            ComprobacionImplementacion = AccionSeleccionada.getComprobacionImplementacion();
+            ComprobacionEficacia = AccionSeleccionada.getComprobacionEficacia();
+            
+            // para editar
+            if(ComprobacionImplementacion.getFechaEstimada() != null){
+                this.setFechaEstimadaImplementacion(ComprobacionImplementacion.getFechaEstimada());
+            }
+            if(ComprobacionImplementacion.getResponsable() != null){
+                this.ResponsableImplementacion = ComprobacionImplementacion.getResponsable().getId();
+            }
+            if(ComprobacionEficacia.getFechaEstimada() != null){
+                this.setFechaEstimadaVerificacion(ComprobacionEficacia.getFechaEstimada());
+            }
+            if(ComprobacionEficacia.getResponsable() != null){
+                this.ResponsableEficacia = ComprobacionEficacia.getResponsable().getId();
+            }
         }
     }
     

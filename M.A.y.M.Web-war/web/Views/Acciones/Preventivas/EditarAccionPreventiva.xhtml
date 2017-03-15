@@ -228,6 +228,120 @@
                     </div>
                 </div>
                 
+                <div class="row">
+                    <div class="col-sm-6">
+                        <!-- Implementacion -->
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">Comprobacion de Implementacion</div>
+                            <div class="panel-body">
+                                <h:panelGroup id="panel_mensajes_implementacion">
+                                    <div class="row">
+                                        <c:choose>
+                                            <c:when test="#{not empty editarAccionPreventiva.listaActividades}">
+                                                <c:choose>
+                                                    <c:when test="#{editarAccionPreventiva.comprobacionImplementacion.resultado == 'NO_COMPROBADA'}">
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group">
+                                                                <strong><label for="fecha_estimada_comprobacion_implementacion">Fecha Estimada</label></strong>
+                                                                <h:inputText id="fecha_estimada_comprobacion_implementacion" class="form-control calendario" value="#{editarAccionPreventiva.strFechaEstimadaImplementacion}"
+                                                                             required="true" requiredMessage="Se debe ingresar una fecha." />
+                                                            </div> 
+                                                            <div class="form-group">
+                                                                <h:message for="fecha_estimada_comprobacion_implementacion" class="msj_error"/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group">
+                                                                <strong><label for="responsable_comprobacion_implementacion">Responsable de Comprobacion</label></strong>
+                                                                <h:selectOneMenu id="responsable_comprobacion_implementacion" class="form-control" value="#{editarAccionPreventiva.responsableImplementacion}" 
+                                                                                 required="true" requiredMessage="Se debe seleccionar responsable." >
+                                                                    <f:selectItem  itemLabel="--- Seleccionar Responsable ---" noSelectionOption="true" itemDisabled="false" />
+                                                                    <c:forEach items="#{editarAccionPreventiva.listaUsuarios}" var="usuario">
+                                                                        <f:selectItem itemLabel="#{usuario.nombre} #{usuario.apellido}" itemValue="#{usuario.id}" />
+                                                                    </c:forEach>
+                                                                </h:selectOneMenu>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <h:message for="responsable_comprobacion_implementacion" class="msj_error"/>
+                                                            </div>
+                                                        </div>
+                                                    </c:when> 
+                                                    <c:otherwise>
+                                                        <div class="alert alert-info">
+                                                            <strong>Info!</strong> No se puede editar luego de comprobarse.
+                                                        </div>
+                                                    </c:otherwise>
+                                                </c:choose>  
+                                            </c:when>
+                                            <c:otherwise>
+                                                <div class="alert alert-info">
+                                                    <strong>Info!</strong> No se definieron actividades.
+                                                </div>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <!-- Eficacia -->
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">Comprobacion de Eficacia</div>
+                            <div class="panel-body">
+                                <h:panelGroup id="panel_mensajes_eficacia">
+                                    <div class="row">
+                                        <c:choose>
+                                            <c:when test="#{not empty editarAccionPreventiva.listaActividades}">
+                                                <c:choose>
+                                                    <c:when test="#{editarAccionPreventiva.comprobacionEficacia.resultado == 'NO_COMPROBADA'}">
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group">
+                                                                <strong><label for="fecha_estimada_comprobacion_eficacia">Fecha Estimada</label></strong>
+                                                                <h:inputText id="fecha_estimada_comprobacion_eficacia" class="form-control calendario" value="#{editarAccionPreventiva.strFechaEstimadaVerificacion}"
+                                                                             required="true" requiredMessage="Se debe ingresar una fecha." />
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <h:message for="fecha_estimada_comprobacion_eficacia" class="msj_error"/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group">
+                                                                <strong><label for="responsable_comprobacion_eficacia">Responsable de Comprobacion</label></strong>
+                                                                <h:selectOneMenu id="responsable_comprobacion_eficacia" class="form-control" value="#{editarAccionPreventiva.responsableEficacia}" 
+                                                                                 required="true" requiredMessage="Se debe seleccionar un responsable." >
+                                                                    <f:selectItem itemLabel="--- Seleccionar Responsable ---" noSelectionOption="true" itemDisabled="false" />
+                                                                    <c:forEach items="#{editarAccionPreventiva.listaUsuarios}" var="usuario">
+                                                                        <f:selectItem itemLabel="#{usuario.nombre} #{usuario.apellido}" itemValue="#{usuario.id}" />
+                                                                    </c:forEach>
+                                                                </h:selectOneMenu>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <h:message for="responsable_comprobacion_eficacia" class="msj_error"/>
+                                                            </div>
+                                                        </div>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <div class="alert alert-info">
+                                                            <strong>Info!</strong> No se puede editar luego de comprobarse.
+                                                        </div>
+                                                    </c:otherwise>
+                                                </c:choose>  
+                                            </c:when>
+                                            <c:otherwise>
+                                                <div class="alert alert-info">
+                                                    <strong>Info!</strong> No se han definido actividades.
+                                                </div>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                
                 <!-- Adjuntos -->
                 <div class="panel panel-primary">
                     <div class="panel-heading">Archivos Adjuntos / Anexos:</div>
