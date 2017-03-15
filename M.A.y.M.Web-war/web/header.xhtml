@@ -20,13 +20,13 @@
         </style>
         <div class="row" style="background-color: #000000">
             <div class="col-sm-4">
-                <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/logo_maym.jpg" style='width: 50%' />
+                <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/logo_maym.jpg" style='height: 100px' />
             </div>
             <div class="col-sm-8">
                 <h1 style="color: #FFF"><abbr title="Medicion Analisis y Mejora" >M.A.Y.M.</abbr> </h1> 
             </div>
         </div>
-        <nav class="navbar navbar-inverse" data-spy="affix" data-offset-top="50">
+        <nav class="navbar navbar-inverse" data-spy="affix" data-offset-top="97">
             <div class="container-fluid" style="background-color: #000000">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
@@ -86,7 +86,7 @@
                                 <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">#{sesionUsuario.usuarioLogueado.nombre} #{sesionUsuario.usuarioLogueado.apellido} <span class="glyphicon glyphicon-user"></span></a>
                                     <div class="dropdown-menu">
                                         <h:form id="formlout" class="form container-fluid">                                                
-                                            <h:commandButton id="btnLogout" class="btn btn-block" value="Salir" action="#{ingresoUsuario.logout()}">
+                                            <h:commandButton id="btnLogout" class="btn btn-block" value="Salir" action="#{sesionUsuario.logout()}">
                                                 <f:ajax execute="@form" render="myNavbar" />
                                             </h:commandButton>
                                             <h:commandButton id="btnEditarPerfil" class="btn btn-block" value="Editar Perfil">
@@ -102,24 +102,24 @@
                                         <h:form id="formlogin" class="form container-fluid">
                                             <div class="form-group">
                                                 <label for="usr">Operario:</label>
-                                                <h:inputText class="form-control" p:placeholder="Padron" id="usr" value="#{ingresoUsuario.usuarioSeleccionado}">
-                                                    <f:ajax event="change" execute="@this" listener="#{ingresoUsuario.comprobarIdUsuario()}" render="panel_datos_usuario" />
+                                                <h:inputText class="form-control" p:placeholder="Padron" id="usr" value="#{sesionUsuario.usuarioSeleccionado}">
+                                                    <f:ajax event="change" execute="@this" listener="#{sesionUsuario.comprobarIdUsuario()}" render="panel_datos_usuario" />
                                                 </h:inputText>
                                                 <h:panelGroup id="panel_datos_usuario">
-                                                    <c:if test="#{not empty ingresoUsuario.nombreUsuario}">
-                                                        <h:inputText class="msj_info" value="#{ingresoUsuario.nombreUsuario}" readonly="true"/>
-                                                        <h:inputText class="msj_info" value="#{ingresoUsuario.empresaSeleccionada.descripcionEmpresa}" readonly="true"/>
+                                                    <c:if test="#{not empty sesionUsuario.nombreUsuario}">
+                                                        <h:inputText class="msj_info" value="#{sesionUsuario.nombreUsuario}" readonly="true"/>
+                                                        <h:inputText class="msj_info" value="#{sesionUsuario.empresaSeleccionada.descripcionEmpresa}" readonly="true"/>
                                                     </c:if>
                                                 </h:panelGroup>
                                             </div>
                                             <div class="form-group" >
                                                 <label for="pwd">Contraseña:</label>
-                                                <h:inputSecret class="form-control" p:placeholder='Contraseña' id="pwd" value="#{ingresoUsuario.passwordUsuario}"/>
+                                                <h:inputSecret class="form-control" p:placeholder='Contraseña' id="pwd" value="#{sesionUsuario.passwordUsuario}"/>
                                                 <h:panelGroup id="panel_mensaje_password">
                                                     <h:message for="pwd" class="msj_error" />
                                                 </h:panelGroup>
                                             </div>
-                                            <h:commandButton id="btnLogin" class="btn btn-block" value="Ingresar" action="#{ingresoUsuario.ingresar()}">
+                                            <h:commandButton id="btnLogin" class="btn btn-block" value="Ingresar" action="#{sesionUsuario.ingresar()}">
                                                 <f:ajax execute="@form" render="panel_mensaje_password myNavbar" />
                                             </h:commandButton>
                                         </h:form>
