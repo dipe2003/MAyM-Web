@@ -59,6 +59,7 @@ public class EditarAccionMejora implements Serializable {
     private CargarArchivo cArchivo;
     
     private int IdAccionSeleccionada;
+    private Accion AccionSeleccionada;
     
     private Date FechaDeteccion;
     private String strFechaDeteccion;
@@ -234,7 +235,7 @@ public class EditarAccionMejora implements Serializable {
         // recuperar el id para llenar datos de la accion de mejora y el resto de las propiedades.
         IdAccionSeleccionada = Integer.parseInt(request.getParameter("id"));
         if(IdAccionSeleccionada != 0){
-            Accion AccionSeleccionada = (Mejora) fLectura.GetAccion(IdAccionSeleccionada);
+            AccionSeleccionada = (Mejora) fLectura.GetAccion(IdAccionSeleccionada);
             FechaDeteccion = AccionSeleccionada.getFechaDeteccion();
             Descripcion = AccionSeleccionada.getDescripcion();
             AnalisisCausa = AccionSeleccionada.getAnalisisCausa();
@@ -290,16 +291,16 @@ public class EditarAccionMejora implements Serializable {
             ComprobacionEficacia = AccionSeleccionada.getComprobacionEficacia();
             
             // para editar
-            if(ComprobacionImplementacion.getFechaEstimada() != null){
+            if(ComprobacionImplementacion != null && ComprobacionImplementacion.getFechaEstimada() != null){
                 this.setFechaEstimadaImplementacion(ComprobacionImplementacion.getFechaEstimada());
             }
-            if(ComprobacionImplementacion.getResponsable() != null){
+            if(ComprobacionImplementacion != null && ComprobacionImplementacion.getResponsable() != null){
                 this.ResponsableImplementacion = ComprobacionImplementacion.getResponsable().getId();
             }
-            if(ComprobacionEficacia.getFechaEstimada() != null){
+            if(ComprobacionEficacia != null && ComprobacionEficacia.getFechaEstimada() != null){
                 this.setFechaEstimadaVerificacion(ComprobacionEficacia.getFechaEstimada());
             }
-            if(ComprobacionEficacia.getResponsable() != null){
+            if(ComprobacionEficacia != null && ComprobacionEficacia.getResponsable() != null){
                 this.ResponsableEficacia = ComprobacionEficacia.getResponsable().getId();
             }
         }
@@ -434,6 +435,24 @@ public class EditarAccionMejora implements Serializable {
             FacesContext.getCurrentInstance().addMessage("form_editar_accion:guardar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
+            if(!this.ListaActividades.isEmpty()){
+                if(AccionSeleccionada.getComprobacionImplementacion() != null){
+                    if(AccionSeleccionada.getComprobacionImplementacion().getFechaEstimada() != this.FechaEstimadaImplementacion
+                            || AccionSeleccionada.getComprobacionImplementacion().getResponsable().getId() != this.ResponsableImplementacion){
+                        fDatos.SetEstimadoComprobacionImplementacion(this.FechaEstimadaImplementacion, this.ResponsableImplementacion, IdAccionSeleccionada);
+                    }
+                }else{
+                    fDatos.SetEstimadoComprobacionImplementacion(this.FechaEstimadaImplementacion, this.ResponsableImplementacion, IdAccionSeleccionada);
+                }
+                if(AccionSeleccionada.getComprobacionEficacia()!= null){
+                    if(AccionSeleccionada.getComprobacionEficacia().getFechaEstimada() != this.FechaEstimadaVerificacion
+                            || AccionSeleccionada.getComprobacionEficacia().getResponsable().getId() != this.ResponsableEficacia){
+                        fDatos.SetEstimadoComprobacionEficacia(this.FechaEstimadaVerificacion, this.ResponsableEficacia, IdAccionSeleccionada);
+                    }
+                }else{
+                    fDatos.SetEstimadoComprobacionEficacia(this.FechaEstimadaVerificacion, this.ResponsableEficacia, IdAccionSeleccionada);
+                }
+            }
             FacesContext.getCurrentInstance().addMessage("form_editar_accion:guardar_accion", new FacesMessage(SEVERITY_INFO, "Los datos se guardaron.", "Los datos se guardaron." ));
             FacesContext.getCurrentInstance().renderResponse();
         }

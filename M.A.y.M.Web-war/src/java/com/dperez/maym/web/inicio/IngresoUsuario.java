@@ -11,7 +11,10 @@ import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.usuario.Usuario;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
 import javax.faces.context.FacesContext;
@@ -30,14 +33,14 @@ public class IngresoUsuario implements Serializable {
     @Inject
     private FacadeLectura fLectura;
     @Inject
-    private SesionUsuario sesion;
+    private sesionUsuario sesion;
     
     private String UsuarioSeleccionado;
     private String PasswordUsuario;
     
     private Empresa EmpresaSeleccionada;
     private String NombreUsuario;
-    private Map<Integer, String> Usuarios;
+    private Map<Integer, Usuario> Usuarios;
     
     //  Getters
     public String getUsuarioSeleccionado() {return UsuarioSeleccionado;}
@@ -52,6 +55,14 @@ public class IngresoUsuario implements Serializable {
     public void setEmpresaSeleccionada(Empresa EmpresaSeleccionada){this.EmpresaSeleccionada = EmpresaSeleccionada;}
     
     //  Metodos
+    @PostConstruct
+    public void init(){
+        this.Usuarios = new HashMap<>();
+        List<Usuario> usuarios = fLectura.GetUsuarios();
+        for(Usuario usr:usuarios){
+            this.Usuarios.put(usr.getId(), usr);
+        }
+    }
     public void ingresar() throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
@@ -89,7 +100,7 @@ public class IngresoUsuario implements Serializable {
         try{
             id = Integer.valueOf(UsuarioSeleccionado);
             if(id!=0 && facadeMain.ExisteUsuario(id)){
-                Usuario usuario = fLectura.GetUsuario(Integer.valueOf(UsuarioSeleccionado));
+                Usuario usuario = Usuarios.get(id);
                 NombreUsuario = usuario.GetNombreCompleto();
                 EmpresaSeleccionada = usuario.getEmpresaUsuario();
             }

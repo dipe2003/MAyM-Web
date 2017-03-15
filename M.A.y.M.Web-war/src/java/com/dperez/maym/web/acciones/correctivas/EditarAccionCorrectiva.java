@@ -339,16 +339,16 @@ public class EditarAccionCorrectiva implements Serializable {
             ComprobacionEficacia = AccionSeleccionada.getComprobacionEficacia();
             
             // para editar
-            if(ComprobacionImplementacion.getFechaEstimada() != null){
+            if(ComprobacionImplementacion != null && ComprobacionImplementacion.getFechaEstimada() != null){
                 this.setFechaEstimadaImplementacion(ComprobacionImplementacion.getFechaEstimada());
             }
-            if(ComprobacionImplementacion.getResponsable() != null){
+            if(ComprobacionImplementacion != null &&  ComprobacionImplementacion.getResponsable() != null){
                 this.ResponsableImplementacion = ComprobacionImplementacion.getResponsable().getId();
             }
-            if(ComprobacionEficacia.getFechaEstimada() != null){
+            if(ComprobacionEficacia != null && ComprobacionEficacia.getFechaEstimada() != null){
                 this.setFechaEstimadaVerificacion(ComprobacionEficacia.getFechaEstimada());
             }
-            if(ComprobacionEficacia.getResponsable() != null){
+            if(ComprobacionEficacia != null && ComprobacionEficacia.getResponsable() != null){
                 this.ResponsableEficacia = ComprobacionEficacia.getResponsable().getId();
             }
         }
