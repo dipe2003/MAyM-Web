@@ -76,10 +76,16 @@
                                 <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/Fortalezas/ListarFortalezas.xhtml">Listado</a></li>
                             </ul>
                         </li>
+                        <c:if test="#{sesionUsuario.usuarioLogueado != null}">
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-cog"></span>Configuracion<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Configuraciones/Codificaciones.xhtml">Codificaciones</a></li>
+                                </ul>
+                            </li>
+                        </c:if>
                     </ul>
-                    <c:if test="#{sesionUsuario.usuarioLogueado != null}">
-                        <a class="navbar-brand" href="#"><span class="glyphicon glyphicon-cog"></span> Configuracion</a>
-                    </c:if>
+                    
                     <ul class="nav navbar-nav navbar-right">
                         <c:choose>
                             <c:when test="#{sesionUsuario.usuarioLogueado != null}">

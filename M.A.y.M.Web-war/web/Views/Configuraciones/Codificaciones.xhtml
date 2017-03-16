@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition template="../../index.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"          
+                xmlns:f="http://xmlns.jcp.org/jsf/core"                    
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                >
+    <ui:define name="page_content">
+        
+        <div class="container-fluid">
+            <div class="panel panel-info">
+                <div class="panel-heading">Codificaciones</div>
+                <div class="panel-body">
+                    Aqui se listan todas las Codificaciones registradas.
+                    Pueden modificarse y elminarse (solo Administrador).
+                </div>                  
+            </div>                 
+        </div>
+        
+        <div class="container-fluid" style="padding: 1%">
+            <c:choose>
+                <c:when test="#{empty codificaciones.listaCodificaciones}">
+                    <div class="alert alert-info">
+                        <strong>Info!</strong> No hay registros para listar.
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <h:form id="form_tabla_acciones" >
+                        <table class="table table-hover table-striped table-responsive">
+                            <thead>
+                                <tr>
+                                    <th>Nombre Codificacion</th>
+                                    <th>Descripcion</th>
+                                    <th>Aplica a Empresa</th>
+                                    <th></th>
+                                </tr>
+                                
+                            </thead>
+                            
+                            <tbody>
+                                <c:forEach items="#{codificaciones.listaCodificaciones}" var="codificacion">
+                                    <tr>
+                                        <td>
+                                            #{codificacion.value.nombre}
+                                        </td>
+                                        <td>
+                                            #{codificacion.value.descripcion}
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" checked="#{codificaciones.contieneEmpresa(codificacion.key)}"/>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
+                                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li><h:link value="Ver Fortaleza" >                                                        
+                                                            <f:ajax onevent="indicador" />
+                                                        </h:link>
+                                                    </li>
+                                                    <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != null}">
+                                                        <li><h:link value="Editar Datos" outcome="#" >                                                        
+                                                                <f:ajax onevent="indicador" />
+                                                            </h:link>
+                                                        </li>
+                                                    </c:if>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table> 
+                    </h:form>
+                </c:otherwise>
+            </c:choose>
+        </div>
+        
+    </ui:define>
+</ui:composition>

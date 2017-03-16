@@ -6,6 +6,7 @@
 package com.dperez.maym.web.codificaciones;
 
 import com.dperez.maymweb.codificacion.Codificacion;
+import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.Serializable;
@@ -19,6 +20,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 
 
 
@@ -30,10 +32,13 @@ public class Codificaciones implements Serializable {
     @Inject
     private FacadeLectura fLectura;
     
+    private Empresa EmpresaLogueada;
+    
     private String NombreCodificacion;
     private String DescripcionCodificacion;   
     private Map<Integer, Codificacion> ListaCodificaciones;
     
+    private Map<Integer, Codificacion> ListaCodificacionesEmpresa;
     
     //  Getters
     
@@ -54,11 +59,19 @@ public class Codificaciones implements Serializable {
      */
     @PostConstruct
     public void init(){
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        EmpresaLogueada = (Empresa)request.getSession().getAttribute("Empresa");
+        
         //  Codificaciones
         ListaCodificaciones = new HashMap<>();
+        ListaCodificacionesEmpresa = new HashMap<>();
         List<Codificacion> tmpCodificaciones = fLectura.ListarCodificaciones();
         for(Codificacion codificacion:tmpCodificaciones){
             ListaCodificaciones.put(codificacion.getId(), codificacion);
+            if(codificacion.getEmpresasCodificacion().contains(EmpresaLogueada)){
+                ListaCodificacionesEmpresa.put(codificacion.getId(), codificacion);
+            }
         }
     }
     
@@ -105,6 +118,14 @@ public class Codificaciones implements Serializable {
         }else{
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar la codificacion", "No se pudo eliminar la codificacion" ));
             FacesContext.getCurrentInstance().renderResponse();
+        }
+    }
+    
+    public boolean contieneEmpresa(int IdCodificacion){
+        if(ListaCodificacionesEmpresa.containsKey(IdCodificacion)){
+            return true;
+        }else{
+            return false;
         }
     }
     

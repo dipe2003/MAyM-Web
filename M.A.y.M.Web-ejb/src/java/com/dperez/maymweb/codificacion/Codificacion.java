@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,7 +35,7 @@ public class Codificacion implements Serializable{
     @OneToMany(mappedBy = "CodificacionAccion")
     private List<Accion> AccionesConCodificacion;
     
-    @ManyToMany(mappedBy = "CodificacionesEmpresa")
+    @ManyToMany(mappedBy = "CodificacionesEmpresa", fetch = FetchType.EAGER)
     private List<Empresa> EmpresasCodificacion;
     
     // Constructores
