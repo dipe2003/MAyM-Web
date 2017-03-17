@@ -107,6 +107,21 @@ public class FacadeAdministrador  {
     }
     
     /**
+     * Agrega o Quita empresa de la codificacion.
+     * Actualiza la base de datos y el objeto Empresa relacionado.
+     * @param IdCodificacion
+     * @param AgregarEmpresa True agrega, False quita.
+     * @param IdEmpresa
+     * @return Retorna -1 si no se actualizo. Retorna el IdCodificacion si se actualizo.
+     */
+    public int ModificarEmpresaCodificacion(int IdCodificacion, boolean AgregarEmpresa, int IdEmpresa){
+        if(AgregarEmpresa){
+            return cConfig.AgregarCodificacionEmpresa(IdCodificacion, IdEmpresa);
+        }
+        return cConfig.RemoverCodificacionEmpresa(IdCodificacion, IdEmpresa);
+    }
+    
+    /**
      * Elimina la codificacion de la base de datos.
      * Se comprueba que no tenga acciones relacionadas.
      * @param IdCodificacion

@@ -32,7 +32,7 @@ public class Codificacion implements Serializable{
     private String Nombre = new String();
     private String Descripcion = new String();
     
-    @OneToMany(mappedBy = "CodificacionAccion")
+    @OneToMany(mappedBy = "CodificacionAccion", fetch = FetchType.EAGER)
     private List<Accion> AccionesConCodificacion;
     
     @ManyToMany(mappedBy = "CodificacionesEmpresa", fetch = FetchType.EAGER)
@@ -112,6 +112,20 @@ public class Codificacion implements Serializable{
         if(EmpresaCodificacion.getCodificacionesEmpresa().contains(this)){
             EmpresaCodificacion.removeCodificacionEmpresa(this);
         }
+    }
+    
+    /**
+     * Comprueba  que la lista de empresas contenga la empresa especificada por su id.
+     * @param IdEmpresa
+     * @return Retorna True si la lista contiene a la empresa, de lo contrario false.
+     */
+    public boolean contieneEmpresa(int IdEmpresa){
+        for(Empresa empresa: this.EmpresasCodificacion){
+            if(empresa.getId() == IdEmpresa){
+                return true;
+            }
+        }
+        return false;
     }
     
 }
