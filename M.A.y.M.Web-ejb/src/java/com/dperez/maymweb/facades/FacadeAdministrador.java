@@ -123,12 +123,15 @@ public class FacadeAdministrador  {
     
     /**
      * Elimina la codificacion de la base de datos.
+     * PRE: se debe comprobar que existe a una unica empresa.
+     * Solo se elimina si pertenece a una unica empresa.
      * Se comprueba que no tenga acciones relacionadas.
      * @param IdCodificacion
+     * @param IdEmpresa
      * @return Retorna el id de la codificacion si se elimino. Retorna -1 si no se elimino.
      */
-    public int EliminarCodificacion(int IdCodificacion){
-        return cConfig.EliminarCodificacion(IdCodificacion);
+    public int EliminarCodificacion(int IdCodificacion, int IdEmpresa){
+        return cConfig.EliminarCodificacion(IdCodificacion, IdEmpresa);
     }
     
     /***

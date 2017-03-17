@@ -6,8 +6,7 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"          
                 xmlns:f="http://xmlns.jcp.org/jsf/core"                    
-                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-                
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"                
                 xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
     <ui:define name="page_content">
         
@@ -16,7 +15,7 @@
                 <div class="panel-heading">Codificaciones</div>
                 <div class="panel-body">
                     Aqui se listan todas las Codificaciones registradas.
-                    Pueden modificarse y elminarse (solo Administrador).
+                    Pueden crearse, modificarse y elminarse (solo Administrador).
                 </div>                  
             </div>                 
         </div>
@@ -83,10 +82,13 @@
                                                 </c:if>                                                    
                                             </div>
                                             <div class="btn-group">
-                                                <h:commandLink id="btn_eliminar_#{codificacion.key}" class="btn btn-danger" onclick="if (! confirm('Seguro que va a eliminar esta accion? Se eliminaran todos los datos relacionados.')) return false" >
-                                                    <span class="glyphicon glyphicon-trash"> </span>
-                                                    <f:ajax event="click" listener="#{codificaciones.eliminarCodificacion(codificacion.key)}"/>
-                                                </h:commandLink>                                                    
+                                                <c:if test="#{(sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR' and codificacion.value.contieneEmpresa(codificaciones.empresaLogueada.id) and 
+                                                              codificacion.value.empresasCodificacion.size()  == 1) or (sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR' and codificacion.value.empresasCodificacion.size() == 0) }">
+                                                    <h:commandLink id="btn_eliminar_#{codificacion.key}" class="btn btn-danger" onclick="if (! confirm('Seguro que va a eliminar esta codificacion? ')) return false" >
+                                                        <span class="glyphicon glyphicon-trash"> </span>
+                                                        <f:ajax event="click" listener="#{codificaciones.eliminarCodificacion(codificacion.key)}"/>
+                                                    </h:commandLink>  
+                                                </c:if>
                                             </div>                                                
                                         </td>
                                         <h:panelGroup id="panel_mensajes_tabla">
@@ -141,7 +143,7 @@
                                         </h:commandButton>
                                     </div>
                                     <div class="col-sm-6">
-                                        <button type="button" class="btn btn-default" style="width: 99%;" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-default" style="width: 99%;" data-dismiss="modal">Cerrar</button>
                                     </div>
                                 </div>
                                 
@@ -205,7 +207,7 @@
                                         </h:commandButton>
                                     </div>
                                     <div class="col-sm-6">
-                                        <button type="button" class="btn btn-default" style="width: 99%;" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-default" style="width: 99%;" data-dismiss="modal">Cerrar</button>
                                     </div>
                                 </div>
                                 

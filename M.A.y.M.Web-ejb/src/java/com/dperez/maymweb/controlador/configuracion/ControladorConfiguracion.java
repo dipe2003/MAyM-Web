@@ -325,13 +325,19 @@ public class ControladorConfiguracion {
     
     /**
      * Elimina la codificacion de la base de datos.
+     * PRE: se debe comprobar que existe a una unica empresa.
+     * Solo se elimina si pertenece a una unica empresa.
      * Se comprueba que no tenga acciones relacionadas.
      * @param IdCodificacion
+     * @param idEmpresa
      * @return Retorna el id de la codificacion si se elimino. Retorna -1 si no se elimino.
      */
-    public int EliminarCodificacion(int IdCodificacion){
+    public int EliminarCodificacion(int IdCodificacion, int idEmpresa){
         Codificacion codificacion = mCodificacion.GetCodificacion(IdCodificacion);
         if(codificacion.getAccionesConCodificacion().isEmpty()){
+            Empresa empresa = mEmpresa.GetEmpresa(idEmpresa);
+            codificacion.removeEmpresaCodificacion(empresa);
+            mEmpresa.ActualizarEmpresa(empresa);
             return mCodificacion.BorrarCodificacion(codificacion);
         }
         return -1;

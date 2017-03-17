@@ -76,12 +76,19 @@ public class Codificaciones implements Serializable {
         //  Codificaciones
         ListaCodificaciones = new HashMap<>();
         ListaCodificacionesEmpresa = new HashMap<>();
-        actualizarCodificacion();
+        
+        List<Codificacion> tmpCodificaciones = fLectura.ListarCodificaciones();
+        for(Codificacion codificacion:tmpCodificaciones){
+            ListaCodificaciones.put(codificacion.getId(), codificacion);
+            if(codificacion.getEmpresasCodificacion().contains(EmpresaLogueada)){
+                ListaCodificacionesEmpresa.put(codificacion.getId(), codificacion);
+            }
+        }
     }
     
     /**
      * Crea la codificacion con los datos ingresados.
-     * Muestra un mensaje de errror si no se creo, redirige a la misma pagina para ver los resultados.
+     * Muestra un mensaje de errror si no se creo, se agrega la codificacion a la empres logueada y redirige a la misma pagina para ver los resultados.
      * @throws java.io.IOException
      */
     public void nuevaCodificacion() throws IOException{
@@ -90,7 +97,11 @@ public class Codificaciones implements Serializable {
             context.addMessage("form_codificaciones:btn_nueva_codificacion", new FacesMessage(SEVERITY_ERROR, "Ya existe una codificacion con ese nombre", "Ya existe una codificacion con ese nombre" ));
             context.renderResponse();
         }else{
-            if(fAdmin.NuevaCodificacion(NombreCodificacion, DescripcionCodificacion) != null){
+            Codificacion cod;
+            if((cod = fAdmin.NuevaCodificacion(NombreCodificacion, DescripcionCodificacion)) != null){
+                if(cod != null){
+                    fAdmin.ModificarEmpresaCodificacion(cod.getId(), true, EmpresaLogueada.getId());
+                }
                 context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Codificaciones.xhtml");
             }else{
                 context.addMessage("form_codificaciones:btn_nueva_codificacion", new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Codificacion", "No se pudo crear la Codificacion" ));
@@ -122,21 +133,6 @@ public class Codificaciones implements Serializable {
         }
     }
     
-    /**
-     * Actualiza la lista de codificaciones.
-     */
-    private void actualizarCodificacion(){
-        this.ListaCodificaciones.clear();
-        this.ListaCodificacionesEmpresa.clear();
-        List<Codificacion> tmpCodificaciones = fLectura.ListarCodificaciones();
-        for(Codificacion codificacion:tmpCodificaciones){
-            ListaCodificaciones.put(codificacion.getId(), codificacion);
-            if(codificacion.getEmpresasCodificacion().contains(EmpresaLogueada)){
-                ListaCodificacionesEmpresa.put(codificacion.getId(), codificacion);
-            }
-        }
-    }
-    
     private boolean comprobarNombreCodificacion(String NombreCodificacion){
         for(Map.Entry entry: this.ListaCodificaciones.entrySet()){
             if (((Codificacion)entry.getValue()).getNombre().equalsIgnoreCase(NombreCodificacion)){
@@ -154,10 +150,17 @@ public class Codificaciones implements Serializable {
      */
     public void eliminarCodificacion(int IdCodificacionSeleccionada) throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();
-        if(fAdmin.EliminarCodificacion(IdCodificacionSeleccionada)!=-1){
-            context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Codificaciones.xhtml");
+        // primero se comprueba que pertenezca a la empresa del usuario logueado y que no aplique a otra empresa
+        Codificacion cod = ListaCodificaciones.get(IdCodificacionSeleccionada);
+        if(cod.contieneEmpresa(EmpresaLogueada.getId()) && cod.getEmpresasCodificacion().size()==1){
+            if(fAdmin.EliminarCodificacion(IdCodificacionSeleccionada, EmpresaLogueada.getId())!=-1){
+                context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Codificaciones.xhtml");
+            }else{
+                context.addMessage("form_codificaciones:btn_eliminar_"+IdCodificacionSeleccionada, new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar la codificacion", "No se pudo eliminar la codificacion" ));
+                context.renderResponse();
+            }
         }else{
-            context.addMessage("form_codificaciones:btn_eliminar_"+IdCodificacionSeleccionada, new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar la codificacion", "No se pudo eliminar la codificacion" ));
+            context.addMessage("form_codificaciones:btn_eliminar_"+IdCodificacionSeleccionada, new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar la codificacion, esta utilizada por otra empresa", "No se pudo eliminar la codificacion, esta utilizada por otra empresa" ));
             context.renderResponse();
         }
     }
