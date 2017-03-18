@@ -34,7 +34,7 @@ public class FacadeAdministrador  {
     //  Constructores
     public FacadeAdministrador(){}
     
-        /**
+    /**
      * Crea una empresa y la persiste en la base de datos.
      * @param Id
      * @param NombreEmpresa
@@ -46,7 +46,7 @@ public class FacadeAdministrador  {
      * @param NumeroEmpresa
      * @return Null si no se creo la empresa.
      */
-    public Empresa NuevaEmpresa(int Id, String NombreEmpresa, String DireccionEmpresa, String TelefonoEmpresa, String CorreoEmpresa, 
+    public Empresa NuevaEmpresa(int Id, String NombreEmpresa, String DireccionEmpresa, String TelefonoEmpresa, String CorreoEmpresa,
             String FaxEmpresa, String Descripcion, String NumeroEmpresa){
         return cConfig.NuevaEmpresa(Id, NombreEmpresa, DireccionEmpresa, TelefonoEmpresa, CorreoEmpresa, FaxEmpresa, Descripcion, NumeroEmpresa);
     }
@@ -75,13 +75,30 @@ public class FacadeAdministrador  {
     }
     
     /**
+     * Agrega o Quita empresa del Area.
+     * Actualiza la base de datos y el objeto Empresa relacionado.
+     * @param IdArea
+     * @param AgregarEmpresa True agrega, False quita.
+     * @param IdEmpresa
+     * @return Retorna -1 si no se actualizo. Retorna el IdCodificacion si se actualizo.
+     */
+    public int ModificarEmpresaArea(int IdArea, boolean AgregarEmpresa, int IdEmpresa){
+        if(AgregarEmpresa){
+            return cConfig.AgregarAreaEmpresa(IdArea, IdEmpresa);
+        }
+        return cConfig.RemoverAreaEmpresa(IdArea, IdEmpresa);
+    }
+    
+    /**
      * Elimina el area de la base de datos.
+     * Actualiza la relaciones Empesa.
      * Se comprueba que no tenga acciones y fortalezas relacionadas.
      * @param IdArea
-     * @return Retorna el id de la codificacion si se elimino. Retorna -1 si no se elimino.
+     * @param IdEmpresa
+     * @return Retorna el id del area si se elimino. Retorna -1 si no se elimino.
      */
-    public int EliminarArea(int IdArea){
-        return cConfig.EliminarArea(IdArea);
+    public int EliminarArea(int IdArea, int IdEmpresa){
+        return cConfig.EliminarArea(IdArea, IdEmpresa);
     }
     
     /***

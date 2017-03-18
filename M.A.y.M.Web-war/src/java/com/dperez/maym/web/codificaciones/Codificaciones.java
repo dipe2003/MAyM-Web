@@ -43,8 +43,6 @@ public class Codificaciones implements Serializable {
     private boolean ContieneAcciones;
     private Map<Integer, Codificacion> ListaCodificaciones;
     
-    private Map<Integer, Codificacion> ListaCodificacionesEmpresa;
-    
     //  Getters
     
     public String getNombreCodificacion() {return NombreCodificacion;}
@@ -75,14 +73,10 @@ public class Codificaciones implements Serializable {
         
         //  Codificaciones
         ListaCodificaciones = new HashMap<>();
-        ListaCodificacionesEmpresa = new HashMap<>();
         
         List<Codificacion> tmpCodificaciones = fLectura.ListarCodificaciones();
         for(Codificacion codificacion:tmpCodificaciones){
             ListaCodificaciones.put(codificacion.getId(), codificacion);
-            if(codificacion.getEmpresasCodificacion().contains(EmpresaLogueada)){
-                ListaCodificacionesEmpresa.put(codificacion.getId(), codificacion);
-            }
         }
     }
     
@@ -133,6 +127,11 @@ public class Codificaciones implements Serializable {
         }
     }
     
+    /**
+     * Comprueba que no exista una Codificacion con el mismo nombre.
+     * @param NombreCodificacion
+     * @return
+     */
     private boolean comprobarNombreCodificacion(String NombreCodificacion){
         for(Map.Entry entry: this.ListaCodificaciones.entrySet()){
             if (((Codificacion)entry.getValue()).getNombre().equalsIgnoreCase(NombreCodificacion)){
@@ -164,15 +163,11 @@ public class Codificaciones implements Serializable {
             context.renderResponse();
         }
     }
-    
-    public boolean contieneEmpresa(int IdCodificacion){
-        if(ListaCodificacionesEmpresa.containsKey(IdCodificacion)){
-            return true;
-        }else{
-            return false;
-        }
-    }
-    
+      
+     /**
+     * Carga los atributos NombreCodificacion, DescripcionCodificacion e IdCodificacionSeleccionada segun el id especificado en la vista.
+     * @param IdCodificacion
+     */
     public void cargarDatos(int IdCodificacion){
         if(IdCodificacion < 0 ){
             this.NombreCodificacion = new String();

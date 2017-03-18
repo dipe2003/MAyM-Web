@@ -19,7 +19,7 @@
                 </div>                  
             </div>                 
         </div>
-        <h:form id="form_codificaciones" >
+        <h:form id="form_detecciones" >
             <div class="container-fluid" style="padding: 1%">
                 <c:choose>
                     <c:when test="#{empty detecciones.listaDetecciones}">
@@ -27,22 +27,18 @@
                             <strong>Info!</strong> No hay registros para listar.
                         </div>
                         <div class="btn-group" >
-                            <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != null}">
-                                <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Nueva" action="#{detecciones.cargarDatos(-1)}">
-                                    <span class="glyphicon glyphicon-plus" style="font-family: sans-serif;"> Nueva</span>
-                                    <f:ajax delay="100" render="panel_modal" />
-                                </h:commandLink>
-                            </c:if>                                                    
+                            <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Nueva" action="#{detecciones.cargarDatos(-1)}">
+                                <span class="glyphicon glyphicon-plus" style="font-family: sans-serif;"> Nueva</span>
+                                <f:ajax delay="100" render="panel_modal" />
+                            </h:commandLink>                                           
                         </div>
                     </c:when>
                     <c:otherwise>
                         <div class="btn-group">
-                            <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != null}">
-                                <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Nueva" action="#{detecciones.cargarDatos(-1)}">
-                                    <span class="glyphicon glyphicon-plus" style="font-family: sans-serif;"> Nueva</span>
-                                    <f:ajax delay="100" render="panel_modal" />
-                                </h:commandLink>
-                            </c:if>                                                    
+                            <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Nueva" action="#{detecciones.cargarDatos(-1)}">
+                                <span class="glyphicon glyphicon-plus" style="font-family: sans-serif;"> Nueva</span>
+                                <f:ajax delay="100" render="panel_modal" />
+                            </h:commandLink>                                              
                         </div>
                         <table class="table table-hover table-striped table-responsive">
                             <thead>
@@ -64,19 +60,19 @@
                                         </td>
                                         <td>                                            
                                             <div class="btn-group">
-                                                <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != null}">
-                                                    <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Editar" action="#{detecciones.cargarDatos(deteccion.key)}">
-                                                        <span class="glyphicon glyphicon-pencil"></span>
-                                                        <f:ajax delay="100" render="panel_modal_editar" />
-                                                    </h:commandLink>
-                                                </c:if>                                                    
+                                                <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Editar" action="#{detecciones.cargarDatos(deteccion.key)}">
+                                                    <span class="glyphicon glyphicon-pencil"></span>
+                                                    <f:ajax delay="100" render="panel_modal_editar" />
+                                                </h:commandLink>                                               
                                             </div>
                                             <div class="btn-group">
-                                                <c:if test="#{(sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR' and deteccion.value.accionesDetectadas.size() == 0) or (sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR' and deteccion.value.fortalezasDetectadas.size() == 0) }">
-                                                    <h:commandLink id="btn_eliminar_#{deteccion.key}" class="btn btn-danger" onclick="if (! confirm('Seguro que va a eliminar esta deteccion? ')) return false" >
-                                                        <span class="glyphicon glyphicon-trash"> </span>
-                                                        <f:ajax event="click" listener="#{detecciones.eliminarDeteccion(deteccion.key)}"/>
-                                                    </h:commandLink>  
+                                                <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTROADOR'}">
+                                                    <c:if test="#{deteccion.value.accionesDetectadas.size() == 0 and deteccion.value.fortalezasDetectadas.size() == 0 }">
+                                                        <h:commandLink id="btn_eliminar_#{deteccion.key}" class="btn btn-danger" onclick="if (! confirm('Seguro que va a eliminar esta deteccion? ')) return false" >
+                                                            <span class="glyphicon glyphicon-trash"> </span>
+                                                            <f:ajax event="click" listener="#{detecciones.eliminarDeteccion(deteccion.key)}"/>
+                                                        </h:commandLink>  
+                                                    </c:if>
                                                 </c:if>
                                             </div>                                                
                                         </td>
@@ -181,7 +177,7 @@
                             <div class="modal-footer">
                                 <div class="row">
                                     <div class="col-sm-6" >
-                                        <h:commandButton id="btn_editar_deteccion" style="width: 99%;" class="btn btn-primary" value="Guardar" action="#{deteccion.editarDeteccion()}" >
+                                        <h:commandButton id="btn_editar_deteccion" style="width: 99%;" class="btn btn-primary" value="Guardar" action="#{detecciones.editarDeteccion()}" >
                                             <f:ajax execute="panel_modal_editar" delay="100" render="panel_mensajes_modal_editar panel_modal_editar" />
                                         </h:commandButton>
                                     </div>

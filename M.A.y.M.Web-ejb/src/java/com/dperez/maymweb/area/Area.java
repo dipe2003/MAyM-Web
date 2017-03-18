@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,12 +33,13 @@ public class Area implements Serializable {
     private String Nombre = new String();
     private String Correo = new String();
     
-    @OneToMany(mappedBy = "AreaSectorAccion")
+    @OneToMany(mappedBy = "AreaSectorAccion", fetch = FetchType.EAGER)
     private List<Accion> AccionesEnAreaSector;
-    @OneToMany(mappedBy = "AreaSectorFortaleza")
+    
+    @OneToMany(mappedBy = "AreaSectorFortaleza", fetch = FetchType.EAGER)
     private List<Fortaleza> FortalezasEnAreaSector;
     
-    @ManyToMany(mappedBy = "AreasEmpresa")
+    @ManyToMany(mappedBy = "AreasEmpresa", fetch = FetchType.EAGER)
     private List<Empresa> EmpresasArea;
     
     // Constructores
@@ -161,5 +163,19 @@ public class Area implements Serializable {
         if(EmpresaArea.getAreasEmpresa().contains(this)){
             EmpresaArea.removeAreaEmpresa(this);
         }
+    }
+    
+    /**
+     * Comprueba  que la lista de empresas contenga la empresa especificada por su id.
+     * @param IdEmpresa
+     * @return Retorna True si la lista contiene a la empresa, de lo contrario false.
+     */
+    public boolean contieneEmpresa(int IdEmpresa){
+        for(Empresa empresa: this.EmpresasArea){
+            if(empresa.getId() == IdEmpresa){
+                return true;
+            }
+        }
+        return false;
     }
 }

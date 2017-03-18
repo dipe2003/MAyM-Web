@@ -190,7 +190,7 @@ public class ControladorConfiguracion {
      * @return null si no se creo.
      */
     public Area NuevaArea(String NombreArea, String CorreoArea){
-        if(ExisteNombreArea(NombreArea)){
+        if(!ExisteNombreArea(NombreArea)){
             Area area = new Area(NombreArea, CorreoArea);
             area.setId(mArea.CrearArea(area));
             if(area.getId()!=-1){
@@ -208,7 +208,7 @@ public class ControladorConfiguracion {
      * @return Retorna -1 si no se actualizo. Retorna el IdArea si se actualizo.
      */
     public int EditarArea(int IdArea, String NombreArea, String CorreoArea){
-        if(ExisteNombreArea(IdArea, NombreArea)){
+        if(!ExisteNombreArea(IdArea, NombreArea)){
             Area area = mArea.GetArea(IdArea);
             area.setNombre(NombreArea);
             area.setCorreo(CorreoArea);
@@ -219,13 +219,18 @@ public class ControladorConfiguracion {
     
     /**
      * Elimina el area de la base de datos.
+     * Actualiza la relaciones Empesa.
      * Se comprueba que no tenga acciones y fortalezas relacionadas.
      * @param IdArea
+     * @param IdEmpresa
      * @return Retorna el id del area si se elimino. Retorna -1 si no se elimino.
      */
-    public int EliminarArea(int IdArea){
+    public int EliminarArea(int IdArea, int IdEmpresa){
         Area area = mArea.GetArea(IdArea);
         if(area.getAccionesEnAreaSector().isEmpty() && area.getFortalezasEnAreaSector().isEmpty()){
+            Empresa empresa = mEmpresa.GetEmpresa(IdEmpresa);
+            area.removeEmpresaArea(empresa);
+            mEmpresa.ActualizarEmpresa(empresa);
             return mArea.BorrarArea(area);
         }
         return -1;

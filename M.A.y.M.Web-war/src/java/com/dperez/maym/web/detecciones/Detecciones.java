@@ -11,6 +11,7 @@ import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeLectura;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +19,6 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
-import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -40,18 +40,22 @@ public class Detecciones implements Serializable {
     private String NombreDeteccion;
     private Map<Integer, Deteccion> ListaDetecciones;
     
+    private boolean ContieneAcciones;
+    
     private EnumTipoDeteccion[] TiposDeteccion;
     private EnumTipoDeteccion TipoDeDeteccionSeleccionada;
     
     
-    //  Getters    
+    //  Getters
     public String getNombreDeteccion() {return NombreDeteccion;}
     public Map<Integer, Deteccion> getListaDetecciones() {return ListaDetecciones;}
+    public boolean isContieneAcciones() {return ContieneAcciones;}
+    
     public EnumTipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
     public EnumTipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
     public Empresa getEmpresaLogueada() {return EmpresaLogueada;}
     
-    //  Setters    
+    //  Setters
     public void setNombreDeteccion(String NombreDeteccion) {this.NombreDeteccion = NombreDeteccion;}
     public void setListaDetecciones(Map<Integer, Deteccion> ListaDetecciones) {this.ListaDetecciones = ListaDetecciones;}
     public void setTipoDeDeteccionSeleccionada(EnumTipoDeteccion TipoDeteccion){this.TipoDeDeteccionSeleccionada = TipoDeteccion;}
@@ -74,51 +78,60 @@ public class Detecciones implements Serializable {
     
     /**
      * Crea nueva deteccion con el tipo interna/externa seleccionado.
-     * Si no se crea se muestra un mensaje
+     * Si no se crea se muestra un mensaje, de lo contrario se redirige a la pagina para ver los cambios.
+     * @throws java.io.IOException
      */
-    public void nuevaDeteccion(){
-        // Crear Nueva Deteccion y actualizar lista
-        Deteccion deteccion;
-        if((deteccion = fAdmin.NuevaDeteccion(NombreDeteccion, TipoDeDeteccionSeleccionada))!=null){
-            ListaDetecciones.put(deteccion.getId(), deteccion);
+    public void nuevaDeteccion() throws IOException{
+        FacesContext context = FacesContext.getCurrentInstance();
+        if(comprobarNombreDeteccion(NombreDeteccion)){
+            context.addMessage("form_detecciones:btn_nueva_deteccion", new FacesMessage(SEVERITY_ERROR, "Ya existe una deteccion con ese nombre", "Ya existe una deteccion con ese nombre" ));
+            context.renderResponse();
         }else{
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
-            FacesContext.getCurrentInstance().renderResponse();
+            if((fAdmin.NuevaDeteccion(NombreDeteccion, TipoDeDeteccionSeleccionada)) != null){
+                context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Detecciones.xhtml");
+            }else{
+                context.addMessage("form_detecciones:btn_nueva_deteccion", new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Deteccion", "No se pudo crear la Deteccion" ));
+                context.renderResponse();
+            }
         }
     }
     
     
     /**
      * Actualiza la deteccion con lo datos ingresados.
-     * Muestra un mensaje de errror si no se actualizo.
-     * Agrega los cambios en la deteccion de la lista del bean.
-     * @param IdDeteccionSeleccionada
+     * Si no se edita se muestra un mensaje, de lo contrario se redirige a la pagina para ver los cambios.
+     * @throws java.io.IOException
      */
-    public void editarDeteccion(int IdDeteccionSeleccionada){
+    public void editarDeteccion() throws IOException{
+        FacesContext context = FacesContext.getCurrentInstance();
         if((fAdmin.EditarDeteccion(IdDeteccionSeleccionada, NombreDeteccion, TipoDeDeteccionSeleccionada))!=-1){
-            ListaDetecciones.get(IdDeteccionSeleccionada).setNombre(NombreDeteccion);
-            ListaDetecciones.get(IdDeteccionSeleccionada).setTipo(TipoDeDeteccionSeleccionada);
+            context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Detecciones.xhtml");
         }else{
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo editar la deteccion", "No se pudo editar la deteccion" ));
-            FacesContext.getCurrentInstance().renderResponse();
+            context.addMessage("form_detecciones:btn_editar_deteccion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la deteccion", "No se pudo editar la deteccion" ));
+            context.renderResponse();
         }
     }
     
     /**
      * Eliminina la deteccion indicada.
-     * Muestra un mensaje de error si no se pudo eliminar.
-     * Remueve la deteccion de la lista del bean.
+     * Si no se elimina se muestra un mensaje, de lo contrario se redirige a la pagina para ver los cambios.
      * @param IdDeteccionSeleccionada
+     * @throws java.io.IOException
      */
-    public void eliminarDeteccion(int IdDeteccionSeleccionada){
+    public void eliminarDeteccion(int IdDeteccionSeleccionada) throws IOException{
+        FacesContext context = FacesContext.getCurrentInstance();
         if(fAdmin.EliminarDeteccion(IdDeteccionSeleccionada)!=-1){
-            ListaDetecciones.remove(IdDeteccionSeleccionada);
+             context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Detecciones.xhtml");
         }else{
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar la deteccion", "No se pudo eliminar la deteccion" ));
-            FacesContext.getCurrentInstance().renderResponse();
+            context.addMessage("form_detecciones:btn_eliminar_deteccion_"+IdDeteccionSeleccionada, new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar la deteccion", "No se pudo eliminar la deteccion" ));
+            context.renderResponse();
         }
     }
     
+    /**
+     * Carga los atributos NombreDeteccion, TipoDeteccion e IdDeteccionSeleccionada segun el id especificado en la vista.
+     * @param IdDeteccion
+     */
     public void cargarDatos(int IdDeteccion){
         if(IdDeteccion < 0 ){
             this.NombreDeteccion = new String();
@@ -129,18 +142,34 @@ public class Detecciones implements Serializable {
             this.TipoDeDeteccionSeleccionada = ListaDetecciones.get(IdDeteccion).getTipo();
             this.IdDeteccionSeleccionada = IdDeteccion;
             
-            // verifica que no tenga acciones con deteccion seleccioada para esta empresa
+            // verifica que no tenga acciones con deteccion seleccioada
             // al encontrar la primer accion que pertenezca a la deteccion y empresa ContieneAcciones = true
-                Deteccion deteccion = ListaDetecciones.get(IdDeteccion);
-                boolean ContieneAcciones = false;
-                for(Accion accion: deteccion.getAccionesDetectadas()){
-                    if(accion.getEmpresaAccion().getId() == EmpresaLogueada.getId()){
-                        ContieneAcciones = true;
-                        break;
-                    }
+            Deteccion deteccion = ListaDetecciones.get(IdDeteccion);
+            ContieneAcciones = false;
+            for(Accion accion: deteccion.getAccionesDetectadas()){
+                if(accion.getEmpresaAccion().getId() == EmpresaLogueada.getId()){
+                    ContieneAcciones = true;
+                    break;
                 }
             }
-
+        }
+    }
+    
+    /**
+     * Comprueba que no exista una deteccion con el mismo nombre.
+     * Se utiliza el tipo de deteccion seleccionado.
+     * @param NombreDeteccion
+     * @return
+     */
+    private boolean comprobarNombreDeteccion(String NombreDeteccion){
+        for(Deteccion deteccion: this.ListaDetecciones.values()){
+            if(deteccion.getTipo() == TipoDeDeteccionSeleccionada){
+                if(deteccion.getNombre().equalsIgnoreCase(NombreDeteccion)){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
     
 }

@@ -63,6 +63,7 @@ public class EditarAccionCorrectiva implements Serializable {
     
     private int IdAccionSeleccionada;
     private Accion AccionSeleccionada;
+    private Empresa EmpresaLogueada;
     
     private Date FechaDeteccion;
     private String strFechaDeteccion;
@@ -332,8 +333,8 @@ public class EditarAccionCorrectiva implements Serializable {
             MapAdjuntos = new HashMap<>();
             
             // Comprobaciones
-            Empresa empresa = (Empresa) request.getSession().getAttribute("Empresa");
-            ListaUsuarios = fLectura.GetUsuariosEmpresa(empresa.getId());
+            EmpresaLogueada = (Empresa) request.getSession().getAttribute("Empresa");
+            ListaUsuarios = fLectura.GetUsuariosEmpresa(EmpresaLogueada.getId());
             
             ComprobacionImplementacion = AccionSeleccionada.getComprobacionImplementacion();
             ComprobacionEficacia = AccionSeleccionada.getComprobacionEficacia();
@@ -403,6 +404,7 @@ public class EditarAccionCorrectiva implements Serializable {
         // Crear Nueva Codificacion y actualizar lista
         Codificacion cod = fAdmin.NuevaCodificacion(NombreNuevaCodificacion, DescripcionNuevaCodificacion);
         if(cod != null){
+            fAdmin.ModificarEmpresaCodificacion(cod.getId(), true, EmpresaLogueada.getId());
             actualizarCodificacion();
             this.CodificacionSeleccionada = cod.getId();
             this.NombreNuevaCodificacion = new String();
