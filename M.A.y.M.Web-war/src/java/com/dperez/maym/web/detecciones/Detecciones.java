@@ -5,8 +5,10 @@
 */
 package com.dperez.maym.web.detecciones;
 
+import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
+import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.Serializable;
@@ -32,6 +34,9 @@ public class Detecciones implements Serializable {
     @Inject
     private FacadeLectura fLectura;
     
+    private Empresa EmpresaLogueada;
+    
+    private int IdDeteccionSeleccionada;
     private String NombreDeteccion;
     private Map<Integer, Deteccion> ListaDetecciones;
     
@@ -39,14 +44,14 @@ public class Detecciones implements Serializable {
     private EnumTipoDeteccion TipoDeDeteccionSeleccionada;
     
     
-    //  Getters
-    
+    //  Getters    
     public String getNombreDeteccion() {return NombreDeteccion;}
     public Map<Integer, Deteccion> getListaDetecciones() {return ListaDetecciones;}
     public EnumTipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
     public EnumTipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
-    //  Setters
+    public Empresa getEmpresaLogueada() {return EmpresaLogueada;}
     
+    //  Setters    
     public void setNombreDeteccion(String NombreDeteccion) {this.NombreDeteccion = NombreDeteccion;}
     public void setListaDetecciones(Map<Integer, Deteccion> ListaDetecciones) {this.ListaDetecciones = ListaDetecciones;}
     public void setTipoDeDeteccionSeleccionada(EnumTipoDeteccion TipoDeteccion){this.TipoDeDeteccionSeleccionada = TipoDeteccion;}
@@ -112,6 +117,30 @@ public class Detecciones implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar la deteccion", "No se pudo eliminar la deteccion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }
+    }
+    
+    public void cargarDatos(int IdDeteccion){
+        if(IdDeteccion < 0 ){
+            this.NombreDeteccion = new String();
+            this.TipoDeDeteccionSeleccionada = EnumTipoDeteccion.INTERNA;
+            this.IdDeteccionSeleccionada = -1;
+        }else{
+            this.NombreDeteccion = ListaDetecciones.get(IdDeteccion).getNombre();
+            this.TipoDeDeteccionSeleccionada = ListaDetecciones.get(IdDeteccion).getTipo();
+            this.IdDeteccionSeleccionada = IdDeteccion;
+            
+            // verifica que no tenga acciones con deteccion seleccioada para esta empresa
+            // al encontrar la primer accion que pertenezca a la deteccion y empresa ContieneAcciones = true
+                Deteccion deteccion = ListaDetecciones.get(IdDeteccion);
+                boolean ContieneAcciones = false;
+                for(Accion accion: deteccion.getAccionesDetectadas()){
+                    if(accion.getEmpresaAccion().getId() == EmpresaLogueada.getId()){
+                        ContieneAcciones = true;
+                        break;
+                    }
+                }
+            }
+
     }
     
 }

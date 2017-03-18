@@ -12,9 +12,9 @@
         
         <div class="container-fluid">
             <div class="panel panel-info">
-                <div class="panel-heading">Codificaciones</div>
+                <div class="panel-heading">Detecciones</div>
                 <div class="panel-body">
-                    Aqui se listan todas las Codificaciones registradas.
+                    Aqui se listan todas las Detecciones registradas.
                     Pueden crearse, modificarse y elminarse (solo Administrador) cuando no esten en uso.
                 </div>                  
             </div>                 
@@ -22,13 +22,13 @@
         <h:form id="form_codificaciones" >
             <div class="container-fluid" style="padding: 1%">
                 <c:choose>
-                    <c:when test="#{empty codificaciones.listaCodificaciones}">
+                    <c:when test="#{empty detecciones.listaDetecciones}">
                         <div class="alert alert-info">
                             <strong>Info!</strong> No hay registros para listar.
                         </div>
                         <div class="btn-group" >
                             <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != null}">
-                                <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Nueva" action="#{codificaciones.cargarDatos(-1)}">
+                                <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Nueva" action="#{detecciones.cargarDatos(-1)}">
                                     <span class="glyphicon glyphicon-plus" style="font-family: sans-serif;"> Nueva</span>
                                     <f:ajax delay="100" render="panel_modal" />
                                 </h:commandLink>
@@ -38,7 +38,7 @@
                     <c:otherwise>
                         <div class="btn-group">
                             <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != null}">
-                                <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Nueva" action="#{codificaciones.cargarDatos(-1)}">
+                                <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Nueva" action="#{detecciones.cargarDatos(-1)}">
                                     <span class="glyphicon glyphicon-plus" style="font-family: sans-serif;"> Nueva</span>
                                     <f:ajax delay="100" render="panel_modal" />
                                 </h:commandLink>
@@ -47,53 +47,42 @@
                         <table class="table table-hover table-striped table-responsive">
                             <thead>
                                 <tr>
-                                    <th>Nombre Codificacion</th>
-                                    <th>Descripcion</th>
-                                    <th>Aplica a #{codificaciones.empresaLogueada.descripcionEmpresa}</th>
+                                    <th>Nombre Deteccion</th>
+                                    <th>Tipo</th>
                                     <th></th>
-                                </tr>
-                                
+                                </tr>                                
                             </thead>
                             
                             <tbody>
-                                <c:forEach items="#{codificaciones.listaCodificaciones}" var="codificacion">
+                                <c:forEach items="#{detecciones.listaDetecciones}" var="deteccion">
                                     <tr>
                                         <td>
-                                            #{codificacion.value.nombre}
+                                            #{deteccion.value.nombre}
                                         </td>
                                         <td>
-                                            #{codificacion.value.descripcion}
-                                        </td>
-                                        <td>
-                                            <c:if test="#{codificacion.value.contieneEmpresa(codificaciones.empresaLogueada.id)== true}">
-                                                Aplica
-                                            </c:if>
-                                            <c:if test="#{codificacion.value.contieneEmpresa(codificaciones.empresaLogueada.id)== false}">
-                                                No Aplica
-                                            </c:if>
+                                            #{deteccion.value.tipo}
                                         </td>
                                         <td>                                            
                                             <div class="btn-group">
                                                 <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != null}">
-                                                    <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Editar" action="#{codificaciones.cargarDatos(codificacion.key)}">
+                                                    <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Editar" action="#{detecciones.cargarDatos(deteccion.key)}">
                                                         <span class="glyphicon glyphicon-pencil"></span>
                                                         <f:ajax delay="100" render="panel_modal_editar" />
                                                     </h:commandLink>
                                                 </c:if>                                                    
                                             </div>
                                             <div class="btn-group">
-                                                <c:if test="#{(sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR' and codificacion.value.contieneEmpresa(codificaciones.empresaLogueada.id) and 
-                                                              codificacion.value.empresasCodificacion.size()  == 1) or (sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR' and codificacion.value.empresasCodificacion.size() == 0) }">
-                                                    <h:commandLink id="btn_eliminar_#{codificacion.key}" class="btn btn-danger" onclick="if (! confirm('Seguro que va a eliminar esta codificacion? ')) return false" >
+                                                <c:if test="#{(sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR' and deteccion.value.accionesDetectadas.size() == 0) or (sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR' and deteccion.value.fortalezasDetectadas.size() == 0) }">
+                                                    <h:commandLink id="btn_eliminar_#{deteccion.key}" class="btn btn-danger" onclick="if (! confirm('Seguro que va a eliminar esta deteccion? ')) return false" >
                                                         <span class="glyphicon glyphicon-trash"> </span>
-                                                        <f:ajax event="click" listener="#{codificaciones.eliminarCodificacion(codificacion.key)}"/>
+                                                        <f:ajax event="click" listener="#{detecciones.eliminarDeteccion(deteccion.key)}"/>
                                                     </h:commandLink>  
                                                 </c:if>
                                             </div>                                                
                                         </td>
                                         <h:panelGroup id="panel_mensajes_tabla">
                                             <div class="form-group-sm">
-                                                <h:message for="btn_eliminar_#{codificacion.key}" class="msj_error"/>
+                                                <h:message for="btn_eliminar_#{deteccion.key}" class="msj_error"/>
                                             </div>
                                         </h:panelGroup>
                                     </tr>                                        
@@ -103,42 +92,44 @@
                     </c:otherwise>
                 </c:choose>
             </div>
-            <!-- Modal Nueva Codificacion -->
+            <!-- Modal Nueva Deteccion -->
             <div id="modal_Nueva" class="modal fade" style="padding-top: 15%;" role="dialog">
                 <div class="modal-dialog">
                     <h:panelGroup id="panel_modal">
                         <!-- Modal content-->
                         <div class="modal-content">
                             <div class="modal-header" style="background-color: gray; color: white;">
-                                <h4 class="modal-title">Codificacion</h4>
+                                <h4 class="modal-title">Deteccion</h4>
                             </div>
                             <div class="modal-body">
                                 <div class="form-group">
-                                    <strong><label for="nombre_nueva_codificacion">Nombre</label></strong>
-                                    <h:inputText id="nombre_nueva_codificacion" class="form-control" value="#{codificaciones.nombreCodificacion}" 
-                                                 required="true" requiredMessage="Se debe ingresar nombre de codificacion" p:placeholder="Nombre de Codificacion." />
+                                    <strong><label for="nombre_nueva_deteccion">Nombre</label></strong>
+                                    <h:inputText id="nombre_nueva_deteccion" class="form-control" value="#{detecciones.nombreDeteccion}" 
+                                                 required="true" requiredMessage="Se debe ingresar nombre de Deteccion" p:placeholder="Nombre de Deteccion." />
                                 </div>
                                 <div class="form-group">
-                                    <strong><label for="descripcion_nueva_codificacion">Descripcion</label></strong>
-                                    <h:inputText id="descripcion_nueva_codificacion" class="form-control" value="#{codificaciones.descripcionCodificacion}"
-                                                 required="true" requiredMessage="Se debe ingresar descripcion de codificacion" p:placeholder="Nombre de Codificacion." />
+                                    <strong><label for="tipo_nueva_deteccion">Tipo</label></strong>                                 
+                                    <h:selectOneRadio id="tipo_nueva_deteccion" value="#{detecciones.tipoDeDeteccionSeleccionada}" >
+                                        <f:selectItem itemLabel="Interna" itemValue="INTERNA"/>
+                                        <f:selectItem itemLabel="Externa" itemValue="EXTERNA" />                                            
+                                    </h:selectOneRadio>  
                                 </div>
                                 <h:panelGroup id="panel_mensajes_modal">
                                     <div class="form-group-sm">
-                                        <h:message for="nombre_nueva_codificacion" class="msj_error"/>
+                                        <h:message for="nombre_nueva_deteccion" class="msj_error"/>
                                     </div>
                                     <div class="form-group-sm">
-                                        <h:message for="descripcion_nueva_codificacion" class="msj_error"/>
+                                        <h:message for="tipo_nueva_deteccion" class="msj_error"/>
                                     </div>
                                     <div class="form-group-sm">
-                                        <h:message for="btn_nueva_codificacion" class="msj_error"/>
+                                        <h:message for="btn_nueva_deteccion" class="msj_error"/>
                                     </div>
                                 </h:panelGroup>
                             </div>
                             <div class="modal-footer">
                                 <div class="row">
                                     <div class="col-sm-6" >
-                                        <h:commandButton id="btn_nueva_codificacion" style="width: 99%;" class="btn btn-primary" value="Guardar" action="#{codificaciones.nuevaCodificacion()}" >
+                                        <h:commandButton id="btn_nueva_deteccion" style="width: 99%;" class="btn btn-primary" value="Guardar" action="#{detecciones.nuevaDeteccion()}" >
                                             <f:ajax execute="panel_modal" delay="100" render="panel_mensajes_modal panel_modal" />
                                         </h:commandButton>
                                     </div>
@@ -153,56 +144,44 @@
                 </div>
             </div>
             
-            <!-- Modal Editar Codificacion -->
+            <!-- Modal Editar Deteccion -->
             <div id="modal_Editar" class="modal fade" style="padding-top: 15%;" role="dialog">
                 <div class="modal-dialog">
                     <h:panelGroup id="panel_modal_editar">
                         <!-- Modal content-->
                         <div class="modal-content">
                             <div class="modal-header" style="background-color: gray; color: white;">
-                                <h4 class="modal-title">Codificacion</h4>
+                                <h4 class="modal-title">Deteccion</h4>
                             </div>
                             <div class="modal-body">
                                 <div class="form-group">
-                                    <strong><label for="nombre_codificacion">Nombre</label></strong>
-                                    <h:inputText id="nombre_codificacion" class="form-control" value="#{codificaciones.nombreCodificacion}" 
-                                                 required="true" requiredMessage="Se debe ingresar nombre de codificacion" p:placeholder="Nombre de Codificacion." />
+                                    <strong><label for="nombre_deteccion">Nombre</label></strong>
+                                    <h:inputText id="nombre_deteccion" class="form-control" value="#{detecciones.nombreDeteccion}" 
+                                                 required="true" requiredMessage="Se debe ingresar nombre de Deteccion" p:placeholder="Nombre de Deteccion." />
                                 </div>
                                 <div class="form-group">
-                                    <strong><label for="descripcion_codificacion">Descripcion</label></strong>
-                                    <h:inputText id="descripcion_codificacion" class="form-control" value="#{codificaciones.descripcionCodificacion}"
-                                                 required="true" requiredMessage="Se debe ingresar descripcion de codificacion" p:placeholder="Nombre de Codificacion." />
-                                </div>
-                                <div class="form-group">
-                                    <strong><label for="aplica_empresa">Aplica a Empresa</label></strong>
-                                    <c:if test="#{codificaciones.contieneAcciones == true}">
-                                        <div class="alert alert-info">
-                                            <strong>Info!</strong> No se puede modificar porque ya existen acciones codificadas.
-                                        </div>
-                                    </c:if>
-                                    <c:if test="#{codificaciones.contieneAcciones == false}">
-                                        <h:selectOneRadio value="#{codificaciones.aplicaEmpresa}" >
-                                            <f:selectItem itemLabel="Aplica" itemValue="true"/>
-                                            <f:selectItem itemLabel="No Aplica" itemValue="false" />                                            
-                                        </h:selectOneRadio>
-                                    </c:if>
+                                    <strong><label for="tipo_deteccion">Tipo de Deteccion</label></strong>                                    
+                                    <h:selectOneRadio id="tipo_deteccion" value="#{detecciones.tipoDeDeteccionSeleccionada}" >
+                                        <f:selectItem itemLabel="Interna" itemValue="INTERNA"/>
+                                        <f:selectItem itemLabel="Externa" itemValue="EXTERNA" />                                            
+                                    </h:selectOneRadio>                                    
                                 </div>
                                 <h:panelGroup id="panel_mensajes_modal_editar">
                                     <div class="form-group-sm">
-                                        <h:message for="nombre_codificacion" class="msj_error"/>
+                                        <h:message for="nombre_deteccion" class="msj_error"/>
                                     </div>
                                     <div class="form-group-sm">
-                                        <h:message for="descripcion_codificacion" class="msj_error"/>
+                                        <h:message for="tipo_deteccion" class="msj_error"/>
                                     </div>
                                     <div class="form-group-sm">
-                                        <h:message for="btn_editar_codificacion" class="msj_error"/>
+                                        <h:message for="btn_editar_deteccion" class="msj_error"/>
                                     </div>
                                 </h:panelGroup>
                             </div>
                             <div class="modal-footer">
                                 <div class="row">
                                     <div class="col-sm-6" >
-                                        <h:commandButton id="btn_editar_codificacion" style="width: 99%;" class="btn btn-primary" value="Guardar" action="#{codificaciones.editarCodificacion()}" >
+                                        <h:commandButton id="btn_editar_deteccion" style="width: 99%;" class="btn btn-primary" value="Guardar" action="#{deteccion.editarDeteccion()}" >
                                             <f:ajax execute="panel_modal_editar" delay="100" render="panel_mensajes_modal_editar panel_modal_editar" />
                                         </h:commandButton>
                                     </div>
