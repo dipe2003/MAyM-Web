@@ -85,6 +85,9 @@
                                     <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Configuraciones/Codificaciones.xhtml">Codificaciones</a></li>
                                     <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Configuraciones/Detecciones.xhtml">Detecciones</a></li>
                                     <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Configuraciones/Areas.xhtml">Areas / Sectores</a></li>
+                                    <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR'}" >
+                                        <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Configuraciones/Usuarios.xhtml">Usuarios</a></li>
+                                    </c:if>
                                 </ul>
                             </li>
                         </c:if>
@@ -96,12 +99,14 @@
                                 <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">#{sesionUsuario.usuarioLogueado.nombre} #{sesionUsuario.usuarioLogueado.apellido} <span class="glyphicon glyphicon-user"></span></a>
                                     <div class="dropdown-menu">
                                         <h:form id="formlout" class="form container-fluid">                                                
-                                            <h:commandButton id="btnLogout" class="btn btn-block" value="Salir" action="#{sesionUsuario.logout()}">
+                                            <h:commandLink id="btnLogout" class="btn btn-block" action="#{sesionUsuario.logout()}">
+                                                <span class="glyphicon glyphicon-log-out"></span> Salir
                                                 <f:ajax execute="@form" render="myNavbar" />
-                                            </h:commandButton>
-                                            <h:commandButton id="btnEditarPerfil" class="btn btn-block" value="Editar Perfil">
+                                            </h:commandLink>
+                                            <h:commandLink id="btnEditarPerfil" class="btn btn-block" >
+                                                <span class="glyphicon glyphicon-edit"></span>Editar Perfil
                                                 <f:ajax execute="@form" render="myNavbar" />
-                                            </h:commandButton>
+                                            </h:commandLink>
                                         </h:form>
                                     </div>
                                 </li>

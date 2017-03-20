@@ -20,6 +20,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 /**
  *
@@ -46,9 +48,11 @@ public class Usuario implements Serializable {
     private Credencial CredencialUsuario;
     
     @OneToMany(mappedBy = "ResponsableImplementacion")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Actividad> MedidasResponsableImplementacion;
     
     @OneToMany(mappedBy = "Responsable")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Comprobacion> Comprobaciones;
     
     // Constructores

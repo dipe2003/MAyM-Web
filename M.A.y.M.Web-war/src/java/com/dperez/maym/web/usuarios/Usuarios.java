@@ -35,6 +35,13 @@ public class Usuarios implements Serializable {
     @Inject
     private FacadeMain fMain;
     
+    private Empresa EmpresaLogueada;
+    
+    private int IdUsuarioSeleccionado;
+    
+    private boolean ContieneRegistros;
+    
+    private int NumeroNuevoUsuario;
     private String Nombre;
     private String Apellido;
     private String Nickname;
@@ -52,14 +59,16 @@ public class Usuarios implements Serializable {
     private boolean CambiarPassword;
     
     //  Getters
-    
+    public Empresa getEmpresaLogueada() {return EmpresaLogueada;}
+    public boolean isContieneRegistros() {return ContieneRegistros;}
+    public String getCorreoElectronico() {return CorreoElectronico;}
+    public int getNumeroNuevoUsuario() {return NumeroNuevoUsuario;}    
     public String getNombre() {return this.Nombre;}
     public String getApellido(){return this.Apellido;}
     public String getNickname(){return this.Nickname;}
     public String getPassword(){return this.Password;}
     public String getPasswordConfirmacion(){return this.PasswordConfirmacion;}
     public String getPasswordNuevo(){return this.PasswordNuevo;}
-    public String getCorreElectronico(){return this.CorreoElectronico;}
     public boolean isRecibeAlertas(){return this.RecibeAlertas;}
     
     public EnumPermiso getPermisoSeleccionado(){return this.PermisoSeleccionado;}
@@ -69,8 +78,11 @@ public class Usuarios implements Serializable {
     
     public boolean isCambiarPassword() {return CambiarPassword;}
     
+    public void setEmpresaLogueada(Empresa EmpresaLogueada) {this.EmpresaLogueada = EmpresaLogueada;}
+
     //  Setters
-    
+    public void setContieneRegistros(boolean ContieneRegistros) {this.ContieneRegistros = ContieneRegistros;}
+    public void setNumeroNuevoUsuario(int NumeroNuevoUsuario) {this.NumeroNuevoUsuario = NumeroNuevoUsuario;}    
     public void setNombre(String Nombre) {this.Nombre = Nombre;}
     public void setApellido(String Apellido){this.Apellido = Apellido;}
     public void setNickname(String Nickname){this.Nickname = Nickname;}
@@ -94,6 +106,10 @@ public class Usuarios implements Serializable {
      */
     @PostConstruct
     public void init(){
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        EmpresaLogueada = (Empresa)request.getSession().getAttribute("Empresa");
+        
         //  Usuarios
         ListaUsuarios = new HashMap<>();
         List<Usuario> tmpUsuarios = fLectura.GetUsuarios();
@@ -126,7 +142,7 @@ public class Usuarios implements Serializable {
      * Agrega los cambios a la lista del bean.
      * @param IdUsuarioSeleccionado
      */
-    public void editarUsuario(int IdUsuarioSeleccionado){
+    public void editarUsuario(){
         if((IdUsuarioSeleccionado =fMain.CambiarDatosUsuario(IdUsuarioSeleccionado, Nickname, Nombre, Apellido, CorreoElectronico, PermisoSeleccionado, RecibeAlertas))!=-1){
             ListaUsuarios.put(IdUsuarioSeleccionado, fLectura.GetUsuario(IdUsuarioSeleccionado));
         }else{
@@ -174,5 +190,44 @@ public class Usuarios implements Serializable {
             FacesContext.getCurrentInstance().renderResponse();
         }
     }
+    
+    /**
+     * Carga los atributos NombreCodificacion, DescripcionCodificacion e IdCodificacionSeleccionada segun el id especificado en la vista.
+     * @param IdUsuario
+     */
+    public void cargarDatos(int IdUsuario){
+        if(IdUsuario < 0 ){
+            this.Nombre  = new String();
+            this.Apellido  = new String();
+            this.Nickname  = new String();
+            this.CorreoElectronico  = new String();
+            this.RecibeAlertas = false;
+            this.PermisoSeleccionado  = EnumPermiso.LECTURA;
+            this.IdUsuarioSeleccionado = -1;
+            this.NumeroNuevoUsuario = 0;
+            this.CambiarPassword = false;
+        }else{
+            this.Nombre  = ListaUsuarios.get(IdUsuario).getNombre();
+            this.Apellido  = ListaUsuarios.get(IdUsuario).getApellido();
+            this.Nickname  = ListaUsuarios.get(IdUsuario).getNickName();
+            this.CorreoElectronico  = ListaUsuarios.get(IdUsuario).getCorreo();
+            this.RecibeAlertas = ListaUsuarios.get(IdUsuario).isRecibeAlertas();
+            this.PermisoSeleccionado  = ListaUsuarios.get(IdUsuario).getPermisoUsuario();
+            this.IdUsuarioSeleccionado = IdUsuario;
+            this.NumeroNuevoUsuario = ListaUsuarios.get(IdUsuario).getId();
+            this.CambiarPassword = false;
+            
+            Usuario usuario =  ListaUsuarios.get(IdUsuario);
+            
+            // verifica que no tenga registros relacionados
+            // la lista de comprobaciones y de actividades deben estar vacias => False
+            if(!usuario.getComprobaciones().isEmpty() || !usuario.getMedidasResponsableImplementacion().isEmpty()){
+                ContieneRegistros = true;
+            }else{
+                ContieneRegistros = false;
+            }
+        }
+    }
+    
     
 }
