@@ -5,6 +5,7 @@
 */
 package com.dperez.maym.web.usuarios;
 
+import com.dperez.maym.web.inicio.SesionUsuario;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeLectura;
@@ -35,6 +36,8 @@ public class Usuarios implements Serializable {
     private FacadeLectura fLectura;
     @Inject
     private FacadeMain fMain;
+    @Inject
+    private SesionUsuario sesion;
     
     private Empresa EmpresaLogueada;
     
@@ -149,6 +152,9 @@ public class Usuarios implements Serializable {
     public void editarUsuario() throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();
         if((fMain.CambiarDatosUsuario(IdUsuarioSeleccionado, Nickname, Nombre, Apellido, CorreoElectronico, PermisoSeleccionado, RecibeAlertas))!=-1){
+            if(sesion.getUsuarioLogueado().getId() == IdUsuarioSeleccionado){
+                sesion.setUsuarioLogueado(fLectura.GetUsuario(IdUsuarioSeleccionado));
+            }
             context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Usuarios.xhtml");
         }else{
             context.addMessage("form_usuarios:btn_editar_usuario", new FacesMessage(SEVERITY_FATAL, "No se pudo editar usuario", "No se pudo editar usuario" ));
