@@ -101,10 +101,10 @@
                                                     </h:commandLink>
                                                 </div>
                                                 <div class="btn-group">
-                                                    <c:if test="#{usuario.value.comprobaciones.size() == 0 and usuario.value.medidasResponsableImplementacion.size() == 0}">
+                                                    <c:if test="#{usuario.value.comprobaciones.size() == 0 and usuario.value.medidasResponsableImplementacion.size() == 0 and sesionUsuario.usuarioLogueado.id != usuario.key}">
                                                         <h:commandLink id="btn_eliminar_#{usuario.key}" class="btn btn-danger" onclick="if (! confirm('Seguro que va a eliminar este Usuario? ')) return false" >
                                                             <span class="glyphicon glyphicon-trash"> </span>
-                                                            <f:ajax event="click" listener="#{usuarios.eliminarUsuario(usuario.key)}"/>
+                                                            <f:ajax event="click" listener="#{usuarios.eliminarUsuario(usuario.key)}" render="panel_mensajes_tabla"/>                                                            
                                                         </h:commandLink>   
                                                     </c:if>
                                                 </div>                                                
@@ -218,14 +218,14 @@
                                         <h:message for="repetir_password_nuevo_usuario" class="msj_error"/>
                                     </div>
                                     <div class="form-group-sm">
-                                        <h:message for="btn_nueva_codificacion" class="msj_error"/>
+                                        <h:message for="btn_nuevo_usuario" class="msj_error"/>
                                     </div>
                                 </h:panelGroup>
                             </div>
                             <div class="modal-footer">
                                 <div class="row">
                                     <div class="col-sm-6" >
-                                        <h:commandButton id="btn_nueva_codificacion" style="width: 99%;" class="btn btn-primary" value="Guardar" action="#{usuarios.nuevoUsuario()}" >
+                                        <h:commandButton id="btn_nuevo_usuario" style="width: 99%;" class="btn btn-primary" value="Guardar" action="#{usuarios.nuevoUsuario()}" >
                                             <f:ajax execute="panel_modal" delay="100" render="panel_mensajes_modal panel_modal" />
                                         </h:commandButton>
                                     </div>
@@ -292,7 +292,7 @@
                                 <h:panelGroup id="panel_cambiar_password">
                                     <c:if test="#{usuarios.cambiarPassword == false}">
                                         <div class="form-group">
-                                            <h:commandLink class="btn btn-primary" action="#{usuarios.setCambiarPassword(true)}">
+                                            <h:commandLink class="btn btn-warning" action="#{usuarios.setCambiarPassword(true)}">
                                                 <span class="glyphicon glyphicon-lock"> </span> Cambiar Contraseña
                                                 <f:ajax delay="100" render="panel_cambiar_password" />
                                             </h:commandLink>
@@ -300,7 +300,7 @@
                                     </c:if>
                                     <c:if test="#{usuarios.cambiarPassword == true}">
                                         <div class="form-group">
-                                            <h:commandLink class="btn btn-primary" action="#{usuarios.setCambiarPassword(false)}">
+                                            <h:commandLink class="btn btn-warning" action="#{usuarios.setCambiarPassword(false)}">
                                                 <span class="glyphicon glyphicon-lock"></span> Cancelar Cambiar Contraseña
                                                 <f:ajax delay="100" render="panel_cambiar_password" />
                                             </h:commandLink>
@@ -308,11 +308,11 @@
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <div class="form-group">
-                                                    <strong><label for="password_editar_usuario">Contraseña</label></strong>
-                                                    <h:inputSecret id="password_editar_usuario" class="form-control" value="#{usuarios.password}"
-                                                                   required="true" requiredMessage="Se debe ingresar un Password" p:placeholder="Ingresar Password."  />
+                                                    <strong><label for="nuevo_password_editar_usuario">Nueva Contraseña</label></strong>
+                                                    <h:inputSecret id="nuevo_password_editar_usuario" class="form-control" value="#{usuarios.passwordNuevo}"
+                                                                   required="true" requiredMessage="Se debe re ingresar el password" p:placeholder="Nuevo Password." />
                                                 </div>
-                                            </div>
+                                            </div>                                    
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <strong><label for="repetir_password_editar_usuario">Repetir Contraseña</label></strong>
@@ -320,6 +320,27 @@
                                                                    required="true" requiredMessage="Se debe re ingresar el password" p:placeholder="Repetir Password." />
                                                 </div>
                                             </div>                                    
+                                        </div>
+                                        <h:panelGroup id="panel_mensajes_password">                                            
+                                            <div class="form-group-sm">
+                                                <h:message for="password_editar_usuario" class="msj_error"/>
+                                            </div>
+                                            <div class="form-group-sm">
+                                                <h:message for="nuevo_password_editar_usuario" class="msj_error"/>
+                                            </div>
+                                            <div class="form-group-sm">
+                                                <h:message for="repetir_password_editar_usuario" class="msj_error"/>
+                                            </div>
+                                            <div class="form-group-sm">
+                                                <h:message for="btn_password_usuario" class="msj_error"/>
+                                            </div>
+                                        </h:panelGroup>
+                                        <div class="form-group">
+                                            <h:commandLink id="btn_password_usuario" class="btn btn-warning" action="#{usuarios.cambiarPassword()}" >
+                                                <span class="glyphicon glyphicon-floppy-save"></span> Cambiar
+                                                <f:ajax execute="password_editar_usuario nuevo_password_editar_usuario repetir_password_editar_usuario" />
+                                                <f:ajax delay="100"  render="panel_cambiar_password panel_mensajes_password" />
+                                            </h:commandLink>
                                         </div>
                                     </c:if>
                                 </h:panelGroup>
@@ -352,17 +373,20 @@
                                         <h:message for="password_editar_usuario" class="msj_error"/>
                                     </div>
                                     <div class="form-group-sm">
+                                        <h:message for="nuevo_password_editar_usuario" class="msj_error"/>
+                                    </div>
+                                    <div class="form-group-sm">
                                         <h:message for="repetir_password_editar_usuario" class="msj_error"/>
                                     </div>
                                     <div class="form-group-sm">
-                                        <h:message for="btn_nueva_codificacion" class="msj_error"/>
+                                        <h:message for="btn_editar_usuario" class="msj_error"/>
                                     </div>
                                 </h:panelGroup>
                             </div>
                             <div class="modal-footer">
                                 <div class="row">
                                     <div class="col-sm-6" >
-                                        <h:commandButton id="btn_editar_codificacion" style="width: 99%;" class="btn btn-primary" value="Guardar" action="#{usuarios.editarUsuario()}" >
+                                        <h:commandButton id="btn_editar_usuario" style="width: 99%;" class="btn btn-primary" value="Guardar" action="#{usuarios.editarUsuario()}" >
                                             <f:ajax execute="panel_modal_editar" delay="100" render="panel_mensajes_modal_editar panel_modal_editar" />
                                         </h:commandButton>
                                     </div>

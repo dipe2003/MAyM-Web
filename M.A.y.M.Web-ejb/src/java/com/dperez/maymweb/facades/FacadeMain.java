@@ -66,6 +66,17 @@ public class FacadeMain {
     }
     
     /**
+     * Cambia la credencial (password y password key) del usuario especificado y actualiza la base de datos.
+     * El metodo debe ser utilizado por un Administrador del Sistema para resetear el password de un usuario.
+     * @param IdUsuario
+     * @param NewPassword: nuevo password para el usuario.
+     * @return Retorna la credencial del usuario actualizada. Retorna Null si no se pudo actualizar.
+     */
+    public Credencial ResetCredencialUsuario(int IdUsuario, String NewPassword){
+       return cConfig.ResetCredencialUsuario(IdUsuario, NewPassword);
+    }
+    
+    /**
      * Comprueba si existe el usuario con el id especificado.
      * @param IdUsuario
      * @return

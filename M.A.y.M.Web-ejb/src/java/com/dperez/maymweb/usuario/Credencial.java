@@ -6,6 +6,7 @@
 package com.dperez.maymweb.usuario;
 
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,7 +26,7 @@ public class Credencial implements Serializable{
     private String Password = new String();
     private String PasswordKey = new String();
     
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Usuario UsuarioCredencial;
     
     //  Constructores

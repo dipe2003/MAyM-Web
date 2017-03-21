@@ -92,10 +92,8 @@ public class Codificaciones implements Serializable {
             context.renderResponse();
         }else{
             Codificacion cod;
-            if((cod = fAdmin.NuevaCodificacion(NombreCodificacion, DescripcionCodificacion)) != null){
-                if(cod != null){
-                    fAdmin.ModificarEmpresaCodificacion(cod.getId(), true, EmpresaLogueada.getId());
-                }
+            if((cod = fAdmin.NuevaCodificacion(NombreCodificacion, DescripcionCodificacion)) != null){                
+                fAdmin.ModificarEmpresaCodificacion(cod.getId(), true, EmpresaLogueada.getId());
                 context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Codificaciones.xhtml");
             }else{
                 context.addMessage("form_codificaciones:btn_nueva_codificacion", new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Codificacion", "No se pudo crear la Codificacion" ));
@@ -163,8 +161,8 @@ public class Codificaciones implements Serializable {
             context.renderResponse();
         }
     }
-      
-     /**
+    
+    /**
      * Carga los atributos NombreCodificacion, DescripcionCodificacion e IdCodificacionSeleccionada segun el id especificado en la vista.
      * @param IdCodificacion
      */

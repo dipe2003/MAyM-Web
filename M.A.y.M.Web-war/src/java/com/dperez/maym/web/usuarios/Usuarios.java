@@ -11,6 +11,7 @@ import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.facades.FacadeMain;
 import com.dperez.maymweb.usuario.Usuario;
 import com.dperez.maymweb.usuario.permiso.EnumPermiso;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
@@ -62,7 +63,7 @@ public class Usuarios implements Serializable {
     public Empresa getEmpresaLogueada() {return EmpresaLogueada;}
     public boolean isContieneRegistros() {return ContieneRegistros;}
     public String getCorreoElectronico() {return CorreoElectronico;}
-    public int getNumeroNuevoUsuario() {return NumeroNuevoUsuario;}    
+    public int getNumeroNuevoUsuario() {return NumeroNuevoUsuario;}
     public String getNombre() {return this.Nombre;}
     public String getApellido(){return this.Apellido;}
     public String getNickname(){return this.Nickname;}
@@ -79,10 +80,10 @@ public class Usuarios implements Serializable {
     public boolean isCambiarPassword() {return CambiarPassword;}
     
     public void setEmpresaLogueada(Empresa EmpresaLogueada) {this.EmpresaLogueada = EmpresaLogueada;}
-
+    
     //  Setters
     public void setContieneRegistros(boolean ContieneRegistros) {this.ContieneRegistros = ContieneRegistros;}
-    public void setNumeroNuevoUsuario(int NumeroNuevoUsuario) {this.NumeroNuevoUsuario = NumeroNuevoUsuario;}    
+    public void setNumeroNuevoUsuario(int NumeroNuevoUsuario) {this.NumeroNuevoUsuario = NumeroNuevoUsuario;}
     public void setNombre(String Nombre) {this.Nombre = Nombre;}
     public void setApellido(String Apellido){this.Apellido = Apellido;}
     public void setNickname(String Nickname){this.Nickname = Nickname;}
@@ -110,6 +111,8 @@ public class Usuarios implements Serializable {
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         EmpresaLogueada = (Empresa)request.getSession().getAttribute("Empresa");
         
+        this.PermisoSeleccionado  = EnumPermiso.DATOS;
+        
         //  Usuarios
         ListaUsuarios = new HashMap<>();
         List<Usuario> tmpUsuarios = fLectura.GetUsuarios();
@@ -120,74 +123,78 @@ public class Usuarios implements Serializable {
     
     /**
      * Crea nuevo usuario con el permiso seleccionado.
-     * Si no se crea se muestra un mensaje
+     * Muestra un mensaje de errror si no se creo, se agrega el usuario a la empres logueada y redirige a la misma pagina para ver los resultados.
+     * @throws java.io.IOException
      */
-    public void nuevoUsuario(){
+    public void nuevoUsuario() throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        Empresa empresa = (Empresa)request.getSession().getAttribute("Empresa");
-        // Crear nuevo usuario y actualizar lista
-        Usuario usuario;
-        if((usuario = fAdmin.NuevoUsuario(Nickname,Nombre,Apellido,CorreoElectronico, Password,PermisoSeleccionado, empresa.getId()))!=null){
-            ListaUsuarios.put(usuario.getId(), usuario);
+        if(Password.equals(PasswordConfirmacion)){
+            if((fAdmin.NuevoUsuario(NumeroNuevoUsuario, Nickname,Nombre,Apellido,CorreoElectronico, Password,PermisoSeleccionado, EmpresaLogueada.getId()))!=null){
+                context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Usuarios.xhtml");
+            }else{
+                context.addMessage("form_usuarios:btn_nuevo_usuario", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nuevo usuario", "No se pudo crear nuevo usuario" ));
+                context.renderResponse();
+            }
         }else{
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo crear nuevo usuario", "No se pudo crear nuevo usuario" ));
-            FacesContext.getCurrentInstance().renderResponse();
+            context.addMessage("form_usuarios:btn_nuevo_usuario", new FacesMessage(SEVERITY_FATAL, "Los passwords no coniciden", "Los passwords no coniciden" ));
+            context.renderResponse();
         }
     }
     
     /**
      * Actualiza el usuario con lo datos ingresados.
-     * Muestra un mensaje de errror si no se actualizo.
-     * Agrega los cambios a la lista del bean.
-     * @param IdUsuarioSeleccionado
+     * Muestra un mensaje de errror si no se actualizo y redirige a la misma pagina para ver los resultados.
+     * @throws java.io.IOException
      */
-    public void editarUsuario(){
-        if((IdUsuarioSeleccionado =fMain.CambiarDatosUsuario(IdUsuarioSeleccionado, Nickname, Nombre, Apellido, CorreoElectronico, PermisoSeleccionado, RecibeAlertas))!=-1){
-            ListaUsuarios.put(IdUsuarioSeleccionado, fLectura.GetUsuario(IdUsuarioSeleccionado));
+    public void editarUsuario() throws IOException{
+        FacesContext context = FacesContext.getCurrentInstance();
+        if((fMain.CambiarDatosUsuario(IdUsuarioSeleccionado, Nickname, Nombre, Apellido, CorreoElectronico, PermisoSeleccionado, RecibeAlertas))!=-1){
+            context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Usuarios.xhtml");
         }else{
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo editar usuario", "No se pudo editar usuario" ));
-            FacesContext.getCurrentInstance().renderResponse();
+            context.addMessage("form_usuarios:btn_editar_usuario", new FacesMessage(SEVERITY_FATAL, "No se pudo editar usuario", "No se pudo editar usuario" ));
+            context.renderResponse();
         }
     }
     
     /**
      * Cambia las credenciales del usuario.
      * Muestra los mensajes correspondientes por cada error/informacion.
-     * Agrega los cambios a la lista del bean.
-     * @param IdUsuarioSeleccionado
+     * Redirige a la pagina si se cambio.
+     * @throws java.io.IOException
      */
-    public void cambiarPassword(int IdUsuarioSeleccionado){
-        if(Password.equals(PasswordNuevo)){
+    public void cambiarPassword() throws IOException{
+        FacesContext context = FacesContext.getCurrentInstance();
+        if(PasswordNuevo.equals(PasswordConfirmacion)){
             if(!PasswordNuevo.isEmpty()){
-                if(fMain.CambiarCredencialUsuario(IdUsuarioSeleccionado, Password, PasswordNuevo)!=null){
-                    ListaUsuarios.put(IdUsuarioSeleccionado, fLectura.GetUsuario(IdUsuarioSeleccionado));
+                if(fMain.ResetCredencialUsuario(IdUsuarioSeleccionado, PasswordNuevo)!=null){
+                    context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Usuarios.xhtml");
                 }else{
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo cambiar password", "No se pudo cambiar password" ));
-                    FacesContext.getCurrentInstance().renderResponse();
+                    context.addMessage("form_usuarios:btn_password_usuario", new FacesMessage(SEVERITY_FATAL, "No se pudo cambiar password", "No se pudo cambiar password" ));
+                    context.renderResponse();
                 }
             }else{
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "El nuevo password esta vacio", "El nuevo password esta vacio" ));
-                FacesContext.getCurrentInstance().renderResponse();
+                context.addMessage("form_usuarios:btn_password_usuario", new FacesMessage(SEVERITY_FATAL, "El nuevo password esta vacio", "El nuevo password esta vacio" ));
+                context.renderResponse();
             }
         }else{
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "Los passwords no coniciden", "Los passwords no coniciden" ));
-            FacesContext.getCurrentInstance().renderResponse();
+            context.addMessage("form_usuarios:btn_password_usuario", new FacesMessage(SEVERITY_FATAL, "Los passwords no coniciden", "Los passwords no coniciden" ));
+            context.renderResponse();
         }
     }
     
     /**
      * Eliminina el usuario indicado.
-     * Muestra un mensaje de error si no se pudo eliminar.
-     * Remueve la deteccion de la lista del bean.
+     * Muestra un mensaje de error si no se pudo eliminar, de lo contrario redirige a la misma pagina para visualizar los cambios.
      * @param IdUsuarioSeleccionado
+     * @throws java.io.IOException
      */
-    public void eliminarUsuario(int IdUsuarioSeleccionado){
+    public void eliminarUsuario(int IdUsuarioSeleccionado) throws IOException{
+        FacesContext context = FacesContext.getCurrentInstance();
         if(fAdmin.EliminarUsuario(IdUsuarioSeleccionado)!=-1){
-            ListaUsuarios.remove(IdUsuarioSeleccionado);
+            context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Usuarios.xhtml");
         }else{
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar el usuario", "No se pudo eliminar el usuario" ));
-            FacesContext.getCurrentInstance().renderResponse();
+            context.addMessage("form_usuarios:btn_eliminar_usuario_"+IdUsuarioSeleccionado, new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar el usuario", "No se pudo eliminar el usuario" ));
+            context.renderResponse();
         }
     }
     
@@ -202,10 +209,12 @@ public class Usuarios implements Serializable {
             this.Nickname  = new String();
             this.CorreoElectronico  = new String();
             this.RecibeAlertas = false;
-            this.PermisoSeleccionado  = EnumPermiso.LECTURA;
+            this.PermisoSeleccionado  = EnumPermiso.DATOS;
             this.IdUsuarioSeleccionado = -1;
             this.NumeroNuevoUsuario = 0;
             this.CambiarPassword = false;
+            this.PasswordNuevo = new String();
+            this.PasswordConfirmacion= new String();
         }else{
             this.Nombre  = ListaUsuarios.get(IdUsuario).getNombre();
             this.Apellido  = ListaUsuarios.get(IdUsuario).getApellido();
@@ -216,6 +225,8 @@ public class Usuarios implements Serializable {
             this.IdUsuarioSeleccionado = IdUsuario;
             this.NumeroNuevoUsuario = ListaUsuarios.get(IdUsuario).getId();
             this.CambiarPassword = false;
+            this.PasswordNuevo = new String();
+            this.PasswordConfirmacion= new String();
             
             Usuario usuario =  ListaUsuarios.get(IdUsuario);
             

@@ -54,6 +54,7 @@ public class ControladorConfiguracion {
     
     /**
      * Crea un nuevo usuario y lo persiste en la base de datos. El usuario creado no recibe alertas.
+     * @param IdUsuario
      * @param Nickname
      * @param NombreUsuario
      * @param ApellidoUsuario
@@ -63,16 +64,18 @@ public class ControladorConfiguracion {
      * @param IdEmpresa
      * @return null si no se creo.
      */
-    public Usuario NuevoUsuario(String Nickname, String NombreUsuario, String ApellidoUsuario, String CorreoUsuario, String Password, EnumPermiso PermisoUsuario, int IdEmpresa){
+    public Usuario NuevoUsuario(int IdUsuario, String Nickname, String NombreUsuario, String ApellidoUsuario, String CorreoUsuario, String Password, EnumPermiso PermisoUsuario, int IdEmpresa){
         Usuario usuario = new Usuario(Nickname, NombreUsuario, ApellidoUsuario, CorreoUsuario, false, PermisoUsuario);
         Empresa empresa = mEmpresa.GetEmpresa(IdEmpresa);
         String[] pass = cSeg.getPasswordSeguro(Password);
         // pass[0] corresponde al password | pass[1] corresponde al salt
         Credencial credencial = new Credencial(pass[1], pass[0]);
         usuario.setCredencialUsuario(credencial);
+        credencial.setUsuarioCredencial(usuario);
         usuario.setEmpresaUsuario(empresa);
-        usuario.setId(mUsuario.CrearUsuario(usuario));
-        if(usuario.getId()!=-1){
+        usuario.setId(IdUsuario);
+        int res = mUsuario.CrearUsuario(usuario);
+        if(res !=-1){
             return usuario;
         }else{
             return null;
@@ -102,7 +105,7 @@ public class ControladorConfiguracion {
      */
     public int CambiarDatosUsuario(int IdUsuario, String Nickname, String NombreUsuario, String ApellidoUsuario, String CorreoUsuario,
             EnumPermiso PermisoUsuario, boolean RecibeAlertas){
-        if(!ExisteNickname(Nickname)){
+        if(!ExisteNickname(Nickname, IdUsuario)){
             Usuario usuario = mUsuario.GetUsuario(IdUsuario);
             usuario.setNombre(NombreUsuario);
             usuario.setApellido(ApellidoUsuario);
@@ -150,6 +153,26 @@ public class ControladorConfiguracion {
             return null;
         }
     }
+    /**
+     * Cambia la credencial (password y password key) del usuario especificado y actualiza la base de datos.
+     * El metodo debe ser utilizado por un Administrador del Sistema para resetear el password de un usuario.
+     * @param IdUsuario
+     * @param NewPassword: nuevo password para el usuario.
+     * @return Retorna la credencial del usuario actualizada. Retorna Null si no se pudo actualizar.
+     */
+    public Credencial ResetCredencialUsuario(int IdUsuario, String NewPassword){
+        int res = -1;
+        Usuario usuario = mUsuario.GetUsuario(IdUsuario);
+            String[] nuevaCredencial = cSeg.getPasswordSeguro(NewPassword);
+            usuario.getCredencialUsuario().setPassword(nuevaCredencial[1]);
+            usuario.getCredencialUsuario().setPasswordKey(nuevaCredencial[0]);
+            res = mUsuario.ActualizarUsuario(usuario);        
+        if(res!=-1){
+            return usuario.getCredencialUsuario();
+        }else{
+            return null;
+        }
+    }
        
     /**
      * Comprueba la existencia de otro usuario con el nickname indicado.
@@ -163,6 +186,18 @@ public class ControladorConfiguracion {
         }
         return false;
     }
+    /**
+     * Comprueba la existencia de otro usuario con el nickname indicado.
+     * @param Nickname
+     * @return
+     */
+    private boolean ExisteNickname(String Nickname, int IdUsuario){
+        List<Usuario> usuarios = mUsuario.ListarUsuarios();
+        for(Usuario usuario: usuarios){
+            if(usuario.getNickName().equalsIgnoreCase(Nickname) && usuario.getId()!= IdUsuario) return true;
+        }
+        return false;
+    }
     
     /**
      * Elimina el usuario indicado por su id.
@@ -172,7 +207,7 @@ public class ControladorConfiguracion {
      */
     public int EliminarUsuario(int IdUsuario) {
         Usuario usuario = mUsuario.GetUsuario(IdUsuario);
-        if(!usuario.getComprobaciones().isEmpty() || !usuario.getMedidasResponsableImplementacion().isEmpty()){
+        if(usuario.getComprobaciones().isEmpty() || usuario.getMedidasResponsableImplementacion().isEmpty()){
             return mUsuario.BorrarUsuario(usuario);
         }
         return -1;
