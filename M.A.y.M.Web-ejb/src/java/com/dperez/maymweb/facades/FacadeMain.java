@@ -36,11 +36,12 @@ public class FacadeMain {
      * @param CorreoUsuario
      * @param PermisoUsuario
      * @param RecibeAlertas
+     * @param IdArea
      * @return -1 si no se actualizo.
      */
     public int CambiarDatosUsuario(int IdUsuario, String Nickname, String NombreUsuario, String ApellidoUsuario, String CorreoUsuario,
-            EnumPermiso PermisoUsuario, boolean RecibeAlertas){
-        return cConfig.CambiarDatosUsuario(IdUsuario, Nickname, NombreUsuario, ApellidoUsuario, CorreoUsuario, PermisoUsuario, RecibeAlertas);
+            EnumPermiso PermisoUsuario, boolean RecibeAlertas, int IdArea){
+        return cConfig.CambiarDatosUsuario(IdUsuario, Nickname, NombreUsuario, ApellidoUsuario, CorreoUsuario, PermisoUsuario, RecibeAlertas, IdArea);
     }
     
     /**

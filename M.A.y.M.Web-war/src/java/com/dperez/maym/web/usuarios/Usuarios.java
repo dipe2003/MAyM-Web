@@ -6,6 +6,7 @@
 package com.dperez.maym.web.usuarios;
 
 import com.dperez.maym.web.inicio.SesionUsuario;
+import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeLectura;
@@ -14,6 +15,8 @@ import com.dperez.maymweb.usuario.Usuario;
 import com.dperez.maymweb.usuario.permiso.EnumPermiso;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +65,9 @@ public class Usuarios implements Serializable {
     
     private boolean CambiarPassword;
     
+    private List<Area> ListaAreas;
+    private int AreaSeleccionada;
+    
     //  Getters
     public Empresa getEmpresaLogueada() {return EmpresaLogueada;}
     public boolean isContieneRegistros() {return ContieneRegistros;}
@@ -81,6 +87,9 @@ public class Usuarios implements Serializable {
     public Map<Integer, Usuario> getListaUsuarios() {return this.ListaUsuarios;}
     
     public boolean isCambiarPassword() {return CambiarPassword;}
+    
+    public List<Area> getListaAreas() {return ListaAreas;}
+    public int getAreaSeleccionada() {return AreaSeleccionada;}
     
     public void setEmpresaLogueada(Empresa EmpresaLogueada) {this.EmpresaLogueada = EmpresaLogueada;}
     
@@ -103,6 +112,9 @@ public class Usuarios implements Serializable {
     
     public void setCambiarPassword(boolean CambiarPassword) {this.CambiarPassword = CambiarPassword;}
     
+    public void setListaAreas(List<Area> ListaAreas) {this.ListaAreas = ListaAreas;}
+    public void setAreaSeleccionada(int AreaSeleccionada) {this.AreaSeleccionada = AreaSeleccionada;}
+    
     //  Metodos
     
     /**
@@ -122,6 +134,15 @@ public class Usuarios implements Serializable {
         for(Usuario usuario:tmpUsuarios){
             ListaUsuarios.put(usuario.getId(), usuario);
         }
+        
+        //Areas
+        ListaAreas =  new ArrayList<>();
+        List<Area> tmpAreas = fLectura.ListarAreasSectores();
+        for(Area area: tmpAreas){
+            if(area.contieneEmpresa(EmpresaLogueada.getId())){
+                ListaAreas.add(area);
+            }
+        }
     }
     
     /**
@@ -132,7 +153,8 @@ public class Usuarios implements Serializable {
     public void nuevoUsuario() throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();
         if(Password.equals(PasswordConfirmacion)){
-            if((fAdmin.NuevoUsuario(NumeroNuevoUsuario, Nickname,Nombre,Apellido,CorreoElectronico, Password,PermisoSeleccionado, EmpresaLogueada.getId()))!=null){
+            if((fAdmin.NuevoUsuario(NumeroNuevoUsuario, Nickname,Nombre,Apellido,CorreoElectronico, Password,
+                    PermisoSeleccionado, EmpresaLogueada.getId(), AreaSeleccionada))!=null){
                 context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Usuarios.xhtml");
             }else{
                 context.addMessage("form_usuarios:btn_nuevo_usuario", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nuevo usuario", "No se pudo crear nuevo usuario" ));
@@ -151,7 +173,7 @@ public class Usuarios implements Serializable {
      */
     public void editarUsuario() throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();
-        if((fMain.CambiarDatosUsuario(IdUsuarioSeleccionado, Nickname, Nombre, Apellido, CorreoElectronico, PermisoSeleccionado, RecibeAlertas))!=-1){
+        if((fMain.CambiarDatosUsuario(IdUsuarioSeleccionado, Nickname, Nombre, Apellido, CorreoElectronico, PermisoSeleccionado, RecibeAlertas, AreaSeleccionada))!=-1){
             if(sesion.getUsuarioLogueado().getId() == IdUsuarioSeleccionado){
                 sesion.setUsuarioLogueado(fLectura.GetUsuario(IdUsuarioSeleccionado));
             }
@@ -205,6 +227,35 @@ public class Usuarios implements Serializable {
     }
     
     /**
+     * Da de baja un usuario.
+     * @param IdUsuario 
+     * @throws java.io.IOException 
+     */
+    public void darDeBajaUsuario(int IdUsuario) throws IOException{
+        FacesContext context = FacesContext.getCurrentInstance();
+        if(fAdmin.DarDeBajaUsuario(IdUsuario)== -1){
+            context.addMessage("form_usuarios:btn_baja_"+IdUsuario, new FacesMessage(SEVERITY_ERROR, "No se pudo dar de baja el usuario", "No se pudo dar de baja el usuario" ));
+            context.renderResponse();
+        }else{
+            context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Usuarios.xhtml");
+        }
+    }
+    /**
+     * Da de alta un usuario.
+     * @param IdUsuario 
+     * @throws java.io.IOException 
+     */
+    public void darDeAltaUsuario(int IdUsuario) throws IOException{
+        FacesContext context = FacesContext.getCurrentInstance();
+        if(fAdmin.DarDeAltaUsuario(IdUsuario)== -1){
+            context.addMessage("form_usuarios:btn_baja_"+IdUsuario, new FacesMessage(SEVERITY_ERROR, "No se pudo dar de alta el usuario", "No se pudo dar de alta el usuario" ));
+            context.renderResponse();
+        }else{
+            context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Usuarios.xhtml");
+        }
+    }
+    
+    /**
      * Carga los atributos NombreCodificacion, DescripcionCodificacion e IdCodificacionSeleccionada segun el id especificado en la vista.
      * @param IdUsuario
      */
@@ -221,6 +272,7 @@ public class Usuarios implements Serializable {
             this.CambiarPassword = false;
             this.PasswordNuevo = new String();
             this.PasswordConfirmacion= new String();
+            this.AreaSeleccionada = -1;
         }else{
             this.Nombre  = ListaUsuarios.get(IdUsuario).getNombre();
             this.Apellido  = ListaUsuarios.get(IdUsuario).getApellido();
@@ -233,6 +285,7 @@ public class Usuarios implements Serializable {
             this.CambiarPassword = false;
             this.PasswordNuevo = new String();
             this.PasswordConfirmacion= new String();
+            this.AreaSeleccionada = ListaUsuarios.get(IdUsuario).getAreaSectorUsuario().getId();
             
             Usuario usuario =  ListaUsuarios.get(IdUsuario);
             

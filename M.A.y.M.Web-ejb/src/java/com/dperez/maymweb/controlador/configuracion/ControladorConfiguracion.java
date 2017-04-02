@@ -19,6 +19,7 @@ import com.dperez.maymweb.usuario.Credencial;
 import com.dperez.maymweb.usuario.ManejadorUsuario;
 import com.dperez.maymweb.usuario.Usuario;
 import com.dperez.maymweb.usuario.permiso.EnumPermiso;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -62,9 +63,11 @@ public class ControladorConfiguracion {
      * @param Password
      * @param PermisoUsuario
      * @param IdEmpresa
+     * @param IdArea
      * @return null si no se creo.
      */
-    public Usuario NuevoUsuario(int IdUsuario, String Nickname, String NombreUsuario, String ApellidoUsuario, String CorreoUsuario, String Password, EnumPermiso PermisoUsuario, int IdEmpresa){
+    public Usuario NuevoUsuario(int IdUsuario, String Nickname, String NombreUsuario, String ApellidoUsuario, String CorreoUsuario,
+            String Password, EnumPermiso PermisoUsuario, int IdEmpresa, int IdArea){
         Usuario usuario = new Usuario(Nickname, NombreUsuario, ApellidoUsuario, CorreoUsuario, false, PermisoUsuario);
         Empresa empresa = mEmpresa.GetEmpresa(IdEmpresa);
         String[] pass = cSeg.getPasswordSeguro(Password);
@@ -74,6 +77,8 @@ public class ControladorConfiguracion {
         credencial.setUsuarioCredencial(usuario);
         usuario.setEmpresaUsuario(empresa);
         usuario.setId(IdUsuario);
+        Area area = mArea.GetArea(IdArea);
+        usuario.setAreaSectorUsuario(area);
         int res = mUsuario.CrearUsuario(usuario);
         if(res !=-1){
             return usuario;
@@ -101,10 +106,11 @@ public class ControladorConfiguracion {
      * @param CorreoUsuario
      * @param PermisoUsuario
      * @param RecibeAlertas
+     * @param IdArea
      * @return -1 si no se actualizo.
      */
     public int CambiarDatosUsuario(int IdUsuario, String Nickname, String NombreUsuario, String ApellidoUsuario, String CorreoUsuario,
-            EnumPermiso PermisoUsuario, boolean RecibeAlertas){
+            EnumPermiso PermisoUsuario, boolean RecibeAlertas, int IdArea){
         if(!ExisteNickname(Nickname, IdUsuario)){
             Usuario usuario = mUsuario.GetUsuario(IdUsuario);
             usuario.setNombre(NombreUsuario);
@@ -112,6 +118,11 @@ public class ControladorConfiguracion {
             usuario.setCorreo(CorreoUsuario);
             usuario.setPermisoUsuario(PermisoUsuario);
             usuario.setRecibeAlertas(RecibeAlertas);
+            if(usuario.getAreaSectorUsuario().getId()!= IdArea){
+                Area area = mArea.GetArea(IdArea);
+                usuario.setAreaSectorUsuario(area);
+                mArea.ActualizarArea(area);
+            }
             return mUsuario.ActualizarUsuario(usuario);
         }
         return -1;
@@ -163,17 +174,17 @@ public class ControladorConfiguracion {
     public Credencial ResetCredencialUsuario(int IdUsuario, String NewPassword){
         int res = -1;
         Usuario usuario = mUsuario.GetUsuario(IdUsuario);
-            String[] nuevaCredencial = cSeg.getPasswordSeguro(NewPassword);
-            usuario.getCredencialUsuario().setPassword(nuevaCredencial[1]);
-            usuario.getCredencialUsuario().setPasswordKey(nuevaCredencial[0]);
-            res = mUsuario.ActualizarUsuario(usuario);        
+        String[] nuevaCredencial = cSeg.getPasswordSeguro(NewPassword);
+        usuario.getCredencialUsuario().setPassword(nuevaCredencial[1]);
+        usuario.getCredencialUsuario().setPasswordKey(nuevaCredencial[0]);
+        res = mUsuario.ActualizarUsuario(usuario);
         if(res!=-1){
             return usuario.getCredencialUsuario();
         }else{
             return null;
         }
     }
-       
+    
     /**
      * Comprueba la existencia de otro usuario con el nickname indicado.
      * @param Nickname
@@ -213,6 +224,22 @@ public class ControladorConfiguracion {
         return -1;
     }
     
+    /**
+     * Cambia el estado de un usuario: da de alta o de baja.
+     * Baja de usuario setea la fecha actual como fecha de baja.
+     * @param IdUsuario
+     * @param AltaUsuario: True para dar de alta. False para dar de baja.
+     * @return 
+     */
+    public int CambiarEstadoUsuario(int IdUsuario, boolean AltaUsuario){
+        Usuario usuario = mUsuario.GetUsuario(IdUsuario);
+        if(AltaUsuario){
+            usuario.setFechaBaja(null);
+        }else{
+            usuario.setFechaBaja(new Date());
+        }
+        return mUsuario.ActualizarUsuario(usuario);
+    }
     /*
     AREA
     */
@@ -537,7 +564,7 @@ public class ControladorConfiguracion {
      * @param NumeroEmpresa
      * @return Null si no se creo la empresa.
      */
-    public Empresa NuevaEmpresa(int Id, String NombreEmpresa, String DireccionEmpresa, String TelefonoEmpresa, String CorreoEmpresa, 
+    public Empresa NuevaEmpresa(int Id, String NombreEmpresa, String DireccionEmpresa, String TelefonoEmpresa, String CorreoEmpresa,
             String FaxEmpresa, String Descripcion, String NumeroEmpresa){
         Empresa empresa = new Empresa(Id, NombreEmpresa, DireccionEmpresa, TelefonoEmpresa, CorreoEmpresa, FaxEmpresa, Descripcion, NumeroEmpresa);
         if(mEmpresa.CrearEmpresa(empresa)!=-1){
@@ -558,7 +585,7 @@ public class ControladorConfiguracion {
      * @param DescripcionEmpresa
      * @return Retorna -1 si no se actualizo. Retorna el id de la empresa si se actualizo.
      */
-    public int EditarEmpresa(int Id, String NombreEmpresa, String DireccionEmpresa, String TelefonoEmpresa, String CorreoEmpresa, 
+    public int EditarEmpresa(int Id, String NombreEmpresa, String DireccionEmpresa, String TelefonoEmpresa, String CorreoEmpresa,
             String FaxEmpresa, String DescripcionEmpresa){
         Empresa empresa = mEmpresa.GetEmpresa(Id);
         empresa.setId(Id);

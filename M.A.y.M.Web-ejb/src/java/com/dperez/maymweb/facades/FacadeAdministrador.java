@@ -193,10 +193,12 @@ public class FacadeAdministrador  {
      * @param Password
      * @param PermisoUsuario
      * @param IdEmpresa
+     * @param IdArea
      * @return null si no se creo.
      */
-    public Usuario NuevoUsuario(int IdUsuario, String Nickname, String NombreUsuario, String ApellidoUsuario, String CorreoUsuario, String Password, EnumPermiso PermisoUsuario, int IdEmpresa){
-        return cConfig.NuevoUsuario(IdUsuario, Nickname, NombreUsuario, ApellidoUsuario, CorreoUsuario, Password, PermisoUsuario, IdEmpresa);
+    public Usuario NuevoUsuario(int IdUsuario, String Nickname, String NombreUsuario, String ApellidoUsuario, String CorreoUsuario, String Password, 
+            EnumPermiso PermisoUsuario, int IdEmpresa, int IdArea){
+        return cConfig.NuevoUsuario(IdUsuario, Nickname, NombreUsuario, ApellidoUsuario, CorreoUsuario, Password, PermisoUsuario, IdEmpresa, IdArea);
     }
     
     /**
@@ -216,6 +218,24 @@ public class FacadeAdministrador  {
      */
     public int EliminarUsuario(int IdUsuario) {
         return cConfig.EliminarUsuario(IdUsuario);
+    }
+    
+    /**
+     * Da de baja un usuario.
+     * @param IdUsuario
+     * @return 
+     */
+    public int DarDeBajaUsuario(int IdUsuario){
+        return cConfig.CambiarEstadoUsuario(IdUsuario, false);
+    }
+    
+    /**
+     * Da de alta un usuario.
+     * @param IdUsuario
+     * @return 
+     */
+    public int DarDeAltaUsuario(int IdUsuario){
+        return cConfig.CambiarEstadoUsuario(IdUsuario, true);
     }
     
     /**
