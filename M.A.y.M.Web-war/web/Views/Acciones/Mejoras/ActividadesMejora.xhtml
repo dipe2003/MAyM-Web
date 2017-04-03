@@ -29,7 +29,7 @@
                                              required="true" requiredMessage="No se selecciono Responsable de Implementacion.">
                                 <f:selectItem itemLabel="--- Seleccionar Usuario ---" itemDisabled="true" noSelectionOption="true" />
                                 <c:forEach items="#{actividadesAM.listaUsuariosEmpresa}" var="entry">
-                                    <f:selectItem itemLabel="#{entry.value.nombre} #{entry.value.apellido}" itemValue="#{entry.key}" />
+                                    <f:selectItem itemLabel="#{entry.value.areaSectorUsuario.nombre} | #{entry.value.nombre} #{entry.value.apellido}" itemValue="#{entry.key}" />
                                 </c:forEach>
                             </h:selectOneMenu>
                         </div>
