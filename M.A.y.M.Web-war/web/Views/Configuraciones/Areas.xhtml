@@ -77,7 +77,7 @@
                                             </div>
                                             <div class="btn-group"> 
                                                 <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR'}">
-                                                    <c:if test="#{area.value.accionesEnAreaSector.size() == 0 and area.value.fortalezasEnAreaSector.size() ==0}">
+                                                    <c:if test="#{area.value.accionesEnAreaSector.size() == 0 and area.value.fortalezasEnAreaSector.size() ==0 and area.value.usuariosEnAreaSector.size() == 0}">
                                                         <c:choose>
                                                             <c:when test="#{area.value.empresasArea.size() == 0}">
                                                                 <h:commandLink id="btn_eliminar_#{area.key}" class="btn btn-danger" onclick="if (! confirm('Seguro que va a eliminar esta Area / Sector? ')) return false" >
