@@ -197,4 +197,10 @@ public abstract class Accion implements Serializable{
      */
     public abstract void CambiarEstado();
     
+    /***
+     * Comprueba que todas actividades esten implementadas.
+     * @return 
+     */
+    public abstract boolean EstaImplementada();
+    
 }

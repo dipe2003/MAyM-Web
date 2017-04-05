@@ -94,4 +94,16 @@ public class Preventiva extends Accion implements Serializable{
             }
         }
     }
+    
+    @Override
+    public boolean EstaImplementada() {
+        boolean implementada = true;
+        for(Actividad actividad: this.Actividades){
+            if(actividad.getFechaImplementacion() == null){
+                implementada = false;
+                break;
+            }
+        }
+        return implementada;
+    }
 }

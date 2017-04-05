@@ -11,7 +11,6 @@ import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
-import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.estado.EnumEstado;
 import com.dperez.maymweb.usuario.Usuario;
 import java.util.ArrayList;
@@ -329,6 +328,12 @@ public class AccionTest {
     public class AccionImpl extends Accion {
         @Override
         public void CambiarEstado(){}
+
+        @Override
+        public boolean EstaImplementada() {
+            assertTrue("implementada en subclases", true);
+            return true;
+        }
     }
     
 }

@@ -50,46 +50,67 @@ public class SeguimientoCorrectiva implements Serializable {
     private Map<Integer, Actividad> MedidasPreventivas;
     
     private Date FechaImplementacion;
-    
-    private String ObservacionesComprobacion;
-    private Date FechaComprobacion;
+    private String ObservacionesImplementacion;
+    private Date FechaComprobacionImplementacion;
     private EnumComprobacion[] Comprobaciones;
-    private EnumComprobacion ComprobacionSeleccionada;
+    private EnumComprobacion ComprobacionSeleccionadaImplementacion;
+    
+    private Date FechaEficacia;
+    private String ObservacionesEficacia;
+    private Date FechaComprobacionEficacia;
+    private EnumComprobacion ComprobacionSeleccionadaEficacia;
     
     private Map<Integer, Usuario> ListaUsuarios;
     private int IdUsuarioSeleccionado;
     
     private Accion AccionSeleccionada;
     
+    private boolean EstaImplementada;
     
     //  Getters
-
-    public EnumTipoDesvio getTipoDesvio() {return TipoDesvio;}    
+    
+    public EnumTipoDesvio getTipoDesvio() {return TipoDesvio;}
     
     public Map<Integer, Actividad> getMedidasCorrectivas() {return MedidasCorrectivas;}
     public Map<Integer, Actividad> getMedidasPreventivas() {return MedidasPreventivas;}
+    
     public Date getFechaImplementacion(){return this.FechaImplementacion;}
-    public String getObservacionesComprobacion() {return ObservacionesComprobacion;}
-    public Date getFechaComprobacion() {return FechaComprobacion;}
+    public String getObservacionesImplementacion() {return ObservacionesImplementacion;}
+    public Date getFechaComprobacionImplementacion() {return FechaComprobacionImplementacion;}
     public EnumComprobacion[] getComprobaciones() {return Comprobaciones;}
-    public EnumComprobacion getComprobacionSeleccionada() {return ComprobacionSeleccionada;}
+    public EnumComprobacion getComprobacionSeleccionadaImplementacion() {return ComprobacionSeleccionadaImplementacion;}
+    
+    public Date getFechaEficacia(){return this.FechaEficacia;}
+    public String getObservacionesEficacia() {return ObservacionesEficacia;}
+    public Date getFechaComprobacionEficacia() {return FechaComprobacionEficacia;}
+    public EnumComprobacion getComprobacionSeleccionadaEficacia() {return ComprobacionSeleccionadaEficacia;}
+    
     public Accion getAccionSeleccionada() {return AccionSeleccionada;}
+    
+    public boolean isEstaImplementada() {return EstaImplementada;}
     
     public Map<Integer, Usuario> getListaUsuarios(){return this.ListaUsuarios;}
     public int getIdUsuarioSeleccionado(){return this.IdUsuarioSeleccionado;}
     
     
     //  Setters
-
-    public void setTipoDesvio(EnumTipoDesvio TipoDesvio) {this.TipoDesvio = TipoDesvio;}    
+    
+    public void setTipoDesvio(EnumTipoDesvio TipoDesvio) {this.TipoDesvio = TipoDesvio;}
     
     public void setMedidasCorrectivas(Map<Integer, Actividad> MedidasCorrectivas) {this.MedidasCorrectivas = MedidasCorrectivas;}
     public void setMedidasPreventivas(Map<Integer, Actividad> MedidasPreventivas) {this.MedidasPreventivas = MedidasPreventivas;}
+    
     public void setFechaImplementacion(Date FechaImplementacion){this.FechaImplementacion = FechaImplementacion;}
-    public void setObservacionesComprobacion(String ObservacionesComprobacion) {this.ObservacionesComprobacion = ObservacionesComprobacion;}
-    public void setFechaComprobacion(Date FechaComprobacion) {this.FechaComprobacion = FechaComprobacion;}
+    public void setObservacionesImplementacion(String ObservacionesImplementacion) {this.ObservacionesImplementacion = ObservacionesImplementacion;}
+    public void setFechaComprobacionImplementacion(Date FechaComprobacionImplementacion) {this.FechaComprobacionImplementacion = FechaComprobacionImplementacion;}
     public void setComprobaciones(EnumComprobacion[] Comprobaciones) {this.Comprobaciones = Comprobaciones;}
-    public void setComprobacionSeleccionada(EnumComprobacion ComprobacionSeleccionada) {this.ComprobacionSeleccionada = ComprobacionSeleccionada;}
+    public void setComprobacionSeleccionadaImplementacion(EnumComprobacion ComprobacionSeleccionadaImplementacion) {this.ComprobacionSeleccionadaImplementacion = ComprobacionSeleccionadaImplementacion;}
+    
+    public void setFechaEficacia(Date FechaEficacia){this.FechaEficacia = FechaEficacia;}
+    public void setObservacionesEficacia(String ObservacionesEficacia) {this.ObservacionesEficacia = ObservacionesEficacia;}
+    public void setFechaComprobacionEficacia(Date FechaComprobacionEficacia) {this.FechaComprobacionEficacia = FechaComprobacionEficacia;}
+    public void setComprobacionSeleccionadaEficacia(EnumComprobacion ComprobacionSeleccionadaEficacia) {this.ComprobacionSeleccionadaEficacia = ComprobacionSeleccionadaEficacia;}
+    
     public void setAccionSeleccionada(Accion AccionSeleccionada) {this.AccionSeleccionada = AccionSeleccionada;}
     
     public void setListaUsuarios(Map<Integer, Usuario> ListaUsuarios){this.ListaUsuarios = ListaUsuarios;}
@@ -120,7 +141,7 @@ public class SeguimientoCorrectiva implements Serializable {
      * @throws java.io.IOException
      */
     public void comprobarImplementacionAccion() throws IOException{
-        if((fVerif.SetComprobacionImplementacionAccion(FechaImplementacion, ObservacionesComprobacion, ComprobacionSeleccionada, AccionSeleccionada.getId()))== -1){
+        if((fVerif.SetComprobacionImplementacionAccion(FechaImplementacion, ObservacionesImplementacion, ComprobacionSeleccionadaImplementacion, AccionSeleccionada.getId()))== -1){
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo comprobar implementacion", "No se pudo comprobar implementacion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
@@ -136,7 +157,7 @@ public class SeguimientoCorrectiva implements Serializable {
      * Muestra un mensaje si no se pudo agregar, de lo contrario se regresa a la lista de acciones.
      */
     public void comprobarEficaciaAccion() throws IOException{
-        if((fVerif.SetVerificacionEficaciaAccion(FechaImplementacion, ObservacionesComprobacion, ComprobacionSeleccionada, AccionSeleccionada.getId()))== -1){
+        if((fVerif.SetVerificacionEficaciaAccion(FechaImplementacion, ObservacionesImplementacion, ComprobacionSeleccionadaImplementacion, AccionSeleccionada.getId()))== -1){
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo comprobar eficacia", "No se pudo comprobar eficacia" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
@@ -149,10 +170,10 @@ public class SeguimientoCorrectiva implements Serializable {
     /**
      * Cambia el estado de la accion a desestimada y registra el motivo.
      * Se muestra un mensaje si no se pudo desestimar, de lo contrario regrega a la lista de acciones.
-     * @throws IOException 
+     * @throws IOException
      */
     public void desestimarAccion() throws IOException{
-        if(fVerif.DesestimarAccion(ObservacionesComprobacion, AccionSeleccionada.getId())== -1){
+        if(fVerif.DesestimarAccion(ObservacionesImplementacion, AccionSeleccionada.getId())== -1){
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo desestimar la accion", "No se pudo desestimar la accion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
@@ -194,11 +215,29 @@ public class SeguimientoCorrectiva implements Serializable {
                 }
             }
             TipoDesvio = ((Correctiva)AccionSeleccionada).getTipo();
+            EstaImplementada = AccionSeleccionada.EstaImplementada();
+            
+            //  Resultado de comprobaciones
+            Comprobaciones = EnumComprobacion.values();
+            if(AccionSeleccionada.getComprobacionImplementacion() == null){
+                ComprobacionSeleccionadaImplementacion = EnumComprobacion.NO_COMPROBADA;
+            }else{
+                ComprobacionSeleccionadaImplementacion = AccionSeleccionada.getComprobacionImplementacion().getResultado();
+                ObservacionesImplementacion = AccionSeleccionada.getComprobacionImplementacion().getObservaciones();
+                FechaImplementacion = AccionSeleccionada.getComprobacionImplementacion().getFechaComprobacion();
+            }
+            
+            if(AccionSeleccionada.getComprobacionEficacia() == null){
+                ComprobacionSeleccionadaEficacia = EnumComprobacion.NO_COMPROBADA;
+            }else{
+                ComprobacionSeleccionadaEficacia = AccionSeleccionada.getComprobacionEficacia().getResultado();
+                ObservacionesEficacia = AccionSeleccionada.getComprobacionEficacia().getObservaciones();
+                FechaEficacia = AccionSeleccionada.getComprobacionEficacia().getFechaComprobacion();
+            }
+            
         }
         
-        //  Resultado de comprobaciones
-        Comprobaciones = EnumComprobacion.values();
-        ComprobacionSeleccionada = EnumComprobacion.NO_COMPROBADA;
+        
     }
     
     
