@@ -228,8 +228,8 @@ public class Usuarios implements Serializable {
     
     /**
      * Da de baja un usuario.
-     * @param IdUsuario 
-     * @throws java.io.IOException 
+     * @param IdUsuario
+     * @throws java.io.IOException
      */
     public void darDeBajaUsuario(int IdUsuario) throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();
@@ -242,8 +242,8 @@ public class Usuarios implements Serializable {
     }
     /**
      * Da de alta un usuario.
-     * @param IdUsuario 
-     * @throws java.io.IOException 
+     * @param IdUsuario
+     * @throws java.io.IOException
      */
     public void darDeAltaUsuario(int IdUsuario) throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();
@@ -252,6 +252,14 @@ public class Usuarios implements Serializable {
             context.renderResponse();
         }else{
             context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Usuarios.xhtml");
+        }
+    }
+    
+    public void comprobarNumeroNuevoOperario(){
+        FacesContext context = FacesContext.getCurrentInstance();
+        if(ListaUsuarios.containsKey(NumeroNuevoUsuario)){
+            context.addMessage("form_usuarios:numero_nuevo_usuario", new FacesMessage(SEVERITY_ERROR, "El numero ingresado ya esta utilzado", "El numero ingresado ya esta utilzado" ));
+            context.renderResponse();
         }
     }
     

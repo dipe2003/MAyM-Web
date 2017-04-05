@@ -172,7 +172,9 @@
                                 <div class="form-group">
                                     <strong><label for="numero_nuevo_usuario">Numero</label></strong>
                                     <h:inputText id="numero_nuevo_usuario" class="form-control" value="#{usuarios.numeroNuevoUsuario}" 
-                                                 required="true" requiredMessage="Se debe ingresar numero (unico) de usuario." p:placeholder="Numero (unico) de Usuario" />
+                                                 required="true" requiredMessage="Se debe ingresar numero (unico) de usuario." p:placeholder="Numero (unico) de Usuario" >
+                                        <f:ajax delay="100" execute="@this" event="change" listener="#{usuarios.comprobarNumeroNuevoOperario()}" render="panel_mensajes_modal_nuevo" />
+                                    </h:inputText>                                    
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-6">
