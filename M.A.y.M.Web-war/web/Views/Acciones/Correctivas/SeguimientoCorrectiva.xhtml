@@ -120,14 +120,19 @@
                                                     <td>
                                                         <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA' and correctiva.value.fechaImplementacion == null}">
                                                             <div class="btn-group">                                                    
-                                                                <h:commandButton action="#{seguimientoCorrectiva.setFechaImplementacionActividad(correctiva.key)}" class="btn btn-primary"  value="Comprobar" >                                                                                                     
+                                                                <h:commandButton id="btn_setFechaImplementacion_corr_#{correctiva.key}" action="#{seguimientoCorrectiva.setFechaImplementacionMedidaCorrectiva(correctiva.key)}" class="btn btn-primary"  value="Comprobar" >                                                                                                     
                                                                     <f:ajax onevent="indicador" render="panel_medidas_correctivas" />
                                                                 </h:commandButton>                                                            
                                                             </div>
                                                         </c:if>
                                                     </td>
                                                     
-                                                </tr>                                            
+                                                </tr>   
+                                                <h:panelGroup >
+                                                    <div class="form-group-sm">
+                                                        <h:message for="btn_setFechaImplementacion_corr_#{correctiva.key}" class="msj_error"/>
+                                                    </div>
+                                                </h:panelGroup>
                                             </c:forEach>
                                         </tbody>
                                     </table>
@@ -179,17 +184,22 @@
                                                     <td>
                                                         <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA' and preventiva.value.fechaImplementacion == null}">
                                                             <div class="btn-group">                                                    
-                                                                <h:commandButton action="#{seguimientoCorrectiva.setFechaImplementacionActividad(preventiva.key)}" class="btn btn-primary"  value="Comprobar" >                                                                                                     
-                                                                    <f:ajax onevent="indicador" render="panel_medidas_correctivas" />
+                                                                <h:commandButton id="btn_setFechaImplementacion_#{preventiva.key}" action="#{seguimientoCorrectiva.setFechaImplementacionMedidaPreventiva(preventiva.key)}" class="btn btn-primary"  value="Comprobar" >                                                                                                     
+                                                                    <f:ajax onevent="indicador" render="panel_medidas_preventivas" />
                                                                 </h:commandButton>                                                            
                                                             </div>
                                                         </c:if>
-                                                    </td>
-                                                    
-                                                </tr>                                            
+                                                    </td>                                                    
+                                                </tr> 
+                                                <h:panelGroup >
+                                                    <div class="form-group-sm">
+                                                        <h:message for="btn_setFechaImplementacion_prev_#{preventiva.key}" class="msj_error"/>
+                                                    </div>
+                                                </h:panelGroup>
                                             </c:forEach>
                                         </tbody>
                                     </table>
+                                    
                                 </c:when>
                                 <c:otherwise>
                                     <div class="alert alert-info">
@@ -208,7 +218,7 @@
                                 <h:panelGroup id="panel_comprobacion_implementacion">
                                     <c:choose>
                                         <!-- CASO 1: esta implementadas y no se ha comprobado la implementacion. -->
-                                        <c:when test="#{seguimientoCorrectiva.accionSeleccionada.comprobacionImplementacion == null and
+                                        <c:when test="#{seguimientoCorrectiva.accionSeleccionada.comprobacionImplementacion.fechaComprobacion == null and
                                                         seguimientoCorrectiva.estaImplementada == true}">
                                             <div class="row">
                                                 <div class="col-sm-6">
@@ -232,7 +242,7 @@
                                                 <strong><label for="observaciones_comprobacion_implementacion">Observaciones</label></strong>
                                                 <h:inputTextarea id="observaciones_comprobacion_implementacion" class="form-control" value="#{seguimientoCorrectiva.observacionesImplementacion}" />
                                             </div>
-                                            <h:panelGroup id="panel_mensajes">
+                                            <h:panelGroup id="panel_mensajes_implementacion">
                                                 <div class="form-group-sm">
                                                     <h:message for="fecha_comprobacion_implementacion" class="msj_error"/>
                                                 </div>                   
@@ -245,7 +255,7 @@
                                             </h:panelGroup>
                                             <div class="btn-group">                                                      
                                                 <h:commandButton id="btn_comprobar_implementacion" action="#{seguimientoCorrectiva.comprobarImplementacionAccion()}" class="btn btn-primary"  value="Comprobar Implementacion de Accion" >                                                                                                     
-                                                    <f:ajax execute="panel_comprobacion_implementacion" render="panel_comprobacion_implementacion panel_comprobacion_eficacia" onevent="indicador" />
+                                                    <f:ajax  render="panel_comprobacion_implementacion panel_comprobacion_eficacia panel_mensajes_implementacion" onevent="indicador" />
                                                 </h:commandButton>                                                            
                                             </div>  
                                         </c:when>
@@ -281,7 +291,7 @@
                                     <c:choose>
                                         <!-- CASO 1: esta implementada, se comprobo la implementacion -->
                                         <c:when test="#{seguimientoCorrectiva.accionSeleccionada.comprobacionEficacia.fechaComprobacion == null and 
-                                                        seguimientoCorrectiva.accionSeleccionada.comprobacionImplementacion.fechaComprobacion == null and
+                                                        seguimientoCorrectiva.accionSeleccionada.comprobacionImplementacion.fechaComprobacion != null and
                                                         seguimientoCorrectiva.estaImplementada == true}">
                                             <div class="row">
                                                 <div class="col-sm-6">
@@ -293,7 +303,7 @@
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
                                                         <strong><label for="resultado_comprobacion_eficacia">Resultado de la Comprobacion</label></strong>
-                                                        <h:selectOneRadio id="resultado_comprobacion_eficacia" value="#{seguimientoCorrectiva.comprobarEficaciaAccion()}" >
+                                                        <h:selectOneRadio id="resultado_comprobacion_eficacia" value="#{seguimientoCorrectiva.comprobacionSeleccionadaEficacia}" >
                                                             <f:selectItem itemLabel="No Comprobada" itemValue="NO_COMPROBADA" />
                                                             <f:selectItem itemLabel="Correcta" itemValue="CORRECTA" />
                                                             <f:selectItem itemLabel="Incorrecta" itemValue="INCORRECTA" />
@@ -305,7 +315,7 @@
                                                 <strong><label for="observaciones_comprobacion_eficacia">Observaciones</label></strong>
                                                 <h:inputTextarea id="observaciones_comprobacion_eficacia" class="form-control" value="#{seguimientoCorrectiva.observacionesEficacia}" />
                                             </div>     
-                                            <h:panelGroup id="panel_mensajes">
+                                            <h:panelGroup id="panel_mensajes_eficacia">
                                                 <div class="form-group-sm">
                                                     <h:message for="fecha_comprobacion_eficacia" class="msj_error"/>
                                                 </div>                   
@@ -317,8 +327,8 @@
                                                 </div>
                                             </h:panelGroup>
                                             <div class="btn-group" >                                                      
-                                                <h:commandButton id="btn_comprobar_eficacia" action="#{seguimientoCorrectiva.comprobarEficaciaAccion()}" class="btn btn-primary"  value="Comprobar Implementacion de Accion" >                                                                                                     
-                                                    <f:ajax execute="panel_comprobacion_eficacia" render="panel_comprobacion_implementacion panel_comprobacion_eficacia"  onevent="indicador" />
+                                                <h:commandButton id="btn_comprobar_eficacia" class="btn btn-primary"  value="Comprobar Eficacia de Accion" >                                                                                                     
+                                                    <f:ajax event="click" listener="#{seguimientoCorrectiva.comprobarEficaciaAccion()}" render="panel_comprobacion_implementacion panel_comprobacion_eficacia panel_mensajes_eficacia"  onevent="indicador" />
                                                 </h:commandButton>                                                            
                                             </div>
                                         </c:when>

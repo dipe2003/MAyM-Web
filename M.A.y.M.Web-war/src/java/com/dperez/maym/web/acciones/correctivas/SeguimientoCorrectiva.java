@@ -124,13 +124,32 @@ public class SeguimientoCorrectiva implements Serializable {
      * Muestra un mensaje si no se pudo agregar fecha de lo contrario agrega la fecha a la actividad de la lista del bean.
      * @param IdActividad
      */
-    public void setFechaImplementacionActividad(int IdActividad){
+    public void setFechaImplementacionMedidaCorrectiva(int IdActividad) throws IOException{
         FechaImplementacion = new Date();
         if((fDatos.SetFechaImplementacionMedidaCorrectiva(FechaImplementacion, IdActividad, AccionSeleccionada.getId()))== -1){
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo agregar fecha", "No se pudo agregar fecha" ));
+            FacesContext.getCurrentInstance().addMessage("form_usuarios:btn_setFechaImplementacion_corr_"+IdActividad, new FacesMessage(SEVERITY_FATAL, "No se pudo agregar fecha", "No se pudo agregar fecha" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
-            MedidasCorrectivas.get(IdActividad).setFechaImplementacion(FechaImplementacion);
+            // regresar a la pagina listar acciones
+            String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/SeguimientoCorrectiva.xhtml?id="+AccionSeleccionada.getId());
+        }
+    }
+    /**
+     * Agrega fecha de implementacion de la actividad seleccionada.
+     * Muestra un mensaje si no se pudo agregar fecha de lo contrario agrega la fecha a la actividad de la lista del bean.
+     * @param IdActividad
+     * @throws java.io.IOException
+     */
+    public void setFechaImplementacionMedidaPreventiva(int IdActividad) throws IOException{
+        FechaImplementacion = new Date();
+        if((fDatos.SetFechaImplementacionMedidaPreventiva(FechaImplementacion, IdActividad, AccionSeleccionada.getId()))== -1){
+            FacesContext.getCurrentInstance().addMessage("form_usuarios:btn_setFechaImplementacion_prev_"+IdActividad, new FacesMessage(SEVERITY_FATAL, "No se pudo agregar fecha", "No se pudo agregar fecha" ));
+            FacesContext.getCurrentInstance().renderResponse();
+        }else{
+            // regresar a la pagina listar acciones
+            String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/SeguimientoCorrectiva.xhtml?id="+AccionSeleccionada.getId());
         }
     }
     
@@ -142,12 +161,12 @@ public class SeguimientoCorrectiva implements Serializable {
      */
     public void comprobarImplementacionAccion() throws IOException{
         if((fVerif.SetComprobacionImplementacionAccion(FechaImplementacion, ObservacionesImplementacion, ComprobacionSeleccionadaImplementacion, AccionSeleccionada.getId()))== -1){
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo comprobar implementacion", "No se pudo comprobar implementacion" ));
+            FacesContext.getCurrentInstance().addMessage("form_usuarios:btn_comprobar_implementacion", new FacesMessage(SEVERITY_FATAL, "No se pudo comprobar implementacion", "No se pudo comprobar implementacion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             // regresar a la pagina listar acciones
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/SeguimientoCorrectiva.xhtml?id="+AccionSeleccionada.getId());
         }
     }
     
@@ -155,15 +174,16 @@ public class SeguimientoCorrectiva implements Serializable {
      * Agrega una comprobacion de eficacia de la accion seleccionada.
      * Se debe comprobar que el estado sea proceso de verificacion.
      * Muestra un mensaje si no se pudo agregar, de lo contrario se regresa a la lista de acciones.
+     * @throws java.io.IOException
      */
     public void comprobarEficaciaAccion() throws IOException{
         if((fVerif.SetVerificacionEficaciaAccion(FechaImplementacion, ObservacionesImplementacion, ComprobacionSeleccionadaImplementacion, AccionSeleccionada.getId()))== -1){
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo comprobar eficacia", "No se pudo comprobar eficacia" ));
+            FacesContext.getCurrentInstance().addMessage("form_usuarios:btn_comprobar_eficacia", new FacesMessage(SEVERITY_FATAL, "No se pudo comprobar eficacia", "No se pudo comprobar eficacia" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
-            // regresar a la pagina listar acciones preventivas
+            // regresar a la pagina listar acciones
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/SeguimientoCorrectiva.xhtml?id="+AccionSeleccionada.getId());
         }
     }
     
@@ -179,7 +199,7 @@ public class SeguimientoCorrectiva implements Serializable {
         }else{
             // regresar a la pagina listar acciones
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Main/Main.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/ListarCorrectivas.xhtml");
         }
     }
     
@@ -219,7 +239,7 @@ public class SeguimientoCorrectiva implements Serializable {
             
             //  Resultado de comprobaciones
             Comprobaciones = EnumComprobacion.values();
-            if(AccionSeleccionada.getComprobacionImplementacion() == null){
+            if(AccionSeleccionada.getComprobacionImplementacion()==null || AccionSeleccionada.getComprobacionImplementacion().getFechaComprobacion() == null){
                 ComprobacionSeleccionadaImplementacion = EnumComprobacion.NO_COMPROBADA;
             }else{
                 ComprobacionSeleccionadaImplementacion = AccionSeleccionada.getComprobacionImplementacion().getResultado();
@@ -227,7 +247,7 @@ public class SeguimientoCorrectiva implements Serializable {
                 FechaImplementacion = AccionSeleccionada.getComprobacionImplementacion().getFechaComprobacion();
             }
             
-            if(AccionSeleccionada.getComprobacionEficacia() == null){
+            if(AccionSeleccionada.getComprobacionEficacia()==null || AccionSeleccionada.getComprobacionEficacia().getFechaComprobacion() == null){
                 ComprobacionSeleccionadaEficacia = EnumComprobacion.NO_COMPROBADA;
             }else{
                 ComprobacionSeleccionadaEficacia = AccionSeleccionada.getComprobacionEficacia().getResultado();
