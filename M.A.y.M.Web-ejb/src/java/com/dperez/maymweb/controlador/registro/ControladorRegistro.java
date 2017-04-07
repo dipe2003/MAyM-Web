@@ -355,6 +355,7 @@ public class ControladorRegistro {
     
     /**
      * Setea la comprobacion de implementacion de la accion, cambia el estado segun corresponda y actualiza la base de datos.
+     * PRE: la accion debe tener comprobacion != null (seteada fecha estimada de comprobacion de implementacion)
      * @param FechaComprobacionImplementacion
      * @param ComentariosImplementacion
      * @param Comprobacion

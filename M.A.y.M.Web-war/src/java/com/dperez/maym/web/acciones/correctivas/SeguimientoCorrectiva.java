@@ -17,6 +17,9 @@ import com.dperez.maymweb.facades.FacadeVerificador;
 import com.dperez.maymweb.usuario.Usuario;
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -50,14 +53,16 @@ public class SeguimientoCorrectiva implements Serializable {
     private Map<Integer, Actividad> MedidasPreventivas;
     
     private Date FechaImplementacion;
+    
     private String ObservacionesImplementacion;
     private Date FechaComprobacionImplementacion;
+    private String strFechaComprobacionImplementacion;
     private EnumComprobacion[] Comprobaciones;
     private EnumComprobacion ComprobacionSeleccionadaImplementacion;
     
-    private Date FechaEficacia;
     private String ObservacionesEficacia;
     private Date FechaComprobacionEficacia;
+    private String strFechaComprobacionEficacia;
     private EnumComprobacion ComprobacionSeleccionadaEficacia;
     
     private Map<Integer, Usuario> ListaUsuarios;
@@ -77,12 +82,27 @@ public class SeguimientoCorrectiva implements Serializable {
     public Date getFechaImplementacion(){return this.FechaImplementacion;}
     public String getObservacionesImplementacion() {return ObservacionesImplementacion;}
     public Date getFechaComprobacionImplementacion() {return FechaComprobacionImplementacion;}
+    public String getStrFechaComprobacionImplementacion(){
+        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
+        if (FechaComprobacionImplementacion == null) {
+            return this.strFechaComprobacionImplementacion;
+        }else{
+            return fDate.format(FechaComprobacionImplementacion);
+        }
+    }
     public EnumComprobacion[] getComprobaciones() {return Comprobaciones;}
     public EnumComprobacion getComprobacionSeleccionadaImplementacion() {return ComprobacionSeleccionadaImplementacion;}
     
-    public Date getFechaEficacia(){return this.FechaEficacia;}
     public String getObservacionesEficacia() {return ObservacionesEficacia;}
     public Date getFechaComprobacionEficacia() {return FechaComprobacionEficacia;}
+    public String getStrFechaComprobacionEficacia(){
+        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
+        if (FechaComprobacionEficacia == null) {
+            return this.strFechaComprobacionEficacia;
+        }else{
+            return fDate.format(FechaComprobacionEficacia);
+        }
+    }
     public EnumComprobacion getComprobacionSeleccionadaEficacia() {return ComprobacionSeleccionadaEficacia;}
     
     public Accion getAccionSeleccionada() {return AccionSeleccionada;}
@@ -101,14 +121,32 @@ public class SeguimientoCorrectiva implements Serializable {
     public void setMedidasPreventivas(Map<Integer, Actividad> MedidasPreventivas) {this.MedidasPreventivas = MedidasPreventivas;}
     
     public void setFechaImplementacion(Date FechaImplementacion){this.FechaImplementacion = FechaImplementacion;}
+    
     public void setObservacionesImplementacion(String ObservacionesImplementacion) {this.ObservacionesImplementacion = ObservacionesImplementacion;}
     public void setFechaComprobacionImplementacion(Date FechaComprobacionImplementacion) {this.FechaComprobacionImplementacion = FechaComprobacionImplementacion;}
+    public void setStrFechaComprobacionImplementacion(String strFechaComprobacionImplementacion) {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try{
+            cal.setTime(sdf.parse(strFechaComprobacionImplementacion));
+        }catch(ParseException ex){}
+        this.strFechaComprobacionImplementacion = strFechaComprobacionImplementacion;
+        this.FechaComprobacionImplementacion = cal.getTime();
+    }
     public void setComprobaciones(EnumComprobacion[] Comprobaciones) {this.Comprobaciones = Comprobaciones;}
     public void setComprobacionSeleccionadaImplementacion(EnumComprobacion ComprobacionSeleccionadaImplementacion) {this.ComprobacionSeleccionadaImplementacion = ComprobacionSeleccionadaImplementacion;}
     
-    public void setFechaEficacia(Date FechaEficacia){this.FechaEficacia = FechaEficacia;}
     public void setObservacionesEficacia(String ObservacionesEficacia) {this.ObservacionesEficacia = ObservacionesEficacia;}
     public void setFechaComprobacionEficacia(Date FechaComprobacionEficacia) {this.FechaComprobacionEficacia = FechaComprobacionEficacia;}
+    public void setStrFechaComprobacionEficacia(String strFechaComprobacionEficacia) {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try{
+            cal.setTime(sdf.parse(strFechaComprobacionEficacia));
+        }catch(ParseException ex){}
+        this.strFechaComprobacionEficacia = strFechaComprobacionEficacia;
+        this.FechaComprobacionEficacia = cal.getTime();
+    }
     public void setComprobacionSeleccionadaEficacia(EnumComprobacion ComprobacionSeleccionadaEficacia) {this.ComprobacionSeleccionadaEficacia = ComprobacionSeleccionadaEficacia;}
     
     public void setAccionSeleccionada(Accion AccionSeleccionada) {this.AccionSeleccionada = AccionSeleccionada;}
@@ -160,7 +198,7 @@ public class SeguimientoCorrectiva implements Serializable {
      * @throws java.io.IOException
      */
     public void comprobarImplementacionAccion() throws IOException{
-        if((fVerif.SetComprobacionImplementacionAccion(FechaImplementacion, ObservacionesImplementacion, ComprobacionSeleccionadaImplementacion, AccionSeleccionada.getId()))== -1){
+        if((fVerif.SetComprobacionImplementacionAccion(FechaComprobacionImplementacion, ObservacionesImplementacion, ComprobacionSeleccionadaImplementacion, AccionSeleccionada.getId()))== -1){
             FacesContext.getCurrentInstance().addMessage("form_usuarios:btn_comprobar_implementacion", new FacesMessage(SEVERITY_FATAL, "No se pudo comprobar implementacion", "No se pudo comprobar implementacion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
@@ -177,7 +215,7 @@ public class SeguimientoCorrectiva implements Serializable {
      * @throws java.io.IOException
      */
     public void comprobarEficaciaAccion() throws IOException{
-        if((fVerif.SetVerificacionEficaciaAccion(FechaImplementacion, ObservacionesImplementacion, ComprobacionSeleccionadaImplementacion, AccionSeleccionada.getId()))== -1){
+        if((fVerif.SetVerificacionEficaciaAccion(FechaComprobacionEficacia, ObservacionesEficacia, ComprobacionSeleccionadaEficacia, AccionSeleccionada.getId()))== -1){
             FacesContext.getCurrentInstance().addMessage("form_usuarios:btn_comprobar_eficacia", new FacesMessage(SEVERITY_FATAL, "No se pudo comprobar eficacia", "No se pudo comprobar eficacia" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
@@ -244,7 +282,7 @@ public class SeguimientoCorrectiva implements Serializable {
             }else{
                 ComprobacionSeleccionadaImplementacion = AccionSeleccionada.getComprobacionImplementacion().getResultado();
                 ObservacionesImplementacion = AccionSeleccionada.getComprobacionImplementacion().getObservaciones();
-                FechaImplementacion = AccionSeleccionada.getComprobacionImplementacion().getFechaComprobacion();
+                FechaComprobacionImplementacion = AccionSeleccionada.getComprobacionImplementacion().getFechaComprobacion();
             }
             
             if(AccionSeleccionada.getComprobacionEficacia()==null || AccionSeleccionada.getComprobacionEficacia().getFechaComprobacion() == null){
@@ -252,7 +290,7 @@ public class SeguimientoCorrectiva implements Serializable {
             }else{
                 ComprobacionSeleccionadaEficacia = AccionSeleccionada.getComprobacionEficacia().getResultado();
                 ObservacionesEficacia = AccionSeleccionada.getComprobacionEficacia().getObservaciones();
-                FechaEficacia = AccionSeleccionada.getComprobacionEficacia().getFechaComprobacion();
+                FechaComprobacionEficacia = AccionSeleccionada.getComprobacionEficacia().getFechaComprobacion();
             }
             
         }

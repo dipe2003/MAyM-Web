@@ -414,7 +414,7 @@
                                         <c:choose>
                                             <c:when test="#{not empty editarAccionCorrectiva.medidasCorrectivas or not empty editarAccionCorrectiva.medidasPreventivas}">
                                                 <c:choose>
-                                                    <c:when test="#{editarAccionCorrectiva.comprobacionImplementacion.resultado == 'NO_COMPROBADA'}">
+                                                    <c:when test="#{editarAccionCorrectiva.comprobacionImplementacion == null || editarAccionCorrectiva.comprobacionImplementacion.resultado == 'NO_COMPROBADA'}">
                                                         <div class="col-sm-6">
                                                             <div class="form-group">
                                                                 <strong><label for="fecha_estimada_comprobacion_implementacion">Fecha Estimada</label></strong>
@@ -432,7 +432,7 @@
                                                                                  required="true" requiredMessage="Se debe seleccionar responsable." >
                                                                     <f:selectItem  itemLabel="--- Seleccionar Responsable ---" noSelectionOption="true" itemDisabled="false" />
                                                                     <c:forEach items="#{editarAccionCorrectiva.listaUsuarios}" var="usuario">
-                                                                        <f:selectItem itemLabel="#{usuario.nombre} #{usuario.apellido}" itemValue="#{usuario.id}" />
+                                                                        <f:selectItem itemLabel="#{usuario.areaSectorUsuario.nombre} | #{usuario.nombre} #{usuario.apellido}" itemValue="#{usuario.id}" />
                                                                     </c:forEach>
                                                                 </h:selectOneMenu>
                                                             </div>
@@ -469,7 +469,7 @@
                                         <c:choose>
                                             <c:when test="#{not empty editarAccionCorrectiva.medidasCorrectivas or not empty editarAccionCorrectiva.medidasPreventivas}">
                                                 <c:choose>
-                                                    <c:when test="#{editarAccionCorrectiva.comprobacionEficacia.resultado == 'NO_COMPROBADA'}">
+                                                    <c:when test="#{editarAccionCorrectiva.comprobacionEficacia == null || editarAccionCorrectiva.comprobacionEficacia.resultado == 'NO_COMPROBADA'}">
                                                         <div class="col-sm-6">
                                                             <div class="form-group">
                                                                 <strong><label for="fecha_estimada_comprobacion_eficacia">Fecha Estimada</label></strong>
@@ -487,7 +487,7 @@
                                                                                  required="true" requiredMessage="Se debe seleccionar un responsable." >
                                                                     <f:selectItem itemLabel="--- Seleccionar Responsable ---" noSelectionOption="true" itemDisabled="false" />
                                                                     <c:forEach items="#{editarAccionCorrectiva.listaUsuarios}" var="usuario">
-                                                                        <f:selectItem itemLabel="#{usuario.nombre} #{usuario.apellido}" itemValue="#{usuario.id}" />
+                                                                        <f:selectItem itemLabel="#{usuario.areaSectorUsuario.nombre} | #{usuario.nombre} #{usuario.apellido}" itemValue="#{usuario.id}" />
                                                                     </c:forEach>
                                                                 </h:selectOneMenu>
                                                             </div>
