@@ -255,7 +255,7 @@
                                             </h:panelGroup>
                                             <div class="btn-group">                                                      
                                                 <h:commandButton id="btn_comprobar_implementacion" action="#{seguimientoCorrectiva.comprobarImplementacionAccion()}" class="btn btn-primary"  value="Comprobar Implementacion de Accion" >                                                                                                     
-                                                    <f:ajax  render="panel_comprobacion_implementacion panel_comprobacion_eficacia panel_mensajes_implementacion" onevent="indicador" />
+                                                    <f:ajax execute="panel_comprobacion_implementacion"  render="panel_comprobacion_implementacion panel_comprobacion_eficacia panel_mensajes_implementacion" onevent="indicador" />
                                                 </h:commandButton>                                                            
                                             </div>  
                                         </c:when>
@@ -328,7 +328,7 @@
                                             </h:panelGroup>
                                             <div class="btn-group" >                                                      
                                                 <h:commandButton id="btn_comprobar_eficacia" class="btn btn-primary"  value="Comprobar Eficacia de Accion" >                                                                                                     
-                                                    <f:ajax event="click" listener="#{seguimientoCorrectiva.comprobarEficaciaAccion()}" render="panel_comprobacion_implementacion panel_comprobacion_eficacia panel_mensajes_eficacia"  onevent="indicador" />
+                                                    <f:ajax execute="panel_comprobacion_eficacia" event="click" listener="#{seguimientoCorrectiva.comprobarEficaciaAccion()}" render="panel_comprobacion_implementacion panel_comprobacion_eficacia panel_mensajes_eficacia"  onevent="indicador" />
                                                 </h:commandButton>                                                            
                                             </div>
                                         </c:when>

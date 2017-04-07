@@ -257,9 +257,9 @@ public class ActividadesAC implements Serializable {
                     if(!((Correctiva)AccionSeleccionada).getMedidasPreventivas().isEmpty()){
                         List<Actividad> medidas = ((Correctiva)AccionSeleccionada).getMedidasPreventivas();
                         for(Actividad medida: medidas ){
-                            FechaEstimadaImplementacionMedidaCorrectiva = medida.getFechaEstimadaImplementacion();
-                            DescripcionMedidaCorrectiva =  medida.getDescripcion();
-                            ResponsableMedidaCorrectiva = medida.getResponsableImplementacion().getId();
+                            FechaEstimadaImplementacionMedidaPreventiva = medida.getFechaEstimadaImplementacion();
+                            DescripcionMedidaPreventiva =  medida.getDescripcion();
+                            ResponsableMedidaPreventiva = medida.getResponsableImplementacion().getId();
                         }
                     }
                 }

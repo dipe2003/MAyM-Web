@@ -6,7 +6,6 @@
 package com.dperez.maymweb.accion.acciones;
 
 import com.dperez.maymweb.accion.Accion;
-import com.dperez.maymweb.accion.EnumComprobacion;
 import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.estado.EnumEstado;
 import java.util.List;
@@ -146,43 +145,46 @@ public class Correctiva extends Accion implements Serializable {
             if(this.MedidasCorrectivas.isEmpty() && this.MedidasPreventivas.isEmpty()){
                 this.setEstadoAccion(EnumEstado.PENDIENTE);
             }else{
-                boolean medCorrectivaImp = false;
-                // chequear implementacion de las medidas correctivas
-                int totalImplementadas = 0;
-                for(Actividad medida: this.MedidasCorrectivas){
-                    if(medida.getFechaImplementacion()!=null) {
-                        totalImplementadas++;
-                    }
-                }
-                if(totalImplementadas == this.MedidasCorrectivas.size()){
-                    medCorrectivaImp = true;
-                }
-                
-                boolean medPreventivaImp = true;
-                // chequear implementacion de todas las medidas preventivas
-                for(Actividad medida: this.MedidasPreventivas){
-                    if(medida.getFechaImplementacion()==null) medPreventivaImp = false;
-                }
-                
-                if((medCorrectivaImp == false && medCorrectivaImp == false) && totalImplementadas > 0 ){
-                    this.setEstadoAccion(EnumEstado.PROCESO_IMP);
-                }else{
-                    // comparar resultados de chequeos y setear nuevo estado
-                    if(medCorrectivaImp == true && medPreventivaImp == true){
-                        if(this.getComprobacionEficacia() !=null && this.getComprobacionEficacia().getResultado()!= EnumComprobacion.NO_COMPROBADA) {
-                            this.setEstadoAccion(EnumEstado.CERRADA);
+                // si todas las medidas correctivas o preventivas estan implementadas
+                if(EstaImplementada()){
+                    if(ComprobacionImplementacion != null && ComprobacionImplementacion.getFechaComprobacion() != null){
+                        if(ComprobacionEficacia != null && ComprobacionEficacia.getFechaComprobacion() == null){
+                            setEstadoAccion(EnumEstado.PROCESO_VER);
                         }else{
-                            this.setEstadoAccion(EnumEstado.PROCESO_VER);
+                            setEstadoAccion(EnumEstado.CERRADA);
                         }
                     }else{
-                        if(medCorrectivaImp == true && medPreventivaImp != true){
-                            if(this.getComprobacionImplementacion() != null && this.getComprobacionImplementacion().getResultado() == EnumComprobacion.NO_COMPROBADA)
-                                this.setEstadoAccion(EnumEstado.PROCESO_IMP);
-                        }else{
-                            if(medCorrectivaImp != true && medPreventivaImp != true){
-                                this.setEstadoAccion(EnumEstado.PENDIENTE);
+                        setEstadoAccion(EnumEstado.PROCESO_IMP);
+                    }
+                }else{
+                    // si alguna medida correctiva o preventiva esta implementada esteria en proceso de implementacion
+                    // si alguna lista esta vacia devuelve implementada.
+                    boolean corr = false;
+                    boolean prev = false;
+                    if(!MedidasCorrectivas.isEmpty()){
+                        for(Actividad actividad: MedidasCorrectivas){
+                            if(actividad.getFechaImplementacion()!=null){
+                                corr = true;
+                                break;
                             }
                         }
+                    }else{
+                        corr = true;
+                    }
+                    if(!MedidasPreventivas.isEmpty()){
+                        for(Actividad actividad: MedidasPreventivas){
+                            if(actividad.getFechaImplementacion()!=null){
+                                prev = true;
+                                break;
+                            }
+                        }
+                    }else{
+                        prev = true;
+                    }
+                    if(corr || prev){
+                        setEstadoAccion(EnumEstado.PROCESO_IMP);
+                    }else{
+                        setEstadoAccion(EnumEstado.PENDIENTE);
                     }
                 }
             }
@@ -200,7 +202,7 @@ public class Correctiva extends Accion implements Serializable {
     
     /**
      * Comprueba que todas las medidas correctivas esten implementadas.
-     * @return 
+     * @return
      */
     public boolean EstanImplementadasMedidasCorretivas(){
         boolean implementada = true;
@@ -214,7 +216,7 @@ public class Correctiva extends Accion implements Serializable {
     }
     /**
      * Comprueba que todas las medidas preventivas esten implementadas.
-     * @return 
+     * @return
      */
     public boolean EstanImplementadasMedidasPreventivas(){
         boolean implementada = true;

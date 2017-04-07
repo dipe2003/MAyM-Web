@@ -37,33 +37,33 @@ import javax.persistence.Table;
 @Table(name = "Acciones")
 public abstract class Accion implements Serializable{
     @Id@GeneratedValue(strategy = GenerationType.AUTO)
-    private int Id;
+    protected int Id;
     @Temporal(TemporalType.DATE)
-    private Date FechaDeteccion;
-    private String Descripcion  = new String();
-    private String AnalisisCausa = new String();
-    private EnumEstado EstadoAccion;
+    protected Date FechaDeteccion;
+    protected String Descripcion  = new String();
+    protected String AnalisisCausa = new String();
+    protected EnumEstado EstadoAccion;
     
     @OneToMany(mappedBy = "AccionAdjunto",orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<Adjunto> Adjuntos;
+    protected List<Adjunto> Adjuntos;
     
     @ManyToOne
-    private Deteccion GeneradaPor;
+    protected Deteccion GeneradaPor;
     
     @ManyToOne
-    private Area AreaSectorAccion;
+    protected Area AreaSectorAccion;
     
     @ManyToOne
-    private Codificacion CodificacionAccion;
+    protected Codificacion CodificacionAccion;
     
     @OneToOne(orphanRemoval = true, fetch = FetchType.EAGER)
-    private Comprobacion ComprobacionEficacia;
+    protected Comprobacion ComprobacionEficacia;
     
     @OneToOne( orphanRemoval = true)
-    private Comprobacion ComprobacionImplementacion;
+    protected Comprobacion ComprobacionImplementacion;
     
     @ManyToOne
-    private Empresa EmpresaAccion;
+    protected Empresa EmpresaAccion;
     
     // Constructores
     public Accion(){
