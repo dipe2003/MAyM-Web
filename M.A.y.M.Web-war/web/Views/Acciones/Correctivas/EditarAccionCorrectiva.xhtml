@@ -272,31 +272,33 @@
                                                                 #{correctiva.value.fechaImplementacion}
                                                             </c:if>
                                                         </td>
-                                                        <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA'}">
+                                                        <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA' }">
                                                             <td>
-                                                                <div class="btn-group">
-                                                                    <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
-                                                                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                                                        <span class="caret"></span>
-                                                                    </button>
-                                                                    <ul class="dropdown-menu" role="menu">                               
-                                                                        <c:choose>
-                                                                            <c:when test="#{correctiva.value.fechaImplementacion == null}">
-                                                                                <li><h:link value="Editar Actividad" onclick="if (! confirm('Si se realizaron cambios y no se guardaron se perderan. Continuar?')) return false"
-                                                                                            outcome="ActividadesCorrectiva.xhtml?id=#{editarAccionCorrectiva.idAccionSeleccionada}&amp;tipo=correctiva&amp;editar=#{correctiva.key}" >                                                                
-                                                                                        <f:ajax onevent="indicador" />
-                                                                                    </h:link>
-                                                                                </li>
-                                                                                <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR' ||  sesionUsuario.usuarioLogueado.permisoUsuario == 'VERIFICADOR'}">
-                                                                                    <li><h:link value="Quitar Actividad" >                                                                
+                                                                <c:if test="#{editarAccionCorrectiva.accionSeleccionada.estadoAccion != 'PROCESO_VER' and editarAccionCorrectiva.accionSeleccionada.estadoAccion != 'CERRADA'}" >
+                                                                    <div class="btn-group">
+                                                                        <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
+                                                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                                            <span class="caret"></span>
+                                                                        </button>
+                                                                        <ul class="dropdown-menu" role="menu">                               
+                                                                            <c:choose>
+                                                                                <c:when test="#{correctiva.value.fechaImplementacion == null}">
+                                                                                    <li><h:link value="Editar Actividad" onclick="if (! confirm('Si se realizaron cambios y no se guardaron se perderan. Continuar?')) return false"
+                                                                                                outcome="ActividadesCorrectiva.xhtml?id=#{editarAccionCorrectiva.idAccionSeleccionada}&amp;tipo=correctiva&amp;editar=#{correctiva.key}" >                                                                
                                                                                             <f:ajax onevent="indicador" />
                                                                                         </h:link>
                                                                                     </li>
-                                                                                </c:if>
-                                                                            </c:when>
-                                                                        </c:choose>
-                                                                    </ul>
-                                                                </div>
+                                                                                    <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR' ||  sesionUsuario.usuarioLogueado.permisoUsuario == 'VERIFICADOR'}">
+                                                                                        <li><h:link value="Quitar Actividad" >                                                                
+                                                                                                <f:ajax onevent="indicador" />
+                                                                                            </h:link>
+                                                                                        </li>
+                                                                                    </c:if>
+                                                                                </c:when>
+                                                                            </c:choose>
+                                                                        </ul>
+                                                                    </div>
+                                                                </c:if>
                                                             </td>
                                                         </c:if>
                                                     </tr>                                            
@@ -310,13 +312,14 @@
                                         </div>
                                     </c:otherwise>
                                 </c:choose>
-                                <div class="form-group-sm">
-                                    <h:link id="agregar_medida_correctiva" value="Agregar Medida Correctiva" class="btn btn-primary" onclick="if (! confirm('Si se realizaron cambios y no se guardaron se perderan. Continuar?')) return false"
-                                            outcome="ActividadesCorrectiva.xhtml?id=#{editarAccionCorrectiva.idAccionSeleccionada}&amp;tipo=correctiva&amp;editar=0">
-                                        <f:ajax onevent="indicador"/>
-                                    </h:link>
-                                </div>
-                                
+                                <c:if test="#{editarAccionCorrectiva.accionSeleccionada.estadoAccion != 'PROCESO_VER' and editarAccionCorrectiva.accionSeleccionada.estadoAccion != 'CERRADA'}" >
+                                    <div class="form-group-sm">
+                                        <h:link id="agregar_medida_correctiva" value="Agregar Medida Correctiva" class="btn btn-primary" onclick="if (! confirm('Si se realizaron cambios y no se guardaron se perderan. Continuar?')) return false"
+                                                outcome="ActividadesCorrectiva.xhtml?id=#{editarAccionCorrectiva.idAccionSeleccionada}&amp;tipo=correctiva&amp;editar=0">
+                                            <f:ajax onevent="indicador"/>
+                                        </h:link>
+                                    </div>
+                                </c:if>
                             </div>
                         </div>
                     </div>
@@ -355,29 +358,31 @@
                                                         </td>
                                                         <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA'}">
                                                             <td>
-                                                                <div class="btn-group">
-                                                                    <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
-                                                                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                                                        <span class="caret"></span>
-                                                                    </button>
-                                                                    <ul class="dropdown-menu" role="menu">                               
-                                                                        <c:choose>
-                                                                            <c:when test="#{preventiva.value.fechaImplementacion == null}">
-                                                                                <li><h:link value="Editar Actividad" onclick="if (! confirm('Si se realizaron cambios y no se guardaron se perderan. Continuar?')) return false"
-                                                                                            outcome="ActividadesCorrectiva.xhtml?id=#{editarAccionCorrectiva.idAccionSeleccionada}&amp;tipo=preventiva&amp;editar=#{preventiva.key}" >                                                                
-                                                                                        <f:ajax onevent="indicador" />
-                                                                                    </h:link>
-                                                                                </li>
-                                                                                <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR' ||  sesionUsuario.usuarioLogueado.permisoUsuario == 'VERIFICADOR'}">
-                                                                                    <li><h:link value="Quitar Actividad" >                                                                
+                                                                <c:if test="#{editarAccionCorrectiva.accionSeleccionada.estadoAccion != 'PROCESO_VER' and editarAccionCorrectiva.accionSeleccionada.estadoAccion != 'CERRADA'}" >
+                                                                    <div class="btn-group">
+                                                                        <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
+                                                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                                            <span class="caret"></span>
+                                                                        </button>
+                                                                        <ul class="dropdown-menu" role="menu">                               
+                                                                            <c:choose>
+                                                                                <c:when test="#{preventiva.value.fechaImplementacion == null}">
+                                                                                    <li><h:link value="Editar Actividad" onclick="if (! confirm('Si se realizaron cambios y no se guardaron se perderan. Continuar?')) return false"
+                                                                                                outcome="ActividadesCorrectiva.xhtml?id=#{editarAccionCorrectiva.idAccionSeleccionada}&amp;tipo=preventiva&amp;editar=#{preventiva.key}" >                                                                
                                                                                             <f:ajax onevent="indicador" />
                                                                                         </h:link>
                                                                                     </li>
-                                                                                </c:if>
-                                                                            </c:when>
-                                                                        </c:choose>
-                                                                    </ul>
-                                                                </div>
+                                                                                    <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR' ||  sesionUsuario.usuarioLogueado.permisoUsuario == 'VERIFICADOR'}">
+                                                                                        <li><h:link value="Quitar Actividad" >                                                                
+                                                                                                <f:ajax onevent="indicador" />
+                                                                                            </h:link>
+                                                                                        </li>
+                                                                                    </c:if>
+                                                                                </c:when>
+                                                                            </c:choose>
+                                                                        </ul>
+                                                                    </div>
+                                                                </c:if>
                                                             </td>
                                                         </c:if>
                                                     </tr>                                            
@@ -391,13 +396,14 @@
                                         </div>
                                     </c:otherwise>
                                 </c:choose>
-                                <div class="form-group-sm">
-                                    <h:link id="agregar_medida_preventiva" value="Agregar Medida Preventiva" class="btn btn-primary" onclick="if (! confirm('Si se realizaron cambios y no se guardaron se perderan. Continuar?')) return false"
-                                            outcome="ActividadesCorrectiva.xhtml?id=#{editarAccionCorrectiva.idAccionSeleccionada}&amp;tipo=preventiva&amp;editar=0">
-                                        <f:ajax onevent="indicador"/>
-                                    </h:link>
-                                </div>
-                                
+                                <c:if test="#{editarAccionCorrectiva.accionSeleccionada.estadoAccion != 'PROCESO_VER' and editarAccionCorrectiva.accionSeleccionada.estadoAccion != 'CERRADA'}" >
+                                    <div class="form-group-sm">
+                                        <h:link id="agregar_medida_preventiva" value="Agregar Medida Preventiva" class="btn btn-primary" onclick="if (! confirm('Si se realizaron cambios y no se guardaron se perderan. Continuar?')) return false"
+                                                outcome="ActividadesCorrectiva.xhtml?id=#{editarAccionCorrectiva.idAccionSeleccionada}&amp;tipo=preventiva&amp;editar=0">
+                                            <f:ajax onevent="indicador"/>
+                                        </h:link>
+                                    </div>
+                                </c:if>                                
                             </div>
                         </div>
                     </div>

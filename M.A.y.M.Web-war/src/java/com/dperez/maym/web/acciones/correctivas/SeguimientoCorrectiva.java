@@ -161,11 +161,12 @@ public class SeguimientoCorrectiva implements Serializable {
      * Agrega fecha de implementacion de la actividad seleccionada.
      * Muestra un mensaje si no se pudo agregar fecha de lo contrario agrega la fecha a la actividad de la lista del bean.
      * @param IdActividad
+     * @throws java.io.IOException
      */
     public void setFechaImplementacionMedidaCorrectiva(int IdActividad) throws IOException{
         FechaImplementacion = new Date();
         if((fDatos.SetFechaImplementacionMedidaCorrectiva(FechaImplementacion, IdActividad, AccionSeleccionada.getId()))== -1){
-            FacesContext.getCurrentInstance().addMessage("form_usuarios:btn_setFechaImplementacion_corr_"+IdActividad, new FacesMessage(SEVERITY_FATAL, "No se pudo agregar fecha", "No se pudo agregar fecha" ));
+            FacesContext.getCurrentInstance().addMessage("form_seguimiento_accion:btn_setFechaImplementacion_corr_"+IdActividad, new FacesMessage(SEVERITY_FATAL, "No se pudo agregar fecha", "No se pudo agregar fecha" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             // regresar a la pagina listar acciones
@@ -182,7 +183,7 @@ public class SeguimientoCorrectiva implements Serializable {
     public void setFechaImplementacionMedidaPreventiva(int IdActividad) throws IOException{
         FechaImplementacion = new Date();
         if((fDatos.SetFechaImplementacionMedidaPreventiva(FechaImplementacion, IdActividad, AccionSeleccionada.getId()))== -1){
-            FacesContext.getCurrentInstance().addMessage("form_usuarios:btn_setFechaImplementacion_prev_"+IdActividad, new FacesMessage(SEVERITY_FATAL, "No se pudo agregar fecha", "No se pudo agregar fecha" ));
+            FacesContext.getCurrentInstance().addMessage("form_seguimiento_accion:btn_setFechaImplementacion_prev_"+IdActividad, new FacesMessage(SEVERITY_FATAL, "No se pudo agregar fecha", "No se pudo agregar fecha" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             // regresar a la pagina listar acciones
@@ -199,7 +200,7 @@ public class SeguimientoCorrectiva implements Serializable {
      */
     public void comprobarImplementacionAccion() throws IOException{
         if((fVerif.SetComprobacionImplementacionAccion(FechaComprobacionImplementacion, ObservacionesImplementacion, ComprobacionSeleccionadaImplementacion, AccionSeleccionada.getId()))== -1){
-            FacesContext.getCurrentInstance().addMessage("form_usuarios:btn_comprobar_implementacion", new FacesMessage(SEVERITY_FATAL, "No se pudo comprobar implementacion", "No se pudo comprobar implementacion" ));
+            FacesContext.getCurrentInstance().addMessage("form_seguimiento_accion:btn_comprobar_implementacion", new FacesMessage(SEVERITY_FATAL, "No se pudo comprobar implementacion", "No se pudo comprobar implementacion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             // regresar a la pagina listar acciones
@@ -216,7 +217,7 @@ public class SeguimientoCorrectiva implements Serializable {
      */
     public void comprobarEficaciaAccion() throws IOException{
         if((fVerif.SetVerificacionEficaciaAccion(FechaComprobacionEficacia, ObservacionesEficacia, ComprobacionSeleccionadaEficacia, AccionSeleccionada.getId()))== -1){
-            FacesContext.getCurrentInstance().addMessage("form_usuarios:btn_comprobar_eficacia", new FacesMessage(SEVERITY_FATAL, "No se pudo comprobar eficacia", "No se pudo comprobar eficacia" ));
+            FacesContext.getCurrentInstance().addMessage("form_seguimiento_accion:btn_comprobar_eficacia", new FacesMessage(SEVERITY_FATAL, "No se pudo comprobar eficacia", "No se pudo comprobar eficacia" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             // regresar a la pagina listar acciones
@@ -232,7 +233,7 @@ public class SeguimientoCorrectiva implements Serializable {
      */
     public void desestimarAccion() throws IOException{
         if(fVerif.DesestimarAccion(ObservacionesImplementacion, AccionSeleccionada.getId())== -1){
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo desestimar la accion", "No se pudo desestimar la accion" ));
+            FacesContext.getCurrentInstance().addMessage("form_seguimiento_accion:btn_desestimar_accion", new FacesMessage(SEVERITY_FATAL, "No se pudo desestimar la accion", "No se pudo desestimar la accion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             // regresar a la pagina listar acciones

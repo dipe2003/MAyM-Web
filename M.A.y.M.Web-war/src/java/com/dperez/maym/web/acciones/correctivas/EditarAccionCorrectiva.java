@@ -112,7 +112,8 @@ public class EditarAccionCorrectiva implements Serializable {
     private Comprobacion ComprobacionEficacia;
     
     //  Getters
-    public int getIdAccionSeleccionada(){return IdAccionSeleccionada;}
+    public Accion getAccionSeleccionada(){return AccionSeleccionada;}
+    public int getIdAccionSeleccionada() {return IdAccionSeleccionada;    }
     public Date getFechaDeteccion() {return FechaDeteccion;}
     public String getStrFechaDeteccion(){
         SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
