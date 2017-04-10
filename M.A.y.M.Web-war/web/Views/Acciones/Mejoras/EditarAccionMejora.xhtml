@@ -188,14 +188,15 @@
                                                 </td>
                                                 <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA'}">
                                                     <td>
-                                                        <div class="btn-group">
-                                                            <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
-                                                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                                                <span class="caret"></span>
-                                                            </button>
-                                                            <ul class="dropdown-menu" role="menu">                               
-                                                                <c:choose>
-                                                                    <c:when test="#{actividad.value.fechaImplementacion == null}">
+                                                        <c:choose>
+                                                            <c:when test="#{actividad.value.fechaImplementacion == null}">
+                                                                
+                                                                <div class="btn-group">
+                                                                    <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
+                                                                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                                        <span class="caret"></span>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu" role="menu">    
                                                                         <li><h:link value="Editar Actividad" onclick="if (! confirm('Si se realizaron cambios y no se guardaron se perderan. Continuar?')) return false"
                                                                                     outcome="ActividadesMejora.xhtml?id=#{editarAccionMejora.idAccionSeleccionada}&amp;editar=#{actividad.key}" >                                                                
                                                                                 <f:ajax onevent="indicador" />
@@ -207,10 +208,10 @@
                                                                                 </h:link>
                                                                             </li>
                                                                         </c:if>
-                                                                    </c:when>
-                                                                </c:choose>
-                                                            </ul>
-                                                        </div>
+                                                                    </ul>
+                                                                </div>
+                                                            </c:when>
+                                                        </c:choose>                                                    
                                                     </td>
                                                 </c:if>
                                             </tr>                                            
