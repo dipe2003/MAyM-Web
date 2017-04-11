@@ -43,8 +43,7 @@
                         <table class="table table-hover table-striped table-responsive">
                             <thead>
                                 <tr>
-                                    <th>Numero</th>                                    
-                                    <th>Nickname</th>  
+                                    <th>Numero</th> 
                                     <th>Nombre</th>
                                     <th>Correo</th>
                                     <th>Area</th>
@@ -62,9 +61,6 @@
                                         <tr>
                                             <td>
                                                 #{usuario.value.id}
-                                            </td>
-                                            <td>
-                                                #{usuario.value.nickName}
                                             </td>
                                             <td>
                                                 #{usuario.value.apellido} #{usuario.value.nombre}
@@ -195,28 +191,23 @@
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <strong><label for="nickname_nuevo_usuario">Nickname</label></strong>
-                                            <h:inputText id="nickname_nuevo_usuario" class="form-control" value="#{usuarios.nickname}"
-                                                         required="true" requiredMessage="Se debe ingresar Nickname" p:placeholder="Nickname de Usuario." />
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
                                             <strong><label for="correo_nuevo_usuario">Correo</label></strong>
                                             <h:inputText id="correo_nuevo_usuario" class="form-control" value="#{usuarios.correoElectronico}"
                                                          required="true" requiredMessage="Se debe ingresar correo electronico" p:placeholder="Correo electronico" />
                                         </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <strong><label for="area_nuevo_usuario">Area / Sector:</label></strong>
-                                    <h:selectOneMenu id="area_nuevo_usuario" class="form-control" value="#{usuarios.areaSeleccionada}"
-                                                     required="true" requiredMessage="No se selecciono area">
-                                        <f:selectItem itemLabel="-- Seleccionar Area ---" itemDisabled="true"  noSelectionOption="true"  />
-                                        <c:forEach items="#{usuarios.listaAreas}" var="area">
-                                            <f:selectItem itemLabel="#{area.nombre}" itemValue="#{area.id}" />
-                                        </c:forEach>
-                                    </h:selectOneMenu>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <strong><label for="area_nuevo_usuario">Area / Sector:</label></strong>
+                                            <h:selectOneMenu id="area_nuevo_usuario" class="form-control" value="#{usuarios.areaSeleccionada}"
+                                                             required="true" requiredMessage="No se selecciono area">
+                                                <f:selectItem itemLabel="-- Seleccionar Area ---" itemDisabled="true"  noSelectionOption="true"  />
+                                                <c:forEach items="#{usuarios.listaAreas}" var="area">
+                                                    <f:selectItem itemLabel="#{area.nombre}" itemValue="#{area.id}" />
+                                                </c:forEach>
+                                            </h:selectOneMenu>
+                                        </div> 
+                                    </div>
                                 </div>                                
                                 
                                 <div class="row">
@@ -253,9 +244,6 @@
                                     </div>
                                     <div class="form-group-sm">
                                         <h:message for="apellido_nuevo_usuario" class="msj_error"/>
-                                    </div>
-                                    <div class="form-group-sm">
-                                        <h:message for="nickname_nuevo_usuario" class="msj_error"/>
                                     </div>
                                     <div class="form-group-sm">
                                         <h:message for="correo_nuevo_usuario" class="msj_error"/>
@@ -326,29 +314,24 @@
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <strong><label for="nickname_editar_usuario">Nickname</label></strong>
-                                            <h:inputText id="nickname_editar_usuario" class="form-control" value="#{usuarios.nickname}"
-                                                         required="true" requiredMessage="Se debe ingresar Nickname" p:placeholder="Nickname de Usuario." />
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
                                             <strong><label for="correo_editar_usuario">Correo</label></strong>
                                             <h:inputText id="correo_editar_usuario" class="form-control" value="#{usuarios.correoElectronico}"
                                                          required="true" requiredMessage="Se debe ingresar correo electronico" p:placeholder="Correo electronico" />
                                         </div>
                                     </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <strong><label for="area_editar_usuario">Area / Sector:</label></strong>
+                                            <h:selectOneMenu id="area_editar_usuario" class="form-control" value="#{usuarios.areaSeleccionada}"
+                                                             required="true" requiredMessage="No se selecciono area">
+                                                <f:selectItem itemLabel="-- Seleccionar Area ---" itemDisabled="true"  noSelectionOption="true"  />
+                                                <c:forEach items="#{usuarios.listaAreas}" var="area">
+                                                    <f:selectItem itemLabel="#{area.nombre}" itemValue="#{area.id}" />
+                                                </c:forEach>
+                                            </h:selectOneMenu>
+                                        </div> 
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <strong><label for="area_editar_usuario">Area / Sector:</label></strong>
-                                    <h:selectOneMenu id="area_editar_usuario" class="form-control" value="#{usuarios.areaSeleccionada}"
-                                                     required="true" requiredMessage="No se selecciono area">
-                                        <f:selectItem itemLabel="-- Seleccionar Area ---" itemDisabled="true"  noSelectionOption="true"  />
-                                        <c:forEach items="#{usuarios.listaAreas}" var="area">
-                                            <f:selectItem itemLabel="#{area.nombre}" itemValue="#{area.id}" />
-                                        </c:forEach>
-                                    </h:selectOneMenu>
-                                </div>                               
                                 
                                 <h:panelGroup id="panel_cambiar_password">
                                     <c:if test="#{usuarios.cambiarPassword == false}">
@@ -423,9 +406,6 @@
                                     </div>
                                     <div class="form-group-sm">
                                         <h:message for="apellido_editar_usuario" class="msj_error"/>
-                                    </div>
-                                    <div class="form-group-sm">
-                                        <h:message for="nickname_editar_usuario" class="msj_error"/>
                                     </div>
                                     <div class="form-group-sm">
                                         <h:message for="correo_editar_usuario" class="msj_error"/>

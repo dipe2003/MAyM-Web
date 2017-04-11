@@ -77,7 +77,8 @@ public class SesionUsuario implements Serializable {
     @PostConstruct
     public void init(){
         this.Usuarios = new HashMap<>();
-        List<Usuario> usuarios = fLectura.GetUsuarios();
+        // llenar la lista de usuarios de todas las empresas que no se hayan dado de baja.
+        List<Usuario> usuarios = fLectura.GetUsuariosEmpresa(true, -1);
         for(Usuario usr:usuarios){
             this.Usuarios.put(usr.getId(), usr);
         }

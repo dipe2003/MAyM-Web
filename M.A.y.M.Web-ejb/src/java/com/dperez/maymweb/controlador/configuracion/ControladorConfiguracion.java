@@ -56,7 +56,6 @@ public class ControladorConfiguracion {
     /**
      * Crea un nuevo usuario y lo persiste en la base de datos. El usuario creado no recibe alertas.
      * @param IdUsuario
-     * @param Nickname
      * @param NombreUsuario
      * @param ApellidoUsuario
      * @param CorreoUsuario
@@ -66,9 +65,9 @@ public class ControladorConfiguracion {
      * @param IdArea
      * @return null si no se creo.
      */
-    public Usuario NuevoUsuario(int IdUsuario, String Nickname, String NombreUsuario, String ApellidoUsuario, String CorreoUsuario,
+    public Usuario NuevoUsuario(int IdUsuario, String NombreUsuario, String ApellidoUsuario, String CorreoUsuario,
             String Password, EnumPermiso PermisoUsuario, int IdEmpresa, int IdArea){
-        Usuario usuario = new Usuario(Nickname, NombreUsuario, ApellidoUsuario, CorreoUsuario, false, PermisoUsuario);
+        Usuario usuario = new Usuario(NombreUsuario, ApellidoUsuario, CorreoUsuario, false, PermisoUsuario);
         Empresa empresa = mEmpresa.GetEmpresa(IdEmpresa);
         String[] pass = cSeg.getPasswordSeguro(Password);
         // pass[0] corresponde al password | pass[1] corresponde al salt
@@ -100,7 +99,6 @@ public class ControladorConfiguracion {
      * Setea los datos del usuario y actualiza la base de datos. No se realiza comprobacion de password.
      * Para cambiar password utilizar metodo cambiarPasswordUsuario().
      * @param IdUsuario
-     * @param Nickname
      * @param NombreUsuario
      * @param ApellidoUsuario
      * @param CorreoUsuario
@@ -109,25 +107,22 @@ public class ControladorConfiguracion {
      * @param IdArea
      * @return -1 si no se actualizo.
      */
-    public int CambiarDatosUsuario(int IdUsuario, String Nickname, String NombreUsuario, String ApellidoUsuario, String CorreoUsuario,
+    public int CambiarDatosUsuario(int IdUsuario, String NombreUsuario, String ApellidoUsuario, String CorreoUsuario,
             EnumPermiso PermisoUsuario, boolean RecibeAlertas, int IdArea){
-        if(!ExisteNickname(Nickname, IdUsuario)){
-            Usuario usuario = mUsuario.GetUsuario(IdUsuario);
-            usuario.setNombre(NombreUsuario);
-            usuario.setApellido(ApellidoUsuario);
-            usuario.setCorreo(CorreoUsuario);
-            usuario.setPermisoUsuario(PermisoUsuario);
-            usuario.setRecibeAlertas(RecibeAlertas);
-            if(usuario.getAreaSectorUsuario().getId()!= IdArea){
-                Area area = mArea.GetArea(IdArea);
-                usuario.setAreaSectorUsuario(area);
-                mArea.ActualizarArea(area);
-            }
-            return mUsuario.ActualizarUsuario(usuario);
+        Usuario usuario = mUsuario.GetUsuario(IdUsuario);
+        usuario.setNombre(NombreUsuario);
+        usuario.setApellido(ApellidoUsuario);
+        usuario.setCorreo(CorreoUsuario);
+        usuario.setPermisoUsuario(PermisoUsuario);
+        usuario.setRecibeAlertas(RecibeAlertas);
+        if(usuario.getAreaSectorUsuario().getId()!= IdArea){
+            Area area = mArea.GetArea(IdArea);
+            usuario.setAreaSectorUsuario(area);
+            mArea.ActualizarArea(area);
         }
-        return -1;
+        return mUsuario.ActualizarUsuario(usuario);
     }
-    
+        
     /**
      * Comprueba la validez del password ingresado con el correspondiente del usuario en la base de datos.
      * @param IdUsuario
@@ -184,32 +179,7 @@ public class ControladorConfiguracion {
             return null;
         }
     }
-    
-    /**
-     * Comprueba la existencia de otro usuario con el nickname indicado.
-     * @param Nickname
-     * @return
-     */
-    private boolean ExisteNickname(String Nickname){
-        List<Usuario> usuarios = mUsuario.ListarUsuarios();
-        for(Usuario usuario: usuarios){
-            if(usuario.getNickName().equalsIgnoreCase(Nickname)) return true;
-        }
-        return false;
-    }
-    /**
-     * Comprueba la existencia de otro usuario con el nickname indicado.
-     * @param Nickname
-     * @return
-     */
-    private boolean ExisteNickname(String Nickname, int IdUsuario){
-        List<Usuario> usuarios = mUsuario.ListarUsuarios();
-        for(Usuario usuario: usuarios){
-            if(usuario.getNickName().equalsIgnoreCase(Nickname) && usuario.getId()!= IdUsuario) return true;
-        }
-        return false;
-    }
-    
+        
     /**
      * Elimina el usuario indicado por su id.
      * Si el usuario esta relacionado con comprobaciones o actividades no se elimina.
@@ -229,7 +199,7 @@ public class ControladorConfiguracion {
      * Baja de usuario setea la fecha actual como fecha de baja.
      * @param IdUsuario
      * @param AltaUsuario: True para dar de alta. False para dar de baja.
-     * @return 
+     * @return
      */
     public int CambiarEstadoUsuario(int IdUsuario, boolean AltaUsuario){
         Usuario usuario = mUsuario.GetUsuario(IdUsuario);
@@ -497,12 +467,12 @@ public class ControladorConfiguracion {
     public int EditarDeteccion(int IdDteccion, String NombreDeteccion, EnumTipoDeteccion TipoDeteccion){
         if(!ExisteNombreDeteccion(IdDteccion, NombreDeteccion)){
             Deteccion deteccion = mDeteccion.GetDeteccion(IdDteccion);
-            // comprobar si se cambia el tipo de deteccion para 'ahorrar' llamada a la base de datos.
-            if(!deteccion.getTipo().equals(TipoDeteccion)){
-                deteccion.setTipo(TipoDeteccion);
-            }
-            deteccion.setNombre(NombreDeteccion);
-            return mDeteccion.ActualizarDeteccion(deteccion);
+// comprobar si se cambia el tipo de deteccion para 'ahorrar' llamada a la base de datos.
+if(!deteccion.getTipo().equals(TipoDeteccion)){
+    deteccion.setTipo(TipoDeteccion);
+}
+deteccion.setNombre(NombreDeteccion);
+return mDeteccion.ActualizarDeteccion(deteccion);
         }
         return -1;
     }

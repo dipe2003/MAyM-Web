@@ -37,8 +37,6 @@ import org.hibernate.annotations.LazyCollectionOption;
 public class Usuario implements Serializable {
     @Id
     private int Id;
-    @Column(unique = true)
-    private String NickName = new String();
     private String Nombre = new String();
     private String Apellido = new String();
     private String Correo = new String();
@@ -70,8 +68,7 @@ public class Usuario implements Serializable {
         this.MedidasResponsableImplementacion = new ArrayList<>();
         this.Comprobaciones = new ArrayList<>();
     }
-    public Usuario(String NickName, String NombreUsuario, String ApellidoUsuario, String CorreoUsuario, boolean RecibeAlertas, EnumPermiso PermisoUsuario){
-        this.NickName = NickName;
+    public Usuario(String NombreUsuario, String ApellidoUsuario, String CorreoUsuario, boolean RecibeAlertas, EnumPermiso PermisoUsuario){
         this.Nombre = NombreUsuario;
         this.Apellido = ApellidoUsuario;
         this.Correo = CorreoUsuario;
@@ -82,8 +79,7 @@ public class Usuario implements Serializable {
     }
     
     // Getters
-    public int getId() {return this.Id;}
-    public String getNickName() {return NickName;}    
+    public int getId() {return this.Id;}   
     public String getNombre() {return this.Nombre;}
     public String getApellido() {return this.Apellido;}
     public String getCorreo() {return this.Correo;}
@@ -103,8 +99,7 @@ public class Usuario implements Serializable {
     public List<Comprobacion> getComprobaciones() {return Comprobaciones;}
     
     // Setters
-    public void setId(int Id) {this.Id = Id;}
-    public void setNickName(String NickName) {this.NickName = NickName;}    
+    public void setId(int Id) {this.Id = Id;}    
     public void setNombre(String Nombre) {this.Nombre = Nombre;}
     public void setApellido(String Apellido) {this.Apellido = Apellido;}
     public void setCorreo(String Correo) {this.Correo = Correo;}

@@ -186,7 +186,6 @@ public class FacadeAdministrador  {
     /**
      * Crea un nuevo usuario y lo persiste en la base de datos. El usuario creado no recibe alertas.
      * @param IdUsuario
-     * @param Nickname
      * @param NombreUsuario
      * @param ApellidoUsuario
      * @param CorreoUsuario
@@ -196,9 +195,9 @@ public class FacadeAdministrador  {
      * @param IdArea
      * @return null si no se creo.
      */
-    public Usuario NuevoUsuario(int IdUsuario, String Nickname, String NombreUsuario, String ApellidoUsuario, String CorreoUsuario, String Password, 
+    public Usuario NuevoUsuario(int IdUsuario, String NombreUsuario, String ApellidoUsuario, String CorreoUsuario, String Password, 
             EnumPermiso PermisoUsuario, int IdEmpresa, int IdArea){
-        return cConfig.NuevoUsuario(IdUsuario, Nickname, NombreUsuario, ApellidoUsuario, CorreoUsuario, Password, PermisoUsuario, IdEmpresa, IdArea);
+        return cConfig.NuevoUsuario(IdUsuario, NombreUsuario, ApellidoUsuario, CorreoUsuario, Password, PermisoUsuario, IdEmpresa, IdArea);
     }
     
     /**

@@ -119,28 +119,31 @@ public class ControladorVistaRegistros {
     public Usuario GetUsuario(int IdUsuario){
         return mUsuario.GetUsuario(IdUsuario);
     }
-    
+        
     /**
-     * Devuelve todos los usuarios registrados.
-     * @return 
+     * Devuelve los usuarios de la empresa especificada segun su fecha de baja.
+     * @param Vigente True: si no fueron dados de baja (FechaBaja == null).
+     * @param IdEmpresa -1 para todas las empresas.
+     * @return Lista de Usuarios.
      */
-    public List<Usuario> GetUsuarios(){
-        return mUsuario.ListarUsuarios();
-    }
-    
-    /**
-     * Devuelve todos usuarios registrados que pertenecen a la empresa indicada.
-     * @param IdEmpresa Id de la empresa de los usuarios
-     * @return
-     */
-    public List<Usuario> GetUsuariosEmpresa(int IdEmpresa){
-        List<Usuario> usuarios = mUsuario.ListarUsuarios();
-        Iterator<Usuario> it = usuarios.iterator();
-        while(it.hasNext()){
-            Usuario usuario = it.next();
-            if(usuario.getEmpresaUsuario().getId() != IdEmpresa) it.remove();
+    public List<Usuario> GetUsuariosEmpresa(boolean Vigente, int IdEmpresa){
+        List<Usuario> lstUsuarios = mUsuario.ListarUsuarios();
+        if(IdEmpresa != -1){
+            Iterator it = lstUsuarios.iterator();
+            while(it.hasNext()){
+                Usuario usr = (Usuario) it.next();
+                if(usr.getEmpresaUsuario().getId() != IdEmpresa){
+                    it.remove();
+                }else{
+                    if(Vigente){
+                        if(usr.getFechaBaja() != null){
+                            it.remove();
+                        }
+                    }
+                }
+            }
         }
-        return usuarios;
+        return lstUsuarios;
     }
     
     /**
@@ -152,19 +155,41 @@ public class ControladorVistaRegistros {
     }
     
     /**
-     * Devuelve una lista de codificaciones.
-     * @return
+     * Devuelve las codificaciones.
+     * @param IdEmpresa -1 para todas las empresas
+     * @return Lista de codificaciones.
      */
-    public List<Codificacion> GetCodificaciones(){
-        return mCodificaciones.ListarCodificaciones();
+    public List<Codificacion> GetCodificaciones(int IdEmpresa){
+        List<Codificacion> lstCodificaciones = mCodificaciones.ListarCodificaciones();
+        if(IdEmpresa != -1){
+            Iterator<Codificacion> it = lstCodificaciones.iterator();
+            while(it.hasNext()){
+                Codificacion cod = it.next();
+                if(!cod.contieneEmpresa(IdEmpresa)){
+                    it.remove();
+                }
+            }
+        }
+        return lstCodificaciones;
     }
     
     /**
-     * Devuelve una lista de areas.
-     * @return 
+     * Devuelve una todas las areas de una empresa.
+     * @param IdEmpresa -1 para todas las empresas
+     * @return lista de areas.
      */
-    public List<Area> GetAreas(){
-        return mArea.ListarAreas();
+    public List<Area> GetAreasEmpresa(int IdEmpresa){
+        List<Area> lstAreas = mArea.ListarAreas();
+        if(IdEmpresa != -1){
+            Iterator<Area> it = lstAreas.iterator();
+            while(it.hasNext()){
+                Area area = it.next();
+                if(!area.contieneEmpresa(IdEmpresa)){
+                    it.remove();
+                }
+            }
+        }
+        return lstAreas;
     }
     
     /**

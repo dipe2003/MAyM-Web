@@ -46,6 +46,8 @@ public class CrearAccionPreventiva implements Serializable {
     @Inject
     private FacadeDatos fDatos;
     
+    private Empresa EmpresaLogueada;
+    
     private Date FechaDeteccion;
     private String strFechaDeteccion;
     private String Descripcion;
@@ -110,6 +112,10 @@ public class CrearAccionPreventiva implements Serializable {
      */
     @PostConstruct
     public void init(){
+        // Empresa
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        EmpresaLogueada = (Empresa) request.getSession().getAttribute("Empresa");
         //  Detecciones
         TiposDeteccion = EnumTipoDeteccion.values();
         TipoDeDeteccionSeleccionada = EnumTipoDeteccion.INTERNA;
@@ -125,7 +131,7 @@ public class CrearAccionPreventiva implements Serializable {
         
         // Areas Sectores
         ListaAreasSectores = new HashMap<>();
-        List<Area> tmpAreas = fLectura.ListarAreasSectores();
+        List<Area> tmpAreas = fLectura.ListarAreasSectores(EmpresaLogueada.getId());
         for(Area area:tmpAreas){
             this.ListaAreasSectores.put(area.getId(), area);
         }

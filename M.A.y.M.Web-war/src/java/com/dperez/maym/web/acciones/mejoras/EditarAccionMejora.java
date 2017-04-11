@@ -233,6 +233,8 @@ public class EditarAccionMejora implements Serializable {
     public void init(){
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        // Empresa
+        EmpresaLogueada = (Empresa) request.getSession().getAttribute("Empresa");
         // recuperar el id para llenar datos de la accion de mejora y el resto de las propiedades.
         IdAccionSeleccionada = Integer.parseInt(request.getParameter("id"));
         if(IdAccionSeleccionada != 0){
@@ -243,7 +245,7 @@ public class EditarAccionMejora implements Serializable {
             
             //  Codificaciones
             ListaCodificaciones = new HashMap<>();
-            List<Codificacion> tmpCodificaciones = fLectura.ListarCodificaciones();
+            List<Codificacion> tmpCodificaciones = fLectura.ListarCodificaciones(EmpresaLogueada.getId());
             ListaCodificaciones.put(0, "--- Nueva ---");
             for(Codificacion codificacion:tmpCodificaciones){
                 ListaCodificaciones.put(codificacion.getId(), codificacion.getNombre());
@@ -275,7 +277,7 @@ public class EditarAccionMejora implements Serializable {
             
             // Areas Sectores
             ListaAreasSectores = new HashMap<>();
-            List<Area> tmpAreas = fLectura.ListarAreasSectores();
+            List<Area> tmpAreas = fLectura.ListarAreasSectores(EmpresaLogueada.getId());
             for(Area area:tmpAreas){
                 this.ListaAreasSectores.put(area.getId(), area);
             }
@@ -285,8 +287,8 @@ public class EditarAccionMejora implements Serializable {
             MapAdjuntos = new HashMap<>();
             
             // Comprobaciones
-            EmpresaLogueada = (Empresa) request.getSession().getAttribute("Empresa");
-            ListaUsuarios = fLectura.GetUsuariosEmpresa(EmpresaLogueada.getId());
+            // llena la lista con los usuarios que no se hayan dado de baja.
+            ListaUsuarios = fLectura.GetUsuariosEmpresa(true, EmpresaLogueada.getId());
             
             ComprobacionImplementacion = AccionSeleccionada.getComprobacionImplementacion();
             ComprobacionEficacia = AccionSeleccionada.getComprobacionEficacia();
@@ -373,7 +375,7 @@ public class EditarAccionMejora implements Serializable {
      * Actualiza la lista de codificaciones.
      */
     public void actualizarCodificacion(){
-        List<Codificacion> tmpCodificacion = fLectura.ListarCodificaciones();
+        List<Codificacion> tmpCodificacion = fLectura.ListarCodificaciones(EmpresaLogueada.getId());
         this.ListaCodificaciones.clear();
         this.ListaCodificaciones.put(0, " --- Nueva Codificacion --- ");
         for(Codificacion codificacion:tmpCodificacion){

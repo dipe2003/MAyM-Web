@@ -73,8 +73,8 @@ public class Codificaciones implements Serializable {
         
         //  Codificaciones
         ListaCodificaciones = new HashMap<>();
-        
-        List<Codificacion> tmpCodificaciones = fLectura.ListarCodificaciones();
+        // llenar la lista con todas las codificaciones registradas.
+        List<Codificacion> tmpCodificaciones = fLectura.ListarCodificaciones(-1);
         for(Codificacion codificacion:tmpCodificaciones){
             ListaCodificaciones.put(codificacion.getId(), codificacion);
         }

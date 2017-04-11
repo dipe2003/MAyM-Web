@@ -38,12 +38,14 @@ public class FacadeLectura  {
         return cVista.GetUsuario(IdUsuario);
     }
     
-    public List<Usuario> GetUsuarios(){
-        return  cVista.GetUsuarios();
-    }
-    
-    public List<Usuario> GetUsuariosEmpresa(int IdEmpresa){
-        return cVista.GetUsuariosEmpresa(IdEmpresa);
+    /**
+     * Devuelve los usuarios de la empresa especificada segun su fecha de baja.
+     * @param Vigente True: si no fueron dados de baja (FechaBaja == null).
+     * @param IdEmpresa -1 para todas las empresas.
+     * @return Lista de Usuarios.
+     */
+    public List<Usuario> GetUsuariosEmpresa(boolean Vigente, int IdEmpresa){
+        return cVista.GetUsuariosEmpresa(Vigente, IdEmpresa);
     }
     
     public List<Empresa> ListaEmpresasRegistradas(){
@@ -58,12 +60,22 @@ public class FacadeLectura  {
         return cVista.GetDetecciones();
     }
     
-    public List<Codificacion> ListarCodificaciones(){
-        return cVista.GetCodificaciones();
+    /**
+     * Devuelve las codificaciones.
+     * @param IdEmpresa -1 para todas las empresas
+     * @return Lista de codificaciones.
+     */
+    public List<Codificacion> ListarCodificaciones(int IdEmpresa){
+        return cVista.GetCodificaciones(IdEmpresa);
     }
     
-    public List<Area> ListarAreasSectores(){
-        return cVista.GetAreas();
+    /**
+     * Devuelve una todas las areas de una empresa.
+     * @param IdEmpresa -1 para todas las empresas
+     * @return lista de areas.
+     */
+    public List<Area> ListarAreasSectores(int IdEmpresa){
+        return cVista.GetAreasEmpresa(IdEmpresa);
     }
     
     public List<Accion> ListarAccionesPreventivas(){

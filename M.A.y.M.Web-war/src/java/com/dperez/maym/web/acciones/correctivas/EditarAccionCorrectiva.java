@@ -264,6 +264,8 @@ public class EditarAccionCorrectiva implements Serializable {
     public void init(){
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        // Empresa
+        EmpresaLogueada = (Empresa) request.getSession().getAttribute("Empresa");
         // recuperar el id para llenar datos de la accion correctiva y el resto de las propiedades.
         IdAccionSeleccionada = Integer.parseInt(request.getParameter("id"));
         if(IdAccionSeleccionada != 0){
@@ -274,7 +276,7 @@ public class EditarAccionCorrectiva implements Serializable {
             
             //  Codificaciones
             ListaCodificaciones = new HashMap<>();
-            List<Codificacion> tmpCodificaciones = fLectura.ListarCodificaciones();
+            List<Codificacion> tmpCodificaciones = fLectura.ListarCodificaciones(EmpresaLogueada.getId());
             ListaCodificaciones.put(0, "--- Nueva ---");
             for(Codificacion codificacion:tmpCodificaciones){
                 ListaCodificaciones.put(codificacion.getId(), codificacion.getNombre());
@@ -316,7 +318,7 @@ public class EditarAccionCorrectiva implements Serializable {
             
             // Areas Sectores
             ListaAreasSectores = new HashMap<>();
-            List<Area> tmpAreas = fLectura.ListarAreasSectores();
+            List<Area> tmpAreas = fLectura.ListarAreasSectores(EmpresaLogueada.getId());
             for(Area area:tmpAreas){
                 this.ListaAreasSectores.put(area.getId(), area);
             }
@@ -333,9 +335,9 @@ public class EditarAccionCorrectiva implements Serializable {
             actualizarListaAdjuntos();
             MapAdjuntos = new HashMap<>();
             
-            // Comprobaciones
-            EmpresaLogueada = (Empresa) request.getSession().getAttribute("Empresa");
-            ListaUsuarios = fLectura.GetUsuariosEmpresa(EmpresaLogueada.getId());
+            // Comprobaciones            
+            // llenar la lista de usuarios de la empresa que no se hayan dado de baja.
+            ListaUsuarios = fLectura.GetUsuariosEmpresa(true, EmpresaLogueada.getId());
             
             ComprobacionImplementacion = AccionSeleccionada.getComprobacionImplementacion();
             ComprobacionEficacia = AccionSeleccionada.getComprobacionEficacia();
@@ -421,7 +423,7 @@ public class EditarAccionCorrectiva implements Serializable {
      * Actualiza la lista de codificaciones.
      */
     public void actualizarCodificacion(){
-        List<Codificacion> tmpCodificacion = fLectura.ListarCodificaciones();
+        List<Codificacion> tmpCodificacion = fLectura.ListarCodificaciones(EmpresaLogueada.getId());
         this.ListaCodificaciones.clear();
         this.ListaCodificaciones.put(0, " --- Nueva Codificacion --- ");
         for(Codificacion codificacion:tmpCodificacion){

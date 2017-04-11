@@ -16,7 +16,6 @@ import com.dperez.maymweb.usuario.permiso.EnumPermiso;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +50,6 @@ public class Usuarios implements Serializable {
     private int NumeroNuevoUsuario;
     private String Nombre;
     private String Apellido;
-    private String Nickname;
     private String Password;
     private String PasswordConfirmacion;
     private String PasswordNuevo;
@@ -75,7 +73,6 @@ public class Usuarios implements Serializable {
     public int getNumeroNuevoUsuario() {return NumeroNuevoUsuario;}
     public String getNombre() {return this.Nombre;}
     public String getApellido(){return this.Apellido;}
-    public String getNickname(){return this.Nickname;}
     public String getPassword(){return this.Password;}
     public String getPasswordConfirmacion(){return this.PasswordConfirmacion;}
     public String getPasswordNuevo(){return this.PasswordNuevo;}
@@ -98,7 +95,6 @@ public class Usuarios implements Serializable {
     public void setNumeroNuevoUsuario(int NumeroNuevoUsuario) {this.NumeroNuevoUsuario = NumeroNuevoUsuario;}
     public void setNombre(String Nombre) {this.Nombre = Nombre;}
     public void setApellido(String Apellido){this.Apellido = Apellido;}
-    public void setNickname(String Nickname){this.Nickname = Nickname;}
     public void setPassword(String Password){this.Password = Password;}
     public void setPasswordConfirmacion(String PasswordConfirmacion){this.PasswordConfirmacion = PasswordConfirmacion;}
     public void setPasswordNuevo(String PasswordNuevo){this.PasswordNuevo = PasswordNuevo;}
@@ -130,14 +126,15 @@ public class Usuarios implements Serializable {
         
         //  Usuarios
         ListaUsuarios = new HashMap<>();
-        List<Usuario> tmpUsuarios = fLectura.GetUsuarios();
+        List<Usuario> tmpUsuarios = fLectura.GetUsuariosEmpresa(false, -1);
         for(Usuario usuario:tmpUsuarios){
             ListaUsuarios.put(usuario.getId(), usuario);
         }
         
         //Areas
         ListaAreas =  new ArrayList<>();
-        List<Area> tmpAreas = fLectura.ListarAreasSectores();
+        // llenar la lista de areas con todas las areas registradas.
+        List<Area> tmpAreas = fLectura.ListarAreasSectores(EmpresaLogueada.getId());
         for(Area area: tmpAreas){
             if(area.contieneEmpresa(EmpresaLogueada.getId())){
                 ListaAreas.add(area);
@@ -153,7 +150,7 @@ public class Usuarios implements Serializable {
     public void nuevoUsuario() throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();
         if(Password.equals(PasswordConfirmacion)){
-            if((fAdmin.NuevoUsuario(NumeroNuevoUsuario, Nickname,Nombre,Apellido,CorreoElectronico, Password,
+            if((fAdmin.NuevoUsuario(NumeroNuevoUsuario, Nombre,Apellido,CorreoElectronico, Password,
                     PermisoSeleccionado, EmpresaLogueada.getId(), AreaSeleccionada))!=null){
                 context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Usuarios.xhtml");
             }else{
@@ -173,7 +170,7 @@ public class Usuarios implements Serializable {
      */
     public void editarUsuario() throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();
-        if((fMain.CambiarDatosUsuario(IdUsuarioSeleccionado, Nickname, Nombre, Apellido, CorreoElectronico, PermisoSeleccionado, RecibeAlertas, AreaSeleccionada))!=-1){
+        if((fMain.CambiarDatosUsuario(IdUsuarioSeleccionado, Nombre, Apellido, CorreoElectronico, PermisoSeleccionado, RecibeAlertas, AreaSeleccionada))!=-1){
             if(sesion.getUsuarioLogueado().getId() == IdUsuarioSeleccionado){
                 sesion.setUsuarioLogueado(fLectura.GetUsuario(IdUsuarioSeleccionado));
             }
@@ -271,7 +268,6 @@ public class Usuarios implements Serializable {
         if(IdUsuario < 0 ){
             this.Nombre  = new String();
             this.Apellido  = new String();
-            this.Nickname  = new String();
             this.CorreoElectronico  = new String();
             this.RecibeAlertas = false;
             this.PermisoSeleccionado  = EnumPermiso.DATOS;
@@ -284,7 +280,6 @@ public class Usuarios implements Serializable {
         }else{
             this.Nombre  = ListaUsuarios.get(IdUsuario).getNombre();
             this.Apellido  = ListaUsuarios.get(IdUsuario).getApellido();
-            this.Nickname  = ListaUsuarios.get(IdUsuario).getNickName();
             this.CorreoElectronico  = ListaUsuarios.get(IdUsuario).getCorreo();
             this.RecibeAlertas = ListaUsuarios.get(IdUsuario).isRecibeAlertas();
             this.PermisoSeleccionado  = ListaUsuarios.get(IdUsuario).getPermisoUsuario();

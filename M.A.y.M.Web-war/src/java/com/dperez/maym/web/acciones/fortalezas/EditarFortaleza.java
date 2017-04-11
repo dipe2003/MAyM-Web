@@ -8,6 +8,7 @@ package com.dperez.maym.web.acciones.fortalezas;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
+import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
@@ -43,6 +44,8 @@ public class EditarFortaleza implements Serializable {
     private FacadeLectura fLectura;
     @Inject
     private FacadeDatos fDatos;
+    
+    private Empresa EmpresaLogueada;
     
     private int IdFortaleza;
     
@@ -119,6 +122,8 @@ public class EditarFortaleza implements Serializable {
     public void init(){
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        // Empresa
+        EmpresaLogueada = (Empresa) request.getSession().getAttribute("Empresa");
         // recuperar el id para llenar datos de la accion de mejora y el resto de las propiedades.
         IdFortaleza = Integer.parseInt(request.getParameter("id"));
         if(IdFortaleza != 0){
@@ -140,7 +145,7 @@ public class EditarFortaleza implements Serializable {
             
             // Areas Sectores
             ListaAreasSectores = new HashMap<>();
-            List<Area> tmpAreas = fLectura.ListarAreasSectores();
+            List<Area> tmpAreas = fLectura.ListarAreasSectores(EmpresaLogueada.getId());
             for(Area area:tmpAreas){
                 this.ListaAreasSectores.put(area.getId(), area);
             }

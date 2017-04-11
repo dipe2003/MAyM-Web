@@ -6,7 +6,6 @@
 package com.dperez.maym.web.acciones.preventivas;
 
 import com.dperez.maymweb.accion.Accion;
-import com.dperez.maymweb.accion.acciones.Mejora;
 import com.dperez.maymweb.accion.acciones.Preventiva;
 import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.empresa.Empresa;
@@ -114,9 +113,9 @@ public class EditarActividadesAP implements Serializable {
             //  Usuarios
             this.ListaUsuariosEmpresa = new HashMap<>();
             Empresa empresa = (Empresa) request.getSession().getAttribute("Empresa");
-            // llenar lista de usuarios para responsables de implementacion.
+            // llenar lista de usuarios para responsables de implementacion que no se hayan dado de baja.
             if(empresa!=null) {
-                List<Usuario> tmpUsuarios = fLectura.GetUsuariosEmpresa(empresa.getId());
+                List<Usuario> tmpUsuarios = fLectura.GetUsuariosEmpresa(true, empresa.getId());
                 for(Usuario usuario: tmpUsuarios){
                     ListaUsuariosEmpresa.put(usuario.getId(), usuario);
                 }

@@ -76,7 +76,8 @@ public class Areas implements Serializable {
         
         //  Areas
         ListaAreas = new HashMap<>();
-        List<Area> tmpAreas = fLectura.ListarAreasSectores();
+        // llenar la lista con todas las areas registradas.
+        List<Area> tmpAreas = fLectura.ListarAreasSectores(-1);
         for(Area area:tmpAreas){
             ListaAreas.put(area.getId(), area);
         }        

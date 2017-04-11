@@ -267,9 +267,9 @@ public class ActividadesAC implements Serializable {
             //  Usuarios
             this.ListaUsuariosEmpresa = new HashMap<>();
             Empresa empresa = (Empresa) request.getSession().getAttribute("Empresa");
-            // llenar lista de usuarios para responsables de implementacion.
+            // llenar lista de usuarios para responsables de implementacion que no se hayan dado de baja.
             if(empresa!=null) {
-                List<Usuario> tmpUsuarios = fLectura.GetUsuariosEmpresa(empresa.getId());
+                List<Usuario> tmpUsuarios = fLectura.GetUsuariosEmpresa(true, empresa.getId());
                 for(Usuario usuario: tmpUsuarios){
                     ListaUsuariosEmpresa.put(usuario.getId(), usuario);
                 }

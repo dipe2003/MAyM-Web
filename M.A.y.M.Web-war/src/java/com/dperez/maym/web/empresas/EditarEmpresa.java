@@ -15,7 +15,6 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.faces.application.FacesMessage;
@@ -81,18 +80,17 @@ public class EditarEmpresa implements Serializable{
     public void init(){
         ListaAreas = new HashMap<>();
         ListaCodificaciones = new HashMap<>();
-        List<Area> areas = fLectura.ListarAreasSectores();
+        // llenar la lista con todas las areas registadas.
+        List<Area> areas = fLectura.ListarAreasSectores(-1);
         for(Area area: areas){
             if(!EmpresaSeleccionada.getAreasEmpresa().contains(area)){
                 ListaAreas.put(area.getId(), area);
             }
         }
         
-        List<Codificacion> codificaciones = fLectura.ListarCodificaciones();
+        List<Codificacion> codificaciones = fLectura.ListarCodificaciones(EmpresaSeleccionada.getId());
         for(Codificacion cod: codificaciones){
-            if(!EmpresaSeleccionada.getCodificacionesEmpresa().contains(cod)){
                 ListaCodificaciones.put(cod.getId(), cod);
-            }
         }
     }
     
