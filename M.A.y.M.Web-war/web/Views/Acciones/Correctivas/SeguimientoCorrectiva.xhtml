@@ -122,9 +122,7 @@
                                                             <c:choose>
                                                                 <c:when test="#{correctiva.value.responsableImplementacion.id != sesionUsuario.usuarioLogueado.id}">
                                                                     <div class="btn-group">                                                    
-                                                                        <h:commandButton id="btn_setFechaImplementacion_corr_#{correctiva.key}" action="#{seguimientoCorrectiva.setFechaImplementacionMedidaCorrectiva(correctiva.key)}" class="btn btn-primary disabled" value="Comprobar" >                                                                                                     
-                                                                            <f:ajax onevent="indicador" render="panel_medidas_correctivas" />
-                                                                        </h:commandButton>                                                            
+                                                                        <h:commandButton class="btn btn-primary disabled" value="Comprobar" title="Solo lo puede comprobar el usuario responsable." />
                                                                     </div>
                                                                 </c:when>
                                                                 <c:otherwise>
@@ -197,9 +195,7 @@
                                                             <c:choose>
                                                                 <c:when test="#{preventiva.value.responsableImplementacion.id != sesionUsuario.usuarioLogueado.id}">
                                                                     <div class="btn-group">                                                    
-                                                                        <h:commandButton id="btn_setFechaImplementacion_#{preventiva.key}" action="#{seguimientoCorrectiva.setFechaImplementacionMedidaPreventiva(preventiva.key)}" class="btn btn-primary disabled"  value="Comprobar" >                                                                                                     
-                                                                            <f:ajax onevent="indicador" render="panel_medidas_preventivas" />
-                                                                        </h:commandButton>                                                            
+                                                                        <h:commandButton class="btn btn-primary disabled" title="Solo lo puede comprobar el usuario responsable." value="Comprobar" />        
                                                                     </div>
                                                                 </c:when>
                                                                 <c:otherwise>
@@ -282,7 +278,7 @@
                                                             <h:message for="btn_comprobar_implementacion" class="msj_info"/>
                                                         </div>
                                                     </h:panelGroup>
-                                                    <div class="btn-group">                                                      
+                                                    <div class="btn-group">
                                                         <h:commandButton id="btn_comprobar_implementacion" action="#{seguimientoCorrectiva.comprobarImplementacionAccion()}" class="btn btn-primary"  value="Comprobar Implementacion de Accion" >                                                                                                     
                                                             <f:ajax execute="panel_comprobacion_implementacion"  render="panel_comprobacion_implementacion panel_comprobacion_eficacia panel_mensajes_implementacion" onevent="indicador" />
                                                         </h:commandButton>                                                            
