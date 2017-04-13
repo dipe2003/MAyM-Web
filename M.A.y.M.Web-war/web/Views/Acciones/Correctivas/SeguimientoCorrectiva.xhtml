@@ -241,7 +241,14 @@
                                             <c:choose>
                                                 <c:when test="#{seguimientoCorrectiva.accionSeleccionada.comprobacionImplementacion.responsable.id != sesionUsuario.usuarioLogueado.id}">
                                                     <div class="alert alert-info">
-                                                        <strong>Info!</strong> Responsable de Comprobacion: #{seguimientoCorrectiva.accionSeleccionada.comprobacionEficacia.responsable.nombre} #{seguimientoCorrectiva.accionSeleccionada.comprobacionEficacia.responsable.apellido}
+                                                        <c:choose>
+                                                            <c:when test="#{seguimientoCorrectiva.accionSeleccionada.comprobacionImplementacion.responsable == null}" >
+                                                                <strong>Info!</strong> No se ha definido Responsable de Comprobacion.
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <strong>Info!</strong> Responsable de Comprobacion: #{seguimientoCorrectiva.accionSeleccionada.comprobacionImplementacion.responsable.nombre} #{seguimientoCorrectiva.accionSeleccionada.comprobacionImplementacion.responsable.apellido}
+                                                            </c:otherwise>
+                                                        </c:choose>                                                        
                                                     </div> 
                                                 </c:when>
                                                 <c:otherwise>
@@ -323,7 +330,14 @@
                                             <c:choose>
                                                 <c:when test="#{seguimientoCorrectiva.accionSeleccionada.comprobacionEficacia.responsable.id != sesionUsuario.usuarioLogueado.id}">
                                                     <div class="alert alert-info">
-                                                        <strong>Info!</strong> Responsable de Verificacion: #{seguimientoCorrectiva.accionSeleccionada.comprobacionEficacia.responsable.nombre} #{seguimientoCorrectiva.accionSeleccionada.comprobacionEficacia.responsable.apellido}
+                                                        <c:choose>
+                                                            <c:when test="#{seguimientoCorrectiva.accionSeleccionada.comprobacionEficacia.responsable == null }">
+                                                                <strong>Info!</strong> No se ha definido Responsable de Verificacion.
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <strong>Info!</strong> Responsable de Verificacion: #{seguimientoCorrectiva.accionSeleccionada.comprobacionEficacia.responsable.nombre} #{seguimientoCorrectiva.accionSeleccionada.comprobacionEficacia.responsable.apellido}
+                                                            </c:otherwise>
+                                                        </c:choose>                                                        
                                                     </div>  
                                                 </c:when>
                                                 <c:otherwise>
