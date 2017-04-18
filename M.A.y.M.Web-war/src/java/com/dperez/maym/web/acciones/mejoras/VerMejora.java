@@ -7,7 +7,6 @@ package com.dperez.maym.web.acciones.mejoras;
 
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.Comprobacion;
-import com.dperez.maymweb.accion.EnumComprobacion;
 import com.dperez.maymweb.accion.acciones.Mejora;
 import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.area.Area;
@@ -18,16 +17,16 @@ import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.facades.FacadeVerificador;
 import com.dperez.maymweb.usuario.Usuario;
-import java.io.IOException;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -49,6 +48,8 @@ public class VerMejora implements Serializable {
     private FacadeVerificador fVerif;
     
     private Date FechaDeteccion;
+    private String strFechaDeteccion;
+    
     private Deteccion GeneradaPor;
     private Area AreaSector;
     private String Descripcion;
@@ -70,6 +71,14 @@ public class VerMejora implements Serializable {
     
     //  Getters
     public Date getFechaDeteccion() {return FechaDeteccion;}
+    public String getStrFechaDeteccion(){
+        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
+        if (FechaDeteccion == null) {
+            return this.strFechaDeteccion;
+        }else{
+            return fDate.format(FechaDeteccion);
+        }
+    }
     public Deteccion getGeneradaPor() {return GeneradaPor;}
     public Area getAreaSector() {return AreaSector;}
     public String getDescripcion() {return Descripcion;}
@@ -85,6 +94,15 @@ public class VerMejora implements Serializable {
     
     //  Setters
     public void setFechaDeteccion(Date FechaDeteccion) {this.FechaDeteccion = FechaDeteccion;}
+    public void setStrFechaDeteccion(String strFechaDeteccion) {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try{
+            cal.setTime(sdf.parse(strFechaDeteccion));
+        }catch(ParseException ex){}
+        this.strFechaDeteccion = strFechaDeteccion;
+        this.FechaDeteccion = cal.getTime();
+    }
     public void setGeneradaPor(Deteccion GeneradaPor) {this.GeneradaPor = GeneradaPor;}
     public void setAreaSector(Area AreaSector) {this.AreaSector = AreaSector;}
     public void setDescripcion(String Descripcion) {this.Descripcion = Descripcion;}
@@ -123,7 +141,7 @@ public class VerMejora implements Serializable {
             for(Actividad act: actividades){
                 ListaActividades.put(act.getIdActividad(), act);
             }
-            EmpresaAccion = (Empresa) request.getSession().getAttribute("Empresa");
+            EmpresaAccion = AccionSeleccionada.getEmpresaAccion();
         }
     }
     

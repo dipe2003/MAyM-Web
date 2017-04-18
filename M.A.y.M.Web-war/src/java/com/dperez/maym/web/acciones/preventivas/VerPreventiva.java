@@ -18,7 +18,10 @@ import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.facades.FacadeVerificador;
 import com.dperez.maymweb.usuario.Usuario;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -45,6 +48,8 @@ public class VerPreventiva implements Serializable {
     private FacadeVerificador fVerif;
     
     private Date FechaDeteccion;
+    private String strFechaDeteccion;
+    
     private Deteccion GeneradaPor;
     private Area AreaSector;
     private String Descripcion;
@@ -66,6 +71,14 @@ public class VerPreventiva implements Serializable {
     
     //  Getters
     public Date getFechaDeteccion() {return FechaDeteccion;}
+        public String getStrFechaDeteccion(){
+        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
+        if (FechaDeteccion == null) {
+            return this.strFechaDeteccion;
+        }else{
+            return fDate.format(FechaDeteccion);
+        }
+    }
     public Deteccion getGeneradaPor() {return GeneradaPor;}
     public Area getAreaSector() {return AreaSector;}
     public String getDescripcion() {return Descripcion;}
@@ -81,6 +94,15 @@ public class VerPreventiva implements Serializable {
     
     //  Setters
     public void setFechaDeteccion(Date FechaDeteccion) {this.FechaDeteccion = FechaDeteccion;}
+    public void setStrFechaDeteccion(String strFechaDeteccion) {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try{
+            cal.setTime(sdf.parse(strFechaDeteccion));
+        }catch(ParseException ex){}
+        this.strFechaDeteccion = strFechaDeteccion;
+        this.FechaDeteccion = cal.getTime();
+    }
     public void setGeneradaPor(Deteccion GeneradaPor) {this.GeneradaPor = GeneradaPor;}
     public void setAreaSector(Area AreaSector) {this.AreaSector = AreaSector;}
     public void setDescripcion(String Descripcion) {this.Descripcion = Descripcion;}
@@ -119,7 +141,7 @@ public class VerPreventiva implements Serializable {
             for(Actividad act: actividades){
                 ListaActividades.put(act.getIdActividad(), act);
             }
-            EmpresaAccion = (Empresa) request.getSession().getAttribute("Empresa");
+            EmpresaAccion = AccionSeleccionada.getEmpresaAccion();
         }
     }
     
