@@ -169,7 +169,7 @@ public class SeguimientoCorrectiva implements Serializable {
             FacesContext.getCurrentInstance().addMessage("form_seguimiento_accion:btn_setFechaImplementacion_corr_"+IdActividad, new FacesMessage(SEVERITY_FATAL, "No se pudo agregar fecha", "No se pudo agregar fecha" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
-            // regresar a la pagina listar acciones
+            // recargar vista de seguimiento
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/SeguimientoCorrectiva.xhtml?id="+AccionSeleccionada.getId());
         }

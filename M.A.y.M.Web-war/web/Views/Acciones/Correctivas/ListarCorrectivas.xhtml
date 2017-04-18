@@ -139,29 +139,19 @@
                                                     <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu" role="menu">
-                                                    <li><h:link value="Ver Accion" outcome="VerAccionCorrectiva.xhtml?id=#{accion.value.id}">                                                        
-                                                            <f:ajax onevent="indicador" />
-                                                        </h:link>
+                                                    <li><h:link value="Ver Accion" outcome="VerAccionCorrectiva.xhtml?id=#{accion.value.id}"/>
                                                     </li>
                                                     <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != null}">
-                                                        <li><h:link value="Editar Datos" outcome="EditarAccionCorrectiva.xhtml?id=#{accion.value.id}" >                                                        
-                                                                <f:ajax onevent="indicador" />
-                                                            </h:link>
+                                                        <li><h:link value="Editar Datos" outcome="EditarAccionCorrectiva.xhtml?id=#{accion.value.id}" />
                                                         </li>
                                                         <c:if test="#{accion.value.estadoAccion != 'CERRADA'}">
                                                             <li>                                                            
-                                                                <h:link  value="Agregar M. Correctiva" outcome="ActividadesCorrectiva.xhtml?id=#{accion.value.id}&amp;tipo=correctiva&amp;editar=0">                                                        
-                                                                    <f:ajax onevent="indicador" />
-                                                                </h:link>                                                            
+                                                                <h:link value="Agregar M. Correctiva" outcome="ActividadesCorrectiva.xhtml?id=#{accion.value.id}&amp;tipo=correctiva&amp;editar=0"/>
                                                             </li>
                                                             <li>                                                            
-                                                                <h:link  value="Agregar M. Preventiva" outcome="ActividadesCorrectiva.xhtml?id=#{accion.value.id}&amp;tipo=preventiva&amp;editar=0">                                                        
-                                                                    <f:ajax onevent="indicador" />
-                                                                </h:link>                                                            
+                                                                <h:link value="Agregar M. Preventiva" outcome="ActividadesCorrectiva.xhtml?id=#{accion.value.id}&amp;tipo=preventiva&amp;editar=0"/>                                   
                                                             </li>                                                            
-                                                            <li><h:link value="Realizar Seguimiento" outcome="SeguimientoCorrectiva.xhtml?id=#{accion.value.id}" >                                                                
-                                                                    <f:ajax onevent="indicador" />
-                                                                </h:link>
+                                                            <li><h:link value="Realizar Seguimiento" outcome="SeguimientoCorrectiva.xhtml?id=#{accion.value.id}" />
                                                             </li>
                                                         </c:if>
                                                     </c:if>
