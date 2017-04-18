@@ -17,23 +17,59 @@
             </div>                      
         </div>
         <div class="container-fluid" style="padding: 1%">
-            <h:form id="form_ver_accion">
-                
-                <div class="panel panel-primary">
-                    <div class="panel-heading">Empresa</div>
-                    <div class="panel-body">   
-                        <div class="row">
-                            <div class="col-sm-2">
-                                <h:outputText value="#{verCorrectiva.empresaAccion.nombreEmpresa}" />
-                            </div>
-                            <div class="col-sm-4">
-                                <h:outputText value="#{verCorrectiva.empresaAccion.descripcionEmpresa}" />
-                            </div>
-                            <div class="col-sm-4">
-                                <h:outputText value="Establecimiento #{verCorrectiva.empresaAccion.numeroEmpresa}" />
-                            </div>                            
+            <h:form id="form_verCorrectiva">
+                <div class="row">
+                    <div class="col-sm-10">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">Empresa</div>
+                            <div class="panel-body">   
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <h:outputText value="#{verCorrectiva.empresaAccion.nombreEmpresa}" />
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <h:outputText value="#{verCorrectiva.empresaAccion.descripcionEmpresa}" />
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <h:outputText value="Establecimiento #{verCorrectiva.empresaAccion.numeroEmpresa}" />
+                                    </div>                            
+                                </div>
+                            </div> 
                         </div>
-                    </div> 
+                    </div>
+                    <div class="col-sm-2">
+                        <!-- Estado -->
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">Estado:</div>
+                            <c:choose>
+                                <c:when test="#{verCorrectiva.estado == 'PENDIENTE'}">
+                                    <div class="panel-body" style="background-color: red; color: white">
+                                        Pendiente
+                                    </div>
+                                </c:when>
+                                <c:when test="#{verCorrectiva.estado == 'CERRADA'}" >
+                                    <div class="panel-body" style="background-color: green; color: white">
+                                        Cerrada
+                                    </div>
+                                </c:when>
+                                <c:when test="#{verCorrectiva.estado == 'DESESTIMADA'}" >
+                                    <div class="panel-body" style="background-color: black; color: white">
+                                        Desestimada
+                                    </div>
+                                </c:when>
+                                <c:when test="#{verCorrectiva.estado == 'PROCESO_IMP'}" >
+                                    <div class="panel-body" style="background-color: #ff9900; color: white">
+                                        Proceso Implementacion
+                                    </div>
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="panel-body" style="background-color: yellow; color: #ff9900">
+                                        Proceso Verificacion
+                                    </div>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- Descripcion -->                
@@ -110,8 +146,7 @@
                         </div>                        
                     </div>
                 </div> 
-                <!-- Analisis de Causa -->
-                
+                <!-- Analisis de Causa -->                
                 <div class="panel panel-primary">
                     <div class="panel-heading">Analisis de Causa</div>
                     <div class="panel-body">
@@ -216,6 +251,110 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- Comprobacion de implementacion -->                
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">Comprobacion de Implementacion:</div>
+                            <div class="panel-body">
+                                <c:choose>
+                                    <c:when test="#{verCorrectiva.comprobacionImplementacion != null}">
+                                        <table class="table table-hover table-striped table-responsive">
+                                            <thead>
+                                                <tr>
+                                                    <th>Fecha Estimada:</th>
+                                                    <th>Responsable: </th>
+                                                    <th>Fecha Comprobacion:</th>
+                                                    <th>Resultado:</th>
+                                                    <th>Observaciones:</th>
+                                                </tr>                                                
+                                            </thead>
+                                            <tbody>                                                
+                                                <tr>
+                                                    <c:choose>
+                                                        <c:when test="#{verCorrectiva.comprobacionImplementacion.fechaEstimada != null and 
+                                                                        verCorrectiva.comprobacionImplementacion.fechaComprobacion == null}">
+                                                            <td>#{verCorrectiva.comprobacionImplementacion.fechaEstimada}</td>
+                                                            <td>#{verCorrectiva.comprobacionImplementacion.responsable.nombre} #{verCorrectiva.comprobacionImplementacion.responsable.apellido}</td>
+                                                            <td> Sin Comprobar </td>
+                                                            <td> Sin Comprobar </td>
+                                                            <td> Sin Comprobar </td>
+                                                        </c:when>
+                                                        <c:when test="#{verCorrectiva.comprobacionImplementacion.fechaEstimada != null and 
+                                                                        verCorrectiva.comprobacionImplementacion.fechaComprobacion != null}">
+                                                            <td>#{verCorrectiva.comprobacionImplementacion.fechaEstimada}</td>
+                                                            <td>#{verCorrectiva.comprobacionImplementacion.responsable.nombre} #{verCorrectiva.comprobacionImplementacion.responsable.apellido}</td>
+                                                            <td>#{verCorrectiva.comprobacionImplementacion.fechaComprobacion}</td>
+                                                            <td>#{verCorrectiva.comprobacionImplementacion.resultado}</td>
+                                                            <td>#{verCorrectiva.comprobacionImplementacion.observaciones}</td>
+                                                        </c:when>
+                                                    </c:choose>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="alert alert-info">
+                                            <strong>Info!</strong> No han definido plazos de comprobacion de implementacion.
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <!-- Medidas Preventivas -->
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">Comprobacion de Eficacia</div>
+                            <div class="panel-body">
+                                <c:choose>
+                                    <c:when test="#{verCorrectiva.comprobacionEficacia != null}">
+                                        <table class="table table-hover table-striped table-responsive">
+                                            <thead>
+                                                <tr>
+                                                    <th>Fecha Estimada:</th>
+                                                    <th>Responsable: </th>
+                                                    <th>Fecha Comprobacion:</th>
+                                                    <th>Resultado:</th>
+                                                    <th>Observaciones:</th>
+                                                </tr>                                                
+                                            </thead>
+                                            <tbody>                                                
+                                                <tr>
+                                                    <c:choose>
+                                                        <c:when test="#{verCorrectiva.comprobacionEficacia.fechaEstimada != null and 
+                                                                        verCorrectiva.comprobacionEficacia.fechaComprobacion == null}">
+                                                            <td>#{verCorrectiva.comprobacionEficacia.fechaEstimada}</td>
+                                                            <td>#{verCorrectiva.comprobacionEficacia.responsable.nombre} #{verCorrectiva.comprobacionEficacia.responsable.apellido}</td>
+                                                            <td> Sin Comprobar </td>
+                                                            <td> Sin Comprobar </td>
+                                                            <td> Sin Comprobar </td>
+                                                        </c:when>
+                                                        <c:when test="#{verCorrectiva.comprobacionEficacia.fechaEstimada != null and 
+                                                                        verCorrectiva.comprobacionEficacia.fechaComprobacion != null}">
+                                                            <td>#{verCorrectiva.comprobacionEficacia.fechaEstimada}</td>
+                                                            <td>#{verCorrectiva.comprobacionEficacia.responsable.nombre} #{verCorrectiva.comprobacionEficacia.responsable.apellido}</td>
+                                                            <td>#{verCorrectiva.comprobacionEficacia.fechaComprobacion}</td>
+                                                            <td>#{verCorrectiva.comprobacionEficacia.resultado}</td>
+                                                            <td>#{verCorrectiva.comprobacionEficacia.observaciones}</td>
+                                                        </c:when>
+                                                    </c:choose>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="alert alert-info">
+                                            <strong>Info!</strong> No han definido plazos de comprobacion de eficacia.
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
                 <!-- Adjuntos -->
                 <div class="panel panel-primary">
                     <div class="panel-heading">Archivos Adjuntos / Anexos:</div>
