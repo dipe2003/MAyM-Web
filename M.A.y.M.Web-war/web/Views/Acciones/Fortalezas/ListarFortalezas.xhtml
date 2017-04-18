@@ -56,24 +56,18 @@
                                             #{accion.value.descripcion}
                                         </td>
                                         <td>
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
-                                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                                    <span class="caret"></span>
-                                                </button>
-                                                <ul class="dropdown-menu" role="menu">
-                                                    <li><h:link value="Ver Fortaleza" >                                                        
-                                                            <f:ajax onevent="indicador" />
-                                                        </h:link>
-                                                    </li>
-                                                    <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != null}">
-                                                        <li><h:link value="Editar Datos" outcome="EditarFortaleza.xhtml?id=#{accion.key}" >                                                        
-                                                                <f:ajax onevent="indicador" />
-                                                            </h:link>
-                                                        </li>
-                                                    </c:if>
-                                                </ul>
-                                            </div>
+                                            <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != null and sesionUsuario.usuarioLogueado.permisoUsuario != 'Lectura' }">
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
+                                                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu" role="menu">                                                        
+                                                        <li><h:link value="Editar Datos" outcome="EditarFortaleza.xhtml?id=#{accion.key}" />
+                                                        </li>                                                        
+                                                    </ul>
+                                                </div>
+                                            </c:if>
                                         </td>
                                     </tr>
                                 </c:forEach>

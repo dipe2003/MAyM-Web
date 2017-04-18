@@ -118,26 +118,31 @@
                                             </c:otherwise>
                                         </c:choose>
                                         <td>
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
-                                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                                    <span class="caret"></span>
-                                                </button>
-                                                <ul class="dropdown-menu" role="menu">
-                                                    <li><h:link value="Ver Accion" outcome="VerAccionPreventiva.xhtml?id=#{accion.value.id}" />
-                                                    </li>
-                                                    <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != null}">
-                                                        <li><h:link value="Editar Datos" outcome="EditarAccionPreventiva.xhtml?id=#{accion.key}"  />
-                                                        </li>
-                                                        <c:if test="#{accion.value.estadoAccion != 'CERRADA'}">
-                                                            <li><h:link  value="Agregar Actividades" outcome="ActividadesPreventiva.xhtml?id=#{accion.key}&amp;editar=0" />
-                                                            </li>                                    
-                                                            <li><h:link value="Realizar Seguimiento" outcome="SeguimientoPreventiva.xhtml?id=#{accion.value.id}" />
+                                            <c:choose>
+                                                <c:when test="#{sesionUsuario.usuarioLogueado.permisoUsuario != null}">
+                                                    <div class="btn-group">
+                                                        <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
+                                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                        <ul class="dropdown-menu" role="menu">
+                                                            <li><h:link value="Ver Accion" outcome="VerAccionPreventiva.xhtml?id=#{accion.value.id}" />
                                                             </li>
-                                                        </c:if>
-                                                    </c:if>
-                                                </ul>
-                                            </div>
+                                                            <li><h:link value="Editar Datos" outcome="EditarAccionPreventiva.xhtml?id=#{accion.key}"  />
+                                                            </li>
+                                                            <c:if test="#{accion.value.estadoAccion != 'CERRADA'}">
+                                                                <li><h:link  value="Agregar Actividades" outcome="ActividadesPreventiva.xhtml?id=#{accion.key}&amp;editar=0" />
+                                                                </li>                                    
+                                                                <li><h:link value="Realizar Seguimiento" outcome="SeguimientoPreventiva.xhtml?id=#{accion.value.id}" />
+                                                                </li>
+                                                            </c:if>
+                                                        </ul>
+                                                    </div>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <h:link class="btn btn-primary" title="Ver Accion Preventiva" outcome="VerAccionPreventiva.xhtml?id=#{accion.value.id}"><span class="glyphicon glyphicon-eye-open"></span></h:link>
+                                                </c:otherwise>
+                                            </c:choose>                                            
                                         </td>
                                     </tr>
                                 </c:forEach>
