@@ -17,10 +17,11 @@ import java.util.Date;
 import java.util.Iterator;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 /**
  *
@@ -28,18 +29,21 @@ import javax.persistence.OneToMany;
  */
 @Entity
 public class Correctiva extends Accion implements Serializable {
-    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.REMOVE)
+    @LazyCollection(LazyCollectionOption.FALSE)
     @JoinTable(name="medidascorrectivas_actividades",joinColumns={ @JoinColumn(name="Id", referencedColumnName="Id") },
             inverseJoinColumns={ @JoinColumn(name="IdActividad", referencedColumnName="IdActividad", unique=true) } )
     private List<Actividad> MedidasCorrectivas;
     
-    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.REMOVE)
+    @LazyCollection(LazyCollectionOption.FALSE)
     @JoinTable  (name="medidaspreventiva_actividades",joinColumns={ @JoinColumn(name="Id", referencedColumnName="Id") },
             inverseJoinColumns={ @JoinColumn(name="IdActividad", referencedColumnName="IdActividad", unique=true) } )
     private List<Actividad> MedidasPreventivas;
     private EnumTipoDesvio Tipo;
     
-    @OneToMany(mappedBy = "AccionCorrectivaConProductoAfectado", orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "AccionCorrectivaConProductoAfectado", orphanRemoval = true)
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Producto> ProductosAfectados;
     
     // Constructores

@@ -14,13 +14,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 /**
  *
@@ -34,16 +35,20 @@ public class Area implements Serializable {
     private String Nombre = new String();
     private String Correo = new String();
     
-    @OneToMany(mappedBy = "AreaSectorAccion", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "AreaSectorAccion")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Accion> AccionesEnAreaSector;
     
-    @OneToMany(mappedBy = "AreaSectorFortaleza", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "AreaSectorFortaleza")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Fortaleza> FortalezasEnAreaSector;
     
-    @ManyToMany(mappedBy = "AreasEmpresa", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "AreasEmpresa")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Empresa> EmpresasArea;
     
-    @ManyToMany(mappedBy = "AreaSectorUsuario", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "AreaSectorUsuario")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Usuario> UsuariosEnAreaSector;
     
     // Constructores

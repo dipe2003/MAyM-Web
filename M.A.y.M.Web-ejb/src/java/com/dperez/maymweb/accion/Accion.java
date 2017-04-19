@@ -22,12 +22,15 @@ import com.dperez.maymweb.estado.EnumEstado;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 /**
  *
@@ -44,7 +47,8 @@ public abstract class Accion implements Serializable{
     protected String AnalisisCausa = new String();
     protected EnumEstado EstadoAccion;
     
-    @OneToMany(mappedBy = "AccionAdjunto",orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "AccionAdjunto",orphanRemoval = true)
+    @LazyCollection(LazyCollectionOption.FALSE)
     protected List<Adjunto> Adjuntos;
     
     @ManyToOne
@@ -56,10 +60,10 @@ public abstract class Accion implements Serializable{
     @ManyToOne
     protected Codificacion CodificacionAccion;
     
-    @OneToOne(orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "AccionEficacia",cascade = CascadeType.REMOVE)
     protected Comprobacion ComprobacionEficacia;
     
-    @OneToOne( orphanRemoval = true)
+    @OneToOne(mappedBy = "AccionImplementacion", cascade = CascadeType.REMOVE)
     protected Comprobacion ComprobacionImplementacion;
     
     @ManyToOne

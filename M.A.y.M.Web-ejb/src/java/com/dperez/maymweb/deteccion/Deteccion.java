@@ -17,8 +17,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Table;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 /**
  *
@@ -33,10 +34,12 @@ public class Deteccion implements Serializable {
     
     private EnumTipoDeteccion Tipo;
     
-    @OneToMany(mappedBy = "GeneradaPor", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "GeneradaPor")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Accion> AccionesDetectadas;
     
-    @OneToMany(mappedBy= "GeneradaPor", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy= "GeneradaPor")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Fortaleza> FortalezasDetectadas;
     
     // Constructores

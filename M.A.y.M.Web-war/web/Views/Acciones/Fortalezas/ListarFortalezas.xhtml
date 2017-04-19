@@ -56,7 +56,7 @@
                                             #{accion.value.descripcion}
                                         </td>
                                         <td>
-                                            <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != null and sesionUsuario.usuarioLogueado.permisoUsuario != 'Lectura' }">
+                                            <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != null}">
                                                 <div class="btn-group">
                                                     <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
                                                     <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">

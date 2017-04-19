@@ -12,13 +12,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 /**
  *
@@ -32,10 +33,12 @@ public class Codificacion implements Serializable{
     private String Nombre = new String();
     private String Descripcion = new String();
     
-    @OneToMany(mappedBy = "CodificacionAccion", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "CodificacionAccion")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Accion> AccionesConCodificacion;
     
-    @ManyToMany(mappedBy = "CodificacionesEmpresa", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "CodificacionesEmpresa")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Empresa> EmpresasCodificacion;
     
     // Constructores
