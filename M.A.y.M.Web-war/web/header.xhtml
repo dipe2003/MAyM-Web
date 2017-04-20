@@ -86,7 +86,7 @@
                                     <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Configuraciones/Detecciones.xhtml">Detecciones</a></li>
                                     <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Configuraciones/Areas.xhtml?pagina=1">Areas / Sectores</a></li>
                                     <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR'}" >
-                                        <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Configuraciones/Usuarios.xhtml">Usuarios</a></li>
+                                        <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Configuraciones/Usuarios.xhtml?pagina=1">Usuarios</a></li>
                                     </c:if>
                                 </ul>
                             </li>

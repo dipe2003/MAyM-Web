@@ -219,6 +219,6 @@ public class Usuario implements Serializable, Comparable<Usuario> {
 
     @Override
     public int compareTo(Usuario OtroUsuario) {
-        return Integer.compare(this.Id, OtroUsuario.Id);
+        return this.Apellido.compareTo(OtroUsuario.Apellido);
     }
 }

@@ -16,6 +16,7 @@ import com.dperez.maymweb.usuario.permiso.EnumPermiso;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,12 +60,18 @@ public class Usuarios implements Serializable {
     private EnumPermiso[] PermisosUsuario;
     private EnumPermiso PermisoSeleccionado;
     
-    private Map<Integer, Usuario> ListaUsuarios;
+    private List<Usuario> ListaUsuarios;
     
     private boolean CambiarPassword;
     
     private List<Area> ListaAreas;
     private int AreaSeleccionada;
+    
+    // Pagination
+    private static final int MAX_ITEMS = 10;
+    private int CantidadPaginas;
+    private int PaginaActual;
+    private List<Usuario> ListaCompletaUsuarios;
     
     //  Getters
     public Empresa getEmpresaLogueada() {return EmpresaLogueada;}
@@ -81,7 +88,7 @@ public class Usuarios implements Serializable {
     public EnumPermiso getPermisoSeleccionado(){return this.PermisoSeleccionado;}
     public EnumPermiso[] getPermisosUsuario(){return this.PermisosUsuario;}
     
-    public Map<Integer, Usuario> getListaUsuarios() {return this.ListaUsuarios;}
+    public List<Usuario> getListaUsuarios() {return this.ListaUsuarios;}
     
     public boolean isCambiarPassword() {return CambiarPassword;}
     
@@ -89,6 +96,11 @@ public class Usuarios implements Serializable {
     public int getAreaSeleccionada() {return AreaSeleccionada;}
     
     public void setEmpresaLogueada(Empresa EmpresaLogueada) {this.EmpresaLogueada = EmpresaLogueada;}
+    
+    // Paginacion
+    public static int getMAX_ITEMS() {return MAX_ITEMS;}
+    public int getCantidadPaginas() {return CantidadPaginas;}
+    public int getPaginaActual() {return PaginaActual;}
     
     //  Setters
     public void setContieneRegistros(boolean ContieneRegistros) {this.ContieneRegistros = ContieneRegistros;}
@@ -104,7 +116,7 @@ public class Usuarios implements Serializable {
     public void setPermisoSeleccionado(EnumPermiso PermisoSeleccionado){this.PermisoSeleccionado = PermisoSeleccionado;}
     public void setPermisosUsuario(EnumPermiso[] PermisosUsuario){this.PermisosUsuario = PermisosUsuario;}
     
-    public void setListaUsuarios(Map<Integer, Usuario> ListaUsuarios) {this.ListaUsuarios = ListaUsuarios;}
+    public void setListaUsuarios(List<Usuario> ListaUsuarios) {this.ListaUsuarios = ListaUsuarios;}
     
     public void setCambiarPassword(boolean CambiarPassword) {this.CambiarPassword = CambiarPassword;}
     
@@ -124,12 +136,26 @@ public class Usuarios implements Serializable {
         
         this.PermisoSeleccionado  = EnumPermiso.DATOS;
         
-        //  Usuarios
-        ListaUsuarios = new HashMap<>();
-        List<Usuario> tmpUsuarios = fLectura.GetUsuariosEmpresa(false, -1);
-        for(Usuario usuario:tmpUsuarios){
-            ListaUsuarios.put(usuario.getId(), usuario);
+        // Paginacion
+        PaginaActual = 0;
+        try{
+            PaginaActual = Integer.parseInt(request.getParameter("pagina"));
+        }catch(NumberFormatException ex){
+            System.out.println("Error en pagina actual: " + ex.getLocalizedMessage());
         }
+        
+        ListaUsuarios = new ArrayList<>();
+        ListaCompletaUsuarios = fLectura.GetUsuariosEmpresa(false, -1);
+        
+        Double resto = (double) ListaCompletaUsuarios.size() / (double) MAX_ITEMS;
+        CantidadPaginas = resto.intValue();
+        resto = resto - resto.intValue();
+        if(resto > 0){
+            CantidadPaginas ++;
+        }
+        
+        // llenar la lista con todas las areas registradas.
+        cargarPagina(PaginaActual);
         
         //Areas
         ListaAreas =  new ArrayList<>();
@@ -140,6 +166,29 @@ public class Usuarios implements Serializable {
                 ListaAreas.add(area);
             }
         }
+        
+        
+    }
+    
+    /**
+     * Carga la lista de usuarios para visualizar.
+     * @param pagina
+     */
+    public void cargarPagina(int pagina){
+        int min = 0;
+        int max = MAX_ITEMS;
+        if(pagina!= 1) {
+            min = (pagina-1) * MAX_ITEMS;
+            max = min + MAX_ITEMS;
+        }
+        if(max > ListaCompletaUsuarios.size()) max = ListaCompletaUsuarios.size();
+        ListaUsuarios.clear();
+        Collections.sort(ListaCompletaUsuarios);
+        for(int i = min; i < max; i++){
+            Usuario usuario = ListaCompletaUsuarios.get(i);
+            ListaUsuarios.add(usuario);
+        }
+        Collections.sort(ListaUsuarios);
     }
     
     /**
@@ -254,10 +303,17 @@ public class Usuarios implements Serializable {
     
     public void comprobarNumeroNuevoOperario(){
         FacesContext context = FacesContext.getCurrentInstance();
-        if(ListaUsuarios.containsKey(NumeroNuevoUsuario)){
+        if(ComprobarContieneNumeroUsuario()){
             context.addMessage("form_usuarios:numero_nuevo_usuario", new FacesMessage(SEVERITY_ERROR, "El numero ingresado ya esta utilzado", "El numero ingresado ya esta utilzado" ));
             context.renderResponse();
         }
+    }
+    
+    private boolean ComprobarContieneNumeroUsuario(){
+        for(Usuario usr:ListaUsuarios){
+            if(usr.getId() == NumeroNuevoUsuario) return true;
+        }
+        return false;
     }
     
     /**

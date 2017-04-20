@@ -57,23 +57,23 @@
                             
                             <tbody>
                                 <c:forEach items="#{usuarios.listaUsuarios}" var="usuario">
-                                    <c:if test="#{usuario.value.empresaUsuario.id == usuarios.empresaLogueada.id}">
+                                    <c:if test="#{usuario.empresaUsuario.id == usuarios.empresaLogueada.id}">
                                         <tr>
                                             <td>
-                                                #{usuario.value.id}
+                                                #{usuario.id}
                                             </td>
                                             <td>
-                                                #{usuario.value.apellido} #{usuario.value.nombre}
+                                                #{usuario.apellido} #{usuario.nombre}
                                             </td>
                                             <td>
-                                                #{usuario.value.correo}
+                                                #{usuario.correo}
                                             </td>
                                             <td>
-                                                #{usuario.value.areaSectorUsuario.nombre}
+                                                #{usuario.areaSectorUsuario.nombre}
                                             </td>
                                             <td>
                                                 <c:choose>
-                                                    <c:when test="#{usuario.value.recibeAlertas == true}">
+                                                    <c:when test="#{usuario.recibeAlertas == true}">
                                                         Si
                                                     </c:when>
                                                     <c:otherwise>
@@ -83,10 +83,10 @@
                                             </td>
                                             <td>
                                                 <c:choose>
-                                                    <c:when test="#{usuario.value.permisoUsuario == 'ADMINISTRADOR'}">
+                                                    <c:when test="#{usuario.permisoUsuario == 'ADMINISTRADOR'}">
                                                         Administrador
                                                     </c:when>
-                                                    <c:when test="#{usuario.value.permisoUsuario == 'DATOS'}">
+                                                    <c:when test="#{usuario.permisoUsuario == 'DATOS'}">
                                                         Ingreso Datos
                                                     </c:when>
                                                     <c:otherwise>
@@ -96,8 +96,8 @@
                                             </td>
                                             <td>
                                                 <c:choose>
-                                                    <c:when test="#{usuario.value.fechaBaja != null}">
-                                                        #{usuario.value.fechaBaja}
+                                                    <c:when test="#{usuario.fechaBaja != null}">
+                                                        #{usuario.fechaBaja}
                                                     </c:when>
                                                     <c:otherwise>
                                                         ---
@@ -106,45 +106,45 @@
                                             </td>
                                             <td>                                            
                                                 <div class="btn-group">
-                                                    <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Editar" action="#{usuarios.cargarDatos(usuario.key)}">
+                                                    <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Editar" action="#{usuarios.cargarDatos(usuario.id)}">
                                                         <span class="glyphicon glyphicon-pencil"></span>
                                                         <f:ajax delay="100" render="panel_modal_editar" />
                                                     </h:commandLink>
                                                 </div>
-                                                <c:if test="#{usuario.value.fechaBaja == null}">
+                                                <c:if test="#{usuario.fechaBaja == null}">
                                                     <div class="btn-group">
-                                                        <h:commandLink id="btn_baja_#{usuario.key}" class="btn btn-default" title="Dar de baja al Usuario (No se Elimina)" >
+                                                        <h:commandLink id="btn_baja_#{usuario.id}" class="btn btn-default" title="Dar de baja al Usuario (No se Elimina)" >
                                                             <span class="glyphicon glyphicon-remove" ></span>
-                                                            <f:ajax event="click" listener="#{usuarios.darDeBajaUsuario(usuario.key)}" render="panel_mensajes_tabla" />
+                                                            <f:ajax event="click" listener="#{usuarios.darDeBajaUsuario(usuario.id)}" render="panel_mensajes_tabla" />
                                                         </h:commandLink>
                                                     </div>
                                                 </c:if>
-                                                <c:if test="#{usuario.value.fechaBaja != null}">
+                                                <c:if test="#{usuario.fechaBaja != null}">
                                                     <div class="btn-group">
-                                                        <h:commandLink id="btn_alta_#{usuario.key}" class="btn btn-default" title="Dar de alta al Usuario." >
+                                                        <h:commandLink id="btn_alta_#{usuario.id}" class="btn btn-default" title="Dar de alta al Usuario." >
                                                             <span class="glyphicon glyphicon-ok"  ></span>
-                                                            <f:ajax event="click" listener="#{usuarios.darDeAltaUsuario(usuario.key)}" render="panel_mensajes_tabla" />
+                                                            <f:ajax event="click" listener="#{usuarios.darDeAltaUsuario(usuario.id)}" render="panel_mensajes_tabla" />
                                                         </h:commandLink>
                                                     </div>
                                                 </c:if>
                                                 <div class="btn-group">
-                                                    <c:if test="#{usuario.value.comprobaciones.size() == 0 and usuario.value.medidasResponsableImplementacion.size() == 0 and sesionUsuario.usuarioLogueado.id != usuario.key}">
-                                                        <h:commandLink id="btn_eliminar_#{usuario.key}" class="btn btn-danger" onclick="if (! confirm('Seguro que va a eliminar este Usuario? ')) return false" >
+                                                    <c:if test="#{usuario.comprobaciones.size() == 0 and usuario.medidasResponsableImplementacion.size() == 0 and sesionUsuario.usuarioLogueado.id != usuario.id}">
+                                                        <h:commandLink id="btn_eliminar_#{usuario.id}" class="btn btn-danger" onclick="if (! confirm('Seguro que va a eliminar este Usuario? ')) return false" >
                                                             <span class="glyphicon glyphicon-trash"> </span>
-                                                            <f:ajax event="click" listener="#{usuarios.eliminarUsuario(usuario.key)}" render="panel_mensajes_tabla"/>                                                            
+                                                            <f:ajax event="click" listener="#{usuarios.eliminarUsuario(usuario.id)}" render="panel_mensajes_tabla"/>                                                            
                                                         </h:commandLink>   
                                                     </c:if>
                                                 </div>                                                
                                             </td>
                                             <h:panelGroup id="panel_mensajes_tabla">
                                                 <div class="form-group-sm">
-                                                    <h:message for="btn_eliminar_#{usuario.key}" class="msj_error"/>
+                                                    <h:message for="btn_eliminar_#{usuario.id}" class="msj_error"/>
                                                 </div>
                                                 <div class="form-group-sm">
-                                                    <h:message for="btn_baja_#{usuario.key}" class="msj_error"/>
+                                                    <h:message for="btn_baja_#{usuario.id}" class="msj_error"/>
                                                 </div>
                                                 <div class="form-group-sm">
-                                                    <h:message for="btn_alta_#{usuario.key}" class="msj_error"/>
+                                                    <h:message for="btn_alta_#{usuario.id}" class="msj_error"/>
                                                 </div>
                                             </h:panelGroup>
                                         </tr>  
@@ -443,6 +443,21 @@
                         </div>
                     </h:panelGroup>
                 </div>
+            </div>
+            <div class="container-fluid text-center" style="padding: 1%">
+                <ul class="pagination">
+                    <c:forEach begin="1" end="#{usuarios.cantidadPaginas}" step="1" varStatus="numero" >
+                        <c:choose>
+                            <c:when test="#{usuarios.paginaActual == numero.count}" >
+                                <li class="active"><h:commandLink >#{numero.count}</h:commandLink></li>
+                            </c:when>
+                            <c:otherwise>
+                                <li><h:link value="#{numero.count}" outcome="Usuarios.xhtml?pagina=#{numero.count}"/>
+                                </li>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
+                </ul>                
             </div>
         </h:form>
         

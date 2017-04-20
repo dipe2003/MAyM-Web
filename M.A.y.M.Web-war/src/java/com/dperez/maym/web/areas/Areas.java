@@ -12,6 +12,7 @@ import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +43,7 @@ public class Areas implements Serializable {
     private boolean AplicaEmpresa;
     private boolean ContieneAcciones;
     
-    private Map<Integer, Area> ListaAreas;
+    private List<Area> ListaAreas;
     
     // Pagination
     private static final int MAX_ITEMS = 10;
@@ -54,7 +55,7 @@ public class Areas implements Serializable {
     
     public String getNombreArea() {return NombreArea;}
     public String getCorreoArea() {return CorreoArea;}
-    public Map<Integer, Area> getListaAreas() {return ListaAreas;}
+    public List<Area> getListaAreas() {return ListaAreas;}
     
     public Empresa getEmpresaLogueada() {return EmpresaLogueada;}
     public boolean isAplicaEmpresa() {return AplicaEmpresa;}
@@ -68,7 +69,7 @@ public class Areas implements Serializable {
     
     public void setNombreArea(String NombreArea) {this.NombreArea = NombreArea;}
     public void setCorreoArea(String CorreoArea) {this.CorreoArea = CorreoArea;}
-    public void setListaAreas(Map<Integer, Area> ListaAreas) {this.ListaAreas = ListaAreas;}
+    public void setListaAreas(List<Area> ListaAreas) {this.ListaAreas = ListaAreas;}
     
     public void setEmpresaLogueada(Empresa EmpresaLogueada) {this.EmpresaLogueada = EmpresaLogueada;}
     public void setAplicaEmpresa(boolean AplicaEmpresa) {this.AplicaEmpresa = AplicaEmpresa;}
@@ -91,7 +92,7 @@ public class Areas implements Serializable {
             System.out.println("Error en pagina actual: " + ex.getLocalizedMessage());
         }
         //  Areas
-        ListaAreas = new HashMap<>();
+        ListaAreas = new ArrayList<>();
         ListaCompletaAreas = fLectura.ListarAreasSectores(-1);
         
         // Paginas
@@ -122,8 +123,9 @@ public class Areas implements Serializable {
         Collections.sort(ListaCompletaAreas);        
         for(int i = min; i < max; i++){
             Area area = ListaCompletaAreas.get(i);
-            ListaAreas.put(area.getId(), area);
+            ListaAreas.add(area);
         }
+        Collections.sort(ListaAreas);
     }
     
     /**
@@ -204,7 +206,7 @@ public class Areas implements Serializable {
      * @return
      */
     private boolean comprobarNombreArea(String NombreArea){
-        for(Area area: this.ListaAreas.values()){
+        for(Area area: this.ListaAreas){
             if (area.getNombre().equalsIgnoreCase(NombreArea)){
                 return true;
             }
