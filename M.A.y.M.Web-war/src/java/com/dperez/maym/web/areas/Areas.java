@@ -12,6 +12,7 @@ import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +44,12 @@ public class Areas implements Serializable {
     
     private Map<Integer, Area> ListaAreas;
     
+    // Pagination
+    private static final int MAX_ITEMS = 10;
+    private int CantidadPaginas;
+    private int PaginaActual;
+    private List<Area> ListaCompletaAreas;
+    
     //  Getters
     
     public String getNombreArea() {return NombreArea;}
@@ -52,6 +59,10 @@ public class Areas implements Serializable {
     public Empresa getEmpresaLogueada() {return EmpresaLogueada;}
     public boolean isAplicaEmpresa() {return AplicaEmpresa;}
     public boolean isContieneAcciones() {return ContieneAcciones;}
+    
+    public static int getMAX_ITEMS() {return MAX_ITEMS;}
+    public int getCantidadPaginas() {return CantidadPaginas;}
+    public int getPaginaActual() {return PaginaActual;}
     
     //  Setters
     
@@ -73,14 +84,46 @@ public class Areas implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         EmpresaLogueada = (Empresa)request.getSession().getAttribute("Empresa");
-        
+        PaginaActual = 0;
+        try{
+            PaginaActual = Integer.parseInt(request.getParameter("pagina"));
+        }catch(NumberFormatException ex){
+            System.out.println("Error en pagina actual: " + ex.getLocalizedMessage());
+        }
         //  Areas
         ListaAreas = new HashMap<>();
+        ListaCompletaAreas = fLectura.ListarAreasSectores(-1);
+        
+        // Paginas
+        Double resto = (double) ListaCompletaAreas.size() / (double) MAX_ITEMS;
+        CantidadPaginas = resto.intValue();
+        resto = resto - resto.intValue();
+        if(resto > 0){
+            CantidadPaginas ++;
+        }
+        
         // llenar la lista con todas las areas registradas.
-        List<Area> tmpAreas = fLectura.ListarAreasSectores(-1);
-        for(Area area:tmpAreas){
+        cargarPagina(PaginaActual);
+    }
+    
+    /**
+     * Carga la lista de areas para visualizar.
+     * @param pagina 
+     */
+    public void cargarPagina(int pagina){
+        int min = 0;
+        int max = MAX_ITEMS;
+        if(pagina!= 1) {
+            min = (pagina-1) * MAX_ITEMS;
+            max = min + MAX_ITEMS;
+        }
+        if(max > ListaCompletaAreas.size()) max = ListaCompletaAreas.size();
+        ListaAreas.clear();        
+        Collections.sort(ListaCompletaAreas);        
+        for(int i = min; i < max; i++){
+            Area area = ListaCompletaAreas.get(i);
             ListaAreas.put(area.getId(), area);
-        }        
+        }
     }
     
     /**

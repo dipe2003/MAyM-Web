@@ -27,7 +27,7 @@ import org.hibernate.annotations.LazyCollectionOption;
  */
 @Entity
 @Table(name="Codificacion")
-public class Codificacion implements Serializable{
+public class Codificacion implements Serializable, Comparable<Codificacion>{
     @Id@GeneratedValue(strategy = GenerationType.AUTO)
     private int Id;
     private String Nombre = new String();
@@ -129,6 +129,11 @@ public class Codificacion implements Serializable{
             }
         }
         return false;
+    }
+
+    @Override
+    public int compareTo(Codificacion OtraCodificacion) {
+       return this.Nombre.compareToIgnoreCase(OtraCodificacion.Nombre);
     }
     
 }

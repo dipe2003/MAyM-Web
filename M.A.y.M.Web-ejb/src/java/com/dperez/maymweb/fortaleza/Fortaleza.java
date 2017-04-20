@@ -25,7 +25,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name="Fortalezas")
-public class Fortaleza implements Serializable {
+public class Fortaleza implements Serializable, Comparable<Fortaleza> {
     @Id@GeneratedValue(strategy = GenerationType.AUTO)
     private int Id;
     @Temporal(TemporalType.DATE)
@@ -88,5 +88,10 @@ public class Fortaleza implements Serializable {
     }
     
     public void setEmpresaFortaleza(Empresa EmpresaFortaleza){this.EmpresaFortaleza = EmpresaFortaleza;}
+
+    @Override
+    public int compareTo(Fortaleza OtraFortaleza) {
+        return this.FechaDeteccion.compareTo(OtraFortaleza.FechaDeteccion);
+    }
     
 }

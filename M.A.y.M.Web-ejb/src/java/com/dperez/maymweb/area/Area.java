@@ -29,7 +29,7 @@ import org.hibernate.annotations.LazyCollectionOption;
  */
 @Entity
 @Table(name="Areas")
-public class Area implements Serializable {
+public class Area implements Serializable, Comparable<Area> {
     @Id@GeneratedValue(strategy = GenerationType.AUTO)
     private int Id;
     private String Nombre = new String();
@@ -214,4 +214,17 @@ public class Area implements Serializable {
         if(UsuarioEnAreaSector.getAreaSectorUsuario()!=null && UsuarioEnAreaSector.getAreaSectorUsuario().equals(this))
             UsuarioEnAreaSector.setAreaSectorUsuario(null);
     }
-}
+
+    @Override
+    /**
+     * Compara con otro area.
+     * La comparacion se realiza por Nombre de Area.
+     * Return 0 si son iguales, -1 si es menor, 1 si es mayor.
+     */
+    public int compareTo(Area OtraArea) {
+        return this.Nombre.compareToIgnoreCase(OtraArea.Nombre);
+    }
+    }
+
+
+

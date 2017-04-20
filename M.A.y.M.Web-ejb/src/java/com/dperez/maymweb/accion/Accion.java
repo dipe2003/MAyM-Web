@@ -15,7 +15,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.estado.EnumEstado;
@@ -24,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -38,7 +36,7 @@ import org.hibernate.annotations.LazyCollectionOption;
  */
 @Entity
 @Table(name = "Acciones")
-public abstract class Accion implements Serializable{
+public abstract class Accion implements Serializable, Comparable<Accion>{
     @Id@GeneratedValue(strategy = GenerationType.AUTO)
     protected int Id;
     @Temporal(TemporalType.DATE)

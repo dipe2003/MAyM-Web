@@ -27,7 +27,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="Empresas")
-public class Empresa implements Serializable {
+public class Empresa implements Serializable, Comparable<Empresa> {
     @Id@GeneratedValue(strategy = GenerationType.AUTO)
     private int Id;
     private String NombreEmpresa = new String();
@@ -232,6 +232,11 @@ public class Empresa implements Serializable {
         if(AreaEmpresa.getEmpresasArea().contains(this)){
             AreaEmpresa.getEmpresasArea().remove(this);
         }
+    }
+
+    @Override
+    public int compareTo(Empresa OtraEmpresa) {
+        return this.NumeroEmpresa.compareToIgnoreCase(OtraEmpresa.NombreEmpresa);
     }
     
 }

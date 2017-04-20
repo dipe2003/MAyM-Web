@@ -34,7 +34,7 @@ import org.hibernate.annotations.LazyCollectionOption;
  */
 @Entity
 @Table(name="Usuarios")
-public class Usuario implements Serializable {
+public class Usuario implements Serializable, Comparable<Usuario> {
     @Id
     private int Id;
     private String Nombre = new String();
@@ -215,5 +215,10 @@ public class Usuario implements Serializable {
      */
     public String GetNombreCompleto(){
         return this.Nombre + " " + this.Apellido;
+    }
+
+    @Override
+    public int compareTo(Usuario OtroUsuario) {
+        return Integer.compare(this.Id, OtroUsuario.Id);
     }
 }

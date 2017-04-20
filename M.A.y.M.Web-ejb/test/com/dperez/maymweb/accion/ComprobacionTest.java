@@ -234,6 +234,11 @@ public class ComprobacionTest {
             assertTrue("implementada en subclases", true);
             return true;
         }
+
+        @Override
+        public int compareTo(Accion o) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
     }
     
 }

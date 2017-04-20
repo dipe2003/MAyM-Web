@@ -27,7 +27,7 @@ import org.hibernate.annotations.LazyCollectionOption;
  */
 @Entity
 @Table(name="Detecciones")
-public class Deteccion implements Serializable {
+public class Deteccion implements Serializable, Comparable<Deteccion> {
     @Id@GeneratedValue(strategy = GenerationType.AUTO)
     private int Id;
     private String Nombre = new String();
@@ -131,5 +131,10 @@ public class Deteccion implements Serializable {
                     f.setGeneradaPor(null);
             }
         }
+    }
+
+    @Override
+    public int compareTo(Deteccion OtraDeteccion) {
+        return this.Nombre.compareToIgnoreCase(OtraDeteccion.Nombre);
     }
 }

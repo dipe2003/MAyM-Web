@@ -25,7 +25,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name="Actividades")
-public class Actividad implements Serializable {
+public class Actividad implements Serializable, Comparable<Actividad> {
     @Id@GeneratedValue(strategy = GenerationType.AUTO)
     private int IdActividad;
     @Temporal(TemporalType.DATE)
@@ -78,5 +78,10 @@ public class Actividad implements Serializable {
                     ResponsableImplementacion.addMedidaResponsableImplementacion(this);
             }
         }
+    }
+
+    @Override
+    public int compareTo(Actividad OtraActividad) {
+        return this.FechaEstimadaImplementacion.compareTo(OtraActividad.FechaEstimadaImplementacion);
     }
 }

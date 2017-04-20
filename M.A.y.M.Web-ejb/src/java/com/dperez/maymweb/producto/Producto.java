@@ -20,7 +20,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="Productos")
-public class Producto implements Serializable{
+public class Producto implements Serializable, Comparable<Producto>{
     @Id@GeneratedValue(strategy = GenerationType.AUTO)
     private int Id;
     private String Nombre = new String();
@@ -59,5 +59,10 @@ public class Producto implements Serializable{
                     this.AccionCorrectivaConProductoAfectado.addProductoAfectado(this);
             }
         }
+    }
+
+    @Override
+    public int compareTo(Producto OtroProducto) {
+        return this.Nombre.compareToIgnoreCase(OtroProducto.Nombre);
     }
 }
