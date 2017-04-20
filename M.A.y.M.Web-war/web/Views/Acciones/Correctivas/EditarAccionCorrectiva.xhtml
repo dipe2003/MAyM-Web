@@ -19,6 +19,59 @@
         </div>
         <div class="container-fluid" style="padding: 1%">
             <h:form id="form_editar_accion" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-sm-10">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Empresa</div>
+                            <div class="panel-body">   
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <h:outputText value="#{editarAccionCorrectiva.empresaAccion.nombreEmpresa}" />
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <h:outputText value="#{editarAccionCorrectiva.empresaAccion.descripcionEmpresa}" />
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <h:outputText value="Establecimiento #{editarAccionCorrectiva.empresaAccion.numeroEmpresa}" />
+                                    </div>                            
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <!-- Estado -->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Estado:</div>
+                            <c:choose>
+                                <c:when test="#{editarAccionCorrectiva.accionSeleccionada.estadoAccion == 'PENDIENTE'}">
+                                    <div class="panel-body" style="background-color: red; color: white">
+                                        Pendiente
+                                    </div>
+                                </c:when>
+                                <c:when test="#{editarAccionCorrectiva.accionSeleccionada.estadoAccion == 'CERRADA'}" >
+                                    <div class="panel-body" style="background-color: green; color: white">
+                                        Cerrada
+                                    </div>
+                                </c:when>
+                                <c:when test="#{editarAccionCorrectiva.accionSeleccionada.estadoAccion == 'DESESTIMADA'}" >
+                                    <div class="panel-body" style="background-color: black; color: white">
+                                        Desestimada
+                                    </div>
+                                </c:when>
+                                <c:when test="#{editarAccionCorrectiva.accionSeleccionada.estadoAccion == 'PROCESO_IMP'}" >
+                                    <div class="panel-body" style="background-color: #ff9900; color: white">
+                                        Proceso Implementacion
+                                    </div>
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="panel-body" style="background-color: yellow; color: #ff9900">
+                                        Proceso Verificacion
+                                    </div>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
+                    </div>
+                </div>
                 <!-- Descripcion -->
                 <div class="panel panel-primary">
                     <div class="panel-heading">Descripcion</div>
@@ -517,112 +570,76 @@
                 </div>
                 
                 <!-- Adjuntos -->
-                <div class="row">
-                    <div class="col-sm-8">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">Archivos Adjuntos / Anexos:</div>
-                            <div class="panel-body">
-                                <h:panelGroup id="panel_datos_adjunto">
-                                    <div class="form-group">
-                                        <strong><label for="titulo_adjunto">Titulo:</label></strong>
-                                        <h:inputText id="titulo_adjunto" class="form-control" p:placeholder="Titulo que describe el adjunto." value="#{editarAccionCorrectiva.tituloAdjunto}">
-                                            <f:ajax execute="@this"  onevent="indicador"/>
-                                            <f:ajax render="panel_titulo_adjunto" />
-                                        </h:inputText>
-                                    </div>
-                                    <h:panelGroup id="panel_titulo_adjunto" >
-                                        <c:if test="#{not empty editarAccionCorrectiva.tituloAdjunto}">
-                                            <div class="form-group">
-                                                <h:inputFile value="#{editarAccionCorrectiva.archivoAdjunto}" class="btn btn-primary" p:accept="image/x-png,image/gif,image/jpeg,application/pdf">
-                                                    <f:ajax event="change" listener="#{editarAccionCorrectiva.setArchivoAdjunto(editarAccionCorrectiva.archivoAdjunto)}" />
-                                                    <f:ajax event="change" listener="#{editarAccionCorrectiva.agregarAdjunto()}" render="panel_lista_adjuntos panel_datos_adjunto" onevent="indicador"/>
-                                                </h:inputFile>
-                                            </div>
-                                        </c:if>
-                                    </h:panelGroup>
-                                </h:panelGroup>
-                                
-                                <h:panelGroup id="panel_lista_adjuntos">
-                                    <c:if test="#{not empty editarAccionCorrectiva.mapAdjuntos}"> 
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <table class="table table-hover table-striped table-responsive">
-                                                    <thead>
-                                                        <tr>
-                                                            <th width="30%">Titulo del Adjunto:</th>
-                                                            <th width="60%">Adjunto:</th>
-                                                            <th width="20%"></th>
-                                                        </tr>                                                
-                                                    </thead>
-                                                    <tbody>
-                                                        <c:forEach items="#{editarAccionCorrectiva.mapAdjuntos}" var="adjunto">
-                                                            <tr>
-                                                                <td>#{adjunto.value.titulo}</td>
-                                                                <td>
-                                                                    <c:choose>
-                                                                        <c:when test="#{adjunto.value.tipoAdjunto == 'IMAGEN'}" >
-                                                                            <a href="#{adjunto.value.ubicacion}" target="blank"><img alt="#{adjunto.value.ubicacion}" src="#{adjunto.value.ubicacion}" class="img-responsive img-thumbnail" width="10%"/></a>
-                                                                        </c:when>
-                                                                        <c:otherwise>
-                                                                            <a href="#{adjunto.value.ubicacion}" target="blank" >Ver Documento</a>
-                                                                        </c:otherwise> 
-                                                                    </c:choose>                                                            
-                                                                </td>
-                                                                <td><div class="btn-group">
-                                                                        <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
-                                                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                                                            <span class="caret"></span>
-                                                                        </button>
-                                                                        <ul class="dropdown-menu" role="menu">
-                                                                            <li><h:commandLink action="#{editarAccionCorrectiva.quitarAdjunto(adjunto.key)}" value="Eliminar Adjunto" onclick="if (! confirm('Seguro que desea quitar este adjunto? Se eliminara inmediatamente de la accion.')) return false">
-                                                                                    <f:ajax render="panel_lista_adjuntos"  onevent="indicador"/>
-                                                                                </h:commandLink>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        </c:forEach>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </c:if>
-                                </h:panelGroup>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Archivos Adjuntos / Anexos:</div>
+                    <div class="panel-body">
+                        <h:panelGroup id="panel_datos_adjunto">
+                            <div class="form-group">
+                                <strong><label for="titulo_adjunto">Titulo:</label></strong>
+                                <h:inputText id="titulo_adjunto" class="form-control" p:placeholder="Titulo que describe el adjunto." value="#{editarAccionCorrectiva.tituloAdjunto}">
+                                    <f:ajax execute="@this"  onevent="indicador"/>
+                                    <f:ajax render="panel_titulo_adjunto" />
+                                </h:inputText>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">Estado:</div>
-                            <c:choose>
-                                <c:when test="#{editarAccionCorrectiva.accionSeleccionada.estadoAccion == 'PENDIENTE'}">
-                                    <div class="panel-body" style="background-color: red; color: white">
-                                        Pendiente
+                            <h:panelGroup id="panel_titulo_adjunto" >
+                                <c:if test="#{not empty editarAccionCorrectiva.tituloAdjunto}">
+                                    <div class="form-group">
+                                        <h:inputFile value="#{editarAccionCorrectiva.archivoAdjunto}" class="btn btn-primary" p:accept="image/x-png,image/gif,image/jpeg,application/pdf">
+                                            <f:ajax event="change" listener="#{editarAccionCorrectiva.setArchivoAdjunto(editarAccionCorrectiva.archivoAdjunto)}" />
+                                            <f:ajax event="change" listener="#{editarAccionCorrectiva.agregarAdjunto()}" render="panel_lista_adjuntos panel_datos_adjunto" onevent="indicador"/>
+                                        </h:inputFile>
                                     </div>
-                                </c:when>
-                                <c:when test="#{editarAccionCorrectiva.accionSeleccionada.estadoAccion == 'CERRADA'}" >
-                                    <div class="panel-body" style="background-color: green; color: white">
-                                        Cerrada
+                                </c:if>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                        
+                        <h:panelGroup id="panel_lista_adjuntos">
+                            <c:if test="#{not empty editarAccionCorrectiva.mapAdjuntos}"> 
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <table class="table table-hover table-striped table-responsive">
+                                            <thead>
+                                                <tr>
+                                                    <th width="30%">Titulo del Adjunto:</th>
+                                                    <th width="60%">Adjunto:</th>
+                                                    <th width="20%"></th>
+                                                </tr>                                                
+                                            </thead>
+                                            <tbody>
+                                                <c:forEach items="#{editarAccionCorrectiva.mapAdjuntos}" var="adjunto">
+                                                    <tr>
+                                                        <td>#{adjunto.value.titulo}</td>
+                                                        <td>
+                                                            <c:choose>
+                                                                <c:when test="#{adjunto.value.tipoAdjunto == 'IMAGEN'}" >
+                                                                    <a href="#{adjunto.value.ubicacion}" target="blank"><img alt="#{adjunto.value.ubicacion}" src="#{adjunto.value.ubicacion}" class="img-responsive img-thumbnail" width="10%"/></a>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <a href="#{adjunto.value.ubicacion}" target="blank" >Ver Documento</a>
+                                                                </c:otherwise> 
+                                                            </c:choose>                                                            
+                                                        </td>
+                                                        <td><div class="btn-group">
+                                                                <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
+                                                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                                    <span class="caret"></span>
+                                                                </button>
+                                                                <ul class="dropdown-menu" role="menu">
+                                                                    <li><h:commandLink action="#{editarAccionCorrectiva.quitarAdjunto(adjunto.key)}" value="Eliminar Adjunto" onclick="if (! confirm('Seguro que desea quitar este adjunto? Se eliminara inmediatamente de la accion.')) return false">
+                                                                            <f:ajax render="panel_lista_adjuntos"  onevent="indicador"/>
+                                                                        </h:commandLink>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
+                                            </tbody>
+                                        </table>
                                     </div>
-                                </c:when>
-                                <c:when test="#{editarAccionCorrectiva.accionSeleccionada.estadoAccion == 'DESESTIMADA'}" >
-                                    <div class="panel-body" style="background-color: black; color: white">
-                                        Desestimada
-                                    </div>
-                                </c:when>
-                                <c:when test="#{editarAccionCorrectiva.accionSeleccionada.estadoAccion == 'PROCESO_IMP'}" >
-                                    <div class="panel-body" style="background-color: #ff9900; color: white">
-                                        Proceso Implementacion
-                                    </div>
-                                </c:when>
-                                <c:otherwise>
-                                    <div class="panel-body" style="background-color: yellow; color: #ff9900">
-                                        Proceso Verificacion
-                                    </div>
-                                </c:otherwise>
-                            </c:choose>
-                        </div>
+                                </div>
+                            </c:if>
+                        </h:panelGroup>
                     </div>
                 </div>
                 

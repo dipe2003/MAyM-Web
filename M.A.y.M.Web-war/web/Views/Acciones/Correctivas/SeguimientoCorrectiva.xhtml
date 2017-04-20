@@ -19,6 +19,59 @@
         </div>
         <div class="container-fluid" style="padding: 1%">
             <h:form id="form_segumiento_accion" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-sm-10">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Empresa</div>
+                            <div class="panel-body">   
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <h:outputText value="#{seguimientoCorrectiva.empresaAccion.nombreEmpresa}" />
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <h:outputText value="#{seguimientoCorrectiva.empresaAccion.descripcionEmpresa}" />
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <h:outputText value="Establecimiento #{seguimientoCorrectiva.empresaAccion.numeroEmpresa}" />
+                                    </div>                            
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <!-- Estado -->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Estado:</div>
+                            <c:choose>
+                                <c:when test="#{seguimientoCorrectiva.accionSeleccionada.estadoAccion == 'PENDIENTE'}">
+                                    <div class="panel-body" style="background-color: red; color: white">
+                                        Pendiente
+                                    </div>
+                                </c:when>
+                                <c:when test="#{seguimientoCorrectiva.accionSeleccionada.estadoAccion == 'CERRADA'}" >
+                                    <div class="panel-body" style="background-color: green; color: white">
+                                        Cerrada
+                                    </div>
+                                </c:when>
+                                <c:when test="#{seguimientoCorrectiva.accionSeleccionada.estadoAccion == 'DESESTIMADA'}" >
+                                    <div class="panel-body" style="background-color: black; color: white">
+                                        Desestimada
+                                    </div>
+                                </c:when>
+                                <c:when test="#{seguimientoCorrectiva.accionSeleccionada.estadoAccion == 'PROCESO_IMP'}" >
+                                    <div class="panel-body" style="background-color: #ff9900; color: white">
+                                        Proceso Implementacion
+                                    </div>
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="panel-body" style="background-color: yellow; color: #ff9900">
+                                        Proceso Verificacion
+                                    </div>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
+                    </div>
+                </div>
                 <!-- Descripcion -->
                 <div class="panel panel-default">
                     <div class="panel-heading">Descripcion</div>

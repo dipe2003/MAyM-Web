@@ -69,6 +69,8 @@ public class SeguimientoPreventiva implements Serializable {
     
     private boolean EstaImplementada;
     
+    private Empresa EmpresaAccion;
+    
     //  Getters
     
     public Map<Integer, Actividad> getListaActividades() {return ListaActividades;}
@@ -117,6 +119,8 @@ public class SeguimientoPreventiva implements Serializable {
     
     public Map<Integer, Usuario> getListaUsuarios(){return this.ListaUsuarios;}
     public int getIdUsuarioSeleccionado(){return this.IdUsuarioSeleccionado;}
+
+    public Empresa getEmpresaAccion() {return EmpresaAccion;}    
     
     //  Setters
     
@@ -237,6 +241,7 @@ public class SeguimientoPreventiva implements Serializable {
                 }
             }
             EstaImplementada = AccionSeleccionada.EstaImplementada();
+            EmpresaAccion = AccionSeleccionada.getEmpresaAccion();
         }
         
         //  Resultado de comprobaciones

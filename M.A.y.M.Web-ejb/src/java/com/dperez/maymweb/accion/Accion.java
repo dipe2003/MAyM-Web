@@ -60,10 +60,10 @@ public abstract class Accion implements Serializable{
     @ManyToOne
     protected Codificacion CodificacionAccion;
     
-    @OneToOne(mappedBy = "AccionEficacia",cascade = CascadeType.REMOVE)
+    @OneToOne(cascade = CascadeType.REMOVE)
     protected Comprobacion ComprobacionEficacia;
     
-    @OneToOne(mappedBy = "AccionImplementacion", cascade = CascadeType.REMOVE)
+    @OneToOne(cascade = CascadeType.REMOVE)
     protected Comprobacion ComprobacionImplementacion;
     
     @ManyToOne

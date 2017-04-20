@@ -65,6 +65,8 @@ public class EditarAccionCorrectiva implements Serializable {
     private Accion AccionSeleccionada;
     private Empresa EmpresaLogueada;
     
+    private Empresa EmpresaAccion;
+    
     private Date FechaDeteccion;
     private String strFechaDeteccion;
     private String Descripcion;
@@ -134,6 +136,8 @@ public class EditarAccionCorrectiva implements Serializable {
     public Integer getCodificacionSeleccionada() {return CodificacionSeleccionada;}
     public String getNombreNuevaCodificacion() {return NombreNuevaCodificacion;}
     public String getDescripcionNuevaCodificacion() {return DescripcionNuevaCodificacion;}
+    
+    public Empresa getEmpresaAccion(){return this.EmpresaAccion;}
     
     public EnumTipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
     public EnumTipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
@@ -268,11 +272,13 @@ public class EditarAccionCorrectiva implements Serializable {
         EmpresaLogueada = (Empresa) request.getSession().getAttribute("Empresa");
         // recuperar el id para llenar datos de la accion correctiva y el resto de las propiedades.
         IdAccionSeleccionada = Integer.parseInt(request.getParameter("id"));
-        if(IdAccionSeleccionada != 0){
+        if(IdAccionSeleccionada != 0){            
             AccionSeleccionada = (Correctiva) fLectura.GetAccion(IdAccionSeleccionada);
             FechaDeteccion = AccionSeleccionada.getFechaDeteccion();
             Descripcion = AccionSeleccionada.getDescripcion();
             AnalisisCausa = AccionSeleccionada.getAnalisisCausa();
+            
+            EmpresaAccion = AccionSeleccionada.getEmpresaAccion();
             
             //  Codificaciones
             ListaCodificaciones = new HashMap<>();

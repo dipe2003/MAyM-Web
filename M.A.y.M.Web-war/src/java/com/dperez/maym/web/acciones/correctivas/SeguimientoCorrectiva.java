@@ -72,6 +72,8 @@ public class SeguimientoCorrectiva implements Serializable {
     
     private boolean EstaImplementada;
     
+    private Empresa EmpresaAccion;
+    
     //  Getters
     
     public EnumTipoDesvio getTipoDesvio() {return TipoDesvio;}
@@ -111,7 +113,8 @@ public class SeguimientoCorrectiva implements Serializable {
     
     public Map<Integer, Usuario> getListaUsuarios(){return this.ListaUsuarios;}
     public int getIdUsuarioSeleccionado(){return this.IdUsuarioSeleccionado;}
-    
+
+    public Empresa getEmpresaAccion() {return EmpresaAccion;}    
     
     //  Setters
     
@@ -275,7 +278,7 @@ public class SeguimientoCorrectiva implements Serializable {
             }
             TipoDesvio = ((Correctiva)AccionSeleccionada).getTipo();
             EstaImplementada = AccionSeleccionada.EstaImplementada();
-            
+            EmpresaAccion = AccionSeleccionada.getEmpresaAccion();
             //  Resultado de comprobaciones
             Comprobaciones = EnumComprobacion.values();
             if(AccionSeleccionada.getComprobacionImplementacion()==null || AccionSeleccionada.getComprobacionImplementacion().getFechaComprobacion() == null){

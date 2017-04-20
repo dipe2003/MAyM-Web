@@ -62,6 +62,8 @@ public class EditarAccionMejora implements Serializable {
     private Accion AccionSeleccionada;
     private Empresa EmpresaLogueada;
     
+    private Empresa EmpresaAccion;
+    
     private Date FechaDeteccion;
     private String strFechaDeteccion;
     private String Descripcion;
@@ -102,6 +104,7 @@ public class EditarAccionMejora implements Serializable {
     
     //  Getters
     public int getIdAccionSeleccionada(){return IdAccionSeleccionada;}
+    public Accion getAccionSeleccionada() {return AccionSeleccionada;}    
     public Date getFechaDeteccion() {return FechaDeteccion;}
     public String getStrFechaDeteccion(){
         SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
@@ -117,6 +120,8 @@ public class EditarAccionMejora implements Serializable {
     public String getTituloAdjunto(){return this.TituloAdjunto;}
     public Part getArchivoAdjunto() {return ArchivoAdjunto;}
     public Map<Integer, Adjunto> getMapAdjuntos() {return MapAdjuntos;}
+    
+    public Empresa getEmpresaAccion(){return this.EmpresaAccion;}
     
     public Map<Integer, String> getListaCodificaciones(){return this.ListaCodificaciones;}
     public Integer getCodificacionSeleccionada() {return CodificacionSeleccionada;}
@@ -242,7 +247,7 @@ public class EditarAccionMejora implements Serializable {
             FechaDeteccion = AccionSeleccionada.getFechaDeteccion();
             Descripcion = AccionSeleccionada.getDescripcion();
             AnalisisCausa = AccionSeleccionada.getAnalisisCausa();
-            
+            EmpresaAccion = AccionSeleccionada.getEmpresaAccion();
             //  Codificaciones
             ListaCodificaciones = new HashMap<>();
             List<Codificacion> tmpCodificaciones = fLectura.ListarCodificaciones(EmpresaLogueada.getId());
