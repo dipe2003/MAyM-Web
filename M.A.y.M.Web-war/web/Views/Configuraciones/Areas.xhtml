@@ -80,13 +80,15 @@
                                                     <c:if test="#{area.accionesEnAreaSector.size() == 0 and area.fortalezasEnAreaSector.size() ==0 and area.usuariosEnAreaSector.size() == 0}">
                                                         <c:choose>
                                                             <c:when test="#{area.empresasArea.size() == 0}">
-                                                                <h:commandLink id="btn_eliminar_#{area.id}" class="btn btn-danger" onclick="if (! confirm('Seguro que va a eliminar esta Area / Sector? ')) return false" >
+                                                                <h:commandLink id="btn_eliminar_#{area.id}" class="btn btn-danger" action="#{areas.cargarDatos(-1)}"
+                                                                               onclick="if (! confirm('Seguro que va a eliminar esta Area / Sector? ')) return false" >
                                                                     <span class="glyphicon glyphicon-trash"> </span>
                                                                     <f:ajax event="click" listener="#{areas.eliminarArea(area.id)}"/>
                                                                 </h:commandLink>
                                                             </c:when>
                                                             <c:when test="#{area.contieneEmpresa(areas.empresaLogueada.id) and area.empresasArea.size() == 1}">
-                                                                <h:commandLink id="btn_eliminar_#{area.id}" class="btn btn-danger" onclick="if (! confirm('Seguro que va a eliminar esta Area / Sector? ')) return false" >
+                                                                <h:commandLink id="btn_eliminar_#{area.id}" class="btn btn-danger" action="#{areas.cargarDatos(-1)}"
+                                                                               onclick="if (! confirm('Seguro que va a eliminar esta Area / Sector? ')) return false" >
                                                                     <span class="glyphicon glyphicon-trash"> </span>
                                                                     <f:ajax event="click" listener="#{areas.eliminarArea(area.id)}"/>
                                                                 </h:commandLink>

@@ -91,7 +91,7 @@ public class Fortaleza implements Serializable, Comparable<Fortaleza> {
 
     @Override
     public int compareTo(Fortaleza OtraFortaleza) {
-        return this.FechaDeteccion.compareTo(OtraFortaleza.FechaDeteccion);
+        return OtraFortaleza.FechaDeteccion.compareTo(this.FechaDeteccion);
     }
     
 }

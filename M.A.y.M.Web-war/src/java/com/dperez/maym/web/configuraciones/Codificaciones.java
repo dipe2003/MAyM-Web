@@ -6,12 +6,15 @@
 package com.dperez.maym.web.configuraciones;
 
 import com.dperez.maymweb.accion.Accion;
+import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,28 +39,40 @@ public class Codificaciones implements Serializable {
     
     private Empresa EmpresaLogueada;
     
+    private Codificacion CodificacionSeleccionada;
+    
     private String NombreCodificacion;
     private String DescripcionCodificacion;
     private int IdCodificacionSeleccionada;
     private boolean AplicaEmpresa;
     private boolean ContieneAcciones;
-    private Map<Integer, Codificacion> ListaCodificaciones;
+    private List<Codificacion> ListaCodificaciones;
+    
+    // Pagination
+    private static final int MAX_ITEMS = 10;
+    private int CantidadPaginas;
+    private int PaginaActual;
+    private List<Codificacion> ListaCompletaCodificaciones;
     
     //  Getters
     
     public String getNombreCodificacion() {return NombreCodificacion;}
     public String getDescripcionCodificacion() {return DescripcionCodificacion;}
     public boolean isAplicaEmpresa() {return AplicaEmpresa;}
-    public Map<Integer, Codificacion> getListaCodificaciones() {return ListaCodificaciones;}
+    public List<Codificacion> getListaCodificaciones() {return ListaCodificaciones;}
     public boolean isContieneAcciones() {return ContieneAcciones;}
     public Empresa getEmpresaLogueada(){return this.EmpresaLogueada;}
+    
+    public static int getMAX_ITEMS() {return MAX_ITEMS;}
+    public int getCantidadPaginas() {return CantidadPaginas;}
+    public int getPaginaActual() {return PaginaActual;}
     
     //  Setters
     
     public void setNombreCodificacion(String NombreCodificacion) {this.NombreCodificacion = NombreCodificacion;}
     public void setDescripcionCodificacion(String DescripcionCodificacion) {this.DescripcionCodificacion = DescripcionCodificacion;}
     public void setAplicaEmpresa(boolean AplicaEmpresa) {this.AplicaEmpresa = AplicaEmpresa;}
-    public void setListaCodificaciones(Map<Integer, Codificacion> ListaCodificaciones) {this.ListaCodificaciones = ListaCodificaciones;}
+    public void setListaCodificaciones(List<Codificacion> ListaCodificaciones) {this.ListaCodificaciones = ListaCodificaciones;}
     public void setContieneAcciones(boolean ContieneAcciones) {this.ContieneAcciones = ContieneAcciones;}
     
     //  Metodos
@@ -71,15 +86,48 @@ public class Codificaciones implements Serializable {
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         EmpresaLogueada = (Empresa)request.getSession().getAttribute("Empresa");
         
-        //  Codificaciones
-        ListaCodificaciones = new HashMap<>();
-        // llenar la lista con todas las codificaciones registradas.
-        List<Codificacion> tmpCodificaciones = fLectura.ListarCodificaciones(-1);
-        for(Codificacion codificacion:tmpCodificaciones){
-            ListaCodificaciones.put(codificacion.getId(), codificacion);
+        PaginaActual = 1;
+        try{
+            PaginaActual = Integer.parseInt(request.getParameter("pagina"));
+        }catch(NumberFormatException ex){
+            System.out.println("Error en pagina actual: " + ex.getLocalizedMessage());
         }
+        //  Areas
+        ListaCodificaciones = new ArrayList<>();
+        ListaCompletaCodificaciones = fLectura.ListarCodificaciones(-1);
+        
+        // Paginas
+        Double resto = (double) ListaCompletaCodificaciones.size() / (double) MAX_ITEMS;
+        CantidadPaginas = resto.intValue();
+        resto = resto - resto.intValue();
+        if(resto > 0){
+            CantidadPaginas ++;
+        }
+        
+        // llenar la lista con todas las areas registradas.
+        cargarPagina(PaginaActual);
     }
     
+    /**
+     * Carga la lista de codificaciones para visualizar.
+     * @param pagina 
+     */
+    public void cargarPagina(int pagina){
+        int min = 0;
+        int max = MAX_ITEMS;
+        if(pagina!= 1) {
+            min = (pagina-1) * MAX_ITEMS;
+            max = min + MAX_ITEMS;
+        }
+        if(max > ListaCompletaCodificaciones.size()) max = ListaCompletaCodificaciones.size();
+        ListaCodificaciones.clear();        
+        Collections.sort(ListaCompletaCodificaciones);        
+        for(int i = min; i < max; i++){
+            Codificacion cod = ListaCompletaCodificaciones.get(i);
+            ListaCodificaciones.add(cod);
+        }
+        Collections.sort(ListaCodificaciones);
+    }
     /**
      * Crea la codificacion con los datos ingresados.
      * Muestra un mensaje de errror si no se creo, se agrega la codificacion a la empres logueada y redirige a la misma pagina para ver los resultados.
@@ -92,9 +140,9 @@ public class Codificaciones implements Serializable {
             context.renderResponse();
         }else{
             Codificacion cod;
-            if((cod = fAdmin.NuevaCodificacion(NombreCodificacion, DescripcionCodificacion)) != null){                
+            if((cod = fAdmin.NuevaCodificacion(NombreCodificacion, DescripcionCodificacion)) != null){
                 fAdmin.ModificarEmpresaCodificacion(cod.getId(), true, EmpresaLogueada.getId());
-                context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Codificaciones.xhtml");
+                context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Codificaciones.xhtml?pagina=1");
             }else{
                 context.addMessage("form_codificaciones:btn_nueva_codificacion", new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Codificacion", "No se pudo crear la Codificacion" ));
                 context.renderResponse();
@@ -111,14 +159,14 @@ public class Codificaciones implements Serializable {
     public void editarCodificacion() throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();
         if((fAdmin.EditarCodificacion(IdCodificacionSeleccionada, NombreCodificacion, DescripcionCodificacion))!=-1){
-            boolean contiene = ListaCodificaciones.get(IdCodificacionSeleccionada).contieneEmpresa(EmpresaLogueada.getId());
+            boolean contiene = CodificacionSeleccionada.contieneEmpresa(EmpresaLogueada.getId());
             if(contiene != this.AplicaEmpresa){
                 if((fAdmin.ModificarEmpresaCodificacion(IdCodificacionSeleccionada, AplicaEmpresa, EmpresaLogueada.getId()))==-1){
                     context.addMessage("form_codificaciones:btn_editar_codificacion", new FacesMessage(SEVERITY_ERROR, "No se pudo modificar empresa", "No se pudo modificar empresa" ));
                     context.renderResponse();
                 }
             }
-            context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Codificaciones.xhtml");
+            context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Codificaciones.xhtml?pagina="+PaginaActual);
         }else{
             context.addMessage("form_codificaciones:btn_editar_codificacion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la codificacion", "No se pudo editar la codificacion" ));
             context.renderResponse();
@@ -131,8 +179,8 @@ public class Codificaciones implements Serializable {
      * @return
      */
     private boolean comprobarNombreCodificacion(String NombreCodificacion){
-        for(Map.Entry entry: this.ListaCodificaciones.entrySet()){
-            if (((Codificacion)entry.getValue()).getNombre().equalsIgnoreCase(NombreCodificacion)){
+        for(Codificacion cod: this.ListaCodificaciones){
+            if (cod.getNombre().equalsIgnoreCase(NombreCodificacion)){
                 return true;
             }
         }
@@ -148,10 +196,9 @@ public class Codificaciones implements Serializable {
     public void eliminarCodificacion(int IdCodificacionSeleccionada) throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();
         // primero se comprueba que pertenezca a la empresa del usuario logueado y que no aplique a otra empresa
-        Codificacion cod = ListaCodificaciones.get(IdCodificacionSeleccionada);
-        if(cod.contieneEmpresa(EmpresaLogueada.getId()) && cod.getEmpresasCodificacion().size()==1){
+        if(CodificacionSeleccionada.getEmpresasCodificacion().size()==1){
             if(fAdmin.EliminarCodificacion(IdCodificacionSeleccionada, EmpresaLogueada.getId())!=-1){
-                context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Codificaciones.xhtml");
+                context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Codificaciones.xhtml?pagina=1");
             }else{
                 context.addMessage("form_codificaciones:btn_eliminar_"+IdCodificacionSeleccionada, new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar la codificacion", "No se pudo eliminar la codificacion" ));
                 context.renderResponse();
@@ -172,13 +219,18 @@ public class Codificaciones implements Serializable {
             this.DescripcionCodificacion = new String();
             this.IdCodificacionSeleccionada = -1;
         }else{
-            this.NombreCodificacion = ListaCodificaciones.get(IdCodificacion).getNombre();
-            this.DescripcionCodificacion = ListaCodificaciones.get(IdCodificacion).getDescripcion();
+            for(Codificacion cod: ListaCodificaciones){
+                if(cod.getId() == IdCodificacion) {
+                    CodificacionSeleccionada = cod;
+                    break;
+                }
+            }
+            this.NombreCodificacion = CodificacionSeleccionada.getNombre();
+            this.DescripcionCodificacion = CodificacionSeleccionada.getDescripcion();
             this.IdCodificacionSeleccionada = IdCodificacion;
             
             // verifica si pertenece a la empresa del usuario logueado
-            Codificacion codificacion =  ListaCodificaciones.get(IdCodificacion);
-            if(codificacion.contieneEmpresa(EmpresaLogueada.getId())){
+            if(CodificacionSeleccionada.contieneEmpresa(EmpresaLogueada.getId())){
                 this.AplicaEmpresa = true;
             }else{
                 this.AplicaEmpresa = false;
@@ -188,7 +240,7 @@ public class Codificaciones implements Serializable {
             // al encontrar la primer accion que pertenezca a la codificacion y empresa ContieneAcciones = true
             if(this.AplicaEmpresa == true){
                 ContieneAcciones = false;
-                for(Accion accion: codificacion.getAccionesConCodificacion()){
+                for(Accion accion: CodificacionSeleccionada.getAccionesConCodificacion()){
                     if(accion.getEmpresaAccion().getId() == EmpresaLogueada.getId()){
                         ContieneAcciones = true;
                         break;

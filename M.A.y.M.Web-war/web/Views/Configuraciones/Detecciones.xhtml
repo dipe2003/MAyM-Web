@@ -18,9 +18,9 @@
                     Pueden crearse, modificarse y elminarse (solo Administrador) cuando no esten en uso.
                 </div>                  
             </div>                 
-        </div>
+        </div>        
         <h:form id="form_detecciones" >
-            <div class="container-fluid" style="padding: 1%">
+            <div class="container-fluid" style="padding: 1%">                
                 <c:choose>
                     <c:when test="#{empty detecciones.listaDetecciones}">
                         <div class="alert alert-info">
@@ -53,24 +53,24 @@
                                 <c:forEach items="#{detecciones.listaDetecciones}" var="deteccion">
                                     <tr>
                                         <td>
-                                            #{deteccion.value.nombre}
+                                            #{deteccion.nombre}
                                         </td>
                                         <td>
-                                            #{deteccion.value.tipo}
+                                            #{deteccion.tipo}
                                         </td>
                                         <td>                                            
                                             <div class="btn-group">
-                                                <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Editar" action="#{detecciones.cargarDatos(deteccion.key)}">
+                                                <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Editar" action="#{detecciones.cargarDatos(deteccion.id)}">
                                                     <span class="glyphicon glyphicon-pencil"></span>
                                                     <f:ajax delay="100" render="panel_modal_editar" />
                                                 </h:commandLink>                                               
                                             </div>
                                             <div class="btn-group">
                                                 <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR'}">
-                                                    <c:if test="#{deteccion.value.accionesDetectadas.size() == 0 and deteccion.value.fortalezasDetectadas.size() == 0 }">
-                                                        <h:commandLink id="btn_eliminar_#{deteccion.key}" class="btn btn-danger" onclick="if (! confirm('Seguro que va a eliminar esta deteccion? ')) return false" >
+                                                    <c:if test="#{deteccion.accionesDetectadas.size() == 0 and deteccion.fortalezasDetectadas.size() == 0 }">
+                                                        <h:commandLink id="btn_eliminar_#{deteccion.id}" class="btn btn-danger" onclick="if (! confirm('Seguro que va a eliminar esta deteccion? ')) return false" >
                                                             <span class="glyphicon glyphicon-trash"> </span>
-                                                            <f:ajax event="click" listener="#{detecciones.eliminarDeteccion(deteccion.key)}"/>
+                                                            <f:ajax event="click" listener="#{detecciones.eliminarDeteccion(deteccion.id)}"/>
                                                         </h:commandLink>  
                                                     </c:if>
                                                 </c:if>
@@ -78,13 +78,30 @@
                                         </td>
                                         <h:panelGroup id="panel_mensajes_tabla">
                                             <div class="form-group-sm">
-                                                <h:message for="btn_eliminar_#{deteccion.key}" class="msj_error"/>
+                                                <h:message for="btn_eliminar_#{deteccion.id}" class="msj_error"/>
                                             </div>
                                         </h:panelGroup>
                                     </tr>                                        
                                 </c:forEach>
                             </tbody>
-                        </table>                         
+                        </table>    
+                        <c:if test="#{detecciones.cantidadPaginas > 1}">
+                            <div class="container-fluid text-center" style="padding: 1%">
+                                <ul class="pagination">
+                                    <c:forEach begin="1" end="#{detecciones.cantidadPaginas}" step="1" varStatus="numero" >
+                                        <c:choose>
+                                            <c:when test="#{detecciones.paginaActual == numero.count}" >
+                                                <li class="active"><a>#{numero.count}</a></li>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <li><h:link value="#{numero.count}" outcome="Detecciones.xhtml?pagina=#{numero.count}"/>
+                                                </li>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
+                                </ul>                
+                            </div>
+                        </c:if>
                     </c:otherwise>
                 </c:choose>
             </div>
@@ -191,7 +208,6 @@
                     </h:panelGroup>
                 </div>
             </div>
-        </h:form>
-        
+        </h:form>        
     </ui:define>
 </ui:composition>

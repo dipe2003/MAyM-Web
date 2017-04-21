@@ -34,6 +34,8 @@ public class Areas implements Serializable {
     
     private Empresa EmpresaLogueada;
     
+    private Area AreaSeleccionada;
+    
     private String NombreArea;
     private String CorreoArea;
     private int IdAreaSeleccionada;
@@ -160,8 +162,7 @@ public class Areas implements Serializable {
     public void editarArea() throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();
         if((fAdmin.EditarArea(IdAreaSeleccionada, NombreArea, CorreoArea))!=-1){
-            boolean contiene = ListaAreas.get(IdAreaSeleccionada).contieneEmpresa(EmpresaLogueada.getId());
-            if(contiene != this.AplicaEmpresa){
+            if(AreaSeleccionada.contieneEmpresa(EmpresaLogueada.getId()) != this.AplicaEmpresa){
                 if((fAdmin.ModificarEmpresaArea(IdAreaSeleccionada, AplicaEmpresa, EmpresaLogueada.getId()))==-1){
                     context.addMessage("form_areas:btn_editar_area", new FacesMessage(SEVERITY_ERROR, "No se pudo modificar empresa", "No se pudo modificar empresa" ));
                     context.renderResponse();
@@ -184,8 +185,7 @@ public class Areas implements Serializable {
     public void eliminarArea(int IdAreaSeleccionada) throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();
         // primero se comprueba que pertenezca a la empresa del usuario logueado y que no aplique a otra empresa
-        Area area = ListaAreas.get(IdAreaSeleccionada);
-        if(area.contieneEmpresa(EmpresaLogueada.getId()) && area.getEmpresasArea().size()==1){
+        if(AreaSeleccionada.contieneEmpresa(EmpresaLogueada.getId()) && AreaSeleccionada.getEmpresasArea().size()==1){
             if(fAdmin.EliminarArea(IdAreaSeleccionada, EmpresaLogueada.getId())!=-1){
                 context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Areas.xhtml?pagina=1");
             }else{
@@ -221,20 +221,19 @@ public class Areas implements Serializable {
             this.NombreArea = new String();
             this.CorreoArea = new String();
             this.IdAreaSeleccionada = -1;
-        }else{
-            Area area = null;
-            for(Area usr: ListaAreas){
-                if(usr.getId() == IdArea) {
-                    area = usr;
+        }else{            
+            for(Area area: ListaAreas){
+                if(area.getId() == IdArea) {
+                    AreaSeleccionada = area;
                     break;
                 }
             }
-            this.NombreArea = area.getNombre();
-            this.CorreoArea = area.getCorreo();
+            this.NombreArea = AreaSeleccionada.getNombre();
+            this.CorreoArea = AreaSeleccionada.getCorreo();
             this.IdAreaSeleccionada = IdArea;
             
             // verifica si pertenece a la empresa del usuario logueado
-            if(area.contieneEmpresa(EmpresaLogueada.getId())){
+            if(AreaSeleccionada.contieneEmpresa(EmpresaLogueada.getId())){
                 this.AplicaEmpresa = true;
             }else{
                 this.AplicaEmpresa = false;
@@ -244,7 +243,7 @@ public class Areas implements Serializable {
             // al encontrar la primer accion que pertenezca a la codificacion y empresa ContieneAcciones = true
             if(this.AplicaEmpresa == true){
                 ContieneAcciones = false;
-                for(Accion accion: area.getAccionesEnAreaSector()){
+                for(Accion accion: AreaSeleccionada.getAccionesEnAreaSector()){
                     if(accion.getEmpresaAccion().getId() == EmpresaLogueada.getId()){
                         ContieneAcciones = true;
                         break;

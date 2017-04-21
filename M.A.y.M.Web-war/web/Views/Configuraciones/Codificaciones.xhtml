@@ -55,40 +55,42 @@
                                 <c:forEach items="#{codificaciones.listaCodificaciones}" var="codificacion">
                                     <tr>
                                         <td>
-                                            #{codificacion.value.nombre}
+                                            #{codificacion.nombre}
                                         </td>
                                         <td>
-                                            #{codificacion.value.descripcion}
+                                            #{codificacion.descripcion}
                                         </td>
                                         <td>
-                                            <c:if test="#{codificacion.value.contieneEmpresa(codificaciones.empresaLogueada.id)== true}">
+                                            <c:if test="#{codificacion.contieneEmpresa(codificaciones.empresaLogueada.id)== true}">
                                                 Aplica
                                             </c:if>
-                                            <c:if test="#{codificacion.value.contieneEmpresa(codificaciones.empresaLogueada.id)== false}">
+                                            <c:if test="#{codificacion.contieneEmpresa(codificaciones.empresaLogueada.id)== false}">
                                                 No Aplica
                                             </c:if>
                                         </td>
                                         <td>                                            
                                             <div class="btn-group">
-                                                <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Editar" action="#{codificaciones.cargarDatos(codificacion.key)}">
+                                                <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Editar" action="#{codificaciones.cargarDatos(codificacion.id)}">
                                                     <span class="glyphicon glyphicon-pencil"></span>
                                                     <f:ajax delay="100" render="panel_modal_editar" />
                                                 </h:commandLink>
                                             </div>
                                             <div class="btn-group">
                                                 <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR'}">
-                                                    <c:if test="#{codificacion.value.accionesConCodificacion.size() == 0}">
+                                                    <c:if test="#{codificacion.accionesConCodificacion.size() == 0}">
                                                         <c:choose>
-                                                            <c:when test="#{codificacion.value.empresasCodificacion.size() == 0}">
-                                                                <h:commandLink id="btn_eliminar_#{codificacion.key}" class="btn btn-danger" onclick="if (! confirm('Seguro que va a eliminar esta Codificacion? ')) return false" >
+                                                            <c:when test="#{codificacion.empresasCodificacion.size() == 0}">
+                                                                <h:commandLink id="btn_eliminar_#{codificacion.id}" class="btn btn-danger" action="#{codificaciones.cargarDatos(codificacion.id)}"
+                                                                               onclick="if (! confirm('Seguro que va a eliminar esta Codificacion? ')) return false" >
                                                                     <span class="glyphicon glyphicon-trash"> </span>
-                                                                    <f:ajax event="click" listener="#{codificaciones.eliminarCodificacion(codificacion.key)}"/>
+                                                                    <f:ajax event="click" listener="#{codificaciones.eliminarCodificacion(codificacion.id)}"/>
                                                                 </h:commandLink>
                                                             </c:when>
-                                                            <c:when test="#{codificacion.value.contieneEmpresa(codificaciones.empresaLogueada.id) and codificacion.value.empresasCodificacion.size() == 1}">
-                                                                <h:commandLink id="btn_eliminar_#{codificacion.key}" class="btn btn-danger" onclick="if (! confirm('Seguro que va a eliminar esta Codificacion? ')) return false" >
+                                                            <c:when test="#{codificacion.contieneEmpresa(codificaciones.empresaLogueada.id) and codificacion.empresasCodificacion.size() == 1}">
+                                                                <h:commandLink id="btn_eliminar_#{codificacion.id}" class="btn btn-danger" action="#{codificaciones.cargarDatos(codificacion.id)}"
+                                                                               onclick="if (! confirm('Seguro que va a eliminar esta Codificacion? ')) return false" >
                                                                     <span class="glyphicon glyphicon-trash"> </span>
-                                                                    <f:ajax event="click" listener="#{codificaciones.eliminarCodificacion(codificacion.key)}"/>
+                                                                    <f:ajax event="click" listener="#{codificaciones.eliminarCodificacion(codificacion.id)}"/>
                                                                 </h:commandLink>
                                                             </c:when>
                                                         </c:choose>     
@@ -98,13 +100,30 @@
                                         </td>
                                         <h:panelGroup id="panel_mensajes_tabla">
                                             <div class="form-group-sm">
-                                                <h:message for="btn_eliminar_#{codificacion.key}" class="msj_error"/>
+                                                <h:message for="btn_eliminar_#{codificacion.id}" class="msj_error"/>
                                             </div>
                                         </h:panelGroup>
                                     </tr>                                        
                                 </c:forEach>
                             </tbody>
-                        </table>                         
+                        </table>  
+                        <c:if test="#{codificaciones.cantidadPaginas > 1}">
+                            <div class="container-fluid text-center" style="padding: 1%">
+                                <ul class="pagination">
+                                    <c:forEach begin="1" end="#{codificaciones.cantidadPaginas}" step="1" varStatus="numero" >
+                                        <c:choose>
+                                            <c:when test="#{codificaciones.paginaActual == numero.count}" >
+                                                <li class="active"><a>#{numero.count}</a></li>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <li><h:link value="#{numero.count}" outcome="Codificaciones.xhtml?pagina=#{numero.count}"/>
+                                                </li>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
+                                </ul>                
+                            </div>
+                        </c:if>
                     </c:otherwise>
                 </c:choose>
             </div>
