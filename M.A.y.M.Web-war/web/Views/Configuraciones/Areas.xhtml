@@ -221,21 +221,23 @@
                     </h:panelGroup>
                 </div>
             </div>
-            <div class="container-fluid text-center" style="padding: 1%">
-                <ul class="pagination">
-                    <c:forEach begin="1" end="#{areas.cantidadPaginas}" step="1" varStatus="numero" >
-                        <c:choose>
-                            <c:when test="#{areas.paginaActual == numero.count}" >
-                                <li class="active"><h:commandLink >#{numero.count}</h:commandLink></li>
-                            </c:when>
-                            <c:otherwise>
-                                <li><h:link value="#{numero.count}" outcome="Areas.xhtml?pagina=#{numero.count}"/>
-                                </li>
-                            </c:otherwise>
-                        </c:choose>
-                    </c:forEach>
-                </ul>                
-            </div>
+            <c:if test="#{areas.cantidadPaginas > 1}">
+                <div class="container-fluid text-center" style="padding: 1%">
+                    <ul class="pagination">
+                        <c:forEach begin="1" end="#{areas.cantidadPaginas}" step="1" varStatus="numero" >
+                            <c:choose>
+                                <c:when test="#{areas.paginaActual == numero.count}" >
+                                    <li class="active"><a>#{numero.count}</a></li>
+                                </c:when>
+                                <c:otherwise>
+                                    <li><h:link value="#{numero.count}" outcome="Areas.xhtml?pagina=#{numero.count}"/>
+                                    </li>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:forEach>
+                    </ul>                
+                </div>
+            </c:if>
         </h:form>
         
     </ui:define>

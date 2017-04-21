@@ -3,7 +3,7 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
 */
-package com.dperez.maym.web.usuarios;
+package com.dperez.maym.web.configuraciones;
 
 import com.dperez.maym.web.inicio.SesionUsuario;
 import com.dperez.maymweb.area.Area;
@@ -17,9 +17,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
@@ -137,7 +135,7 @@ public class Usuarios implements Serializable {
         this.PermisoSeleccionado  = EnumPermiso.DATOS;
         
         // Paginacion
-        PaginaActual = 0;
+        PaginaActual = 1;
         try{
             PaginaActual = Integer.parseInt(request.getParameter("pagina"));
         }catch(NumberFormatException ex){
@@ -201,7 +199,7 @@ public class Usuarios implements Serializable {
         if(Password.equals(PasswordConfirmacion)){
             if((fAdmin.NuevoUsuario(NumeroNuevoUsuario, Nombre,Apellido,CorreoElectronico, Password,
                     PermisoSeleccionado, EmpresaLogueada.getId(), AreaSeleccionada))!=null){
-                context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Usuarios.xhtml");
+                context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Usuarios.xhtml?pagina=1");
             }else{
                 context.addMessage("form_usuarios:btn_nuevo_usuario", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nuevo usuario", "No se pudo crear nuevo usuario" ));
                 context.renderResponse();
@@ -223,7 +221,7 @@ public class Usuarios implements Serializable {
             if(sesion.getUsuarioLogueado().getId() == IdUsuarioSeleccionado){
                 sesion.setUsuarioLogueado(fLectura.GetUsuario(IdUsuarioSeleccionado));
             }
-            context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Usuarios.xhtml");
+            context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Usuarios.xhtml?pagina="+PaginaActual);
         }else{
             context.addMessage("form_usuarios:btn_editar_usuario", new FacesMessage(SEVERITY_FATAL, "No se pudo editar usuario", "No se pudo editar usuario" ));
             context.renderResponse();
@@ -241,7 +239,7 @@ public class Usuarios implements Serializable {
         if(PasswordNuevo.equals(PasswordConfirmacion)){
             if(!PasswordNuevo.isEmpty()){
                 if(fMain.ResetCredencialUsuario(IdUsuarioSeleccionado, PasswordNuevo)!=null){
-                    context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Usuarios.xhtml");
+                    context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Usuarios.xhtml?pagina="+PaginaActual);
                 }else{
                     context.addMessage("form_usuarios:btn_password_usuario", new FacesMessage(SEVERITY_FATAL, "No se pudo cambiar password", "No se pudo cambiar password" ));
                     context.renderResponse();
@@ -265,7 +263,7 @@ public class Usuarios implements Serializable {
     public void eliminarUsuario(int IdUsuarioSeleccionado) throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();
         if(fAdmin.EliminarUsuario(IdUsuarioSeleccionado)!=-1){
-            context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Usuarios.xhtml");
+            context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Usuarios.xhtml?pagina=1");
         }else{
             context.addMessage("form_usuarios:btn_eliminar_usuario_"+IdUsuarioSeleccionado, new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar el usuario", "No se pudo eliminar el usuario" ));
             context.renderResponse();
@@ -283,7 +281,7 @@ public class Usuarios implements Serializable {
             context.addMessage("form_usuarios:btn_baja_"+IdUsuario, new FacesMessage(SEVERITY_ERROR, "No se pudo dar de baja el usuario", "No se pudo dar de baja el usuario" ));
             context.renderResponse();
         }else{
-            context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Usuarios.xhtml");
+            context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Usuarios.xhtml?pagina="+PaginaActual);
         }
     }
     /**
@@ -297,7 +295,7 @@ public class Usuarios implements Serializable {
             context.addMessage("form_usuarios:btn_baja_"+IdUsuario, new FacesMessage(SEVERITY_ERROR, "No se pudo dar de alta el usuario", "No se pudo dar de alta el usuario" ));
             context.renderResponse();
         }else{
-            context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Usuarios.xhtml");
+            context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Usuarios.xhtml?pagina="+PaginaActual);
         }
     }
     
@@ -334,23 +332,28 @@ public class Usuarios implements Serializable {
             this.PasswordConfirmacion= new String();
             this.AreaSeleccionada = -1;
         }else{
-            this.Nombre  = ListaUsuarios.get(IdUsuario).getNombre();
-            this.Apellido  = ListaUsuarios.get(IdUsuario).getApellido();
-            this.CorreoElectronico  = ListaUsuarios.get(IdUsuario).getCorreo();
-            this.RecibeAlertas = ListaUsuarios.get(IdUsuario).isRecibeAlertas();
-            this.PermisoSeleccionado  = ListaUsuarios.get(IdUsuario).getPermisoUsuario();
+            Usuario usrSeleccionado = null;
+            for(Usuario usr: ListaUsuarios){
+                if(usr.getId() == IdUsuario) {
+                    usrSeleccionado = usr;
+                    break;
+                }
+            }
+            this.Nombre  = usrSeleccionado.getNombre();
+            this.Apellido  = usrSeleccionado.getApellido();
+            this.CorreoElectronico  = usrSeleccionado.getCorreo();
+            this.RecibeAlertas = usrSeleccionado.isRecibeAlertas();
+            this.PermisoSeleccionado  = usrSeleccionado.getPermisoUsuario();
             this.IdUsuarioSeleccionado = IdUsuario;
-            this.NumeroNuevoUsuario = ListaUsuarios.get(IdUsuario).getId();
+            this.NumeroNuevoUsuario = usrSeleccionado.getId();
             this.CambiarPassword = false;
             this.PasswordNuevo = new String();
             this.PasswordConfirmacion= new String();
-            this.AreaSeleccionada = ListaUsuarios.get(IdUsuario).getAreaSectorUsuario().getId();
-            
-            Usuario usuario =  ListaUsuarios.get(IdUsuario);
+            this.AreaSeleccionada = usrSeleccionado.getAreaSectorUsuario().getId();
             
             // verifica que no tenga registros relacionados
             // la lista de comprobaciones y de actividades deben estar vacias => False
-            if(!usuario.getComprobaciones().isEmpty() || !usuario.getMedidasResponsableImplementacion().isEmpty()){
+            if(!usrSeleccionado.getComprobaciones().isEmpty() || !usrSeleccionado.getMedidasResponsableImplementacion().isEmpty()){
                 ContieneRegistros = true;
             }else{
                 ContieneRegistros = false;

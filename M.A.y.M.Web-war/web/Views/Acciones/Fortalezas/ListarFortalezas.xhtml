@@ -20,14 +20,15 @@
         </div>
         
         <div class="container-fluid" style="padding: 1%">
-            <c:choose>
-                <c:when test="#{empty listarFortalezas.listaFortalezas}">
-                    <div class="alert alert-info">
-                        <strong>Info!</strong> No hay registros para listar.
-                    </div>
-                </c:when>
-                <c:otherwise>
-                    <h:form id="form_tabla_acciones" >
+            <h:form id="form_tabla_acciones" >
+                <c:choose>
+                    <c:when test="#{empty listarFortalezas.listaFortalezas}">
+                        <div class="alert alert-info">
+                            <strong>Info!</strong> No hay registros para listar.
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        
                         <table class="table table-hover table-striped table-responsive">
                             <thead style="font-size: 12px">
                                 <tr>
@@ -44,16 +45,16 @@
                                 <c:forEach items="#{listarFortalezas.listaFortalezas}" var="accion">
                                     <tr>
                                         <td>
-                                            #{accion.value.fechaDeteccion}
+                                            #{accion.fechaDeteccion}
                                         </td>
                                         <td>
-                                            #{accion.value.areaSectorFortaleza.nombre}
+                                            #{accion.areaSectorFortaleza.nombre}
                                         </td>
                                         <td>
-                                            #{accion.value.generadaPor.nombre}
+                                            #{accion.generadaPor.nombre}
                                         </td>
                                         <td>
-                                            #{accion.value.descripcion}
+                                            #{accion.descripcion}
                                         </td>
                                         <td>
                                             <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != null}">
@@ -63,7 +64,7 @@
                                                         <span class="caret"></span>
                                                     </button>
                                                     <ul class="dropdown-menu" role="menu">                                                        
-                                                        <li><h:link value="Editar Datos" outcome="EditarFortaleza.xhtml?id=#{accion.key}" />
+                                                        <li><h:link value="Editar Datos" outcome="EditarFortaleza.xhtml?id=#{accion.id}" />
                                                         </li>                                                        
                                                     </ul>
                                                 </div>
@@ -73,16 +74,26 @@
                                 </c:forEach>
                             </tbody>
                         </table> 
-                    </h:form>
-                    <ul class="pagination">
-                        <li class="active"><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
-                    </ul>
-                </c:otherwise>
-            </c:choose>
+                        <c:if test="#{listarFortalezas.cantidadPaginas > 1}">
+                            <div class="container-fluid text-center" style="padding: 1%">
+                                <ul class="pagination">
+                                    <c:forEach begin="1" end="#{areas.cantidadPaginas}" step="1" varStatus="numero" >
+                                        <c:choose>
+                                            <c:when test="#{areas.paginaActual == numero.count}" >
+                                                <li class="active"><a>#{numero.count}</a></li>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <li><h:link value="#{numero.count}" outcome="Areas.xhtml?pagina=#{numero.count}"/>
+                                                </li>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
+                                </ul>                
+                            </div>
+                        </c:if>                        
+                    </c:otherwise>
+                </c:choose>
+            </h:form>
         </div>
         
     </ui:define>

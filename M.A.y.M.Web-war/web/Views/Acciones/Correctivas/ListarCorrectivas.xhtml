@@ -20,14 +20,14 @@
         </div>
         
         <div class="container-fluid" style="padding: 1%">
-            <c:choose>
-                <c:when test="#{empty listarCorrectivas.listaAcciones}">
-                    <div class="alert alert-info">
-                        <strong>Info!</strong> No hay registros para listar.
-                    </div>
-                </c:when>
-                <c:otherwise>
-                    <h:form id="form_tabla_acciones" >
+            <h:form id="form_tabla_acciones" >
+                <c:choose>
+                    <c:when test="#{empty listarCorrectivas.listaAcciones}">
+                        <div class="alert alert-info">
+                            <strong>Info!</strong> No hay registros para listar.
+                        </div>
+                    </c:when>
+                    <c:otherwise>                    
                         <table class="table table-hover table-striped table-responsive">
                             <thead style="font-size: 12px">
                                 <tr>
@@ -50,24 +50,24 @@
                                 <c:forEach items="#{listarCorrectivas.listaAcciones}" var="accion">
                                     <tr>
                                         <td>
-                                            #{accion.value.fechaDeteccion}
+                                            #{accion.fechaDeteccion}
                                         </td>
                                         <td>
-                                            #{accion.value.areaSectorAccion.nombre}
+                                            #{accion.areaSectorAccion.nombre}
                                         </td>
                                         <td>
-                                            #{accion.value.generadaPor.nombre}
+                                            #{accion.generadaPor.nombre}
                                         </td>
                                         <td>
-                                            #{accion.value.descripcion}
+                                            #{accion.descripcion}
                                         </td>
                                         <td>
-                                            #{accion.value.analisisCausa}
+                                            #{accion.analisisCausa}
                                         </td>
                                         <td>
                                             <c:choose>
-                                                <c:when test="#{not empty accion.value.medidasCorrectivas}">
-                                                    <c:forEach items="#{accion.value.medidasCorrectivas}" var="correctiva">
+                                                <c:when test="#{not empty accion.medidasCorrectivas}">
+                                                    <c:forEach items="#{accion.medidasCorrectivas}" var="correctiva">
                                                         <div class="form-group-sm">
                                                             #{correctiva.descripcion}
                                                         </div>
@@ -80,8 +80,8 @@
                                         </td>
                                         <td>
                                             <c:choose>
-                                                <c:when test="#{not empty accion.value.medidasPreventivas}">
-                                                    <c:forEach items="#{accion.value.medidasPreventivas}" var="preventiva">
+                                                <c:when test="#{not empty accion.medidasPreventivas}">
+                                                    <c:forEach items="#{accion.medidasPreventivas}" var="preventiva">
                                                         <div class="form-group-sm">
                                                             #{preventiva.descripcion}
                                                         </div>
@@ -94,8 +94,8 @@
                                         </td>
                                         <td>
                                             <c:choose>
-                                                <c:when test="#{accion.value.getComprobacionEficacia() != null and accion.value.getComprobacionEficacia().fechaEstimada != null }">
-                                                    #{accion.value.getComprobacionEficacia().fechaEstimada}
+                                                <c:when test="#{accion.getComprobacionEficacia() != null and accion.getComprobacionEficacia().fechaEstimada != null }">
+                                                    #{accion.getComprobacionEficacia().fechaEstimada}
                                                 </c:when>
                                                 <c:otherwise>
                                                     No se ha definido.
@@ -103,25 +103,25 @@
                                             </c:choose>
                                         </td>
                                         <td>
-                                            #{accion.value.codificacionAccion.nombre}
+                                            #{accion.codificacionAccion.nombre}
                                         </td>
                                         <c:choose>
-                                            <c:when test="#{accion.value.estadoAccion == 'PENDIENTE'}">
+                                            <c:when test="#{accion.estadoAccion == 'PENDIENTE'}">
                                                 <td style="background-color: red; color: white">
                                                     Pendiente
                                                 </td>
                                             </c:when>
-                                            <c:when test="#{accion.value.estadoAccion == 'CERRADA'}" >
+                                            <c:when test="#{accion.estadoAccion == 'CERRADA'}" >
                                                 <td style="background-color: green; color: white">
                                                     Cerrada
                                                 </td>
                                             </c:when>
-                                            <c:when test="#{accion.value.estadoAccion == 'DESESTIMADA'}" >
+                                            <c:when test="#{accion.estadoAccion == 'DESESTIMADA'}" >
                                                 <td style="background-color: black; color: white">
                                                     Desestimada
                                                 </td>
                                             </c:when>
-                                            <c:when test="#{accion.value.estadoAccion == 'PROCESO_IMP'}" >
+                                            <c:when test="#{accion.estadoAccion == 'PROCESO_IMP'}" >
                                                 <td style="background-color: #ff9900; color: white">
                                                     Proceso Implementacion
                                                 </td>
@@ -141,44 +141,52 @@
                                                             <span class="caret"></span>
                                                         </button>
                                                         <ul class="dropdown-menu" role="menu">
-                                                            <li><h:link value="Ver Accion" outcome="VerAccionCorrectiva.xhtml?id=#{accion.value.id}"/>
+                                                            <li><h:link value="Ver Accion" outcome="VerAccionCorrectiva.xhtml?id=#{accion.id}"/>
                                                             </li>
-                                                            <li><h:link value="Editar Datos" outcome="EditarAccionCorrectiva.xhtml?id=#{accion.value.id}" />
+                                                            <li><h:link value="Editar Datos" outcome="EditarAccionCorrectiva.xhtml?id=#{accion.id}" />
                                                             </li>
-                                                            <c:if test="#{accion.value.estadoAccion != 'CERRADA'}">
+                                                            <c:if test="#{accion.estadoAccion != 'CERRADA'}">
                                                                 <li>                                                            
-                                                                    <h:link value="Agregar M. Correctiva" outcome="ActividadesCorrectiva.xhtml?id=#{accion.value.id}&amp;tipo=correctiva&amp;editar=0"/>
+                                                                    <h:link value="Agregar M. Correctiva" outcome="ActividadesCorrectiva.xhtml?id=#{accion.id}&amp;tipo=correctiva&amp;editar=0"/>
                                                                 </li>
                                                                 <li>                                                            
-                                                                    <h:link value="Agregar M. Preventiva" outcome="ActividadesCorrectiva.xhtml?id=#{accion.value.id}&amp;tipo=preventiva&amp;editar=0"/>                                   
+                                                                    <h:link value="Agregar M. Preventiva" outcome="ActividadesCorrectiva.xhtml?id=#{accion.id}&amp;tipo=preventiva&amp;editar=0"/>                                   
                                                                 </li>                                                            
-                                                                <li><h:link value="Realizar Seguimiento" outcome="SeguimientoCorrectiva.xhtml?id=#{accion.value.id}" />
+                                                                <li><h:link value="Realizar Seguimiento" outcome="SeguimientoCorrectiva.xhtml?id=#{accion.id}" />
                                                                 </li>
                                                             </c:if>
                                                         </ul>
                                                     </div>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <h:link class="btn btn-primary" title="Ver Accion Correctiva" outcome="VerAccionCorrectiva.xhtml?id=#{accion.value.id}"><span class="glyphicon glyphicon-eye-open"></span></h:link>
+                                                    <h:link class="btn btn-primary" title="Ver Accion Correctiva" outcome="VerAccionCorrectiva.xhtml?id=#{accion.id}"><span class="glyphicon glyphicon-eye-open"></span></h:link>
                                                 </c:otherwise>
                                             </c:choose>
-                                            
                                         </td>
                                     </tr>
                                 </c:forEach>
                             </tbody>
-                        </table> 
-                    </h:form>
-                    <ul class="pagination">
-                        <li class="active"><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
-                    </ul>
-                </c:otherwise>
-            </c:choose>
+                        </table>   
+                        <c:if test="#{listarCorrectivas.cantidadPaginas > 1}">
+                            <div class="container-fluid text-center" style="padding: 1%">
+                                <ul class="pagination">
+                                    <c:forEach begin="1" end="#{listarCorrectivas.cantidadPaginas}" step="1" varStatus="numero" >
+                                        <c:choose>
+                                            <c:when test="#{listarCorrectivas.paginaActual == numero.count}" >
+                                                <li class="active"><a>#{numero.count}</a></li>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <li><h:link value="#{numero.count}" outcome="ListarCorrectivas.xhtml?pagina=#{numero.count}"/>
+                                                </li>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
+                                </ul>                
+                            </div> 
+                        </c:if>
+                    </c:otherwise>
+                </c:choose>
+            </h:form>
         </div>
-        
     </ui:define>
 </ui:composition>

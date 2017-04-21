@@ -3,7 +3,7 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
 */
-package com.dperez.maym.web.areas;
+package com.dperez.maym.web.configuraciones;
 
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.area.Area;
@@ -14,9 +14,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
@@ -85,7 +83,7 @@ public class Areas implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         EmpresaLogueada = (Empresa)request.getSession().getAttribute("Empresa");
-        PaginaActual = 0;
+        PaginaActual = 1;
         try{
             PaginaActual = Integer.parseInt(request.getParameter("pagina"));
         }catch(NumberFormatException ex){
@@ -145,7 +143,7 @@ public class Areas implements Serializable {
                 if(area != null){
                     fAdmin.ModificarEmpresaArea(area.getId(), true, EmpresaLogueada.getId());
                 }
-                context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Areas.xhtml");
+                context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Areas.xhtml?pagina=1");
             }else{
                 context.addMessage("form_areas:btn_nueva_area", new FacesMessage(SEVERITY_ERROR, "No se pudo crear el area", "No se pudo crear el area" ));
                 context.renderResponse();
@@ -169,7 +167,7 @@ public class Areas implements Serializable {
                     context.renderResponse();
                 }
             }
-            context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Areas.xhtml");
+            context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Areas.xhtml?pagina="+PaginaActual);
         }else{
             context.addMessage("form_areas:btn_editar_area", new FacesMessage(SEVERITY_ERROR, "No se pudo editar el area", "No se pudo editar el area" ));
             context.renderResponse();
@@ -189,7 +187,7 @@ public class Areas implements Serializable {
         Area area = ListaAreas.get(IdAreaSeleccionada);
         if(area.contieneEmpresa(EmpresaLogueada.getId()) && area.getEmpresasArea().size()==1){
             if(fAdmin.EliminarArea(IdAreaSeleccionada, EmpresaLogueada.getId())!=-1){
-                context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Areas.xhtml");
+                context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Areas.xhtml?pagina=1");
             }else{
                 context.addMessage("form_areas:btn_eliminar_"+IdAreaSeleccionada, new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar el Area", "No se pudo eliminar el Area" ));
                 context.renderResponse();
@@ -224,12 +222,18 @@ public class Areas implements Serializable {
             this.CorreoArea = new String();
             this.IdAreaSeleccionada = -1;
         }else{
-            this.NombreArea = ListaAreas.get(IdArea).getNombre();
-            this.CorreoArea = ListaAreas.get(IdArea).getCorreo();
+            Area area = null;
+            for(Area usr: ListaAreas){
+                if(usr.getId() == IdArea) {
+                    area = usr;
+                    break;
+                }
+            }
+            this.NombreArea = area.getNombre();
+            this.CorreoArea = area.getCorreo();
             this.IdAreaSeleccionada = IdArea;
             
             // verifica si pertenece a la empresa del usuario logueado
-            Area area =  ListaAreas.get(IdArea);
             if(area.contieneEmpresa(EmpresaLogueada.getId())){
                 this.AplicaEmpresa = true;
             }else{

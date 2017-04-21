@@ -13,7 +13,6 @@ import java.util.List;
 import com.dperez.maymweb.producto.Producto;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import javax.persistence.CascadeType;
@@ -236,6 +235,6 @@ public class Correctiva extends Accion implements Serializable {
 
     @Override
     public int compareTo(Accion OtraAccion) {        
-        return this.FechaDeteccion.compareTo(OtraAccion.getFechaDeteccion());
+        return OtraAccion.getFechaDeteccion().compareTo(this.FechaDeteccion);
     }
 }

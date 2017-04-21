@@ -92,7 +92,12 @@ public class FacadeLectura  {
         return cVista.GetFortaleza(IdFortaleza);
     }
     
-    public List<Fortaleza> ListarFortalezas(){
-        return cVista.ListarFortalezas();
+    /**
+     * Lista todas las fortalezas registradas
+     * @param IdEmpresa -1 para todas las empresas
+     * @return
+     */
+    public List<Fortaleza> ListarFortalezas(int IdEmpresa){
+        return cVista.ListarFortalezas(IdEmpresa);
     }
 }

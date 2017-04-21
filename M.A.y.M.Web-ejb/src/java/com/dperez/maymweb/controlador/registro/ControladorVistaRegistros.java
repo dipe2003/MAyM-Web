@@ -235,10 +235,21 @@ public class ControladorVistaRegistros {
     
     /**
      * Lista todas las fortalezas registradas
+     * @param IdEmpresa -1 para todas las empresas
      * @return 
      */
-    public List<Fortaleza> ListarFortalezas(){
-        return mFortaleza.ListarFortalezas();
+    public List<Fortaleza> ListarFortalezas(int IdEmpresa){
+        List<Fortaleza> lstFortalezas = mFortaleza.ListarFortalezas();
+        if(IdEmpresa != -1){
+            Iterator<Fortaleza> it = lstFortalezas.iterator();
+            while(it.hasNext()){
+                Fortaleza fortaleza = it.next();
+                if(!(fortaleza.getEmpresaFortaleza().getId() == IdEmpresa)){
+                    it.remove();
+                }
+            }
+        }
+        return lstFortalezas;
     }
     
 }

@@ -214,7 +214,7 @@ public class EditarFortaleza implements Serializable {
         }else{
             // Si la eliminacion se realizo correctamente redirige a lista de fortalezas.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Fortalezas/ListarFortalezas.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Fortalezas/ListarFortalezas.xhtml?PAGINA");
         }
     }
     

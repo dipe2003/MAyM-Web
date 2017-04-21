@@ -3,7 +3,7 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
 */
-package com.dperez.maym.web.detecciones;
+package com.dperez.maym.web.configuraciones;
 
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.deteccion.Deteccion;
