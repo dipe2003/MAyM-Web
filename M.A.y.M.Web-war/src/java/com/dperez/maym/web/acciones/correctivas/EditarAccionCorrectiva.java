@@ -296,7 +296,6 @@ public class EditarAccionCorrectiva implements Serializable {
             
             this.ListaDetecciones = new HashMap<>();
             List<Deteccion> tmpDetecciones = fLectura.ListarDetecciones();
-            ListaDetecciones.put(0, "--- Nueva ---");
             for(Deteccion deteccion:tmpDetecciones){
                 if (deteccion.getTipo().equals(TipoDeDeteccionSeleccionada)){
                     ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
@@ -380,7 +379,6 @@ public class EditarAccionCorrectiva implements Serializable {
      */
     public void actualizarDeteccion(){
         List<Deteccion> tmpDetecciones = fLectura.ListarDetecciones();
-        ListaDetecciones.put(0, "--- Nueva ---");
         for(Deteccion deteccion:tmpDetecciones){
             if (deteccion.getTipo().equals(TipoDeDeteccionSeleccionada)){
                 ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
@@ -396,11 +394,14 @@ public class EditarAccionCorrectiva implements Serializable {
         // Crear Nueva Deteccion y actualizar lista
         Deteccion det = fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoDeDeteccionSeleccionada);
         if(det != null){
-            actualizarDeteccion();
+            actualizarDeteccion();            
             this.DeteccionSeleccionada = det.getId();
             this.NombreNuevaDeteccion = new String();
+            this.TipoDeDeteccionSeleccionada = det.getTipo();
+            FacesContext.getCurrentInstance().addMessage("form_editar_accion:btn_nueva_deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
+            FacesContext.getCurrentInstance().renderResponse();
         }else{
-            FacesContext.getCurrentInstance().addMessage("form_nueva_accion:deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
+            FacesContext.getCurrentInstance().addMessage("form_editar_accion:btn_nueva_deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }
     }

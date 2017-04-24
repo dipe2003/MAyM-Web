@@ -61,7 +61,6 @@ public class CrearAccionCorrectiva implements Serializable {
     private String NombreNuevaDeteccion;
     private Map<Integer, String> ListaDetecciones;
     private Integer DeteccionSeleccionada;
-    private boolean valor;
     
     private EnumTipoDesvio[] TiposDesvios;
     private EnumTipoDesvio TipoDesvioSeleccionado;
@@ -92,7 +91,6 @@ public class CrearAccionCorrectiva implements Serializable {
     public Map<Integer, String> getListaDetecciones(){return this.ListaDetecciones;}
     public String getNombreNuevaDeteccion(){return this.NombreNuevaDeteccion;}
     public Integer getDeteccionSeleccionada(){return this.DeteccionSeleccionada;}
-    public boolean isValor() {return valor;}    
     
     public EnumTipoDesvio[] getTiposDesvios(){return this.TiposDesvios;}
     public EnumTipoDesvio getTipoDesvioSeleccionado(){return this.TipoDesvioSeleccionado;}
