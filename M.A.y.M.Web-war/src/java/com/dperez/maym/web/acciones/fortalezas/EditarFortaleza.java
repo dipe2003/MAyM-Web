@@ -55,7 +55,6 @@ public class EditarFortaleza implements Serializable {
     
     private EnumTipoDeteccion[] TiposDeteccion;
     private EnumTipoDeteccion TipoDeDeteccionSeleccionada;
-    private EnumTipoDeteccion TipoNuevaDeteccion;
     private String NombreNuevaDeteccion;
     private Map<Integer, Deteccion> ListaDetecciones;
     private Integer DeteccionSeleccionada;
@@ -78,7 +77,6 @@ public class EditarFortaleza implements Serializable {
     
     public EnumTipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
     public EnumTipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
-    public EnumTipoDeteccion getTipoNuevaDeteccion() {return TipoNuevaDeteccion;}
     
     public Map<Integer, Deteccion> getListaDetecciones(){return this.ListaDetecciones;}
     public String getNombreNuevaDeteccion(){return this.NombreNuevaDeteccion;}
@@ -104,7 +102,6 @@ public class EditarFortaleza implements Serializable {
     
     public void setTipoDeDeteccionSeleccionada(EnumTipoDeteccion TipoDeteccion){this.TipoDeDeteccionSeleccionada = TipoDeteccion;}
     public void setTiposDeteccion(EnumTipoDeteccion[] TiposDeteccion){this.TiposDeteccion = TiposDeteccion;}
-    public void setTipoNuevaDeteccion(EnumTipoDeteccion TipoNuevaDeteccion) {this.TipoNuevaDeteccion = TipoNuevaDeteccion;}
     
     public void setListaDetecciones(Map<Integer, Deteccion> ListaDetecciones){this.ListaDetecciones = ListaDetecciones;}
     public void setNombreNuevaDeteccion(String NombreNuevaDeteccion){this.NombreNuevaDeteccion = NombreNuevaDeteccion;}
@@ -172,13 +169,16 @@ public class EditarFortaleza implements Serializable {
      */
     public void nuevaDeteccion(){
          // Crear Nueva Deteccion y actualizar lista
-        Deteccion det = fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoNuevaDeteccion);
+        Deteccion det = fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoDeDeteccionSeleccionada);
         if(det != null){
             actualizarDeteccion();
             this.DeteccionSeleccionada = det.getId();
             this.NombreNuevaDeteccion = new String();
+            this.TipoDeDeteccionSeleccionada = det.getTipo();
+            FacesContext.getCurrentInstance().addMessage("form_editar_fortaleza:btn_nueva_deteccion", new FacesMessage(SEVERITY_INFO, det.getNombre() + " fue creada.", det.getNombre() + " fue creada." ));
+            FacesContext.getCurrentInstance().renderResponse();
         }else{
-            FacesContext.getCurrentInstance().addMessage("form_editar_fortaleza:deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
+            FacesContext.getCurrentInstance().addMessage("form_editar_fortaleza:btn_nueva_deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }
     }

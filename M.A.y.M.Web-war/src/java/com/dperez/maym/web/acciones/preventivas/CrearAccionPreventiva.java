@@ -167,7 +167,7 @@ public class CrearAccionPreventiva implements Serializable {
             FacesContext.getCurrentInstance().addMessage("form_nueva_accion:btn_nueva_deteccion", new FacesMessage(SEVERITY_INFO, det.getNombre() + " fue creada.", det.getNombre() + " fue creada." ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
-            FacesContext.getCurrentInstance().addMessage("form_nueva_accion:deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
+            FacesContext.getCurrentInstance().addMessage("form_nueva_accion:btn_nueva_deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }
     }

@@ -44,8 +44,7 @@
                                     </h:selectOneMenu>
                                 </div>
                             </div>
-                        </div>  
-                        
+                        </div>                          
                         
                         <div class="row">
                             <div class="col-sm-6">
@@ -71,7 +70,7 @@
                                                      required="true" requiredMessage="No se selecciono Deteccion.">
                                         <f:selectItem itemLabel="-- Seleccionar Deteccion ---" itemDisabled="true"  noSelectionOption="false"  />
                                         <c:forEach items="#{crearFortaleza.listaDetecciones}" var="deteccion">
-                                            <f:selectItem itemLabel="#{deteccion.value}" itemValue="#{deteccion.key}" />
+                                            <f:selectItem itemLabel="#{deteccion.value.nombre}" itemValue="#{deteccion.key}" />
                                         </c:forEach>
                                         <f:ajax execute="@this"/>
                                         <f:ajax render="panel_nueva_deteccion"/>

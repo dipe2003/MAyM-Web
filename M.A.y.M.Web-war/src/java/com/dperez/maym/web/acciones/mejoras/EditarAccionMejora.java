@@ -75,7 +75,6 @@ public class EditarAccionMejora implements Serializable {
     
     private EnumTipoDeteccion[] TiposDeteccion;
     private EnumTipoDeteccion TipoDeDeteccionSeleccionada;
-    private EnumTipoDeteccion TipoNuevaDeteccion;
     private String NombreNuevaDeteccion;
     private Map<Integer, String> ListaDetecciones;
     private Integer DeteccionSeleccionada;
@@ -132,7 +131,6 @@ public class EditarAccionMejora implements Serializable {
     public EnumTipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
     public Map<Integer, String> getListaDetecciones(){return this.ListaDetecciones;}
     public String getNombreNuevaDeteccion(){return this.NombreNuevaDeteccion;}
-    public EnumTipoDeteccion getTipoNuevaDeteccion() {return TipoNuevaDeteccion;}
     public Integer getDeteccionSeleccionada(){return this.DeteccionSeleccionada;}
     
     public Map<Integer, Area> getListaAreasSectores() {return this.ListaAreasSectores;}
@@ -194,7 +192,6 @@ public class EditarAccionMejora implements Serializable {
     public void setTiposDeteccion(EnumTipoDeteccion[] TiposDeteccion){this.TiposDeteccion = TiposDeteccion;}
     public void setListaDetecciones(Map<Integer, String> ListaDetecciones){this.ListaDetecciones = ListaDetecciones;}
     public void setNombreNuevaDeteccion(String NombreNuevaDeteccion){this.NombreNuevaDeteccion = NombreNuevaDeteccion;}
-    public void setTipoNuevaDeteccion(EnumTipoDeteccion TipoNuevaDeteccion) {this.TipoNuevaDeteccion = TipoNuevaDeteccion;}
     public void setDeteccionSeleccionada(Integer DeteccionSeleccionada){this.DeteccionSeleccionada = DeteccionSeleccionada;}
     
     public void setListaAreasSectores(Map<Integer, Area> ListaAreasSectores) {this.ListaAreasSectores = ListaAreasSectores;}
@@ -264,7 +261,6 @@ public class EditarAccionMejora implements Serializable {
             
             this.ListaDetecciones = new HashMap<>();
             List<Deteccion> tmpDetecciones = fLectura.ListarDetecciones();
-            ListaDetecciones.put(0, "--- Nueva ---");
             for(Deteccion deteccion:tmpDetecciones){
                 if (deteccion.getTipo().equals(TipoDeDeteccionSeleccionada)){
                     ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
@@ -330,7 +326,6 @@ public class EditarAccionMejora implements Serializable {
      */
     public void actualizarDeteccion(){
         List<Deteccion> tmpDetecciones = fLectura.ListarDetecciones();
-        ListaDetecciones.put(0, "--- Nueva ---");
         for(Deteccion deteccion:tmpDetecciones){
             if (deteccion.getTipo().equals(TipoDeDeteccionSeleccionada)){
                 ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
@@ -345,13 +340,16 @@ public class EditarAccionMejora implements Serializable {
      */
     public void nuevaDeteccion(){
         // Crear Nueva Deteccion y actualizar lista
-        Deteccion det = fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoNuevaDeteccion);
+        Deteccion det = fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoDeDeteccionSeleccionada);
         if(det != null){
             actualizarDeteccion();
             this.DeteccionSeleccionada = det.getId();
             this.NombreNuevaDeteccion = new String();
+            this.TipoDeDeteccionSeleccionada = det.getTipo();
+            FacesContext.getCurrentInstance().addMessage("form_editar_accion:btn_nueva_deteccion", new FacesMessage(SEVERITY_INFO, det.getNombre() + " fue creada.", det.getNombre() + " fue creada." ));
+            FacesContext.getCurrentInstance().renderResponse();
         }else{
-            FacesContext.getCurrentInstance().addMessage("form_nueva_accion:deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
+            FacesContext.getCurrentInstance().addMessage("form_editar_accion:btn_nueva_deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }
     }
