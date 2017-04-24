@@ -26,6 +26,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
+import static javax.faces.application.FacesMessage.SEVERITY_INFO;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -156,12 +157,14 @@ public class CrearFortaleza implements Serializable {
         // Crear Nueva Deteccion y actualizar lista
         Deteccion det = fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoDeDeteccionSeleccionada);
         if(det != null){
-            actualizarDeteccion();
-            this.TipoDeDeteccionSeleccionada = det.getTipo();
+            actualizarDeteccion();           
             this.DeteccionSeleccionada = det.getId();
             this.NombreNuevaDeteccion = new String();
+            this.TipoDeDeteccionSeleccionada = det.getTipo();
+            FacesContext.getCurrentInstance().addMessage("form_nueva_fortaleza:btn_nueva_deteccion", new FacesMessage(SEVERITY_INFO, det.getNombre() + " fue creada.", det.getNombre() + " fue creada." ));
+            FacesContext.getCurrentInstance().renderResponse();
         }else{
-            FacesContext.getCurrentInstance().addMessage("form_nueva_fortaleza:deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
+            FacesContext.getCurrentInstance().addMessage("form_nueva_fortaleza:btn_nueva_deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }
     }
