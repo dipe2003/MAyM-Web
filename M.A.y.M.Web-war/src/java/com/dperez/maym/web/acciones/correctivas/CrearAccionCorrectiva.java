@@ -29,6 +29,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
+import static javax.faces.application.FacesMessage.SEVERITY_INFO;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -60,6 +61,7 @@ public class CrearAccionCorrectiva implements Serializable {
     private String NombreNuevaDeteccion;
     private Map<Integer, String> ListaDetecciones;
     private Integer DeteccionSeleccionada;
+    private boolean valor;
     
     private EnumTipoDesvio[] TiposDesvios;
     private EnumTipoDesvio TipoDesvioSeleccionado;
@@ -90,6 +92,7 @@ public class CrearAccionCorrectiva implements Serializable {
     public Map<Integer, String> getListaDetecciones(){return this.ListaDetecciones;}
     public String getNombreNuevaDeteccion(){return this.NombreNuevaDeteccion;}
     public Integer getDeteccionSeleccionada(){return this.DeteccionSeleccionada;}
+    public boolean isValor() {return valor;}    
     
     public EnumTipoDesvio[] getTiposDesvios(){return this.TiposDesvios;}
     public EnumTipoDesvio getTipoDesvioSeleccionado(){return this.TipoDesvioSeleccionado;}
@@ -152,7 +155,6 @@ public class CrearAccionCorrectiva implements Serializable {
         TiposDeteccion = EnumTipoDeteccion.values();
         TipoDeDeteccionSeleccionada = EnumTipoDeteccion.INTERNA;
         this.ListaDetecciones = new HashMap<>();
-        this.ListaDetecciones.put(0, " --- Nueva Deteccion --- ");
         List<Deteccion> tmpDetecciones = fLectura.ListarDetecciones();
         for(Deteccion deteccion:tmpDetecciones){
             if (deteccion.getTipo().equals(EnumTipoDeteccion.INTERNA)){
@@ -180,7 +182,6 @@ public class CrearAccionCorrectiva implements Serializable {
     public void actualizarDeteccion(){
         List<Deteccion> tmpDetecciones = fLectura.ListarDetecciones();
         this.ListaDetecciones.clear();
-        this.ListaDetecciones.put(0, " --- Nueva Deteccion --- ");
         for(Deteccion deteccion:tmpDetecciones){
             if (deteccion.getTipo().equals(TipoDeDeteccionSeleccionada)){
                 ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
@@ -192,15 +193,18 @@ public class CrearAccionCorrectiva implements Serializable {
      * Crea nueva deteccion con el tipo interna/externa seleccionado.
      * Si no se crea se muestra un mensaje
      */
-    public void nuevaDeteccion(){
+    public void nuevaDeteccion() {
         // Crear Nueva Deteccion y actualizar lista
         Deteccion det = fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoDeDeteccionSeleccionada);
         if(det != null){
-            actualizarDeteccion();
+            actualizarDeteccion();            
             this.DeteccionSeleccionada = det.getId();
             this.NombreNuevaDeteccion = new String();
+            this.TipoDeDeteccionSeleccionada = det.getTipo();
+            FacesContext.getCurrentInstance().addMessage("form_nueva_accion:btn_nueva_deteccion", new FacesMessage(SEVERITY_INFO, det.getNombre() + " fue creada.", det.getNombre() + " fue creada." ));
+            FacesContext.getCurrentInstance().renderResponse();
         }else{
-            FacesContext.getCurrentInstance().addMessage("form_nueva_accion:deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
+            FacesContext.getCurrentInstance().addMessage("form_nueva_accion:btn_nueva_deteccion", new FacesMessage(SEVERITY_INFO, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }
     }
