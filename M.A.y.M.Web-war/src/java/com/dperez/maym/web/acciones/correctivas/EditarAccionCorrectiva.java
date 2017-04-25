@@ -589,5 +589,9 @@ public class EditarAccionCorrectiva implements Serializable {
     public void limpiarModalDeteccion(){
         this.NombreNuevaDeteccion = new String();
     }
+    public void limpiarModalCodificacion(){
+        this.NombreNuevaCodificacion = new String();
+        this.DescripcionNuevaCodificacion = new String();
+    }
     
 }

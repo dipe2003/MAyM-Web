@@ -491,4 +491,8 @@ public class EditarAccionMejora implements Serializable {
         this.NombreNuevaDeteccion = new String();
     }
     
+    public void limpiarModalCodificacion(){
+        this.NombreNuevaCodificacion = new String();
+        this.DescripcionNuevaCodificacion = new String();
+    }
 }
