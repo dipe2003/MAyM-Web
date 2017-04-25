@@ -250,7 +250,6 @@ public class EditarAccionPreventiva implements Serializable {
             //  Codificaciones
             ListaCodificaciones = new HashMap<>();
             List<Codificacion> tmpCodificaciones = fLectura.ListarCodificaciones(EmpresaLogueada.getId());
-            ListaCodificaciones.put(0, "--- Nueva ---");
             for(Codificacion codificacion:tmpCodificaciones){
                 ListaCodificaciones.put(codificacion.getId(), codificacion.getNombre());
             }
@@ -370,10 +369,11 @@ public class EditarAccionPreventiva implements Serializable {
             this.CodificacionSeleccionada = cod.getId();
             this.NombreNuevaCodificacion = new String();
             this.DescripcionNuevaCodificacion = new String();
-            FacesContext.getCurrentInstance().addMessage("form_editar_accion:btn_nueva_codificacion", new FacesMessage(SEVERITY_INFO, "Se agrego nueva codificacion", "Se agrego nueva codificacion" ));
+            FacesContext.getCurrentInstance().addMessage("form_editar_accion:btn_nueva_codificacion", new FacesMessage(SEVERITY_INFO, cod.getNombre() + " fue creada.", cod.getNombre() + " fue creada."));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
-            System.out.println("Error");
+            FacesContext.getCurrentInstance().addMessage("form_editar_accion:btn_nueva_codificacion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva codificacion", "No se pudo crear nueva codificacion" ));
+            FacesContext.getCurrentInstance().renderResponse();
         }
     }
     
@@ -383,7 +383,6 @@ public class EditarAccionPreventiva implements Serializable {
     public void actualizarCodificacion(){
         List<Codificacion> tmpCodificacion = fLectura.ListarCodificaciones(EmpresaLogueada.getId());
         this.ListaCodificaciones.clear();
-        this.ListaCodificaciones.put(0, " --- Nueva Codificacion --- ");
         for(Codificacion codificacion:tmpCodificacion){
             ListaCodificaciones.put(codificacion.getId(), codificacion.getNombre());
         }

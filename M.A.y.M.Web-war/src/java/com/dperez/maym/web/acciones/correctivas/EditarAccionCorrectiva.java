@@ -283,7 +283,6 @@ public class EditarAccionCorrectiva implements Serializable {
             //  Codificaciones
             ListaCodificaciones = new HashMap<>();
             List<Codificacion> tmpCodificaciones = fLectura.ListarCodificaciones(EmpresaLogueada.getId());
-            ListaCodificaciones.put(0, "--- Nueva ---");
             for(Codificacion codificacion:tmpCodificaciones){
                 ListaCodificaciones.put(codificacion.getId(), codificacion.getNombre());
             }
