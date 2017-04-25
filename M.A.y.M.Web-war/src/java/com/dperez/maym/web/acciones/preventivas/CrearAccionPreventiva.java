@@ -193,5 +193,9 @@ public class CrearAccionPreventiva implements Serializable {
             FacesContext.getCurrentInstance().renderResponse();
         }
     }
+    
+      public void limpiarModalDeteccion(){
+        this.NombreNuevaDeteccion = new String();
+    }
 }
 

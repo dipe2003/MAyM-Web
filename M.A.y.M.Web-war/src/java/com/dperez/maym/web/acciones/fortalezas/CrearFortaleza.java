@@ -191,4 +191,7 @@ public class CrearFortaleza implements Serializable {
         }
     }
     
+      public void limpiarModalDeteccion(){
+        this.NombreNuevaDeteccion = new String();
+    }
 }
