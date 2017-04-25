@@ -168,7 +168,7 @@ public class EditarFortaleza implements Serializable {
      * Se verifica que el nombre no sea vacio. Si es vacio no se crea y se muestra un mensaje
      */
     public void nuevaDeteccion(){
-         // Crear Nueva Deteccion y actualizar lista
+        // Crear Nueva Deteccion y actualizar lista
         Deteccion det = fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoDeDeteccionSeleccionada);
         if(det != null){
             actualizarDeteccion();
@@ -216,6 +216,10 @@ public class EditarFortaleza implements Serializable {
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Fortalezas/ListarFortalezas.xhtml?PAGINA");
         }
+    }
+    
+    public void limpiarModalDeteccion(){
+        this.NombreNuevaDeteccion = new String();
     }
     
 }

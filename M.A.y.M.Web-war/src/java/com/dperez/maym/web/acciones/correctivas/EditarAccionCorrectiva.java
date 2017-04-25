@@ -272,7 +272,7 @@ public class EditarAccionCorrectiva implements Serializable {
         EmpresaLogueada = (Empresa) request.getSession().getAttribute("Empresa");
         // recuperar el id para llenar datos de la accion correctiva y el resto de las propiedades.
         IdAccionSeleccionada = Integer.parseInt(request.getParameter("id"));
-        if(IdAccionSeleccionada != 0){            
+        if(IdAccionSeleccionada != 0){
             AccionSeleccionada = (Correctiva) fLectura.GetAccion(IdAccionSeleccionada);
             FechaDeteccion = AccionSeleccionada.getFechaDeteccion();
             Descripcion = AccionSeleccionada.getDescripcion();
@@ -339,7 +339,7 @@ public class EditarAccionCorrectiva implements Serializable {
             actualizarListaAdjuntos();
             MapAdjuntos = new HashMap<>();
             
-            // Comprobaciones            
+            // Comprobaciones
             // llenar la lista de usuarios de la empresa que no se hayan dado de baja.
             ListaUsuarios = fLectura.GetUsuariosEmpresa(true, EmpresaLogueada.getId());
             
@@ -393,7 +393,7 @@ public class EditarAccionCorrectiva implements Serializable {
         // Crear Nueva Deteccion y actualizar lista
         Deteccion det = fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoDeDeteccionSeleccionada);
         if(det != null){
-            actualizarDeteccion();            
+            actualizarDeteccion();
             this.DeteccionSeleccionada = det.getId();
             this.NombreNuevaDeteccion = new String();
             this.TipoDeDeteccionSeleccionada = det.getTipo();
@@ -584,6 +584,10 @@ public class EditarAccionCorrectiva implements Serializable {
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/ListarCorrectivas.xhtml");
         }
+    }
+    
+    public void limpiarModalDeteccion(){
+        this.NombreNuevaDeteccion = new String();
     }
     
 }

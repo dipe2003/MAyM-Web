@@ -103,7 +103,7 @@ public class EditarAccionMejora implements Serializable {
     
     //  Getters
     public int getIdAccionSeleccionada(){return IdAccionSeleccionada;}
-    public Accion getAccionSeleccionada() {return AccionSeleccionada;}    
+    public Accion getAccionSeleccionada() {return AccionSeleccionada;}
     public Date getFechaDeteccion() {return FechaDeteccion;}
     public String getStrFechaDeteccion(){
         SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
@@ -485,6 +485,10 @@ public class EditarAccionMejora implements Serializable {
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Mejoras/ListarMejoras.xhtml");
         }
+    }
+    
+    public void limpiarModalDeteccion(){
+        this.NombreNuevaDeteccion = new String();
     }
     
 }

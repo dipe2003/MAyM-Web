@@ -103,7 +103,7 @@ public class EditarAccionPreventiva implements Serializable {
     
     //  Getters
     public int getIdAccionSeleccionada(){return IdAccionSeleccionada;}
-    public Accion getAccionSeleccionada() {return AccionSeleccionada;}    
+    public Accion getAccionSeleccionada() {return AccionSeleccionada;}
     public Date getFechaDeteccion() {return FechaDeteccion;}
     public String getStrFechaDeteccion(){
         SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
@@ -489,6 +489,10 @@ public class EditarAccionPreventiva implements Serializable {
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Preventivas/ListarPreventivas.xhtml");
         }
+    }
+    
+    public void limpiarModalDeteccion(){
+        this.NombreNuevaDeteccion = new String();
     }
     
 }

@@ -184,7 +184,9 @@
                                             </c:if>
                                         </div>
                                         <div class="col-sm-6">
-                                            <button type="button" class="btn btn-default" style="width: 99%;" data-dismiss="modal">Cerrar</button>
+                                            <h:commandButton class="btn btn-default" style="width: 99%;" p:data-dismiss="modal" action="#{editarFortaleza.limpiarModalDeteccion()}" value="Cerrar">
+                                                <f:ajax render="panel_modal panel_mensajes_modal" />
+                                            </h:commandButton>
                                         </div>
                                     </div>
                                 </div>
