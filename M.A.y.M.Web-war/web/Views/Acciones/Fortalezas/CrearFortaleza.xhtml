@@ -111,7 +111,7 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <h:commandButton id="crear_fortaleza" class="btn btn-success" style="width: 99%" value="Guardar" >
-                            <f:ajax execute="@form" event="click" listener="#{crearFortaleza.crearFortaleza()}" onevent="indicador" render="panel_mensajes"/>
+                            <f:ajax execute="deteccion descripcion fecha_deteccion area" event="click" listener="#{crearFortaleza.crearFortaleza()}" onevent="indicador" render="panel_mensajes"/>
                         </h:commandButton>
                     </div>
                     <div class="col-sm-6">
@@ -120,6 +120,8 @@
                         </h:commandButton>
                     </div>
                 </div> 
+            </h:form>
+            <h:form id="form_nueva_fortaleza_modal" >
                 <!-- Modal Nueva Deteccion -->
                 <div id="modal_Nueva" class="modal fade" style="padding-top: 15%;" role="dialog">
                     <div class="modal-dialog">
@@ -167,8 +169,8 @@
                                             <c:if test="#{crearFortaleza.nombreNuevaDeteccion != '' and crearFortaleza.nombreNuevaDeteccion != null}" >
                                                 <h:commandButton id="btn_nueva_deteccion" style="width: 99%;" class="btn btn-primary" value="Guardar" action="#{crearFortaleza.nuevaDeteccion()}">
                                                     <f:ajax execute="panel_modal" onevent="indicador" />
-                                                    <f:ajax render="panel_tipodeteccion" />
-                                                    <f:ajax render="deteccion" />
+                                                    <f:ajax render="form_nueva_fortaleza:panel_tipodeteccion" />
+                                                    <f:ajax render="form_nueva_fortaleza:deteccion" />
                                                     <f:ajax render="panel_modal panel_mensajes_modal" />
                                                 </h:commandButton>
                                             </c:if>
