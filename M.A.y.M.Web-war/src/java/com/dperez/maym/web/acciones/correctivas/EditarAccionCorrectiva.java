@@ -397,10 +397,10 @@ public class EditarAccionCorrectiva implements Serializable {
             this.DeteccionSeleccionada = det.getId();
             this.NombreNuevaDeteccion = new String();
             this.TipoDeDeteccionSeleccionada = det.getTipo();
-            FacesContext.getCurrentInstance().addMessage("form_editar_accion:btn_nueva_deteccion", new FacesMessage(SEVERITY_INFO, det.getNombre() + " fue creada.", det.getNombre() + " fue creada."));
+            FacesContext.getCurrentInstance().addMessage("form_editar_accion_modal:btn_nueva_deteccion", new FacesMessage(SEVERITY_INFO, det.getNombre() + " fue creada.", det.getNombre() + " fue creada."));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
-            FacesContext.getCurrentInstance().addMessage("form_editar_accion:btn_nueva_deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
+            FacesContext.getCurrentInstance().addMessage("form_editar_accion_modal:btn_nueva_deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }
     }
@@ -418,10 +418,10 @@ public class EditarAccionCorrectiva implements Serializable {
             this.CodificacionSeleccionada = cod.getId();
             this.NombreNuevaCodificacion = new String();
             this.DescripcionNuevaCodificacion = new String();
-            FacesContext.getCurrentInstance().addMessage("form_editar_accion:btn_nueva_codificacion", new FacesMessage(SEVERITY_INFO, cod.getNombre() + " fue creada.", cod.getNombre() + " fue creada."));
+            FacesContext.getCurrentInstance().addMessage("form_editar_accion_modal:btn_nueva_codificacion", new FacesMessage(SEVERITY_INFO, cod.getNombre() + " fue creada.", cod.getNombre() + " fue creada."));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
-            FacesContext.getCurrentInstance().addMessage("form_editar_accion:btn_nueva_codificacion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva codificacion", "No se pudo crear nueva codificacion" ));
+            FacesContext.getCurrentInstance().addMessage("form_editar_accion_modal:btn_nueva_codificacion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva codificacion", "No se pudo crear nueva codificacion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }
     }

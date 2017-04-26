@@ -147,7 +147,7 @@
                     <div class="panel-body">
                         <div class="form-group">
                             <strong><label for="analisis_causa">Analisis de Causa Raiz:</label></strong>                                    
-                            <h:inputTextarea class="form-control" id="analisis_caousa"  p:placeholder="Analisis de causa raiz utilizando por ejemplo la tecnica de 5 porques." 
+                            <h:inputTextarea class="form-control" id="analisis_causa"  p:placeholder="Analisis de causa raiz utilizando por ejemplo la tecnica de 5 porques." 
                                              value="#{editarAccionPreventiva.analisisCausa}"/>
                         </div>
                         <div class="form-group">
@@ -458,7 +458,7 @@
                 <div class="row">
                     <div class='col-sm-4' >
                         <h:commandButton id="guardar_accion" class="btn btn-default" style="width: 99%" value="Guardar" >
-                            <f:ajax execute="@form" event="click" listener="#{editarAccionPreventiva.editarAccion()}" onevent="indicador" render="panel_mensajes"/>
+                            <f:ajax execute="fecha_deteccion descripcion analisis_causa area codificacion deteccion" event="click" listener="#{editarAccionPreventiva.editarAccion()}" onevent="indicador" render="panel_mensajes"/>
                         </h:commandButton>
                     </div>
                     <div class='col-sm-4' >
@@ -473,6 +473,8 @@
                         </div> 
                     </c:if>
                 </div>
+            </h:form>
+            <h:form id="form_editar_accion_modal">
                 <!-- Modal Nueva Deteccion -->
                 <div id="modal_Nueva" class="modal fade" style="padding-top: 15%;" role="dialog">
                     <div class="modal-dialog">
@@ -520,8 +522,8 @@
                                             <c:if test="#{editarAccionPreventiva.nombreNuevaDeteccion != '' and editarAccionPreventiva.nombreNuevaDeteccion != null}" >
                                                 <h:commandButton id="btn_nueva_deteccion" style="width: 99%;" class="btn btn-primary" value="Guardar" action="#{editarAccionPreventiva.nuevaDeteccion()}">
                                                     <f:ajax execute="panel_modal" onevent="indicador" />
-                                                    <f:ajax render="panel_tipodeteccion" />
-                                                    <f:ajax render="deteccion" />
+                                                    <f:ajax render="form_editar_accion:panel_tipodeteccion" />
+                                                    <f:ajax render="form_editar_accion:deteccion" />
                                                     <f:ajax render="panel_modal panel_mensajes_modal" />
                                                 </h:commandButton>
                                             </c:if>
@@ -585,8 +587,8 @@
                                                 <c:otherwise>
                                                     <h:commandButton id="btn_nueva_codificacion" style="width: 99%;" class="btn btn-primary" value="Guardar" action="#{editarAccionPreventiva.nuevaCodificacion()}" >
                                                         <f:ajax execute="panel_modal_codificacion" onevent="indicador" />
-                                                        <f:ajax render="panel_codificaciones" />
-                                                        <f:ajax render="codificacion" />
+                                                        <f:ajax render="form_editar_accion:panel_codificaciones" />
+                                                        <f:ajax render="form_editar_accion:codificacion" />
                                                         <f:ajax render="panel_modal_codificacion panel_mensajes_modal_codificacion" />
                                                     </h:commandButton>
                                                 </c:otherwise>
