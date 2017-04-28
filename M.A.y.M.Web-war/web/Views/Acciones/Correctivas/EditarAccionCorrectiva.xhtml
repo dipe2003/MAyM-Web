@@ -152,79 +152,69 @@
                                              value="#{editarAccionCorrectiva.descripcion}" required="true" requiredMessage="No se ingreso descripcion."/>
                         </div>                        
                         <h:panelGroup id="panel_producto_afectado">
-                            <div class="form-group">
-                                <strong><label for="producto_afectado">Hay Producto Afectado?</label></strong>
-                                <h:selectOneRadio id="producto_afectado" value="#{editarAccionCorrectiva.hayProductoAfectado}">
-                                    <f:selectItem itemLabel="Si" itemValue="true"/>
-                                    <f:selectItem itemLabel="No" itemValue="false"/>
-                                    <f:ajax execute="@this"/>
-                                    <f:ajax render="panel_producto_afectado" />
-                                </h:selectOneRadio>
-                            </div>
-                            <c:if test="#{editarAccionCorrectiva.hayProductoAfectado == true}" >
-                                <h:panelGroup id="panel_lista_producto_afectado">
-                                    <c:choose>
-                                        <c:when test="#{empty editarAccionCorrectiva.listaProductosAfectados}">
-                                            <div class="alert alert-info">
-                                                <strong>Info!</strong> No se han agregado productos.
-                                            </div>
-                                            <div class="form-group">
-                                                <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_nuevo_producto" >
-                                                    <span class="glyphicon glyphicon-plus" style="font-family: sans-serif;"> Agregar</span>
-                                                    <f:ajax delay="100" render="form_editar_accion_modal:modal_nuevo_producto" />
-                                                </h:commandLink> 
-                                            </div>   
-                                        </c:when>
-                                        <c:otherwise>
-                                            <div class="form-group">
-                                                <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_nuevo_producto" >
-                                                    <span class="glyphicon glyphicon-plus" style="font-family: sans-serif;"> Agregar</span>
-                                                    <f:ajax delay="100" render="form_editar_accion_modal:modal_nuevo_producto" />
-                                                </h:commandLink> 
-                                            </div>  
-                                            
-                                            <div class="row">
-                                                <div class="col-sm-12">
-                                                    <table class="table table-hover table-striped">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Nombre del Producto:</th>
-                                                                <th>Datos del Producto:</th>
-                                                                <th></th>
-                                                            </tr>                                                
-                                                        </thead>
-                                                        <tbody>
-                                                            <c:forEach items="#{editarAccionCorrectiva.listaProductosAfectados}" var="producto">
-                                                                <tr>
-                                                                    <td>#{producto.key}</td>
-                                                                    <td>#{producto.value}</td>
-                                                                    <td><div class="btn-group">
-                                                                            <h:commandLink class="btn btn-primary"  p:data-toggle="modal" p:data-target="#modal_editar_producto" 
-                                                                                           action="#{editarAccionCorrectiva.cargarDatosProducto(producto.key)}">
-                                                                                <span class="glyphicon glyphicon-pencil"></span>
-                                                                                <f:ajax delay="400" render="form_editar_accion_modal:panel_modal_editar_producto" />
-                                                                            </h:commandLink>
-                                                                            <h:commandLink class="btn btn-danger" action="#{editarAccionCorrectiva.quitarProducto(producto.key)}" 
-                                                                                           onclick="if (! confirm('Seguro que va a eliminar este Producto? ')) return false">
-                                                                                <span class="glyphicon glyphicon-trash"> </span>
-                                                                                <f:ajax render="panel_mensajes"/>
-                                                                                <f:ajax render="panel_producto_afectado"/>
-                                                                                <f:ajax render="panel_lista_producto_afectado"/>
-                                                                            </h:commandLink>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            </c:forEach>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </c:otherwise>
-                                    </c:choose>  
-                                </h:panelGroup>                              
-                            </c:if>                            
-                        </h:panelGroup>  
-                        
+                            <c:choose>
+                                <c:when test="#{empty editarAccionCorrectiva.listaProductosAfectados}">
+                                    <div class="form-group">
+                                        <strong><label for="producto_afectado">Hay Producto Afectado?</label></strong>
+                                        No
+                                    </div>
+                                    <div class="form-group">
+                                        <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_nuevo_producto" >
+                                            <span class="glyphicon glyphicon-plus" style="font-family: sans-serif;"> Agregar Producto</span>
+                                            <f:ajax delay="100" render="form_editar_accion_modal:modal_nuevo_producto" />
+                                        </h:commandLink> 
+                                    </div>   
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="form-group">
+                                        <strong><label for="producto_afectado">Hay Producto Afectado?</label></strong>
+                                        Si
+                                    </div>
+                                    <div class="form-group">
+                                        <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_nuevo_producto" >
+                                            <span class="glyphicon glyphicon-plus" style="font-family: sans-serif;"> Agregar</span>
+                                            <f:ajax delay="100" render="form_editar_accion_modal:modal_nuevo_producto" />
+                                        </h:commandLink> 
+                                    </div>  
+                                    
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <table class="table table-hover table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Nombre del Producto:</th>
+                                                        <th>Datos del Producto:</th>
+                                                        <th></th>
+                                                    </tr>                                                
+                                                </thead>
+                                                <tbody>
+                                                    <c:forEach items="#{editarAccionCorrectiva.listaProductosAfectados}" var="producto">
+                                                        <tr>
+                                                            <td>#{producto.key}</td>
+                                                            <td>#{producto.value}</td>
+                                                            <td><div class="btn-group">
+                                                                    <h:commandLink class="btn btn-primary"  p:data-toggle="modal" p:data-target="#modal_editar_producto" 
+                                                                                   action="#{editarAccionCorrectiva.cargarDatosProducto(producto.key)}">
+                                                                        <span class="glyphicon glyphicon-pencil"></span>
+                                                                        <f:ajax delay="400" render="form_editar_accion_modal:panel_modal_editar_producto" />
+                                                                    </h:commandLink>
+                                                                    <h:commandLink class="btn btn-danger" action="#{editarAccionCorrectiva.quitarProducto(producto.key)}" 
+                                                                                   onclick="if (! confirm('Seguro que va a eliminar este Producto? ')) return false">
+                                                                        <span class="glyphicon glyphicon-trash"> </span>
+                                                                        <f:ajax render="panel_mensajes"/>
+                                                                        <f:ajax render="panel_producto_afectado"/>
+                                                                    </h:commandLink>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </c:forEach>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </c:otherwise>
+                            </c:choose>  
+                        </h:panelGroup>
                     </div>
                 </div> 
                 
@@ -836,8 +826,7 @@
                                                 <c:otherwise>
                                                     <h:commandButton id="btn_nuevo_producto" style="width: 99%;" class="btn btn-primary" value="Guardar" action="#{editarAccionCorrectiva.nuevoProductoAfectado()}" >
                                                         <f:ajax execute="panel_modal_producto" onevent="indicador" />
-                                                        <f:ajax render="panel_modal_producto panel_mensajes_modal_producto" />
-                                                        <f:ajax render="form_editar_accion:panel_lista_producto_afectado" />                                                       
+                                                        <f:ajax render="panel_modal_producto panel_mensajes_modal_producto" />                                                      
                                                         <f:ajax render="form_editar_accion:panel_producto_afectado" />  
                                                     </h:commandButton>
                                                 </c:otherwise>
@@ -902,7 +891,6 @@
                                                     <h:commandButton id="btn_editar_producto" style="width: 99%;" class="btn btn-primary" value="Guardar" action="#{editarAccionCorrectiva.guardarCambiosProducto()}" >
                                                         <f:ajax execute="panel_modal_editar_producto" onevent="indicador" />                                                                                                               
                                                         <f:ajax render="form_editar_accion:panel_producto_afectado" />
-                                                        <f:ajax render="form_editar_accion:panel_lista_producto_afectado" /> 
                                                         <f:ajax render="panel_modal_editar_producto panel_mensajes_modal_editar_producto" />
                                                     </h:commandButton>
                                                 </c:otherwise>

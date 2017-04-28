@@ -93,7 +93,6 @@ public class EditarAccionCorrectiva implements Serializable {
     private String NombreNuevaCodificacion;
     private String DescripcionNuevaCodificacion;
     
-    private boolean hayProductoAfectado;
     private Map<String, String> ListaProductosAfectados;
     private String NombreProductoAfectado;
     private String DatosProductoAfectado;
@@ -152,7 +151,6 @@ public class EditarAccionCorrectiva implements Serializable {
     public Map<Integer, Area> getListaAreasSectores(){return this.ListaAreasSectores;}
     public Integer getAreaSectorAccionSeleccionada() {return AreaSectorAccionSeleccionada;}
     
-    public boolean isHayProductoAfectado() {return hayProductoAfectado;}
     public Map<String, String> getListaProductosAfectados(){return this.ListaProductosAfectados;}
     public String getNombreProductoAfectado(){return this.NombreProductoAfectado;}
     public String getDatosProductoAfectado(){return this.DatosProductoAfectado;}
@@ -222,10 +220,6 @@ public class EditarAccionCorrectiva implements Serializable {
     public void setListaAreasSectores(Map<Integer, Area> ListaAreasSectores) {this.ListaAreasSectores = ListaAreasSectores;}
     public void setAreaSectorAccionSeleccionada(Integer AreaSectorAccionSeleccionada) {this.AreaSectorAccionSeleccionada = AreaSectorAccionSeleccionada;}
     
-    public void setHayProductoAfectado(boolean hayProductoAfectado){
-        this.hayProductoAfectado = hayProductoAfectado;
-        if(hayProductoAfectado) this.ListaProductosAfectados = new HashMap<>();
-    }
     public void setListaProductosAfectados(Map<String, String> ListaProductosAfectados) {this.ListaProductosAfectados = ListaProductosAfectados;}
     public void setNombreProductoAfectado(String NombreProductoAfectado){this.NombreProductoAfectado = NombreProductoAfectado;}
     public void setDatosProductoAfectado(String DatosProductoAfectado){this.DatosProductoAfectado = DatosProductoAfectado;}
@@ -335,7 +329,6 @@ public class EditarAccionCorrectiva implements Serializable {
                 for(Producto producto: ProductosAfectados){
                     ListaProductosAfectados.put(producto.getNombre(), producto.getDatos());
                 }
-                hayProductoAfectado = true;
             }
             actualizarListaAdjuntos();
             MapAdjuntos = new HashMap<>();
@@ -473,7 +466,7 @@ public class EditarAccionCorrectiva implements Serializable {
             this.ListaProductosAfectados.remove(NombreProducto);
             this.NombreProductoAfectado = new String();
             this.DatosProductoAfectado = new String();
-            if(ListaProductosAfectados.isEmpty()) this.hayProductoAfectado = false;
+            FacesContext.getCurrentInstance().renderResponse();
         }
     }
     
