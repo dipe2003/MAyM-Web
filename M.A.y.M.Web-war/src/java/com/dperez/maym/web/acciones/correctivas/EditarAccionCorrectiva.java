@@ -97,6 +97,7 @@ public class EditarAccionCorrectiva implements Serializable {
     private Map<String, String> ListaProductosAfectados;
     private String NombreProductoAfectado;
     private String DatosProductoAfectado;
+    private String NombreProductoAfectadoOriginal;
     
     private Map<Integer, Actividad> MedidasCorrectivas;
     private Map<Integer, Actividad> MedidasPreventivas;
@@ -443,14 +444,17 @@ public class EditarAccionCorrectiva implements Serializable {
      * Si el nombre o el datos estan vacios no se crea y se muestra el mensaje correspondiente.
      */
     public void nuevoProductoAfectado(){
-        if(NombreProductoAfectado.isEmpty() || DatosProductoAfectado.isEmpty()){
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo agregar producto", "No se pudo agregar producto" ));
-            FacesContext.getCurrentInstance().renderResponse();
-        }else{
-            if((fDatos.AgregarProductoInvolucrado(IdAccionSeleccionada, NombreProductoAfectado, DatosProductoAfectado))!=-1){
+        if(NombreProductoAfectado!= null && DatosProductoAfectado !=null){
+            if(NombreProductoAfectado.isEmpty() || DatosProductoAfectado.isEmpty()){
+                FacesContext.getCurrentInstance().addMessage("form_editar_accion_modal:btn_nuevo_producto", new FacesMessage(SEVERITY_FATAL, "No se pudo agregar producto", "No se pudo agregar producto" ));
+                FacesContext.getCurrentInstance().renderResponse();
+            }else{
                 this.ListaProductosAfectados.put(NombreProductoAfectado, DatosProductoAfectado);
+                fDatos.AgregarProductoInvolucrado(IdAccionSeleccionada, NombreProductoAfectado, DatosProductoAfectado);
                 this.NombreProductoAfectado = new String();
                 this.DatosProductoAfectado = new String();
+                FacesContext.getCurrentInstance().addMessage("form_editar_accion_modal:btn_nuevo_producto", new FacesMessage(SEVERITY_INFO, "El producto fue agregado.", "El producto fue agregado."));
+                FacesContext.getCurrentInstance().renderResponse();
             }
         }
     }
@@ -461,14 +465,15 @@ public class EditarAccionCorrectiva implements Serializable {
      * Se muestra un mensaje de error si no se elimino.
      * @param NombreProducto
      */
-    public void removerProductoAfectado(String NombreProducto){
+    public void quitarProducto(String NombreProducto){
         if(fDatos.RemoverProductoInvolucrado(IdAccionSeleccionada, NombreProducto)==-1){
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo quitar producto", "No se pudo quitar producto" ));
+            FacesContext.getCurrentInstance().addMessage("form_editar_accion:btn_eliminar_accion", new FacesMessage(SEVERITY_FATAL, "No se pudo quitar producto", "No se pudo quitar producto" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
-            this.ListaProductosAfectados.remove(NombreProductoAfectado, DatosProductoAfectado);
+            this.ListaProductosAfectados.remove(NombreProducto);
             this.NombreProductoAfectado = new String();
             this.DatosProductoAfectado = new String();
+            if(ListaProductosAfectados.isEmpty()) this.hayProductoAfectado = false;
         }
     }
     
@@ -477,12 +482,29 @@ public class EditarAccionCorrectiva implements Serializable {
      * Lo remueve de la lista.
      * @param NombreProducto
      */
-    public void editarProducto(String NombreProducto){
-        String nombre =NombreProducto;
-        String datos = this.ListaProductosAfectados.get(NombreProducto);
-        removerProductoAfectado(NombreProducto);
-        this.NombreProductoAfectado = nombre;
-        this.DatosProductoAfectado = datos;
+    public void cargarDatosProducto(String NombreProducto){
+        this.NombreProductoAfectado = NombreProducto;
+        this.DatosProductoAfectado = this.ListaProductosAfectados.get(NombreProducto);
+        this.NombreProductoAfectadoOriginal = this.NombreProductoAfectado;
+    }
+    
+    /**
+     * Guarda los datos del producto de los campos del formulario.
+     * Remueve de la lista los datos del producto anterior.
+     */
+    public void guardarCambiosProducto(){
+        if(!NombreProductoAfectado.equals(NombreProductoAfectadoOriginal) || !DatosProductoAfectado.equals(this.ListaProductosAfectados.get(NombreProductoAfectadoOriginal))){
+            this.ListaProductosAfectados.remove(NombreProductoAfectadoOriginal);
+            this.ListaProductosAfectados.put(NombreProductoAfectado, DatosProductoAfectado);
+            fDatos.AgregarProductoInvolucrado(IdAccionSeleccionada, NombreProductoAfectado, DatosProductoAfectado);
+            fDatos.RemoverProductoInvolucrado(IdAccionSeleccionada, NombreProductoAfectadoOriginal);            
+            this.NombreProductoAfectado = new String();
+            this.DatosProductoAfectado = new String();
+            FacesContext.getCurrentInstance().addMessage("form_editar_accion_modal:btn_editar_producto", new FacesMessage(SEVERITY_INFO, "El producto fue guardado.", "El producto fue guardado."));
+            FacesContext.getCurrentInstance().renderResponse();
+        }else{
+            FacesContext.getCurrentInstance().renderResponse();
+        }
     }
     
     /**
@@ -593,5 +615,8 @@ public class EditarAccionCorrectiva implements Serializable {
         this.NombreNuevaCodificacion = new String();
         this.DescripcionNuevaCodificacion = new String();
     }
-    
+    public void limpiarModalProducto(){
+        this.NombreProductoAfectado = new String();
+        this.DatosProductoAfectado = new String();
+    }
 }

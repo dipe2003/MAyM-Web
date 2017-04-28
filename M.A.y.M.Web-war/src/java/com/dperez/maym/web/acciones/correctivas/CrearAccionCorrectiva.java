@@ -234,6 +234,7 @@ public class CrearAccionCorrectiva implements Serializable {
      */
     public void quitarProducto(String NombreProducto){
         this.ListaProductosAfectados.remove(NombreProducto);
+        if(ListaProductosAfectados.isEmpty()) this.hayProductoAfectado = false;
     }
     
     /**
@@ -253,10 +254,10 @@ public class CrearAccionCorrectiva implements Serializable {
      */
     public void guardarCambiosProducto(){
         if(!NombreProductoAfectado.equals(NombreProductoAfectadoOriginal) || !DatosProductoAfectado.equals(this.ListaProductosAfectados.get(NombreProductoAfectadoOriginal))){
+            this.ListaProductosAfectados.remove(NombreProductoAfectadoOriginal);
             this.ListaProductosAfectados.put(NombreProductoAfectado, DatosProductoAfectado);
             this.NombreProductoAfectado = new String();
             this.DatosProductoAfectado = new String();
-            this.ListaProductosAfectados.remove(NombreProductoAfectadoOriginal);
             FacesContext.getCurrentInstance().addMessage("form_nueva_accion_modal:btn_editar_producto", new FacesMessage(SEVERITY_INFO, "El producto fue guardado.", "El producto fue guardado."));
             FacesContext.getCurrentInstance().renderResponse();
         }else{

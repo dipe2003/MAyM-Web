@@ -150,79 +150,80 @@
                             <strong><label for="descripcion">Descripcion:</label></strong>                                    
                             <h:inputTextarea class="form-control" id="descripcion" p:placeholder="Descripcion de la situacion o desvio."
                                              value="#{editarAccionCorrectiva.descripcion}" required="true" requiredMessage="No se ingreso descripcion."/>
-                        </div>
-                        <div class="form-group">
-                            <strong><label for="producto_afectado">Hay Producto Afectado?</label></strong>
-                            <h:selectOneRadio id="producto_afectado" value="#{editarAccionCorrectiva.hayProductoAfectado}">
-                                <f:selectItem itemLabel="Si" itemValue="true"/>
-                                <f:selectItem itemLabel="No" itemValue="false"/>
-                                <f:ajax execute="@this"/>
-                                <f:ajax render="panel_producto_afectado" />
-                            </h:selectOneRadio>
-                        </div>
+                        </div>                        
                         <h:panelGroup id="panel_producto_afectado">
+                            <div class="form-group">
+                                <strong><label for="producto_afectado">Hay Producto Afectado?</label></strong>
+                                <h:selectOneRadio id="producto_afectado" value="#{editarAccionCorrectiva.hayProductoAfectado}">
+                                    <f:selectItem itemLabel="Si" itemValue="true"/>
+                                    <f:selectItem itemLabel="No" itemValue="false"/>
+                                    <f:ajax execute="@this"/>
+                                    <f:ajax render="panel_producto_afectado" />
+                                </h:selectOneRadio>
+                            </div>
                             <c:if test="#{editarAccionCorrectiva.hayProductoAfectado == true}" >
-                                <h:panelGroup id="panel_datos_producto">
-                                    <div class="form-group">
-                                        <strong><label for="nombre_producto">Nombre:</label></strong>
-                                        <h:inputText id="nombre_producto" class="form-control" p:placeholder="Nombre del producto involucrado." 
-                                                     value="#{editarAccionCorrectiva.nombreProductoAfectado}"  />
-                                    </div>
-                                    <div class="form-group">
-                                        <strong><label for="datos_producto">Datos del Producto:</label></strong>
-                                        <h:inputText id="datos_producto" class="form-control" p:placeholder="Datos o informacion sobre el producto (fechas de produccion, especificaciones, etc.)" 
-                                                     value="#{editarAccionCorrectiva.datosProductoAfectado}"/>
-                                    </div>                                    
-                                </h:panelGroup>                                
-                                <div class="form-group">
-                                    <h:commandButton action="#{editarAccionCorrectiva.nuevoProductoAfectado()}" class="btn btn-primary" value="Agregar">
-                                        <f:ajax execute="panel_datos_producto" render="panel_mensajes nombre_producto datos_producto panel_lista_productos" onevent="indicador"/>
-                                    </h:commandButton>
-                                </div>
-                                <h:panelGroup id="panel_lista_productos">
-                                    <c:if test="#{not empty editarAccionCorrectiva.listaProductosAfectados}">
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <table class="table table-hover table-striped table-responsive">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Nombre del Producto:</th>
-                                                            <th>Datos del Producto:</th>
-                                                            <th></th>
-                                                        </tr>                                                
-                                                    </thead>
-                                                    <tbody>
-                                                        <c:forEach items="#{editarAccionCorrectiva.listaProductosAfectados}" var="producto">
-                                                            <tr>
-                                                                <td>#{producto.key}</td>
-                                                                <td>#{producto.value}</td>
-                                                                <td><div class="btn-group">
-                                                                        <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
-                                                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                                                            <span class="caret"></span>
-                                                                        </button>
-                                                                        <ul class="dropdown-menu" role="menu">
-                                                                            <li><h:commandLink action="#{editarAccionCorrectiva.editarProducto(producto.key)}" value="Editar Producto">
-                                                                                    <f:ajax render="panel_datos_producto panel_lista_productos panel_mensajes" onevent="indicador"/>
-                                                                                </h:commandLink>
-                                                                            </li>
-                                                                            <li><h:commandLink action="#{editarAccionCorrectiva.removerProductoAfectado(producto.key)}">
-                                                                                    <f:ajax render="panel_lista_productos panel_mensajes" onevent="indicador"/>
-                                                                                </h:commandLink>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        </c:forEach>
-                                                    </tbody>
-                                                </table>
+                                <h:panelGroup id="panel_lista_producto_afectado">
+                                    <c:choose>
+                                        <c:when test="#{empty editarAccionCorrectiva.listaProductosAfectados}">
+                                            <div class="alert alert-info">
+                                                <strong>Info!</strong> No se han agregado productos.
                                             </div>
-                                        </div>
-                                    </c:if>
-                                </h:panelGroup>
+                                            <div class="form-group">
+                                                <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_nuevo_producto" >
+                                                    <span class="glyphicon glyphicon-plus" style="font-family: sans-serif;"> Agregar</span>
+                                                    <f:ajax delay="100" render="form_editar_accion_modal:modal_nuevo_producto" />
+                                                </h:commandLink> 
+                                            </div>   
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div class="form-group">
+                                                <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_nuevo_producto" >
+                                                    <span class="glyphicon glyphicon-plus" style="font-family: sans-serif;"> Agregar</span>
+                                                    <f:ajax delay="100" render="form_editar_accion_modal:modal_nuevo_producto" />
+                                                </h:commandLink> 
+                                            </div>  
+                                            
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <table class="table table-hover table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Nombre del Producto:</th>
+                                                                <th>Datos del Producto:</th>
+                                                                <th></th>
+                                                            </tr>                                                
+                                                        </thead>
+                                                        <tbody>
+                                                            <c:forEach items="#{editarAccionCorrectiva.listaProductosAfectados}" var="producto">
+                                                                <tr>
+                                                                    <td>#{producto.key}</td>
+                                                                    <td>#{producto.value}</td>
+                                                                    <td><div class="btn-group">
+                                                                            <h:commandLink class="btn btn-primary"  p:data-toggle="modal" p:data-target="#modal_editar_producto" 
+                                                                                           action="#{editarAccionCorrectiva.cargarDatosProducto(producto.key)}">
+                                                                                <span class="glyphicon glyphicon-pencil"></span>
+                                                                                <f:ajax delay="400" render="form_editar_accion_modal:panel_modal_editar_producto" />
+                                                                            </h:commandLink>
+                                                                            <h:commandLink class="btn btn-danger" action="#{editarAccionCorrectiva.quitarProducto(producto.key)}" 
+                                                                                           onclick="if (! confirm('Seguro que va a eliminar este Producto? ')) return false">
+                                                                                <span class="glyphicon glyphicon-trash"> </span>
+                                                                                <f:ajax render="panel_mensajes"/>
+                                                                                <f:ajax render="panel_producto_afectado"/>
+                                                                                <f:ajax render="panel_lista_producto_afectado"/>
+                                                                            </h:commandLink>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </c:forEach>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </c:otherwise>
+                                    </c:choose>  
+                                </h:panelGroup>                              
                             </c:if>                            
-                        </h:panelGroup>
+                        </h:panelGroup>  
                         
                     </div>
                 </div> 
@@ -786,10 +787,139 @@
                             </div>
                         </h:panelGroup>
                     </div>
-                </div>                
+                </div> 
+                
+                <!-- Modal Nuevo Producto Involucrado -->
+                <div id="modal_nuevo_producto" class="modal fade" style="padding-top: 15%;" role="dialog">
+                    <div class="modal-dialog">
+                        <h:panelGroup id="panel_modal_producto">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header" style="background-color: gray; color: white;">
+                                    <h4 class="modal-title">Agregar Nuevo Producto Involucrado</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <strong><label for="nombre_nuevo_producto">Nombre</label></strong>
+                                        <h:inputText id="nombre_nuevo_producto" class="form-control" value="#{editarAccionCorrectiva.nombreProductoAfectado}" 
+                                                     required="true" requiredMessage="Se debe ingresar nombre de producto" p:placeholder="Nombre de Producto." >
+                                            <f:ajax execute="@this" event="change" render="panel_modal_producto" />
+                                        </h:inputText>
+                                    </div>
+                                    <div class="form-group">
+                                        <strong><label for="datos_nuevo_producto">Datos Adicionales</label></strong>
+                                        <h:inputText id="datos_nuevo_producto" class="form-control" value="#{editarAccionCorrectiva.datosProductoAfectado}"
+                                                     required="true" requiredMessage="Se deben ingresar datos adicionales" p:placeholder="Datos de Producto." >
+                                            <f:ajax execute="@this" event="change" render="panel_modal_producto" />
+                                        </h:inputText>
+                                    </div>
+                                    <h:panelGroup id="panel_mensajes_modal_producto">
+                                        <div class="form-group-sm">
+                                            <h:message for="nombre_nuevo_producto" class="msj_error"/>
+                                        </div>
+                                        <div class="form-group-sm">
+                                            <h:message for="datos_nuevo_producto" class="msj_error"/>
+                                        </div>
+                                        <div class="form-group-sm">
+                                            <h:message for="btn_nuevo_producto" class="msj_info"/>
+                                        </div>
+                                    </h:panelGroup>
+                                </div>
+                                <div class="modal-footer">
+                                    <div class="row">
+                                        <div class="col-sm-6" >
+                                            <c:choose>
+                                                <c:when test="#{editarAccionCorrectiva.nombreProductoAfectado == '' || editarAccionCorrectiva.datosProductoAfectado == '' and
+                                                                editarAccionCorrectiva.nombreProductoAfectado == null || editarAccionCorrectiva.datosProductoAfectado == null}">
+                                                    <h:commandButton id="btn_nuevo_producto" style="width: 99%;" class="btn btn-primary" title="Nombre y Datos no pueden estar vacios." value="Guardar" disabled="true" />
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <h:commandButton id="btn_nuevo_producto" style="width: 99%;" class="btn btn-primary" value="Guardar" action="#{editarAccionCorrectiva.nuevoProductoAfectado()}" >
+                                                        <f:ajax execute="panel_modal_producto" onevent="indicador" />
+                                                        <f:ajax render="panel_modal_producto panel_mensajes_modal_producto" />
+                                                        <f:ajax render="form_editar_accion:panel_lista_producto_afectado" />                                                       
+                                                        <f:ajax render="form_editar_accion:panel_producto_afectado" />  
+                                                    </h:commandButton>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <h:commandButton  class="btn btn-default" style="width: 99%;" p:data-dismiss="modal" value="Cerrar" action="#{editarAccionCorrectiva.limpiarModalProducto()}" >
+                                                <f:ajax render="panel_modal_producto panel_mensajes_modal_producto" />
+                                            </h:commandButton>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </h:panelGroup>
+                    </div>
+                </div>
+                <!-- Modal Editar Producto Involucrado -->
+                <div id="modal_editar_producto" class="modal fade" style="padding-top: 15%;" role="dialog">
+                    <div class="modal-dialog">
+                        <h:panelGroup id="panel_modal_editar_producto">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header" style="background-color: gray; color: white;">
+                                    <h4 class="modal-title">Editar Producto Involucrado</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <strong><label for="nombre_editar_producto">Nombre</label></strong>
+                                        <h:inputText id="nombre_editar_producto" class="form-control" value="#{editarAccionCorrectiva.nombreProductoAfectado}" 
+                                                     required="true" requiredMessage="Se debe ingresar nombre de producto" p:placeholder="Nombre de Producto." >
+                                            <f:ajax execute="@this" event="change" render="panel_editar_modal_producto" />
+                                        </h:inputText>
+                                    </div>
+                                    <div class="form-group">
+                                        <strong><label for="datos_editar_producto">Datos Adicionales</label></strong>
+                                        <h:inputText id="datos_editar_producto" class="form-control" value="#{editarAccionCorrectiva.datosProductoAfectado}"
+                                                     required="true" requiredMessage="Se deben ingresar datos adicionales" p:placeholder="Datos de Producto." >
+                                            <f:ajax execute="@this" event="change" render="panel_editar_modal_producto" />
+                                        </h:inputText>
+                                    </div>
+                                    <h:panelGroup id="panel_mensajes_modal_editar_producto">
+                                        <div class="form-group-sm">
+                                            <h:message for="nombre_editar_producto" class="msj_error"/>
+                                        </div>
+                                        <div class="form-group-sm">
+                                            <h:message for="datos_editar_producto" class="msj_error"/>
+                                        </div>
+                                        <div class="form-group-sm">
+                                            <h:message for="btn_editar_producto" class="msj_info"/>
+                                        </div>
+                                    </h:panelGroup>
+                                </div>
+                                <div class="modal-footer">
+                                    <div class="row">
+                                        <div class="col-sm-6" >
+                                            <c:choose>
+                                                <c:when test="#{editarAccionCorrectiva.nombreProductoAfectado == '' || editarAccionCorrectiva.datosProductoAfectado == '' and
+                                                                editarAccionCorrectiva.nombreProductoAfectado == null || editarAccionCorrectiva.datosProductoAfectado == null}">
+                                                    <h:commandButton id="btn_editar_producto" style="width: 99%;" class="btn btn-primary" title="Nombre y Datos no pueden estar vacios." value="Guardar" disabled="true" />
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <h:commandButton id="btn_editar_producto" style="width: 99%;" class="btn btn-primary" value="Guardar" action="#{editarAccionCorrectiva.guardarCambiosProducto()}" >
+                                                        <f:ajax execute="panel_modal_editar_producto" onevent="indicador" />                                                                                                               
+                                                        <f:ajax render="form_editar_accion:panel_producto_afectado" />
+                                                        <f:ajax render="form_editar_accion:panel_lista_producto_afectado" /> 
+                                                        <f:ajax render="panel_modal_editar_producto panel_mensajes_modal_editar_producto" />
+                                                    </h:commandButton>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <h:commandButton  class="btn btn-default" style="width: 99%;" p:data-dismiss="modal" value="Cerrar" action="#{editarAccionCorrectiva.limpiarModalProducto()}" >
+                                                <f:ajax render="panel_modal_editar_producto panel_mensajes_modal_editar_producto" />
+                                            </h:commandButton>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </h:panelGroup>
+                    </div>
+                </div>
             </h:form>
         </div>
     </ui:define>
 </ui:composition>
-
-
