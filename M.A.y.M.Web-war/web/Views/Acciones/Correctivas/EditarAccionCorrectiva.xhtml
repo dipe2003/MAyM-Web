@@ -907,7 +907,7 @@
                     </div>
                 </div>
                 
-                <!-- Modal Nuevo Archivo -->
+                <!-- Modal Nuevo Archivo Adjunto -->
                 <div id="modal_nuevo_adjunto" class="modal fade" style="padding-top: 15%;" role="dialog">
                     <div class="modal-dialog">
                         <h:panelGroup id="panel_modal_adjunto">
@@ -936,8 +936,8 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <h:commandButton  class="btn btn-default" style="width: 99%;" p:data-dismiss="modal" value="Cerrar" action="#{editarAccionCorrectiva.limpiarModalProducto()}" >
-                                        <f:ajax render="panel_modal_producto panel_mensajes_modal_producto" />
+                                    <h:commandButton  class="btn btn-default" style="width: 99%;" p:data-dismiss="modal" value="Cerrar" >
+                                        <f:ajax render="panel_modal_adjunto" />
                                     </h:commandButton>
                                 </div>
                             </div>
