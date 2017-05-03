@@ -218,9 +218,10 @@
                                                                             </h:link>
                                                                         </li>
                                                                         <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR' ||  sesionUsuario.usuarioLogueado.permisoUsuario == 'VERIFICADOR'}">
-                                                                            <li><h:link value="Quitar Actividad" >                                                                
-                                                                                    <f:ajax onevent="indicador" />
-                                                                                </h:link>
+                                                                            <li><h:commandLink value="Quitar Actividad" action="#{editarAccionMejora.quitarActividad(actividad.key)}" 
+                                                                                               onclick="if (! confirm('Seguro que va a quitar esta Actividad? ')) return false">
+                                                                                    <f:ajax  onevent="indicador"/>
+                                                                                </h:commandLink>
                                                                             </li>
                                                                         </c:if>
                                                                     </ul>

@@ -149,9 +149,18 @@
                                                                 <li>                                                            
                                                                     <h:link value="Agregar M. Correctiva" outcome="ActividadesCorrectiva.xhtml?id=#{accion.id}&amp;tipo=correctiva&amp;editar=0"/>
                                                                 </li>
-                                                                <li>                                                            
-                                                                    <h:link value="Agregar M. Preventiva" outcome="ActividadesCorrectiva.xhtml?id=#{accion.id}&amp;tipo=preventiva&amp;editar=0"/>                                   
-                                                                </li>                                                            
+                                                                <c:choose>
+                                                                    <c:when test="#{accion.analisisCausa != ''}">
+                                                                        <li>                                                            
+                                                                            <h:link value="Agregar M. Preventiva" outcome="ActividadesCorrectiva.xhtml?id=#{accion.id}&amp;tipo=preventiva&amp;editar=0"/>                                   
+                                                                        </li>
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        <li>                                                            
+                                                                            <h:link value="Agregar M. Preventiva" style="color: #aaa" title="Se debe realizar Analisis de Causa" outcome="ListarCorrectivas.xhtml"/>                                   
+                                                                        </li>  
+                                                                    </c:otherwise>
+                                                                </c:choose>                                                                
                                                                 <li><h:link value="Realizar Seguimiento" outcome="SeguimientoCorrectiva.xhtml?id=#{accion.id}" />
                                                                 </li>
                                                             </c:if>

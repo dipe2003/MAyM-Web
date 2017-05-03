@@ -542,17 +542,55 @@ public class EditarAccionCorrectiva implements Serializable {
     }
     
     /**
+     * Quita la actividad seleccionada de la accion.
+     * Muestra un mensaje si no se pudo quitar de lo contrario redidirge a la vista de edicion de la accion.
+     * @param IdActividad
+     * @throws IOException 
+     */
+    public void quitarMedidaCorrectiva(int IdActividad) throws IOException{
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        if(fDatos.RemoverMedidaCorrectiva(IdAccionSeleccionada, IdActividad)==-1){
+            // Si no se actualizo muestra mensaje de error.
+            ctx.addMessage("form_editar_accion:guardar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
+            ctx.renderResponse();
+        }else{
+            // Si la eliminacion se realizo correctamente redirige a lista de acciones.
+            String url = ctx.getExternalContext().getRequestContextPath();
+            ctx.getExternalContext().redirect(url+"/Views/Acciones/Correctivas/EditarAccionCorrectiva.xhtml?id="+IdAccionSeleccionada);
+        }
+    }
+    /**
+     * Quita la actividad seleccionada de la accion.
+     * Muestra un mensaje si no se pudo quitar de lo contrario redidirge a la vista de edicion de la accion.
+     * @param IdActividad
+     * @throws IOException 
+     */
+    public void quitarMedidaPreventiva(int IdActividad) throws IOException{
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        if(fDatos.RemoverMedidaPreventiva(IdAccionSeleccionada, IdActividad)==-1){
+            // Si no se actualizo muestra mensaje de error.
+            ctx.addMessage("form_editar_accion:guardar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
+            ctx.renderResponse();
+        }else{
+            // Si la eliminacion se realizo correctamente redirige a lista de acciones.
+            String url = ctx.getExternalContext().getRequestContextPath();
+            ctx.getExternalContext().redirect(url+"/Views/Acciones/Correctivas/EditarAccionCorrectiva.xhtml?id="+IdAccionSeleccionada);
+        }
+    }
+    
+    /**
      * Actualiza la accion correctiva con los datos nuevos.
      * Si se muestra mensaje de confirmacion.
      * @throws java.io.IOException
      */
     public void editarAccion() throws IOException{
+        FacesContext ctx = FacesContext.getCurrentInstance();
         // actualizar accion
         if(fDatos.EditarAccion(IdAccionSeleccionada, EnumAccion.CORRECTIVA, FechaDeteccion, Descripcion, AnalisisCausa, TipoDesvioSeleccionado,
                 AreaSectorAccionSeleccionada, DeteccionSeleccionada, CodificacionSeleccionada) == -1){
             // Si no se actualizo muestra mensaje de error.
-            FacesContext.getCurrentInstance().addMessage("form_editar_accion:guardar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
-            FacesContext.getCurrentInstance().renderResponse();
+            ctx.addMessage("form_editar_accion:guardar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
+            ctx.renderResponse();
         }else{
             if(!this.MedidasCorrectivas.isEmpty() || !this.MedidasPreventivas.isEmpty()){
                 if(AccionSeleccionada.getComprobacionImplementacion() != null){
@@ -573,8 +611,8 @@ public class EditarAccionCorrectiva implements Serializable {
                 }
             }
             // Si la actualizacion se realizo correctamente redirige a lista de acciones.
-            FacesContext.getCurrentInstance().addMessage("form_editar_accion:guardar_accion", new FacesMessage(SEVERITY_INFO, "Los datos se guardaron.", "Los datos se guardaron." ));
-            FacesContext.getCurrentInstance().renderResponse();
+            ctx.addMessage("form_editar_accion:guardar_accion", new FacesMessage(SEVERITY_INFO, "Los datos se guardaron.", "Los datos se guardaron." ));
+            ctx.renderResponse();
         }
     }
     

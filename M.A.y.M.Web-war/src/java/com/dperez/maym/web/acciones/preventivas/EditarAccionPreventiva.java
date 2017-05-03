@@ -432,6 +432,24 @@ public class EditarAccionPreventiva implements Serializable {
     }
     
     /**
+     * Quita la actividad seleccionada de la accion.
+     * Muestra un mensaje si no se pudo quitar de lo contrario redidirge a la vista de edicion de la accion.
+     * @param IdActividad
+     * @throws IOException 
+     */
+    public void quitarActividad(int IdActividad) throws IOException{
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        if(fDatos.RemoverActividadPreventiva(IdAccionSeleccionada, IdActividad)==-1){
+            // Si no se actualizo muestra mensaje de error.
+            ctx.addMessage("form_editar_accion:guardar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
+            ctx.renderResponse();
+        }else{
+            // Si la eliminacion se realizo correctamente redirige a lista de acciones.
+            String url = ctx.getExternalContext().getRequestContextPath();
+            ctx.getExternalContext().redirect(url+"/Views/Acciones/Preventivas/EditarAccionPreventiva.xhtml?id="+IdAccionSeleccionada);
+        }
+    }
+    /**
      * Actualiza la accion correctiva con los datos nuevos.
      * Si se muestra mensaje de confirmacion.
      * Si se creo se redirige a la pagina de listado de acciones.

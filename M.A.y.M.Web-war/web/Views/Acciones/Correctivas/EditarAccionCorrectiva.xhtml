@@ -289,15 +289,16 @@
                                                                             <span class="caret"></span>
                                                                         </button>
                                                                         <ul class="dropdown-menu" role="menu">        
-                                                                            <li><h:link value="Editar Actividad" onclick="if (! confirm('Si se realizaron cambios y no se guardaron se perderan. Continuar?')) return false"
+                                                                            <li><h:link value="Editar Medida" onclick="if (! confirm('Si se realizaron cambios y no se guardaron se perderan. Continuar?')) return false"
                                                                                         outcome="ActividadesCorrectiva.xhtml?id=#{editarAccionCorrectiva.idAccionSeleccionada}&amp;tipo=correctiva&amp;editar=#{correctiva.key}" >                                                                
                                                                                     <f:ajax onevent="indicador" />
                                                                                 </h:link>
                                                                             </li>
                                                                             <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR' ||  sesionUsuario.usuarioLogueado.permisoUsuario == 'VERIFICADOR'}">
-                                                                                <li><h:link value="Quitar Actividad" >                                                                
-                                                                                        <f:ajax onevent="indicador" />
-                                                                                    </h:link>
+                                                                                <li><h:commandLink value="Quitar Medida" action="#{editarAccionCorrectiva.quitarMedidaCorrectiva(correctiva.key)}" 
+                                                                                                   onclick="if (! confirm('Seguro que va a quitar esta Medida Correctiva? ')) return false">
+                                                                                        <f:ajax  onevent="indicador"/>
+                                                                                    </h:commandLink>
                                                                                 </li>
                                                                             </c:if>
                                                                         </ul>
@@ -377,9 +378,10 @@
                                                                                 </h:link>
                                                                             </li>
                                                                             <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR' ||  sesionUsuario.usuarioLogueado.permisoUsuario == 'VERIFICADOR'}">
-                                                                                <li><h:link value="Quitar Actividad" >                                                                
-                                                                                        <f:ajax onevent="indicador" />
-                                                                                    </h:link>
+                                                                                <li><h:commandLink value="Quitar Medida" action="#{editarAccionCorrectiva.quitarMedidaPreventiva(preventiva.key)}" 
+                                                                                                   onclick="if (! confirm('Seguro que va a quitar esta Medida Preventiva? ')) return false">
+                                                                                        <f:ajax onevent="indicador"/>
+                                                                                    </h:commandLink>
                                                                                 </li>
                                                                             </c:if>
                                                                         </ul>
@@ -402,10 +404,20 @@
                         </c:choose>
                         <c:if test="#{editarAccionCorrectiva.accionSeleccionada.estadoAccion != 'PROCESO_VER' and editarAccionCorrectiva.accionSeleccionada.estadoAccion != 'CERRADA'}" >
                             <div class="form-group-sm">
-                                <h:link id="agregar_medida_preventiva" value="Agregar Medida Preventiva" class="btn btn-primary" onclick="if (! confirm('Si se realizaron cambios y no se guardaron se perderan. Continuar?')) return false"
-                                        outcome="ActividadesCorrectiva.xhtml?id=#{editarAccionCorrectiva.idAccionSeleccionada}&amp;tipo=preventiva&amp;editar=0">
-                                    <f:ajax onevent="indicador"/>
-                                </h:link>
+                                <c:choose>
+                                    <c:when test="#{editarAccionCorrectiva.accionSeleccionada.analisisCausa != ''}">
+                                        <h:link id="agregar_medida_preventiva" value="Agregar Medida Preventiva" class="btn btn-primary" onclick="if (! confirm('Si se realizaron cambios y no se guardaron se perderan. Continuar?')) return false"
+                                                outcome="ActividadesCorrectiva.xhtml?id=#{editarAccionCorrectiva.idAccionSeleccionada}&amp;tipo=preventiva&amp;editar=0">
+                                            <f:ajax onevent="indicador"/>
+                                        </h:link>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <h:link id="agregar_medida_preventiva" value="Agregar Medida Preventiva" class="btn btn-primary disabled" disabled="true" title="Debe realizarse Analisis de Causa"
+                                                outcome="ActividadesCorrectiva.xhtml?id=#{editarAccionCorrectiva.idAccionSeleccionada}&amp;tipo=preventiva&amp;editar=0">
+                                            <f:ajax onevent="indicador"/>
+                                        </h:link>
+                                    </c:otherwise>
+                                </c:choose>                                
                             </div>
                         </c:if>                                
                     </div>
