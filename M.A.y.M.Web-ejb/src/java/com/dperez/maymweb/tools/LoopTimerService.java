@@ -12,7 +12,7 @@ import javax.inject.Inject;
  * @author dperez
  */
 @Singleton
-public class TimerService {
+public class LoopTimerService {
 //    @Inject
 //    private SendMail mail;
     
