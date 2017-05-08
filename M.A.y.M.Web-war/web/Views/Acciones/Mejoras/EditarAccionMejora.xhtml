@@ -456,7 +456,10 @@
                 <div class="row">
                     <div class='col-sm-4' >
                         <h:commandButton id="guardar_accion" class="btn btn-default" style="width: 99%" value="Guardar" >
-                            <f:ajax execute="fecha_deteccion descripcion analisis_causa area codificacion deteccion" event="click" listener="#{editarAccionMejora.editarAccion()}" onevent="indicador" render="panel_mensajes"/>
+                            <f:ajax execute="fecha_deteccion descripcion analisis_causa area codificacion deteccion 
+                                    fecha_estimada_comprobacion_implementacion responsable_comprobacion_implementacion 
+                                    fecha_estimada_comprobacion_eficacia responsable_comprobacion_eficacia" 
+                                    event="click" listener="#{editarAccionMejora.editarAccion()}" onevent="indicador" render="panel_mensajes"/>
                         </h:commandButton>
                     </div>
                     <div class='col-sm-4' >
