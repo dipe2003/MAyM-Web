@@ -5,8 +5,6 @@
 */
 package com.dperez.maym.web.herramientas;
 
-import com.dperez.maymweb.usuario.Usuario;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -32,6 +30,9 @@ public class ProgramadorEventos {
     
     @Resource
     private TimerService timerService;
+
+    public ProgramadorEventos() {
+    }
     
     
     /**
@@ -50,6 +51,50 @@ public class ProgramadorEventos {
             }
         }
         return timerList;
+    }
+    
+    /**
+     * Comprueba la existencia del evento programado.
+     * @param evento
+     * @return 
+     */
+    public boolean ExisteEvento(Evento evento){
+        Collection<Timer> timers = timerService.getTimers();
+        List<Timer> timerList = new ArrayList<>();
+        Iterator<Timer> it = timers.iterator();
+        Timer timer;
+        while(it.hasNext()){
+            timer = (Timer) it;
+            if (timer.getInfo() instanceof Evento) {
+                Evento e = (Evento) timer.getInfo();
+                if(e.getUsuarioResponsable() == evento.getUsuarioResponsable() && e.getTipo().equals(evento.getTipo())){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    /**
+     * Remueve el evento programado.
+     * @param evento
+     * @return 
+     */
+    public boolean RemoverEvento(Evento evento){
+        Collection<Timer> timers = timerService.getTimers();
+        List<Timer> timerList = new ArrayList<>();
+        Iterator<Timer> it = timers.iterator();
+        Timer timer;
+        while(it.hasNext()){
+            timer = (Timer) it;
+            if (timer.getInfo() instanceof Evento) {
+                Evento e = (Evento) timer.getInfo();
+                if(e.getUsuarioResponsable() == evento.getUsuarioResponsable() && e.getTipo().equals(evento.getTipo())){
+                    it.remove();
+                    return true;
+                }
+            }
+        }
+        return false;
     }
     
     /**
@@ -97,27 +142,6 @@ public class ProgramadorEventos {
             
             // enviar mail
         }
-    }
-    
-    public enum TipoEvento{
-        IMPLEMENTACION_ACTIVIDAD,
-        IMPLEMENTACION_ACCION,
-        VERIFICACION_EFICACIA
-    }
-    
-    public class Evento implements Serializable{
-        private TipoEvento Tipo;
-        private Usuario UsuarioResponsable;
-        
-        public Evento(TipoEvento Tipo, Usuario UsuarioResponsable) {
-            this.Tipo = Tipo;
-            this.UsuarioResponsable = UsuarioResponsable;
-        }
-        
-        public TipoEvento getTipo() {return Tipo;}
-        public void setTipo(TipoEvento Tipo) {this.Tipo = Tipo;}
-        public Usuario getUsuarioResponsable() {return UsuarioResponsable;}
-        public void setUsuarioResponsable(Usuario UsuarioResponsable) {this.UsuarioResponsable = UsuarioResponsable;}
     }
 }
 
