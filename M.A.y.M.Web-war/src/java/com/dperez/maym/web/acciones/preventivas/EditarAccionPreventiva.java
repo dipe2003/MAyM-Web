@@ -6,6 +6,9 @@
 package com.dperez.maym.web.acciones.preventivas;
 
 import com.dperez.maym.web.herramientas.CargarArchivo;
+import com.dperez.maym.web.herramientas.Evento;
+import com.dperez.maym.web.herramientas.ProgramadorEventos;
+import com.dperez.maym.web.herramientas.TipoEvento;
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.Comprobacion;
 import com.dperez.maymweb.accion.acciones.EnumAccion;
@@ -57,6 +60,8 @@ public class EditarAccionPreventiva implements Serializable {
     private FacadeDatos fDatos;
     @Inject
     private CargarArchivo cArchivo;
+    @Inject
+    private ProgramadorEventos pEventos;
     
     private int IdAccionSeleccionada;
     private Accion AccionSeleccionada;
@@ -435,7 +440,7 @@ public class EditarAccionPreventiva implements Serializable {
      * Quita la actividad seleccionada de la accion.
      * Muestra un mensaje si no se pudo quitar de lo contrario redidirge a la vista de edicion de la accion.
      * @param IdActividad
-     * @throws IOException 
+     * @throws IOException
      */
     public void quitarActividad(int IdActividad) throws IOException{
         FacesContext ctx = FacesContext.getCurrentInstance();
@@ -468,17 +473,37 @@ public class EditarAccionPreventiva implements Serializable {
                     if(AccionSeleccionada.getComprobacionImplementacion().getFechaEstimada() != this.FechaEstimadaImplementacion
                             || AccionSeleccionada.getComprobacionImplementacion().getResponsable().getId() != this.ResponsableImplementacion){
                         fDatos.SetEstimadoComprobacionImplementacion(this.FechaEstimadaImplementacion, this.ResponsableImplementacion, IdAccionSeleccionada);
+                        // se crea el evento con los datos guardados para comparar reemplazar con el anterior en el caso que hayan cambios
+                        Evento eventoAccion = new Evento(TipoEvento.IMPLEMENTACION_ACCION, AccionSeleccionada.getComprobacionImplementacion().getResponsable().getId(),
+                                IdAccionSeleccionada, 0);
+                        if (pEventos.ExisteEvento(eventoAccion)){
+                            pEventos.RemoverEvento(eventoAccion);
+                            Evento eventoNuevo = new Evento(TipoEvento.IMPLEMENTACION_ACCION, ResponsableImplementacion, IdAccionSeleccionada, 0);
+                            pEventos.ProgramarEvento(FechaEstimadaImplementacion, eventoNuevo);
+                        }
                     }
                 }else{
                     fDatos.SetEstimadoComprobacionImplementacion(this.FechaEstimadaImplementacion, this.ResponsableImplementacion, IdAccionSeleccionada);
+                    Evento eventoNuevo = new Evento(TipoEvento.IMPLEMENTACION_ACCION, ResponsableImplementacion, IdAccionSeleccionada, 0);
+                    pEventos.ProgramarEvento(FechaEstimadaImplementacion, eventoNuevo);
                 }
                 if(AccionSeleccionada.getComprobacionEficacia()!= null){
                     if(AccionSeleccionada.getComprobacionEficacia().getFechaEstimada() != this.FechaEstimadaVerificacion
                             || AccionSeleccionada.getComprobacionEficacia().getResponsable().getId() != this.ResponsableEficacia){
                         fDatos.SetEstimadoComprobacionEficacia(this.FechaEstimadaVerificacion, this.ResponsableEficacia, IdAccionSeleccionada);
+                        // se crea el evento con los datos guardados para comparar reemplazar con el anterior en el caso que hayan cambios
+                        Evento eventoAccion = new Evento(TipoEvento.VERIFICACION_EFICACIA, AccionSeleccionada.getComprobacionEficacia().getResponsable().getId(),
+                                IdAccionSeleccionada, 0);
+                        if (pEventos.ExisteEvento(eventoAccion)){
+                            pEventos.RemoverEvento(eventoAccion);
+                            Evento eventoNuevo = new Evento(TipoEvento.VERIFICACION_EFICACIA, ResponsableEficacia, IdAccionSeleccionada, 0);
+                            pEventos.ProgramarEvento(FechaEstimadaVerificacion, eventoNuevo);
+                        }
                     }
                 }else{
                     fDatos.SetEstimadoComprobacionEficacia(this.FechaEstimadaVerificacion, this.ResponsableEficacia, IdAccionSeleccionada);
+                    Evento eventoNuevo = new Evento(TipoEvento.VERIFICACION_EFICACIA, ResponsableEficacia, IdAccionSeleccionada, 0);
+                    pEventos.ProgramarEvento(FechaEstimadaVerificacion, eventoNuevo);
                 }
             }
             FacesContext.getCurrentInstance().addMessage("form_editar_accion:guardar_accion", new FacesMessage(SEVERITY_INFO, "Los datos se guardaron.", "Los datos se guardaron." ));
