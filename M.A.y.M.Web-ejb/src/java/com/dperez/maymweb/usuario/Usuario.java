@@ -17,7 +17,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -79,7 +78,7 @@ public class Usuario implements Serializable, Comparable<Usuario> {
     }
     
     // Getters
-    public int getId() {return this.Id;}   
+    public int getId() {return this.Id;}
     public String getNombre() {return this.Nombre;}
     public String getApellido() {return this.Apellido;}
     public String getCorreo() {return this.Correo;}
@@ -99,7 +98,7 @@ public class Usuario implements Serializable, Comparable<Usuario> {
     public List<Comprobacion> getComprobaciones() {return Comprobaciones;}
     
     // Setters
-    public void setId(int Id) {this.Id = Id;}    
+    public void setId(int Id) {this.Id = Id;}
     public void setNombre(String Nombre) {this.Nombre = Nombre;}
     public void setApellido(String Apellido) {this.Apellido = Apellido;}
     public void setCorreo(String Correo) {this.Correo = Correo;}
@@ -180,45 +179,61 @@ public class Usuario implements Serializable, Comparable<Usuario> {
         }
     }
     
-    public void addComprobacion(Comprobacion comprobacion){
-        if(comprobacion != null){
-            this.Comprobaciones.add(comprobacion);
-            if(comprobacion.getResponsable() != null && !comprobacion.getResponsable().equals(this))
-                comprobacion.setResponsable(this);
-        }
-    }
-    
-    public void removeComprobacion(Comprobacion comprobacion){
-        if(comprobacion != null){
-            this.Comprobaciones.remove(comprobacion);
-            if(comprobacion.getResponsable() != null && comprobacion.getResponsable().equals(this))
-                comprobacion.setResponsable(null);
-        }
-    }
-    
-    public void removeComprobacion(int IdComprobacion){
-        Iterator<Comprobacion> it = this.Comprobaciones.iterator();
+    /**
+     * Devuelve la actividad indicada por su id.
+     * @param IdActividad
+     * @return Actividad, null si no se encuentra.
+     */
+    public Actividad getActividad(int IdActividad){
+        Iterator<Actividad> it = this.MedidasResponsableImplementacion.iterator() ;
         while(it.hasNext()){
-            Comprobacion c = it.next();
-            if(c.getId() == IdComprobacion){
-                it.remove();
-                if(c.getResponsable() != null && c.getResponsable().equals(this))
-                    c.setResponsable(null);
+            Actividad m = it.next();
+            if(m.getIdActividad()== IdActividad){
+                return m;
             }
         }
+        return null;
     }
-    
-    // Metodos
-    /***
-     * Devuelve el nombre completo del Usuario (Nombre+Apellido)
-     * @return
-     */
-    public String GetNombreCompleto(){
-        return this.Nombre + " " + this.Apellido;
-    }
-
-    @Override
-    public int compareTo(Usuario OtroUsuario) {
-        return this.Apellido.compareTo(OtroUsuario.Apellido);
-    }
+        
+        public void addComprobacion(Comprobacion comprobacion){
+            if(comprobacion != null){
+                this.Comprobaciones.add(comprobacion);
+                if(comprobacion.getResponsable() != null && !comprobacion.getResponsable().equals(this))
+                    comprobacion.setResponsable(this);
+            }
+        }
+        
+        public void removeComprobacion(Comprobacion comprobacion){
+            if(comprobacion != null){
+                this.Comprobaciones.remove(comprobacion);
+                if(comprobacion.getResponsable() != null && comprobacion.getResponsable().equals(this))
+                    comprobacion.setResponsable(null);
+            }
+        }
+        
+        public void removeComprobacion(int IdComprobacion){
+            Iterator<Comprobacion> it = this.Comprobaciones.iterator();
+            while(it.hasNext()){
+                Comprobacion c = it.next();
+                if(c.getId() == IdComprobacion){
+                    it.remove();
+                    if(c.getResponsable() != null && c.getResponsable().equals(this))
+                        c.setResponsable(null);
+                }
+            }
+        }
+        
+        // Metodos
+        /***
+         * Devuelve el nombre completo del Usuario (Nombre+Apellido)
+         * @return
+         */
+        public String GetNombreCompleto(){
+            return this.Nombre + " " + this.Apellido;
+        }
+        
+        @Override
+        public int compareTo(Usuario OtroUsuario) {
+            return this.Apellido.compareTo(OtroUsuario.Apellido);
+        }
 }

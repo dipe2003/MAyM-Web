@@ -32,7 +32,7 @@ public class IOPropiedades implements Serializable{
      * Guarda el valor de la propiedad especificado.
      * @param NombrePropiedad
      * @param ValorPropiedad
-     * @return Retorn <b>True</b> si se guardo, de lo contrario <b>False</b?>
+     * @return Retorna <b>True</b> si se guardo, de lo contrario <b>False</b?>
      */
     public boolean setPropiedad(String NombrePropiedad, String ValorPropiedad){
         directorio = "MAYMWEB"+separator+"Configuracion"+separator;

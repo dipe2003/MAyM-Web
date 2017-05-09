@@ -28,7 +28,7 @@ public class SendMail {
     private static Properties props;
     private static Session session;
     
-    public SendMail(String NombreEmpresa) {}
+    public SendMail() {}
         
     @PostConstruct
     public void init(){

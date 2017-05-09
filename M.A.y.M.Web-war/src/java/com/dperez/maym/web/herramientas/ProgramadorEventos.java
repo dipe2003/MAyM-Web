@@ -18,6 +18,7 @@ import javax.ejb.Timeout;
 import javax.ejb.Timer;
 import javax.ejb.TimerConfig;
 import javax.ejb.TimerService;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 /**
@@ -26,15 +27,13 @@ import javax.inject.Named;
  */
 @Named("scheduler")
 @Stateless
-public class ProgramadorEventos {
-    
+public class ProgramadorEventos {    
     @Resource
     private TimerService timerService;
+    
+    @Inject
+    private ControladorAlertas cAlertas;
 
-    public ProgramadorEventos() {
-    }
-    
-    
     /**
      * Retorna una lista de eventos programados.
      * @return
@@ -67,7 +66,7 @@ public class ProgramadorEventos {
             timer = (Timer) it;
             if (timer.getInfo() instanceof Evento) {
                 Evento e = (Evento) timer.getInfo();
-                if(e.getUsuarioResponsable() == evento.getUsuarioResponsable() && e.getTipo().equals(evento.getTipo())){
+                if(e.getIdUsuarioResponsable() == evento.getIdUsuarioResponsable() && e.getTipo().equals(evento.getTipo())){
                     return true;
                 }
             }
@@ -88,7 +87,7 @@ public class ProgramadorEventos {
             timer = (Timer) it;
             if (timer.getInfo() instanceof Evento) {
                 Evento e = (Evento) timer.getInfo();
-                if(e.getUsuarioResponsable() == evento.getUsuarioResponsable() && e.getTipo().equals(evento.getTipo())){
+                if(e.getIdUsuarioResponsable() == evento.getIdUsuarioResponsable() && e.getTipo().equals(evento.getTipo())){
                     it.remove();
                     return true;
                 }
@@ -139,8 +138,8 @@ public class ProgramadorEventos {
         if (timer.getInfo() instanceof Evento) {
             Evento evento = (Evento) timer.getInfo();
             System.out.println("Ejecucion del evento.");
-            
-            // enviar mail
+            System.out.println("Evento: " + evento.getTipo());
+            cAlertas.EnviarAlerta(evento);
         }
     }
 }

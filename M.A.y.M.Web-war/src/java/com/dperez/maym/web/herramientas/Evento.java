@@ -23,9 +23,14 @@ public class Evento implements Serializable{
         this.IdAccion = IdAccion;
         this.IdActividad = IdActividad;
     }
-    
+
     public TipoEvento getTipo() {return Tipo;}
     public void setTipo(TipoEvento Tipo) {this.Tipo = Tipo;}
-    public int getUsuarioResponsable() {return IdUsuarioResponsable;}
-    public void setUsuarioResponsable(int UsuarioResponsable) {this.IdUsuarioResponsable = UsuarioResponsable;}
+    public int getIdUsuarioResponsable() {return IdUsuarioResponsable;}
+    public void setIdUsuarioResponsable(int IdUsuarioResponsable) {this.IdUsuarioResponsable = IdUsuarioResponsable;}
+    public int getIdAccion() {return IdAccion;}
+    public void setIdAccion(int IdAccion) {this.IdAccion = IdAccion;}
+    public int getIdActividad() {return IdActividad;}
+    public void setIdActividad(int IdActividad) {this.IdActividad = IdActividad;}    
+    
 }
