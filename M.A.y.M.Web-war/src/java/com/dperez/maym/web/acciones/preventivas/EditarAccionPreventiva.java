@@ -6,9 +6,9 @@
 package com.dperez.maym.web.acciones.preventivas;
 
 import com.dperez.maym.web.herramientas.CargarArchivo;
-import com.dperez.maym.web.herramientas.Evento;
-import com.dperez.maym.web.herramientas.ProgramadorEventos;
-import com.dperez.maym.web.herramientas.TipoEvento;
+import com.dperez.maymweb.herramientas.Evento;
+import com.dperez.maymweb.herramientas.ProgramadorEventos;
+import com.dperez.maymweb.herramientas.TipoEvento;
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.Comprobacion;
 import com.dperez.maymweb.accion.acciones.EnumAccion;
@@ -449,6 +449,12 @@ public class EditarAccionPreventiva implements Serializable {
             ctx.addMessage("form_editar_accion:guardar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
             ctx.renderResponse();
         }else{
+            // remover el evento del programador de tareas.
+            Evento eventoAccion = new Evento(TipoEvento.IMPLEMENTACION_ACTIVIDAD, AccionSeleccionada.getComprobacionImplementacion().getResponsable().getId(),
+                    AccionSeleccionada.getId(), IdActividad);
+            if (pEventos.ExisteEvento(eventoAccion)){
+                pEventos.RemoverEvento(eventoAccion);
+            }
             // Si la eliminacion se realizo correctamente redirige a lista de acciones.
             String url = ctx.getExternalContext().getRequestContextPath();
             ctx.getExternalContext().redirect(url+"/Views/Acciones/Preventivas/EditarAccionPreventiva.xhtml?id="+IdAccionSeleccionada);

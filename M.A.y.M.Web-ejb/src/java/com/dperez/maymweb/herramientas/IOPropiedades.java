@@ -3,7 +3,7 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
 */
-package com.dperez.maymweb.tools;
+package com.dperez.maymweb.herramientas;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

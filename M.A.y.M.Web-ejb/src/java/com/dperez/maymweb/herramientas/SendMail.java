@@ -1,5 +1,5 @@
 
-package com.dperez.maymweb.email;
+package com.dperez.maymweb.herramientas;
 
 import java.util.Properties;
 import javax.annotation.PostConstruct;

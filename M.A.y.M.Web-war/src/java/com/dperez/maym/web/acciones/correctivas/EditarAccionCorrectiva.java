@@ -6,9 +6,9 @@
 package com.dperez.maym.web.acciones.correctivas;
 
 import com.dperez.maym.web.herramientas.CargarArchivo;
-import com.dperez.maym.web.herramientas.Evento;
-import com.dperez.maym.web.herramientas.ProgramadorEventos;
-import com.dperez.maym.web.herramientas.TipoEvento;
+import com.dperez.maymweb.herramientas.Evento;
+import com.dperez.maymweb.herramientas.ProgramadorEventos;
+import com.dperez.maymweb.herramientas.TipoEvento;
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.Comprobacion;
 import com.dperez.maymweb.accion.acciones.Correctiva;
@@ -559,6 +559,12 @@ public class EditarAccionCorrectiva implements Serializable {
             ctx.addMessage("form_editar_accion:guardar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
             ctx.renderResponse();
         }else{
+            // remover el evento del programador de tareas.
+            Evento eventoAccion = new Evento(TipoEvento.IMPLEMENTACION_ACTIVIDAD, AccionSeleccionada.getComprobacionImplementacion().getResponsable().getId(),
+                    IdAccionSeleccionada, IdActividad);
+            if (pEventos.ExisteEvento(eventoAccion)){
+                pEventos.RemoverEvento(eventoAccion);
+            }
             // Si la eliminacion se realizo correctamente redirige a lista de acciones.
             String url = ctx.getExternalContext().getRequestContextPath();
             ctx.getExternalContext().redirect(url+"/Views/Acciones/Correctivas/EditarAccionCorrectiva.xhtml?id="+IdAccionSeleccionada);
@@ -577,6 +583,12 @@ public class EditarAccionCorrectiva implements Serializable {
             ctx.addMessage("form_editar_accion:guardar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
             ctx.renderResponse();
         }else{
+            // remover el evento del programador de tareas.
+            Evento eventoAccion = new Evento(TipoEvento.IMPLEMENTACION_ACTIVIDAD, AccionSeleccionada.getComprobacionImplementacion().getResponsable().getId(),
+                    IdAccionSeleccionada, IdActividad);
+            if (pEventos.ExisteEvento(eventoAccion)){
+                pEventos.RemoverEvento(eventoAccion);
+            }
             // Si la eliminacion se realizo correctamente redirige a lista de acciones.
             String url = ctx.getExternalContext().getRequestContextPath();
             ctx.getExternalContext().redirect(url+"/Views/Acciones/Correctivas/EditarAccionCorrectiva.xhtml?id="+IdAccionSeleccionada);
@@ -619,7 +631,7 @@ public class EditarAccionCorrectiva implements Serializable {
                     pEventos.ProgramarEvento(FechaEstimadaImplementacion, eventoNuevo);
                 }
                 if(AccionSeleccionada.getComprobacionEficacia()!= null){
-                     // si ya tiene estimada de eficacia se comprueba si hay modificacion
+                    // si ya tiene estimada de eficacia se comprueba si hay modificacion
                     if(AccionSeleccionada.getComprobacionEficacia().getFechaEstimada() != this.FechaEstimadaVerificacion
                             || AccionSeleccionada.getComprobacionEficacia().getResponsable().getId() != this.ResponsableEficacia){
                         fDatos.SetEstimadoComprobacionEficacia(this.FechaEstimadaVerificacion, this.ResponsableEficacia, IdAccionSeleccionada);

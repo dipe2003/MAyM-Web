@@ -1,7 +1,7 @@
 
-package com.dperez.maymweb.email;
+package com.dperez.maymweb.herramientas;
 
-import com.dperez.maymweb.tools.IOPropiedades;
+import com.dperez.maymweb.herramientas.IOPropiedades;
 import javax.ejb.Stateless;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;

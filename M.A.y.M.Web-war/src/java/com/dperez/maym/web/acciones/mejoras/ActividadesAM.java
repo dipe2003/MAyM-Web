@@ -11,6 +11,9 @@ import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
+import com.dperez.maymweb.herramientas.Evento;
+import com.dperez.maymweb.herramientas.ProgramadorEventos;
+import com.dperez.maymweb.herramientas.TipoEvento;
 import com.dperez.maymweb.usuario.Usuario;
 import java.io.IOException;
 import java.io.Serializable;
@@ -41,6 +44,8 @@ public class ActividadesAM implements Serializable {
     private FacadeDatos fDatos;
     @Inject
     private FacadeLectura fLectura;
+    @Inject
+    private ProgramadorEventos pEventos;
     
     private Accion AccionSeleccionada;
     private int IdActividadEditar;
@@ -97,11 +102,15 @@ public class ActividadesAM implements Serializable {
      * @throws java.io.IOException
      */
     public void agregarActividad() throws IOException{
-        if(fDatos.AgregarActividadMejora(AccionSeleccionada.getId(), FechaEstimadaImplementacionActividad, DescripcionActividad,
-                ResponsableActividad)<0){
+        int idActividad = -1;
+        if((idActividad = fDatos.AgregarActividadMejora(AccionSeleccionada.getId(), FechaEstimadaImplementacionActividad, DescripcionActividad,
+                ResponsableActividad))<0){
             FacesContext.getCurrentInstance().addMessage("form_agregar_actividades:btn_agregar_actividad", new FacesMessage(SEVERITY_FATAL, "No se pudo agregar Actividad", "No se pudo agregar Actividad" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
+            // agregar el evento en el programador de tareas.
+            Evento eventoNuevo = new Evento(TipoEvento.IMPLEMENTACION_ACTIVIDAD, ResponsableActividad, AccionSeleccionada.getId(), idActividad);
+            pEventos.ProgramarEvento(FechaEstimadaImplementacionActividad, eventoNuevo);
             // redirigir a la edicion de la accion correctiva.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Mejoras/EditarAccionMejora.xhtml?id="+AccionSeleccionada.getId());
@@ -119,6 +128,12 @@ public class ActividadesAM implements Serializable {
             FacesContext.getCurrentInstance().addMessage("form_agregar_actividades:btn_remover_actividad", new FacesMessage(SEVERITY_FATAL, "No se pudo quitar la Actividad", "No se pudo quitar la Actividad" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
+            // remover el evento del programador de tareas.
+            Evento eventoAccion = new Evento(TipoEvento.IMPLEMENTACION_ACTIVIDAD, AccionSeleccionada.getComprobacionImplementacion().getResponsable().getId(),
+                    AccionSeleccionada.getId(), IdActividadEditar);
+            if (pEventos.ExisteEvento(eventoAccion)){
+                pEventos.RemoverEvento(eventoAccion);
+            }
             // redirigir a la edicion de la accion de mejora.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Mejoras/EditarAccionMejora.xhtml?id="+AccionSeleccionada.getId());

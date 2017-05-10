@@ -11,6 +11,9 @@ import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
+import com.dperez.maymweb.herramientas.Evento;
+import com.dperez.maymweb.herramientas.ProgramadorEventos;
+import com.dperez.maymweb.herramientas.TipoEvento;
 import com.dperez.maymweb.usuario.Usuario;
 import java.io.IOException;
 import java.io.Serializable;
@@ -41,15 +44,17 @@ public class ActividadesAC implements Serializable {
     private FacadeDatos fDatos;
     @Inject
     private FacadeLectura fLectura;
+    @Inject
+    private ProgramadorEventos pEventos;
     
     private Accion AccionSeleccionada;
     private String TipoActividad;
     private int IdActividadEditar;
     
-    private Map<Integer, Usuario> ListaUsuariosEmpresa;    
+    private Map<Integer, Usuario> ListaUsuariosEmpresa;
     
     private Date FechaEstimadaImplementacionMedidaCorrectiva;
-    private String strFechaEstimadaCorrectiva;    
+    private String strFechaEstimadaCorrectiva;
     private String DescripcionMedidaCorrectiva;
     private int ResponsableMedidaCorrectiva;
     
@@ -129,11 +134,15 @@ public class ActividadesAC implements Serializable {
      * @throws java.io.IOException
      */
     public void agregarMedidaCorrectiva() throws IOException{
-        if(fDatos.AgregarMedidaCorrectiva(AccionSeleccionada.getId(), FechaEstimadaImplementacionMedidaCorrectiva, DescripcionMedidaCorrectiva,
-                ResponsableMedidaCorrectiva)<0){
+        int idActividad = -1;
+        if((idActividad = fDatos.AgregarMedidaCorrectiva(AccionSeleccionada.getId(), FechaEstimadaImplementacionMedidaCorrectiva, DescripcionMedidaCorrectiva,
+                ResponsableMedidaCorrectiva))<0){
             FacesContext.getCurrentInstance().addMessage("form_agregar_actividades:btn_agregar_medida_correctiva", new FacesMessage(SEVERITY_FATAL, "No se pudo agregar Medida Correctiva", "No se pudo agregar Medida Correctiva" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
+            // agregar el evento en el programador de tareas.
+            Evento eventoNuevo = new Evento(TipoEvento.IMPLEMENTACION_ACTIVIDAD, ResponsableMedidaCorrectiva, AccionSeleccionada.getId(), idActividad);
+            pEventos.ProgramarEvento(FechaEstimadaImplementacionMedidaCorrectiva, eventoNuevo);
             // redirigir a la edicion de la accion correctiva.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/EditarAccionCorrectiva.xhtml?id="+AccionSeleccionada.getId());
@@ -147,11 +156,15 @@ public class ActividadesAC implements Serializable {
      * @throws java.io.IOException
      */
     public void agregarMedidaPreventiva() throws IOException{
-        if((fDatos.AgregarMedidaPreventiva(AccionSeleccionada.getId(), FechaEstimadaImplementacionMedidaPreventiva, DescripcionMedidaPreventiva,
+        int idActividad = -1;
+        if((idActividad = fDatos.AgregarMedidaPreventiva(AccionSeleccionada.getId(), FechaEstimadaImplementacionMedidaPreventiva, DescripcionMedidaPreventiva,
                 ResponsableMedidaPreventiva))<0){
             FacesContext.getCurrentInstance().addMessage("form_agregar_actividades:btn_agregar_medida_preventiva", new FacesMessage(SEVERITY_FATAL, "No se pudo agregar Medida Preventiva", "No se pudo agregar Medida Preventiva" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
+            // agregar el evento en el programador de tareas.
+            Evento eventoNuevo = new Evento(TipoEvento.IMPLEMENTACION_ACTIVIDAD, ResponsableMedidaCorrectiva, AccionSeleccionada.getId(), idActividad);
+            pEventos.ProgramarEvento(FechaEstimadaImplementacionMedidaCorrectiva, eventoNuevo);
             // redirigir a la edicion de la accion correctiva.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/EditarAccionCorrectiva.xhtml?id="+AccionSeleccionada.getId());
@@ -169,6 +182,12 @@ public class ActividadesAC implements Serializable {
             FacesContext.getCurrentInstance().addMessage("form_agregar_actividades:btn_remover_medida_correctiva", new FacesMessage(SEVERITY_FATAL, "No se pudo quitar Medida Correctiva", "No se pudo quitar Medida Correctiva" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
+            // remover el evento del programador de tareas.
+            Evento eventoAccion = new Evento(TipoEvento.IMPLEMENTACION_ACTIVIDAD, AccionSeleccionada.getComprobacionImplementacion().getResponsable().getId(),
+                    AccionSeleccionada.getId(), IdActividadEditar);
+            if (pEventos.ExisteEvento(eventoAccion)){
+                pEventos.RemoverEvento(eventoAccion);
+            }
             // redirigir a la edicion de la accion correctiva.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/EditarAccionCorrectiva.xhtml?id="+AccionSeleccionada.getId());
@@ -186,6 +205,12 @@ public class ActividadesAC implements Serializable {
             FacesContext.getCurrentInstance().addMessage("form_agregar_actividades:btn_remover_medida_preventiva", new FacesMessage(SEVERITY_FATAL, "No se pudo quitar Medida Preventiva", "No se pudo quitar Medida Preventiva" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
+            // remover el evento del programador de tareas.
+            Evento eventoAccion = new Evento(TipoEvento.IMPLEMENTACION_ACTIVIDAD, AccionSeleccionada.getComprobacionImplementacion().getResponsable().getId(),
+                    AccionSeleccionada.getId(), IdActividadEditar);
+            if (pEventos.ExisteEvento(eventoAccion)){
+                pEventos.RemoverEvento(eventoAccion);
+            }
             // redirigir a la edicion de la accion correctiva.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/EditarAccionCorrectiva.xhtml?id="+AccionSeleccionada.getId());
