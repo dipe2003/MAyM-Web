@@ -1,7 +1,6 @@
 
 package com.dperez.maymweb.herramientas;
 
-import com.dperez.maymweb.herramientas.IOPropiedades;
 import javax.ejb.Stateless;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
