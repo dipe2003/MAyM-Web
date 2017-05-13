@@ -32,9 +32,6 @@ public class ControladorPropiedad {
     public int getMailPort(){
         return Integer.parseInt(ioProp.getPropiedad("mail_port"));
     }
-    public int getDiasRenvioAlertas(){
-        return Integer.parseInt(ioProp.getPropiedad("dias_renvio_alertas"));
-    }
         
 }
 
