@@ -44,14 +44,14 @@ public class AlertasMejoras implements Runnable {
                 // Primero Si esta implementada
                 if(accion.EstaImplementada()){
                     if(accion.getEstadoAccion() == EnumEstado.PROCESO_IMP){
-                        if(accion.getComprobacionImplementacion().getFechaComprobacion() == null &&
+                        if(accion.getComprobacionImplementacion().getFechaComprobacion() == null ||
                                 accion.getComprobacionImplementacion().getFechaEstimada().compareTo(Hoy)< 0){
                             Evento evento = new Evento(TipoEvento.IMPLEMENTACION_ACCION, accion.getComprobacionImplementacion().getResponsable().getId(),
                                     accion.getId(),0);
                             cAlertas.EnviarAlerta(evento);
                         }
                     }else {
-                        if(accion.getComprobacionEficacia().getFechaComprobacion() == null &&
+                        if(accion.getComprobacionEficacia().getFechaComprobacion() == null ||
                                 accion.getComprobacionEficacia().getFechaEstimada().compareTo(Hoy)< 0){
                             Evento evento = new Evento(TipoEvento.VERIFICACION_EFICACIA, accion.getComprobacionImplementacion().getResponsable().getId(),
                                     accion.getId(),0);
