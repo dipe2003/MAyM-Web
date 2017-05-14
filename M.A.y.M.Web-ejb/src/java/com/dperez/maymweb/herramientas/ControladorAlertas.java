@@ -54,18 +54,18 @@ public class ControladorAlertas implements Serializable{
         String mensaje = "";
         switch(evento.getTipo()){
             case IMPLEMENTACION_ACTIVIDAD:
-                mensaje = "<h2 style='color:brown;'> Se cumplio el plazo para la implementacion de la actividad de la Accion con Id " + evento.getIdAccion() + ":</h2>";
-                mensaje = mensaje + "<p style='color:chocolate'> "+ usuario.getActividad(evento.getIdActividad()).getDescripcion() +" </p>";
+                mensaje = "<h2 style='color:brown;font-family: sans-serif'> Se cumplio el plazo para la implementacion de la actividad de la Accion con Id " + evento.getIdAccion() + ":</h2>";
+                mensaje = mensaje + "<p style='color:chocolate;font-family: sans-serif'> "+ usuario.getActividad(evento.getIdActividad()).getDescripcion() +" </p>";
                 break;
                 
             case IMPLEMENTACION_ACCION:
-                mensaje = "<h2 style='color:brown;'> Se cumplio el plazo para la comprobar la implementacion de la Accion con Id " + evento.getIdAccion() + ":</h2>";
-                mensaje = mensaje + "<p style='color:chocolate'> "+ Acciones.get(evento.getIdAccion()).getDescripcion() +" </p>";
+                mensaje = "<h2 style='color:brown;font-family: sans-serif'> Se cumplio el plazo para la comprobar la implementacion de la Accion con Id " + evento.getIdAccion() + ":</h2>";
+                mensaje = mensaje + "<p style='color:chocolate;font-family: sans-serif'> "+ Acciones.get(evento.getIdAccion()).getDescripcion() +" </p>";
                 break;
                 
             case VERIFICACION_EFICACIA:
-                mensaje = "<h2 style='color:brown;'> Se cumplio el plazo para la verificar la eficacia de la Accion con Id " + evento.getIdAccion() + ":</h2>";
-                mensaje = mensaje + "<p style='color:chocolate'> "+ Acciones.get(evento.getIdAccion()).getDescripcion() +" </p>";
+                mensaje = "<h2 style='color:brown;font-family: sans-serif'> Se cumplio el plazo para la verificar la eficacia de la Accion con Id " + evento.getIdAccion() + ":</h2>";
+                mensaje = mensaje + "<p style='color:chocolate;font-family: sans-serif'> "+ Acciones.get(evento.getIdAccion()).getDescripcion() +" </p>";
                 break;
                 
         }

@@ -18,7 +18,7 @@ import javax.inject.Inject;
  * @author Diego
  */
 @Stateless
-public class RepetidorTareas {    
+public class RepetidorTareas {
     @Inject
     private FacadeLectura fLectura;
     @Inject
@@ -32,14 +32,13 @@ public class RepetidorTareas {
     public void RenviarAlertasEventos() {
         // Acciones Correctivas
         Thread tCorrectivas = new Thread(new AlertasCorrectivas(fLectura.ListarAccionesCorrectivas(), cAlertas) );
-        tCorrectivas.start();
-        
         // Acciones Preventivas
         Thread tPreventivas = new Thread(new AlertasPreventivas(fLectura.ListarAccionesPreventivas(),cAlertas));
-        tPreventivas.start();
-        
         // Acciones de Mejora
         Thread tMejoras = new Thread(new AlertasMejoras(fLectura.ListarAccionesMejoras(), cAlertas));
+        
+        tCorrectivas.start();
+        tPreventivas.start();        
         tMejoras.start();
     }
     
