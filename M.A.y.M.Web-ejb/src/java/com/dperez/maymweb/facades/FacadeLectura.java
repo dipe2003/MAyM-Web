@@ -88,6 +88,10 @@ public class FacadeLectura  {
         return cVista.ListarAccionesSegunEstado(null, EnumAccion.MEJORA);
     }
     
+    public List<Accion> ListarAcciones(){
+        return cVista.ListarAccionesSegunEstado(null);
+    }
+    
     public Fortaleza GetFotaleza(int IdFortaleza){
         return cVista.GetFortaleza(IdFortaleza);
     }

@@ -12,22 +12,27 @@ import com.dperez.maymweb.estado.EnumEstado;
 import com.dperez.maymweb.herramientas.ControladorAlertas;
 import com.dperez.maymweb.herramientas.Evento;
 import com.dperez.maymweb.herramientas.TipoEvento;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.inject.Inject;
 
 /**
  *
  * @author dperez
  */
 public class AlertasMejoras implements Runnable {
-    @Inject
-    private ControladorAlertas cAlertas;
     
+    private ControladorAlertas cAlertas;
+       
     private final List<Accion> AccionesMejora;
     
-    public AlertasMejoras(List<Accion> AccionesMejora){
+    public AlertasMejoras(){
+        this.AccionesMejora = new ArrayList<>();
+    }
+    
+    public AlertasMejoras(List<Accion> AccionesMejora, ControladorAlertas cAlertas){
         this.AccionesMejora = AccionesMejora;
+        this.cAlertas = cAlertas;
     }    
     
     /**
@@ -40,7 +45,8 @@ public class AlertasMejoras implements Runnable {
     private void EnviarAlertasMejora(){
         Date Hoy = new Date();
         for(Accion accion: AccionesMejora){
-            if(accion.getEstadoAccion() != EnumEstado.CERRADA && accion.getEstadoAccion() != EnumEstado.DESESTIMADA){
+            if(accion.getEstadoAccion() != EnumEstado.CERRADA && accion.getEstadoAccion() != EnumEstado.DESESTIMADA && 
+                    accion.getComprobacionImplementacion() != null && accion.getComprobacionEficacia() != null){
                 // Primero Si esta implementada
                 if(accion.EstaImplementada()){
                     if(accion.getEstadoAccion() == EnumEstado.PROCESO_IMP){

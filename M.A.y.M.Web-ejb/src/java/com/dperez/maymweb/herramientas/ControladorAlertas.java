@@ -5,6 +5,8 @@
 */
 package com.dperez.maymweb.herramientas;
 
+import com.dperez.maymweb.accion.Accion;
+import com.dperez.maymweb.estado.EnumEstado;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.usuario.Usuario;
 import java.io.Serializable;
@@ -13,14 +15,14 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.List;
+import javax.faces.bean.ManagedBean;
 
 /**
  *
  * @author Diego
  */
-@Named
+@ManagedBean
 @Stateless
 public class ControladorAlertas implements Serializable{
     private SendMail cMail = new SendMail();
@@ -29,9 +31,10 @@ public class ControladorAlertas implements Serializable{
     private FacadeLectura fLectura;
     
     private Map<Integer, Usuario> Usuarios;
+    private Map<Integer, Accion> Acciones;
     
     // Metodos
-    
+
     /**
      * Envia un correo de alerta segun el evento.
      * Se extrae la informacion correspondiente al tipo de evento y se seleccionada el mensaje adecuado.
@@ -52,19 +55,22 @@ public class ControladorAlertas implements Serializable{
         switch(evento.getTipo()){
             case IMPLEMENTACION_ACTIVIDAD:
                 mensaje = "<h2 style='color:brown;'> Se cumplio el plazo para la implementacion de la actividad de la Accion con Id " + evento.getIdAccion() + ":</h2>";
+                mensaje = mensaje + "<p style='color:chocolate'> "+ usuario.getActividad(evento.getIdActividad()).getDescripcion() +" </p>";
                 break;
                 
             case IMPLEMENTACION_ACCION:
                 mensaje = "<h2 style='color:brown;'> Se cumplio el plazo para la comprobar la implementacion de la Accion con Id " + evento.getIdAccion() + ":</h2>";
+                mensaje = mensaje + "<p style='color:chocolate'> "+ Acciones.get(evento.getIdAccion()).getDescripcion() +" </p>";
                 break;
                 
             case VERIFICACION_EFICACIA:
                 mensaje = "<h2 style='color:brown;'> Se cumplio el plazo para la verificar la eficacia de la Accion con Id " + evento.getIdAccion() + ":</h2>";
+                mensaje = mensaje + "<p style='color:chocolate'> "+ Acciones.get(evento.getIdAccion()).getDescripcion() +" </p>";
                 break;
                 
         }
-        mensaje = mensaje + "<p style='color:chocolate'> "+ usuario.getActividad(evento.getIdActividad()).getDescripcion() +" </p>";
-        cMail.enviarMail(to, mensaje, asunto);
+        System.out.println("Mensaje: " + mensaje);
+        //cMail.enviarMail(to, mensaje, asunto);
     }
     
     @PostConstruct
@@ -73,6 +79,13 @@ public class ControladorAlertas implements Serializable{
         Usuarios = new HashMap<>();
         for(Usuario usuario: lstUsuarios){
             Usuarios.put(usuario.getId(), usuario);
+        }
+        List<Accion> lstAcciones = fLectura.ListarAcciones();
+        Acciones = new HashMap<>();
+        for(Accion accion: lstAcciones){
+            if(accion.getEstadoAccion() != EnumEstado.CERRADA && accion.getEstadoAccion() != EnumEstado.DESESTIMADA){
+                Acciones.put(accion.getId(), accion);
+            }
         }
     }
 }
