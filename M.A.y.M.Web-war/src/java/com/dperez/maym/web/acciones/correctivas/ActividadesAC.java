@@ -253,6 +253,15 @@ public class ActividadesAC implements Serializable {
             FacesContext.getCurrentInstance().addMessage("form_agregar_actividades:btn_agregar_medida_preventiva", new FacesMessage(SEVERITY_FATAL, "No se pudo Guardar Medida Preventiva", "No se pudo Guardar Medida Preventiva" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
+            // modificar evento
+            Actividad actividad = AccionSeleccionada.GetActividad(IdActividadEditar);
+            Evento eventoAccion = new Evento(TipoEvento.IMPLEMENTACION_ACTIVIDAD, actividad.getResponsableImplementacion().getId(),
+                    AccionSeleccionada.getId(), IdActividadEditar);
+            if (pEventos.ExisteEvento(eventoAccion)){
+                pEventos.RemoverEvento(eventoAccion);
+                Evento eventoNuevo = new Evento(TipoEvento.IMPLEMENTACION_ACTIVIDAD, ResponsableMedidaCorrectiva, AccionSeleccionada.getId(), IdActividadEditar);
+                pEventos.ProgramarEvento(FechaEstimadaImplementacionMedidaCorrectiva, eventoNuevo);
+            }
             // redirigir a la edicion de la accion correctiva.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/EditarAccionCorrectiva.xhtml?id="+AccionSeleccionada.getId());

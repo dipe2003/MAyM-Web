@@ -532,6 +532,8 @@ public class EditarAccionMejora implements Serializable {
                     cArchivo.BorrarArchivo(adjunto.getUbicacion());
                 }
             }
+            // Eliminar Eventos
+            pEventos.RemoverEventos(IdAccionSeleccionada);
             // Si la eliminacion se realizo correctamente redirige a lista de acciones.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Mejoras/ListarMejoras.xhtml");

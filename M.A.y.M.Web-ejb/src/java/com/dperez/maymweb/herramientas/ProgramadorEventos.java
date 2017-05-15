@@ -95,6 +95,25 @@ public class ProgramadorEventos {
         }
         return false;
     }
+    /**
+     * Remueve todos los eventos programados asociados la accion.
+     * @param IdAccion 
+     */
+    public void RemoverEventos(int IdAccion){
+        Collection<Timer> timers = timerService.getTimers();
+        List<Timer> timerList = new ArrayList<>();
+        Iterator<Timer> it = timers.iterator();
+        Timer timer;
+        while(it.hasNext()){
+            timer = (Timer) it;
+            if (timer.getInfo() instanceof Evento) {
+                Evento e = (Evento) timer.getInfo();
+                if(e.getIdAccion() == IdAccion){
+                    it.remove();
+                }
+            }
+        }
+    }
     
     /**
      * Crea una ScheduleExpression representando la fecha y hora del evento.
