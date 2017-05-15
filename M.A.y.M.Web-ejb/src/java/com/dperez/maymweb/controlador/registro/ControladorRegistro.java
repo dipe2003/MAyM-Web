@@ -181,8 +181,8 @@ public class ControladorRegistro {
         Accion accion = mAccion.GetAccion(IdAccion);
         if((accion.getClass())!= Mejora.class) throw new InvalidParameterException("El id no corresponde con una mejora");
         ((Mejora)accion).addActividadMejora((Actividad)medida);
-        int res = mAccion.ActualizarAccion(accion);
-        return res;
+        mAccion.ActualizarAccion(accion);
+        return medida.getIdActividad();
     }
     
     /**
@@ -201,8 +201,8 @@ public class ControladorRegistro {
         Accion accion = mAccion.GetAccion(IdAccion);
         if((accion.getClass())!= Preventiva.class) throw new InvalidParameterException("El id no corresponde con una Preventiva");
         ((Preventiva)accion).addActividadPreventiva((Actividad)medida);
-        int res = mAccion.ActualizarAccion(accion);
-        return res;
+         mAccion.ActualizarAccion(accion);
+        return medida.getIdActividad();
     }
     
     /**
@@ -221,8 +221,8 @@ public class ControladorRegistro {
         Accion accion = mAccion.GetAccion(IdAccion);
         if((accion.getClass())!= Correctiva.class) throw new InvalidParameterException("El id no corresponde con una Correctiva");
         ((Correctiva)accion).addMedidaPreventiva(medida);
-        int res = mAccion.ActualizarAccion(accion);
-        return res;
+        mAccion.ActualizarAccion(accion);
+        return medida.getIdActividad();
     }
     
     /**
@@ -241,8 +241,8 @@ public class ControladorRegistro {
         Accion accion = mAccion.GetAccion(IdAccion);
         if((accion.getClass())!= Correctiva.class) throw new InvalidParameterException("El id no corresponde con una Correctiva");
         ((Correctiva)accion).addMedidaCorrectiva(medida);
-        int res = mAccion.ActualizarAccion(accion);
-        return res;
+        mAccion.ActualizarAccion(accion);
+        return medida.getIdActividad();
     }
     
     /**

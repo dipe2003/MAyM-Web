@@ -12,6 +12,7 @@ import com.dperez.maymweb.estado.EnumEstado;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -112,5 +113,18 @@ public class Preventiva extends Accion implements Serializable{
     @Override
     public int compareTo(Accion OtraAccion) {        
         return OtraAccion.getFechaDeteccion().compareTo(this.FechaDeteccion);
+    }
+
+    @Override
+    public Actividad GetActividad(int IdActividad) {
+        Iterator<Actividad> it = this.Actividades.iterator();
+        Actividad actividad = null;
+        while(it.hasNext()){
+            actividad = it.next();
+            if(actividad.getIdActividad() == IdActividad){
+                return actividad;
+            }
+        }
+        return null;
     }
 }

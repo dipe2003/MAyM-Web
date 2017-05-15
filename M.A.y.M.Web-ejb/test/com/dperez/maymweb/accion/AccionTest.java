@@ -5,6 +5,7 @@
 */
 package com.dperez.maymweb.accion;
 
+import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.accion.adjunto.Adjunto;
 import com.dperez.maymweb.accion.adjunto.EnumTipoAdjunto;
 import com.dperez.maymweb.area.Area;
@@ -337,6 +338,10 @@ public class AccionTest {
 
         @Override
         public int compareTo(Accion o) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+        @Override
+        public Actividad GetActividad(int o) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
     }

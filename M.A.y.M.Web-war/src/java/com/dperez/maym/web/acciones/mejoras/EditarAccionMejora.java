@@ -447,7 +447,8 @@ public class EditarAccionMejora implements Serializable {
             ctx.renderResponse();
         }else{
             // remover el evento del programador de tareas.
-            Evento eventoAccion = new Evento(TipoEvento.IMPLEMENTACION_ACTIVIDAD, AccionSeleccionada.getComprobacionImplementacion().getResponsable().getId(),
+            Actividad actividad = AccionSeleccionada.GetActividad(IdActividad);
+            Evento eventoAccion = new Evento(TipoEvento.IMPLEMENTACION_ACTIVIDAD, actividad.getResponsableImplementacion().getId(),
                     AccionSeleccionada.getId(), IdActividad);
             if (pEventos.ExisteEvento(eventoAccion)){
                 pEventos.RemoverEvento(eventoAccion);

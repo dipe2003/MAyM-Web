@@ -125,7 +125,8 @@ public class ActividadesAP implements Serializable {
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             // remover el evento del programador de tareas.
-            Evento eventoAccion = new Evento(TipoEvento.IMPLEMENTACION_ACTIVIDAD, AccionSeleccionada.getComprobacionImplementacion().getResponsable().getId(),
+            Actividad actividad = AccionSeleccionada.GetActividad(IdActividadEditar);
+            Evento eventoAccion = new Evento(TipoEvento.IMPLEMENTACION_ACTIVIDAD, actividad.getResponsableImplementacion().getId(),
                     AccionSeleccionada.getId(), IdActividadEditar);
             if (pEventos.ExisteEvento(eventoAccion)){
                 pEventos.RemoverEvento(eventoAccion);
@@ -146,6 +147,15 @@ public class ActividadesAP implements Serializable {
             FacesContext.getCurrentInstance().addMessage("form_agregar_actividades:btn_guardar_actividad", new FacesMessage(SEVERITY_FATAL, "No se pudo guardar Actividad", "No se pudo guardar Actividad" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
+            // modificar evento
+            Actividad actividad = AccionSeleccionada.GetActividad(IdActividadEditar);
+            Evento eventoAccion = new Evento(TipoEvento.IMPLEMENTACION_ACTIVIDAD, actividad.getResponsableImplementacion().getId(),
+                    AccionSeleccionada.getId(), IdActividadEditar);
+            if (pEventos.ExisteEvento(eventoAccion)){
+                pEventos.RemoverEvento(eventoAccion);
+                Evento eventoNuevo = new Evento(TipoEvento.IMPLEMENTACION_ACTIVIDAD, ResponsableActividad, AccionSeleccionada.getId(), IdActividadEditar);
+                pEventos.ProgramarEvento(FechaEstimadaImplementacionActividad, eventoNuevo);
+            }
             // redirigir a la edicion de la accion correctiva.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Mejoras/EditarAccionMejora.xhtml?id="+AccionSeleccionada.getId());

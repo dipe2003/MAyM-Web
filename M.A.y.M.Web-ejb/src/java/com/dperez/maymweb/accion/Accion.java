@@ -5,6 +5,7 @@
 */
 package com.dperez.maymweb.accion;
 
+import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.accion.adjunto.Adjunto;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
@@ -204,5 +205,12 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
      * @return 
      */
     public abstract boolean EstaImplementada();
+    
+    /**
+     * Devuelve la actividad especificada.
+     * @param IdActividad
+     * @return Null si no se encuentra.
+     */
+    public abstract Actividad GetActividad(int IdActividad);
     
 }

@@ -232,9 +232,29 @@ public class Correctiva extends Accion implements Serializable {
         }
         return implementada;
     }
-
+    
     @Override
-    public int compareTo(Accion OtraAccion) {        
+    public int compareTo(Accion OtraAccion) {
         return OtraAccion.getFechaDeteccion().compareTo(this.FechaDeteccion);
+    }
+    
+    @Override
+    public Actividad GetActividad(int IdActividad) {
+        Iterator<Actividad> it = this.MedidasCorrectivas.iterator();
+        Actividad actividad = null;
+        while(it.hasNext()){
+            actividad = it.next();
+            if(actividad.getIdActividad() == IdActividad){
+                return actividad;
+            }
+        }
+        it = this.MedidasPreventivas.iterator();
+        while(it.hasNext()){
+            actividad = it.next();
+            if(actividad.getIdActividad() == IdActividad){
+                return actividad;
+            }
+        }
+        return null;
     }
 }
