@@ -11,6 +11,7 @@
         <title>Medicion Analisis y Mejora</title>
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/Resources/CSS/GraficosIndex.css"/>
         <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/Resources/bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
         <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/Resources/CSS/Cargando.css"/>
         <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/Resources/CSS/Mensajes.css"/>
@@ -22,6 +23,8 @@
         
         <script src="#{facesContext.externalContext.requestContextPath}/Resources/Scripts/Datepicker.js"/>
         <script src="#{facesContext.externalContext.requestContextPath}/Resources/Scripts/IndicadorCarga.js"/>
+        
+        <script src="#{facesContext.externalContext.requestContextPath}/Resources/Scripts/Charts/Chart.js"/>
         
         <link rel="shortcut icon" type="image/x-icon" href="#{facesContext.externalContext.requestContextPath}/Resources/Images/maym_favicon.ico"/>
         
@@ -51,7 +54,8 @@
                             <h1>Bienvenido a <abbr title="Medicion Analisis y Mejora" >M.A.Y.M.</abbr> </h1>      
                             <p>Este es el sitio de inicio donde podras ver un resumen de los registros generados.</p> 
                             <p><small>Para mas informacion o utilizar todas las funciones del sistema inicia sesion.</small></p>   
-                        </div>                        
+                        </div>
+                        <a href="#{facesContext.externalContext.requestContextPath}/Views/Graficos/GraficosIndex.xhtml">Ver Resumen</a>
                     </div>
                 </div>
             </ui:insert>
