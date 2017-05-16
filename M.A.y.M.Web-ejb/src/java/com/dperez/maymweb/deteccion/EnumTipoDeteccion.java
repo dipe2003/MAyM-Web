@@ -18,10 +18,12 @@ public enum EnumTipoDeteccion {
     INTERNA ("Deteccion Interna"),
     EXTERNA ("Deteccion Externa");
     
-    private final String Descripcion;  
-     
+    private final String Descripcion;
+    
     EnumTipoDeteccion(String descripcion){
         this.Descripcion = descripcion;
     }
-      
+    public String getDescripcion(){
+        return this.Descripcion;
+    }
 }

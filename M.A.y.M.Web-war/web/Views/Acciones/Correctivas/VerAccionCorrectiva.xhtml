@@ -44,22 +44,22 @@
                             <c:choose>
                                 <c:when test="#{verCorrectiva.estado == 'PENDIENTE'}">
                                     <div class="panel-body" style="background-color: red; color: white">
-                                        Pendiente
+                                        #{verCorrectiva.estado.descripcion}
                                     </div>
                                 </c:when>
                                 <c:when test="#{verCorrectiva.estado == 'CERRADA'}" >
                                     <div class="panel-body" style="background-color: green; color: white">
-                                        Cerrada
+                                       #{verCorrectiva.estado.descripcion}
                                     </div>
                                 </c:when>
                                 <c:when test="#{verCorrectiva.estado == 'DESESTIMADA'}" >
                                     <div class="panel-body" style="background-color: black; color: white">
-                                        Desestimada
+                                        #{verCorrectiva.estado.descripcion}
                                     </div>
                                 </c:when>
                                 <c:when test="#{verCorrectiva.estado == 'PROCESO_IMP'}" >
                                     <div class="panel-body" style="background-color: #ff9900; color: white">
-                                        Proceso Implementacion
+                                        #{verCorrectiva.estado.descripcion}
                                     </div>
                                 </c:when>
                                 <c:otherwise>
@@ -92,7 +92,7 @@
                             <div class="col-sm-3">
                                 <div class="form-group">
                                     <strong><label for="tipo_deteccion">Tipo de Deteccion:</label></strong>                                    
-                                    <h:outputText id="tipo_deteccion" class="form-control" value="#{verCorrectiva.generadaPor.tipo}" />
+                                    <h:outputText id="tipo_deteccion" class="form-control" value="#{verCorrectiva.generadaPor.tipo.descripcion}" />
                                 </div> 
                             </div>
                             <div class="col-sm-3">
@@ -106,7 +106,7 @@
                         
                         <div class="form-group">
                             <strong><label for="clasificacion">Clasificacion:</label></strong>                                    
-                            <h:outputText id="clasificacion" value=" #{verCorrectiva.tipoDesvio}" />
+                            <h:outputText id="clasificacion" value=" #{verCorrectiva.tipoDesvio.descripcion}" />
                         </div> 
                         
                         <div class="form-group">

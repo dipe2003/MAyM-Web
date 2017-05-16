@@ -15,9 +15,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
@@ -101,7 +99,7 @@ public class Detecciones implements Serializable {
         if(resto > 0){
             CantidadPaginas ++;
         }
-        
+        TiposDeteccion =  EnumTipoDeteccion.values();
         // llenar la lista con todas las areas registradas.
         cargarPagina(PaginaActual);
     }

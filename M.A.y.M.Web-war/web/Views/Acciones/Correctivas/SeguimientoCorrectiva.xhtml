@@ -45,27 +45,27 @@
                             <c:choose>
                                 <c:when test="#{seguimientoCorrectiva.accionSeleccionada.estadoAccion == 'PENDIENTE'}">
                                     <div class="panel-body" style="background-color: red; color: white">
-                                        Pendiente
+                                        #{seguimientoCorrectiva.accionSeleccionada.estadoAccion.descripcion}
                                     </div>
                                 </c:when>
                                 <c:when test="#{seguimientoCorrectiva.accionSeleccionada.estadoAccion == 'CERRADA'}" >
                                     <div class="panel-body" style="background-color: green; color: white">
-                                        Cerrada
+                                        #{seguimientoCorrectiva.accionSeleccionada.estadoAccion.descripcion}
                                     </div>
                                 </c:when>
                                 <c:when test="#{seguimientoCorrectiva.accionSeleccionada.estadoAccion == 'DESESTIMADA'}" >
                                     <div class="panel-body" style="background-color: black; color: white">
-                                        Desestimada
+                                        #{seguimientoCorrectiva.accionSeleccionada.estadoAccion.descripcion}
                                     </div>
                                 </c:when>
                                 <c:when test="#{seguimientoCorrectiva.accionSeleccionada.estadoAccion == 'PROCESO_IMP'}" >
                                     <div class="panel-body" style="background-color: #ff9900; color: white">
-                                        Proceso Implementacion
+                                        #{seguimientoCorrectiva.accionSeleccionada.estadoAccion.descripcion}
                                     </div>
                                 </c:when>
                                 <c:otherwise>
                                     <div class="panel-body" style="background-color: yellow; color: #ff9900">
-                                        Proceso Verificacion
+                                        #{seguimientoCorrectiva.accionSeleccionada.estadoAccion.descripcion}
                                     </div>
                                 </c:otherwise>
                             </c:choose>
@@ -316,9 +316,11 @@
                                                             <div class="form-group">
                                                                 <strong><label for="resultado_comprobacion_implementacion">Resultado de la Comprobacion</label></strong>
                                                                 <h:selectOneRadio id="resultado_comprobacion_implementacion" value="#{seguimientoCorrectiva.comprobacionSeleccionadaImplementacion}" >
-                                                                    <f:selectItem itemLabel="No Comprobada" itemValue="NO_COMPROBADA" />
-                                                                    <f:selectItem itemLabel="Correcta" itemValue="CORRECTA" />
-                                                                    <f:selectItem itemLabel="Incorrecta" itemValue="INCORRECTA" />
+                                                                    <c:forEach items="#{seguimientoCorrectiva.comprobaciones}" var="tipo_comprobaciones">
+                                                                        <div class="radio">
+                                                                            <f:selectItem itemLabel="#{tipo_comprobaciones.descripcion}" itemValue="#{tipo_comprobaciones}" />
+                                                                        </div>
+                                                                    </c:forEach>
                                                                 </h:selectOneRadio>
                                                             </div>
                                                         </div>                                            
@@ -405,9 +407,11 @@
                                                             <div class="form-group">
                                                                 <strong><label for="resultado_comprobacion_eficacia">Resultado de la Comprobacion</label></strong>
                                                                 <h:selectOneRadio id="resultado_comprobacion_eficacia" value="#{seguimientoCorrectiva.comprobacionSeleccionadaEficacia}" >
-                                                                    <f:selectItem itemLabel="No Comprobada" itemValue="NO_COMPROBADA" />
-                                                                    <f:selectItem itemLabel="Correcta" itemValue="CORRECTA" />
-                                                                    <f:selectItem itemLabel="Incorrecta" itemValue="INCORRECTA" />
+                                                                    <c:forEach items="#{seguimientoCorrectiva.comprobaciones}" var="tipo_comprobaciones">
+                                                                        <div class="radio">
+                                                                            <f:selectItem itemLabel="#{tipo_comprobaciones.descripcion}" itemValue="#{tipo_comprobaciones}" />
+                                                                        </div>
+                                                                    </c:forEach>
                                                                 </h:selectOneRadio>
                                                             </div>
                                                         </div>

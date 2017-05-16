@@ -44,27 +44,27 @@
                             <c:choose>
                                 <c:when test="#{verMejora.estado == 'PENDIENTE'}">
                                     <div class="panel-body" style="background-color: red; color: white">
-                                        Pendiente
+                                        #{verMejora.estado.descripcion}
                                     </div>
                                 </c:when>
                                 <c:when test="#{verMejora.estado == 'CERRADA'}" >
                                     <div class="panel-body" style="background-color: green; color: white">
-                                        Cerrada
+                                       #{verMejora.estado.descripcion}
                                     </div>
                                 </c:when>
                                 <c:when test="#{verMejora.estado == 'DESESTIMADA'}" >
                                     <div class="panel-body" style="background-color: black; color: white">
-                                        Desestimada
+                                        #{verMejora.estado.descripcion}
                                     </div>
                                 </c:when>
                                 <c:when test="#{verMejora.estado == 'PROCESO_IMP'}" >
                                     <div class="panel-body" style="background-color: #ff9900; color: white">
-                                        Proceso Implementacion
+                                        #{verMejora.estado.descripcion}
                                     </div>
                                 </c:when>
                                 <c:otherwise>
                                     <div class="panel-body" style="background-color: yellow; color: #ff9900">
-                                        Proceso Verificacion
+                                        #{verMejora.estado.descripcion}
                                     </div>
                                 </c:otherwise>
                             </c:choose>
@@ -92,7 +92,7 @@
                             <div class="col-sm-3">
                                 <div class="form-group">
                                     <strong><label for="tipo_deteccion">Tipo de Deteccion:</label></strong>                                    
-                                    <h:outputText id="tipo_deteccion" class="form-control" value="#{verMejora.generadaPor.tipo}" />
+                                    <h:outputText id="tipo_deteccion" class="form-control" value="#{verMejora.generadaPor.tipo.descripcion}" />
                                 </div> 
                             </div>
                             <div class="col-sm-3">

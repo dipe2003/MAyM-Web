@@ -45,27 +45,27 @@
                             <c:choose>
                                 <c:when test="#{editarAccionCorrectiva.accionSeleccionada.estadoAccion == 'PENDIENTE'}">
                                     <div class="panel-body" style="background-color: red; color: white">
-                                        Pendiente
+                                        #{editarAccionCorrectiva.accionSeleccionada.estadoAccion.descripcion}
                                     </div>
                                 </c:when>
                                 <c:when test="#{editarAccionCorrectiva.accionSeleccionada.estadoAccion == 'CERRADA'}" >
                                     <div class="panel-body" style="background-color: green; color: white">
-                                        Cerrada
+                                        #{editarAccionCorrectiva.accionSeleccionada.estadoAccion.descripcion}
                                     </div>
                                 </c:when>
                                 <c:when test="#{editarAccionCorrectiva.accionSeleccionada.estadoAccion == 'DESESTIMADA'}" >
                                     <div class="panel-body" style="background-color: black; color: white">
-                                        Desestimada
+                                        #{editarAccionCorrectiva.accionSeleccionada.estadoAccion.descripcion}
                                     </div>
                                 </c:when>
                                 <c:when test="#{editarAccionCorrectiva.accionSeleccionada.estadoAccion == 'PROCESO_IMP'}" >
                                     <div class="panel-body" style="background-color: #ff9900; color: white">
-                                        Proceso Implementacion
+                                        #{editarAccionCorrectiva.accionSeleccionada.estadoAccion.descripcion}
                                     </div>
                                 </c:when>
                                 <c:otherwise>
                                     <div class="panel-body" style="background-color: yellow; color: #ff9900">
-                                        Proceso Verificacion
+                                        #{editarAccionCorrectiva.accionSeleccionada.estadoAccion.descripcion}
                                     </div>
                                 </c:otherwise>
                             </c:choose>
@@ -106,7 +106,7 @@
                                         <h:selectOneRadio id="tipo_deteccion" value="#{editarAccionCorrectiva.tipoDeDeteccionSeleccionada}" >
                                             <c:forEach items="#{editarAccionCorrectiva.tiposDeteccion}" var="tipo">
                                                 <div class="radio" >
-                                                    <f:selectItem itemLabel="#{tipo}" itemValue="#{tipo}" />
+                                                    <f:selectItem itemLabel="#{tipo.descripcion}" itemValue="#{tipo}" />
                                                 </div>
                                             </c:forEach>
                                             <f:ajax execute="@this"/>
@@ -137,11 +137,11 @@
                                 <div class="form-group">
                                     <strong><label for="clasificacion">Clasificacion:</label></strong>                                    
                                     <h:selectOneRadio id="clasificacion" value="#{editarAccionCorrectiva.tipoDesvioSeleccionado}">
-                                        <div class="radio" >
-                                            <f:selectItem itemLabel="Menor/Observacion" itemValue="NC_MENOR_OBS" />
-                                            <f:selectItem itemLabel="Mayor" itemValue="NC_MAYOR" />
-                                            <f:selectItem itemLabel="Critica" itemValue="NC_CRITICA" />
-                                        </div>
+                                        <c:forEach items="#{crearAccionCorrectiva.tiposDesvios}" var="tipo" >
+                                            <div class="radio" >
+                                                <f:selectItem itemLabel="#{tipo.descripcion}" itemValue="#{tipo}" />
+                                            </div>
+                                        </c:forEach>
                                     </h:selectOneRadio>
                                 </div> 
                             </div>
@@ -680,8 +680,11 @@
                                     <div class="form-group">
                                         <strong><label for="tipo_nueva_deteccion">Tipo</label></strong>                                 
                                         <h:selectOneRadio id="tipo_nueva_deteccion" value="#{editarAccionCorrectiva.tipoDeDeteccionSeleccionada}" >
-                                            <f:selectItem itemLabel="Interna" itemValue="INTERNA"/>
-                                            <f:selectItem itemLabel="Externa" itemValue="EXTERNA" />  
+                                             <c:forEach items="#{editarAccionCorrectiva.tiposDeteccion}" var="tipo">
+                                                <div class="radio" >
+                                                    <f:selectItem itemLabel="#{tipo.descripcion}" itemValue="#{tipo}" />
+                                                </div>
+                                            </c:forEach>
                                             <f:ajax execute="@this" event="change" />
                                         </h:selectOneRadio>  
                                     </div>

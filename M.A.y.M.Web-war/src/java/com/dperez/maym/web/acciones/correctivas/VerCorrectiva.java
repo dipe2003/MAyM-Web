@@ -58,7 +58,7 @@ public class VerCorrectiva implements Serializable {
     
     private List<Producto> ListaProductos;
     
-    private String TipoDesvio;
+    private EnumTipoDesvio TipoDesvio;
     
     private Map<Integer, Actividad> MedidasCorrectivas;
     private Map<Integer, Actividad> MedidasPreventivas;
@@ -94,7 +94,7 @@ public class VerCorrectiva implements Serializable {
     
     public List<Producto> getListaProductos() {return ListaProductos;}
     
-    public String getTipoDesvio() {return TipoDesvio;}
+    public EnumTipoDesvio getTipoDesvio() {return TipoDesvio;}
     
     public Map<Integer, Actividad> getMedidasCorrectivas() {return MedidasCorrectivas;}
     public Map<Integer, Actividad> getMedidasPreventivas() {return MedidasPreventivas;}
@@ -125,7 +125,7 @@ public class VerCorrectiva implements Serializable {
     
     public void setListaProductos(List<Producto> ListaProductos) {this.ListaProductos = ListaProductos;}
     
-    public void setTipoDesvio(String TipoDesvio) {this.TipoDesvio = TipoDesvio;}
+    public void setTipoDesvio(EnumTipoDesvio TipoDesvio) {this.TipoDesvio = TipoDesvio;}
 
     public void setMedidasCorrectivas(Map<Integer, Actividad> MedidasCorrectivas) {this.MedidasCorrectivas = MedidasCorrectivas;}
     public void setMedidasPreventivas(Map<Integer, Actividad> MedidasPreventivas) {this.MedidasPreventivas = MedidasPreventivas;}
@@ -174,20 +174,8 @@ public class VerCorrectiva implements Serializable {
                 ListaProductos = ((Correctiva)AccionSeleccionada).getProductosAfectados();
             }
             
-            EnumTipoDesvio tipo = ((Correctiva)AccionSeleccionada).getTipo();
-            switch(tipo){
-                case NC_MENOR_OBS:
-                    TipoDesvio = "No Conformidad Menor / Observacion";
-                    break;
-                case NC_MAYOR:
-                    TipoDesvio = "No Conformidad Mayor";
-                    break;
-                    
-                case NC_CRITICA:
-                    TipoDesvio = "No Conformidad Critica";
-                    break;
-                default: break;
-            }
+            TipoDesvio = ((Correctiva)AccionSeleccionada).getTipo();
+            
         }
     }
     

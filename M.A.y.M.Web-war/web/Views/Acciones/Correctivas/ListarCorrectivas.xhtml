@@ -108,27 +108,27 @@
                                         <c:choose>
                                             <c:when test="#{accion.estadoAccion == 'PENDIENTE'}">
                                                 <td style="background-color: red; color: white">
-                                                    Pendiente
+                                                    #{accion.estadoAccion.descripcion}
                                                 </td>
                                             </c:when>
                                             <c:when test="#{accion.estadoAccion == 'CERRADA'}" >
                                                 <td style="background-color: green; color: white">
-                                                    Cerrada
+                                                    #{accion.estadoAccion.descripcion}
                                                 </td>
                                             </c:when>
                                             <c:when test="#{accion.estadoAccion == 'DESESTIMADA'}" >
                                                 <td style="background-color: black; color: white">
-                                                    Desestimada
+                                                   #{accion.estadoAccion.descripcion}
                                                 </td>
                                             </c:when>
                                             <c:when test="#{accion.estadoAccion == 'PROCESO_IMP'}" >
                                                 <td style="background-color: #ff9900; color: white">
-                                                    Proceso Implementacion
+                                                    #{accion.estadoAccion.descripcion}
                                                 </td>
                                             </c:when>
                                             <c:otherwise>
                                                 <td style="background-color: yellow; color: #ff9900">
-                                                    Proceso Verificacion
+                                                    #{accion.estadoAccion.descripcion}
                                                 </td>
                                             </c:otherwise>
                                         </c:choose>

@@ -18,5 +18,7 @@ public enum EnumTipoAdjunto {
     EnumTipoAdjunto(String descripcion){
         this.Descripcion = descripcion;
     }
-    
+    public String getDescripcion(){
+        return this.Descripcion;
+    }
 }

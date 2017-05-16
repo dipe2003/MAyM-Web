@@ -45,27 +45,27 @@
                             <c:choose>
                                 <c:when test="#{editarAccionMejora.accionSeleccionada.estadoAccion == 'PENDIENTE'}">
                                     <div class="panel-body" style="background-color: red; color: white">
-                                        Pendiente
+                                        #{editarAccionMejora.accionSeleccionada.estadoAccion.descripcion}
                                     </div>
                                 </c:when>
                                 <c:when test="#{editarAccionMejora.accionSeleccionada.estadoAccion == 'CERRADA'}" >
                                     <div class="panel-body" style="background-color: green; color: white">
-                                        Cerrada
+                                        #{editarAccionMejora.accionSeleccionada.estadoAccion.descripcion}
                                     </div>
                                 </c:when>
                                 <c:when test="#{editarAccionMejora.accionSeleccionada.estadoAccion == 'DESESTIMADA'}" >
                                     <div class="panel-body" style="background-color: black; color: white">
-                                        Desestimada
+                                       #{editarAccionMejora.accionSeleccionada.estadoAccion.descripcion}
                                     </div>
                                 </c:when>
                                 <c:when test="#{editarAccionMejora.accionSeleccionada.estadoAccion == 'PROCESO_IMP'}" >
                                     <div class="panel-body" style="background-color: #ff9900; color: white">
-                                        Proceso Implementacion
+                                        #{editarAccionMejora.accionSeleccionada.estadoAccion.descripcion}
                                     </div>
                                 </c:when>
                                 <c:otherwise>
                                     <div class="panel-body" style="background-color: yellow; color: #ff9900">
-                                        Proceso Verificacion
+                                        #{editarAccionMejora.accionSeleccionada.estadoAccion.descripcion}
                                     </div>
                                 </c:otherwise>
                             </c:choose>
@@ -105,7 +105,7 @@
                                         <h:selectOneRadio id="tipo_deteccion" value="#{editarAccionMejora.tipoDeDeteccionSeleccionada}" >
                                             <c:forEach items="#{editarAccionMejora.tiposDeteccion}" var="tipo">
                                                 <div class="radio" >
-                                                    <f:selectItem itemLabel="#{tipo}" itemValue="#{tipo}" />
+                                                    <f:selectItem itemLabel="#{tipo.descripcion}" itemValue="#{tipo}" />
                                                 </div>
                                             </c:forEach>
                                             <f:ajax execute="@this"/>
@@ -496,8 +496,11 @@
                                     <div class="form-group">
                                         <strong><label for="tipo_nueva_deteccion">Tipo</label></strong>                                 
                                         <h:selectOneRadio id="tipo_nueva_deteccion" value="#{editarAccionMejora.tipoDeDeteccionSeleccionada}" >
-                                            <f:selectItem itemLabel="Interna" itemValue="INTERNA"/>
-                                            <f:selectItem itemLabel="Externa" itemValue="EXTERNA" />  
+                                            <c:forEach items="#{editarAccionMejora.tiposDeteccion}" var="tipo">
+                                                <div class="radio" >
+                                                    <f:selectItem itemLabel="#{tipo.descripcion}" itemValue="#{tipo}" />
+                                                </div>
+                                            </c:forEach>
                                             <f:ajax execute="@this" event="change" />
                                         </h:selectOneRadio>  
                                     </div>

@@ -54,7 +54,7 @@
                                         <h:selectOneRadio id="tipo_deteccion" value="#{crearAccionPreventiva.tipoDeDeteccionSeleccionada}" >
                                             <c:forEach items="#{crearAccionPreventiva.tiposDeteccion}" var="tipo">
                                                 <div class="radio" >
-                                                    <f:selectItem itemLabel="#{tipo}" itemValue="#{tipo}" />
+                                                    <f:selectItem itemLabel="#{tipo.descripcion}" itemValue="#{tipo}" />
                                                 </div>
                                             </c:forEach>
                                             <f:ajax execute="@this"/>
@@ -138,8 +138,11 @@
                                     <div class="form-group">
                                         <strong><label for="tipo_nueva_deteccion">Tipo</label></strong>                                 
                                         <h:selectOneRadio id="tipo_nueva_deteccion" value="#{crearAccionPreventiva.tipoDeDeteccionSeleccionada}" >
-                                            <f:selectItem itemLabel="Interna" itemValue="INTERNA"/>
-                                            <f:selectItem itemLabel="Externa" itemValue="EXTERNA" />  
+                                            <c:forEach items="#{crearAccionPreventiva.tiposDeteccion}" var="tipo">
+                                                <div class="radio" >
+                                                    <f:selectItem itemLabel="#{tipo.descripcion}" itemValue="#{tipo}" />
+                                                </div>
+                                            </c:forEach>
                                             <f:ajax execute="@this" event="change" />
                                         </h:selectOneRadio>  
                                     </div>

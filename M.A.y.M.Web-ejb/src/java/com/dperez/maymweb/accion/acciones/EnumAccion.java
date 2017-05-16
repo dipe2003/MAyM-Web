@@ -20,4 +20,7 @@ public enum EnumAccion {
         this.Descripcion = descripcion;
     }
     
+    public String getDescripcion(){
+        return this.Descripcion;
+    }
 }

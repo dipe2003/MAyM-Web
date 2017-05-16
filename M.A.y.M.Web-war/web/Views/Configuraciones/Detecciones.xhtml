@@ -56,7 +56,7 @@
                                             #{deteccion.nombre}
                                         </td>
                                         <td>
-                                            #{deteccion.tipo}
+                                            #{deteccion.tipo.descripcion}
                                         </td>
                                         <td>                                            
                                             <div class="btn-group">
@@ -123,8 +123,11 @@
                                 <div class="form-group">
                                     <strong><label for="tipo_nueva_deteccion">Tipo</label></strong>                                 
                                     <h:selectOneRadio id="tipo_nueva_deteccion" value="#{detecciones.tipoDeDeteccionSeleccionada}" >
-                                        <f:selectItem itemLabel="Interna" itemValue="INTERNA"/>
-                                        <f:selectItem itemLabel="Externa" itemValue="EXTERNA" />                                            
+                                        <c:forEach items="#{detecciones.tiposDeteccion}" var="tipo">
+                                            <div class="radio" >
+                                                <f:selectItem itemLabel="#{tipo.descripcion}" itemValue="#{tipo}" />
+                                            </div>
+                                        </c:forEach>                                      
                                     </h:selectOneRadio>  
                                 </div>
                                 <h:panelGroup id="panel_mensajes_modal">
@@ -175,8 +178,11 @@
                                 <div class="form-group">
                                     <strong><label for="tipo_deteccion">Tipo de Deteccion</label></strong>                                    
                                     <h:selectOneRadio id="tipo_deteccion" value="#{detecciones.tipoDeDeteccionSeleccionada}" >
-                                        <f:selectItem itemLabel="Interna" itemValue="INTERNA"/>
-                                        <f:selectItem itemLabel="Externa" itemValue="EXTERNA" />                                            
+                                        <c:forEach items="#{detecciones.tiposDeteccion}" var="tipo">
+                                            <div class="radio" >
+                                                <f:selectItem itemLabel="#{tipo.descripcion}" itemValue="#{tipo}" />
+                                            </div>
+                                        </c:forEach>                                               
                                     </h:selectOneRadio>                                    
                                 </div>
                                 <h:panelGroup id="panel_mensajes_modal_editar">

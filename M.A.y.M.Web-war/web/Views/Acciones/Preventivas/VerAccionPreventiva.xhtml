@@ -44,27 +44,27 @@
                             <c:choose>
                                 <c:when test="#{verPreventiva.estado == 'PENDIENTE'}">
                                     <div class="panel-body" style="background-color: red; color: white">
-                                        Pendiente
+                                        #{verPreventiva.estado.descripcion}
                                     </div>
                                 </c:when>
                                 <c:when test="#{verPreventiva.estado == 'CERRADA'}" >
                                     <div class="panel-body" style="background-color: green; color: white">
-                                        Cerrada
+                                       #{verPreventiva.estado.descripcion}
                                     </div>
                                 </c:when>
                                 <c:when test="#{verPreventiva.estado == 'DESESTIMADA'}" >
                                     <div class="panel-body" style="background-color: black; color: white">
-                                        Desestimada
+                                        #{verPreventiva.estado.descripcion}
                                     </div>
                                 </c:when>
                                 <c:when test="#{verPreventiva.estado == 'PROCESO_IMP'}" >
                                     <div class="panel-body" style="background-color: #ff9900; color: white">
-                                        Proceso Implementacion
+                                        #{verPreventiva.estado.descripcion}
                                     </div>
                                 </c:when>
                                 <c:otherwise>
                                     <div class="panel-body" style="background-color: yellow; color: #ff9900">
-                                        Proceso Verificacion
+                                        #{verPreventiva.estado.descripcion}
                                     </div>
                                 </c:otherwise>
                             </c:choose>
@@ -92,7 +92,7 @@
                             <div class="col-sm-3">
                                 <div class="form-group">
                                     <strong><label for="tipo_deteccion">Tipo de Deteccion:</label></strong>                                    
-                                    <h:outputText id="tipo_deteccion" class="form-control" value="#{verPreventiva.generadaPor.tipo}" />
+                                    <h:outputText id="tipo_deteccion" class="form-control" value="#{verPreventiva.generadaPor.tipo.descripcion}" />
                                 </div> 
                             </div>
                             <div class="col-sm-3">

@@ -22,4 +22,7 @@ public enum EnumPermiso {
         this.Descripcion = descripcion;
     }
     
+    public String getDescripcion(){
+        return this.Descripcion;
+    }
 }

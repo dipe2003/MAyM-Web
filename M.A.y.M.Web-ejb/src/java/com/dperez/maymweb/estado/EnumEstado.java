@@ -23,4 +23,7 @@ public enum EnumEstado {
         this.Descripcion = descripcion;
     }
     
+    public String getDescripcion(){
+        return this.Descripcion;
+    }
 }

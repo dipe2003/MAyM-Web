@@ -52,7 +52,7 @@
                                         <h:selectOneRadio id="tipo_deteccion" value="#{crearAccionCorrectiva.tipoDeDeteccionSeleccionada}" >
                                             <c:forEach items="#{crearAccionCorrectiva.tiposDeteccion}" var="tipo">
                                                 <div class="radio" >
-                                                    <f:selectItem itemLabel="#{tipo}" itemValue="#{tipo}" />
+                                                    <f:selectItem itemLabel="#{tipo.descripcion}" itemValue="#{tipo}" />
                                                 </div>
                                             </c:forEach>
                                             <f:ajax execute="@this"/>
@@ -82,12 +82,12 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <strong><label for="clasificacion">Clasificacion:</label></strong>                                    
-                                    <h:selectOneRadio id="clasificacion" value="#{crearAccionCorrectiva.tipoDesvioSeleccionado}">
-                                        <div class="radio" >
-                                            <f:selectItem itemLabel="Menor/Observacion" itemValue="NC_MENOR_OBS" />
-                                            <f:selectItem itemLabel="Mayor" itemValue="NC_MAYOR" />
-                                            <f:selectItem itemLabel="Critica" itemValue="NC_CRITICA" />
-                                        </div>
+                                    <h:selectOneRadio id="clasificacion" value="#{crearAccionCorrectiva.tipoDesvioSeleccionado}">                                        
+                                        <c:forEach items="#{crearAccionCorrectiva.tiposDesvios}" var="tipo" >
+                                            <div class="radio" >
+                                                <f:selectItem itemLabel="#{tipo.descripcion}" itemValue="#{tipo}" />
+                                            </div>
+                                        </c:forEach>                                        
                                     </h:selectOneRadio>
                                 </div> 
                             </div>
@@ -214,8 +214,11 @@
                                     <div class="form-group">
                                         <strong><label for="tipo_nueva_deteccion">Tipo</label></strong>                                 
                                         <h:selectOneRadio id="tipo_nueva_deteccion" value="#{crearAccionCorrectiva.tipoDeDeteccionSeleccionada}" >
-                                            <f:selectItem itemLabel="Interna" itemValue="INTERNA"/>
-                                            <f:selectItem itemLabel="Externa" itemValue="EXTERNA" />  
+                                            <c:forEach items="#{crearAccionCorrectiva.tiposDeteccion}" var="tipo">
+                                                <div class="radio" >
+                                                    <f:selectItem itemLabel="#{tipo.descripcion}" itemValue="#{tipo}" />
+                                                </div>
+                                            </c:forEach>
                                             <f:ajax execute="@this" event="change" />
                                         </h:selectOneRadio>  
                                     </div>

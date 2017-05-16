@@ -151,7 +151,7 @@ public class Usuarios implements Serializable {
         if(resto > 0){
             CantidadPaginas ++;
         }
-        
+        PermisosUsuario = EnumPermiso.values();
         // llenar la lista con todas las areas registradas.
         cargarPagina(PaginaActual);
         

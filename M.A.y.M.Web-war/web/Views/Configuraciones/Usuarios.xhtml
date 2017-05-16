@@ -84,13 +84,13 @@
                                             <td>
                                                 <c:choose>
                                                     <c:when test="#{usuario.permisoUsuario == 'ADMINISTRADOR'}">
-                                                        Administrador
+                                                        #{usuario.permisoUsuario.descripcion}
                                                     </c:when>
                                                     <c:when test="#{usuario.permisoUsuario == 'DATOS'}">
-                                                        Ingreso Datos
+                                                        #{usuario.permisoUsuario.descripcion}
                                                     </c:when>
                                                     <c:otherwise>
-                                                        Verificador
+                                                        #{usuario.permisoUsuario.descripcion}
                                                     </c:otherwise>
                                                 </c:choose> 
                                             </td>
@@ -230,9 +230,11 @@
                                 <div class="form-group">
                                     <strong><label for="permiso_nuevo_usuario">Permiso</label></strong>
                                     <h:selectOneRadio class="form-control" value="#{usuarios.permisoSeleccionado}" >
-                                        <f:selectItem itemLabel="Ingreso de Datos" itemValue="DATOS" />
-                                        <f:selectItem itemLabel="Verificador" itemValue="VERIFICADOR" />
-                                        <f:selectItem itemLabel="Administrador" itemValue="ADMINISTRADOR" />
+                                        <c:forEach items="#{usuarios.permisosUsuario}" var="nombre_permiso">
+                                            <div class="radio">
+                                                <f:selectItem itemLabel="#{nombre_permiso.descripcion}" itemValue="#{nombre_permiso}" />
+                                            </div>
+                                        </c:forEach>
                                     </h:selectOneRadio>
                                 </div>
                                 <h:panelGroup id="panel_mensajes_modal_nuevo">
@@ -392,9 +394,11 @@
                                 <div class="form-group">
                                     <strong><label for="permiso_editar_usuario">Permiso</label></strong>
                                     <h:selectOneRadio class="form-control" value="#{usuarios.permisoSeleccionado}" >
-                                        <f:selectItem itemLabel="Ingreso de Datos" itemValue="DATOS" />
-                                        <f:selectItem itemLabel="Verificador" itemValue="VERIFICADOR" />
-                                        <f:selectItem itemLabel="Administrador" itemValue="ADMINISTRADOR" />
+                                        <c:forEach items="#{usuarios.permisosUsuario}" var="nombre_permiso">
+                                            <div class="radio">
+                                                <f:selectItem itemLabel="#{nombre_permiso.descripcion}" itemValue="#{nombre_permiso}" />
+                                            </div>
+                                        </c:forEach>
                                     </h:selectOneRadio>
                                 </div>
                                 <h:panelGroup id="panel_mensajes_modal_editar">
