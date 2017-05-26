@@ -34,8 +34,24 @@
                                         beginAtZero:true
                                     }
                                 }]
-                        }   
+                        }
                     }                         
+                }); 
+                var ctxTipo = $("#chartTipos");
+                var chartTipos = new Chart(ctx , {
+                    type:'pie',
+                    data: {
+                        labels: ['Correctivas', 'Preventivas', 'Mejoras'],
+                        datasets: [{
+                                label:'Total',
+                                data:[#{graficosIndex.accionesCorrectivas}, #{graficosIndex.accionPreventivas}, #{graficosIndex.accionesMejora}],
+                                backgroundColor:['green', 
+                                    'red', 
+                                    'black'
+                                ],
+                                borderWidth: 1
+                            }]
+                    }                        
                 }); 
             }); 
         </script>

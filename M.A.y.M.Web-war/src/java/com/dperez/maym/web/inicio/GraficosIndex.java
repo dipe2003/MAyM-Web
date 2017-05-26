@@ -35,6 +35,14 @@ public class GraficosIndex implements Serializable{
     private int AccionesProcesoImp;
     private int AccionesProcesoVerif;
     
+    private int AccionesMejora;
+    private int AccionesCorrectivas;
+    private int AccionPreventivas;
+    
+    
+    /*
+    ESTADOS
+    */
     // Getters
     public int getTotalAcciones() {return TotalAcciones;}
     public int getAccionesCerradas() {return AccionesCerradas;}
@@ -51,6 +59,19 @@ public class GraficosIndex implements Serializable{
     public void setAccionesProcesoImp(int AccionesProcesoImp) {this.AccionesProcesoImp = AccionesProcesoImp;}
     public void setAccionesProcesoVerif(int AccionesProcesoVerif) {this.AccionesProcesoVerif = AccionesProcesoVerif;}
     
+    /*
+    TIPOS
+    */
+    // Getters
+    public int getAccionesMejora() {return AccionesMejora;}
+    public int getAccionesCorrectivas() {return AccionesCorrectivas;}
+    public int getAccionPreventivas() {return AccionPreventivas;}
+    
+    // Setters
+    public void setAccionesMejora(int AccionesMejora) {this.AccionesMejora = AccionesMejora;}
+    public void setAccionesCorrectivas(int AccionesCorrectivas) {this.AccionesCorrectivas = AccionesCorrectivas;}
+    public void setAccionPreventivas(int AccionPreventivas) {this.AccionPreventivas = AccionPreventivas;}
+    
     // Metodos
     @PostConstruct
     public void init(){
@@ -60,7 +81,7 @@ public class GraficosIndex implements Serializable{
         for(Accion accion:lstAcciones){
             switch(accion.getEstadoAccion()){
                 case CERRADA:
-                    AccionesCerradas++;
+                    AccionesCerradas++;                    
                     break;
                 case DESESTIMADA:
                     AccionesDesestimadas++;
@@ -75,7 +96,27 @@ public class GraficosIndex implements Serializable{
                     AccionesProcesoVerif++;
                     break;
             }
+            contarAccion(accion);
         }
     }
     
+    /**
+     * Determina el tipo de accion y aumenta el valor correspondiente.
+     * @param accion 
+     */
+    private void contarAccion(Accion accion){
+        switch(accion.getClass().getSimpleName()){
+            case "Correctiva":
+                AccionesCorrectivas++;
+                break;
+                
+            case "Preventiva":
+                AccionPreventivas++;
+                break;
+                
+            case "Mejora":
+                AccionesMejora++;
+                break;
+        }
+    }
 }
