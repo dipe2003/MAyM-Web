@@ -35,15 +35,15 @@
                                     }
                                 }]
                         }
+                        
                     }                         
                 }); 
                 var ctxTipo = $("#chartTipos");
-                var chartTipos = new Chart(ctx , {
+                var chartTipos = new Chart(ctxTipo , {
                     type:'pie',
                     data: {
                         labels: ['Correctivas', 'Preventivas', 'Mejoras'],
                         datasets: [{
-                                label:'Total',
                                 data:[#{graficosIndex.accionesCorrectivas}, #{graficosIndex.accionPreventivas}, #{graficosIndex.accionesMejora}],
                                 backgroundColor:['green', 
                                     'red', 
@@ -57,12 +57,24 @@
         </script>
         <div class="container-fluid" style="padding: 1%">
             <h:form id="form_graficos_index">
-                <fieldset><legend>Estado de Acciones</legend>
-                    <div class="contenedor-5050">
-                        <canvas id="chartestado" width="50" height="20" class="contenedor-50" ></canvas>                               
-                        <canvas id="chartTipos" width="50" height="20" class="contenedor-50"></canvas>                               
+                
+                <div class="row">                    
+                    <div class="col-sm-6">
+                        <fieldset><legend>Total de Acciones</legend>
+                            <div style="height:20vh; width:100%">
+                                <canvas id="chartTipos"  ></canvas>   
+                            </div>                            
+                        </fieldset>
                     </div>
-                </fieldset>
+                    <div class="col-sm-6">
+                        <fieldset><legend>Estado de Acciones</legend>
+                            <div style="height:40vh; width:100%">
+                                <canvas id="chartestado"  ></canvas>
+                            </div>                            
+                        </fieldset>
+                    </div>
+                </div>
+                
             </h:form>
         </div>
     </ui:define>
