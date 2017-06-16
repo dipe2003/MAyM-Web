@@ -137,7 +137,7 @@
                                 <div class="form-group">
                                     <strong><label for="clasificacion">Clasificacion:</label></strong>                                    
                                     <h:selectOneRadio id="clasificacion" value="#{editarAccionCorrectiva.tipoDesvioSeleccionado}">
-                                        <c:forEach items="#{crearAccionCorrectiva.tiposDesvios}" var="tipo" >
+                                        <c:forEach items="#{editarAccionCorrectiva.tiposDesvios}" var="tipo" >
                                             <div class="radio" >
                                                 <f:selectItem itemLabel="#{tipo.descripcion}" itemValue="#{tipo}" />
                                             </div>
@@ -639,7 +639,7 @@
                 <div class="row">
                     <div class='col-sm-4' >
                         <h:commandButton id="guardar_accion" class="btn btn-default" style="width: 99%" value="Guardar" >
-                            <f:ajax execute="analisis_causa descripcion fecha_deteccion area codificacion deteccion 
+                            <f:ajax execute="analisis_causa descripcion fecha_deteccion area codificacion deteccion clasificacion
                                     fecha_estimada_comprobacion_implementacion responsable_comprobacion_implementacion 
                                     fecha_estimada_comprobacion_eficacia responsable_comprobacion_eficacia" event="click" listener="#{editarAccionCorrectiva.editarAccion()}" onevent="indicador" render="panel_mensajes
                                     panel_mensajes_implementacion panel_mensajes_eficacia"/>
