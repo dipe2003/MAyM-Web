@@ -11,7 +11,6 @@ package com.dperez.maymweb.accion.acciones;
  */
 public enum EnumAccion {
     CORRECTIVA ("Correctiva"),
-    PREVENTIVA ("Preventiva"),
     MEJORA ("Mejora");
     
     private final String Descripcion;  

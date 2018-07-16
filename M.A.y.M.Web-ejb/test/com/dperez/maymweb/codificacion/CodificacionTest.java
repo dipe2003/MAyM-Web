@@ -8,7 +8,6 @@ package com.dperez.maymweb.codificacion;
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.acciones.Correctiva;
 import com.dperez.maymweb.accion.acciones.Mejora;
-import com.dperez.maymweb.accion.acciones.Preventiva;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;
@@ -25,7 +24,6 @@ import static org.junit.Assert.*;
 public class CodificacionTest {
     
     private final Accion ACorrectiva = new Correctiva();
-    private final Accion APreventiva = new Preventiva();
     private final Accion AMejora = new Mejora();
     
     public CodificacionTest() {
@@ -136,8 +134,7 @@ public class CodificacionTest {
         System.out.println("setAccionesConCodificacion");
         List<Accion> AccionesConCodificacion = new ArrayList<>();
         AccionesConCodificacion.add(AMejora);
-        AccionesConCodificacion.add(ACorrectiva);
-        AccionesConCodificacion.add(APreventiva);        
+        AccionesConCodificacion.add(ACorrectiva);        
         Codificacion instance = new Codificacion();
         instance.setAccionesConCodificacion(AccionesConCodificacion);
     }
@@ -151,7 +148,6 @@ public class CodificacionTest {
         Codificacion instance = new Codificacion();
         instance.addAccionCodificacion(AMejora);
         instance.addAccionCodificacion(ACorrectiva);
-        instance.addAccionCodificacion(APreventiva);
     }
     
     /**
@@ -163,10 +159,8 @@ public class CodificacionTest {
         Codificacion instance = new Codificacion();
         instance.addAccionCodificacion(AMejora);
         instance.addAccionCodificacion(ACorrectiva);
-        instance.addAccionCodificacion(APreventiva);
         instance.removeAccionCodificacion(AMejora);
         instance.removeAccionCodificacion(ACorrectiva);
-        instance.removeAccionCodificacion(APreventiva);
     }
     
     /**
@@ -178,11 +172,9 @@ public class CodificacionTest {
         int IdAccionCodificacion = 1;
         Codificacion instance = new Codificacion();
         ACorrectiva.setId(0);
-        APreventiva.setId(1);
         AMejora.setId(2);
         instance.addAccionCodificacion(AMejora);
         instance.addAccionCodificacion(ACorrectiva);
-        instance.addAccionCodificacion(APreventiva);
         instance.removeAccionCodificacion(IdAccionCodificacion);
     }
     

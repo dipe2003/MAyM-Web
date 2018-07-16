@@ -11,7 +11,6 @@ import com.dperez.maymweb.accion.acciones.Correctiva;
 import com.dperez.maymweb.accion.acciones.EnumAccion;
 import com.dperez.maymweb.accion.acciones.EnumTipoDesvio;
 import com.dperez.maymweb.accion.acciones.Mejora;
-import com.dperez.maymweb.accion.acciones.Preventiva;
 import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.accion.adjunto.Adjunto;
 import com.dperez.maymweb.accion.adjunto.ManejadorAdjunto;
@@ -202,26 +201,7 @@ public class ControladorEdicionRegistro {
         }
         return res;
     }
-    
-    /**
-     * Remueve la actividad preventiva de la accion preventiva selaccionada y actualiza la base de datos.
-     * Elimina la actividad preventiva de la base de datos.
-     * @param IdAccion
-     * @param IdActividadPreventiva
-     * @return Retorna -1 si se actualizo. Retorna el IdAccion si no se elimino.
-     */
-    public int RemoverActividadPreventiva(int IdAccion, int IdActividadPreventiva){
-        Accion accion = mAccion.GetAccion(IdAccion);
-        Actividad actividad = mActividad.GetActividad(IdActividadPreventiva);
-        ((Preventiva)accion).removeActividad(actividad);
-        ((Preventiva)accion).CambiarEstado();
-        int res = mAccion.ActualizarAccion(accion);
-        if(res!=-1){            
-           res =  mActividad.BorrarActividad(actividad);
-        }
-        return res;
-    }
-    
+        
     /**
      * Remueve la medida preventiva de la accion correctiva seleccionada y actualiza la base de datos.
      * Elimina la medida preventiva de la base de datos.

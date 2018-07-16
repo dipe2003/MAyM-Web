@@ -8,7 +8,6 @@ package com.dperez.maymweb.herramientas;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.herramientas.EnvioAlertas.AlertasCorrectivas;
 import com.dperez.maymweb.herramientas.EnvioAlertas.AlertasMejoras;
-import com.dperez.maymweb.herramientas.EnvioAlertas.AlertasPreventivas;
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -32,13 +31,10 @@ public class RepetidorTareas {
     public void RenviarAlertasEventos() {
         // Acciones Correctivas
         Thread tCorrectivas = new Thread(new AlertasCorrectivas(fLectura.ListarAccionesCorrectivas(), cAlertas) );
-        // Acciones Preventivas
-        Thread tPreventivas = new Thread(new AlertasPreventivas(fLectura.ListarAccionesPreventivas(),cAlertas));
         // Acciones de Mejora
         Thread tMejoras = new Thread(new AlertasMejoras(fLectura.ListarAccionesMejoras(), cAlertas));
         
-        tCorrectivas.start();
-        tPreventivas.start();        
+        tCorrectivas.start();       
         tMejoras.start();
     }
     

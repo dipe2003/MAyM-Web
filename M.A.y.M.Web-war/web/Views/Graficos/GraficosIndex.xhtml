@@ -42,12 +42,11 @@
                 var chartTipos = new Chart(ctxTipo , {
                     type:'pie',
                     data: {
-                        labels: ['Correctivas', 'Preventivas', 'Mejoras'],
+                        labels: ['Correctivas', 'Mejoras'],
                         datasets: [{
-                                data:[#{graficosIndex.accionesCorrectivas}, #{graficosIndex.accionPreventivas}, #{graficosIndex.accionesMejora}],
+                                data:[#{graficosIndex.accionesCorrectivas}, #{graficosIndex.accionesMejora}],
                                 backgroundColor:['green', 
-                                    'red', 
-                                    'black'
+                                    'red'
                                 ],
                                 borderWidth: 1
                             }]

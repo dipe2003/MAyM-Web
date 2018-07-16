@@ -8,7 +8,6 @@ package com.dperez.maymweb.area;
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.acciones.Correctiva;
 import com.dperez.maymweb.accion.acciones.Mejora;
-import com.dperez.maymweb.accion.acciones.Preventiva;
 import com.dperez.maymweb.fortaleza.Fortaleza;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +26,6 @@ public class AreaTest {
     
     private final Fortaleza fortaleza = new Fortaleza();
     private final Accion ACorrectiva = new Correctiva();
-    private final Accion APreventiva = new Preventiva();
     private final Accion AMejora = new Mejora();    
     
     public AreaTest() {
@@ -95,7 +93,6 @@ public class AreaTest {
         List<Accion> expResult = new ArrayList<>();
         expResult.add(AMejora);
         expResult.add(ACorrectiva);
-        expResult.add(APreventiva);
         instance.setAccionesEnAreaSector(expResult);
         List<Accion> result = instance.getAccionesEnAreaSector();
         assertEquals(expResult, result);
@@ -154,8 +151,7 @@ public class AreaTest {
         System.out.println("setAccionesEnAreaSector");
         List<Accion> AccionesEnAreaSector = new ArrayList<>();
         AccionesEnAreaSector.add(AMejora);
-        AccionesEnAreaSector.add(ACorrectiva);
-        AccionesEnAreaSector.add(APreventiva);  
+        AccionesEnAreaSector.add(ACorrectiva); 
         Area instance = new Area();
         instance.setAccionesEnAreaSector(AccionesEnAreaSector);
     }
@@ -180,7 +176,6 @@ public class AreaTest {
         System.out.println("addAccionEnAreaSector");
         Area instance = new Area();
         instance.addAccionEnAreaSector(ACorrectiva);
-        instance.addAccionEnAreaSector(APreventiva);
         instance.addAccionEnAreaSector(AMejora);
     }
 
@@ -193,12 +188,10 @@ public class AreaTest {
         List<Accion> AccionesEnAreaSector = new ArrayList<>();
         AccionesEnAreaSector.add(AMejora);
         AccionesEnAreaSector.add(ACorrectiva);
-        AccionesEnAreaSector.add(APreventiva);
         Area instance = new Area();
         instance.setAccionesEnAreaSector(AccionesEnAreaSector);
         instance.removeAccionEnAreaSector(AMejora);
         instance.removeAccionEnAreaSector(ACorrectiva);
-        instance.removeAccionEnAreaSector(APreventiva);
     }
 
     /**
@@ -211,7 +204,6 @@ public class AreaTest {
         ACorrectiva.setId(IdAccionEnAreaSector);
         Area instance = new Area();
         instance.addAccionEnAreaSector(ACorrectiva);
-        instance.addAccionEnAreaSector(APreventiva);
         instance.addAccionEnAreaSector(AMejora);
         instance.removeAccionEnAreaSector(IdAccionEnAreaSector);
     }

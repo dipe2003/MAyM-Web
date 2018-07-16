@@ -77,10 +77,7 @@ public class FacadeLectura  {
     public List<Area> ListarAreasSectores(int IdEmpresa){
         return cVista.GetAreasEmpresa(IdEmpresa);
     }
-    
-    public List<Accion> ListarAccionesPreventivas(){
-        return cVista.ListarAccionesSegunEstado(null, EnumAccion.PREVENTIVA);
-    }
+
     public List<Accion> ListarAccionesCorrectivas(){
         return cVista.ListarAccionesSegunEstado(null, EnumAccion.CORRECTIVA);
     }

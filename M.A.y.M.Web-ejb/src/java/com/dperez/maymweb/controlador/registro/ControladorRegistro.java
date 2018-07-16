@@ -13,7 +13,6 @@ import com.dperez.maymweb.accion.acciones.Correctiva;
 import com.dperez.maymweb.accion.acciones.EnumAccion;
 import com.dperez.maymweb.accion.acciones.EnumTipoDesvio;
 import com.dperez.maymweb.accion.acciones.Mejora;
-import com.dperez.maymweb.accion.acciones.Preventiva;
 import com.dperez.maymweb.accion.adjunto.Adjunto;
 import com.dperez.maymweb.accion.actividad.ManejadorActividad;
 import com.dperez.maymweb.accion.actividad.Actividad;
@@ -90,10 +89,6 @@ public class ControladorRegistro {
         switch(TipoAccion){
             case CORRECTIVA:
                 accion = new Correctiva(FechaDeteccion, Descripcion, TipoDesvio);
-                break;
-                
-            case PREVENTIVA:
-                accion = new Preventiva(FechaDeteccion, Descripcion);
                 break;
                 
             case MEJORA:
@@ -184,27 +179,7 @@ public class ControladorRegistro {
         mAccion.ActualizarAccion(accion);
         return medida.getIdActividad();
     }
-    
-    /**
-     * Crea una nueva actividad preventiva, la persiste en la base de datos y se asocia a la accion preventiva.
-     * @param IdAccion
-     * @param FechaEstimadaImplementacion
-     * @param Descripcion
-     * @param IdUsuarioResponsable
-     * @return -1 si no se creo.
-     */
-    public int AgregarActividadPreventiva(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion, int IdUsuarioResponsable){
-        Actividad medida = new Actividad(FechaEstimadaImplementacion, Descripcion);
-        Usuario usuario = mUsuario.GetUsuario(IdUsuarioResponsable);
-        medida.setResponsableImplementacion(usuario);
-        medida.setIdActividad(mMedida.CrearActividad(medida));
-        Accion accion = mAccion.GetAccion(IdAccion);
-        if((accion.getClass())!= Preventiva.class) throw new InvalidParameterException("El id no corresponde con una Preventiva");
-        ((Preventiva)accion).addActividadPreventiva((Actividad)medida);
-         mAccion.ActualizarAccion(accion);
-        return medida.getIdActividad();
-    }
-    
+        
     /**
      * Crea una nueva medida preventiva, la persiste en la base de datos y se asocia a la accion correctiva.
      * @param IdAccion

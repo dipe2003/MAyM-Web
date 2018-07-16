@@ -8,7 +8,6 @@ package com.dperez.maymweb.accion.adjunto;
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.acciones.Correctiva;
 import com.dperez.maymweb.accion.acciones.Mejora;
-import com.dperez.maymweb.accion.acciones.Preventiva;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -22,7 +21,6 @@ import static org.junit.Assert.*;
  */
 public class AdjuntoTest {
     private final Accion accCorrectiva = new Correctiva();
-    private final Accion accPreventiva = new Preventiva();
     private final Accion accMejora = new Mejora();
     
     public AdjuntoTest() {

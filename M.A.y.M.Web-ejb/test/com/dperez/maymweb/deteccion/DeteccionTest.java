@@ -8,7 +8,6 @@ package com.dperez.maymweb.deteccion;
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.acciones.Correctiva;
 import com.dperez.maymweb.accion.acciones.Mejora;
-import com.dperez.maymweb.accion.acciones.Preventiva;
 import com.dperez.maymweb.fortaleza.Fortaleza;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +26,6 @@ public class DeteccionTest {
     
     private final Fortaleza fortaleza = new Fortaleza();
     private final Accion ACorrectiva = new Correctiva();
-    private final Accion APreventiva = new Preventiva();
     private final Accion AMejora = new Mejora();
     private final EnumTipoDeteccion tipo = EnumTipoDeteccion.INTERNA;
     
@@ -102,11 +100,9 @@ public class DeteccionTest {
         assertEquals(expResult, result);
         
         expResult.add(AMejora);
-        expResult.add(ACorrectiva);
-        expResult.add(APreventiva);        
+        expResult.add(ACorrectiva);       
         instance.addAccionDetectada(AMejora);
         instance.addAccionDetectada(ACorrectiva);
-        instance.addAccionDetectada(APreventiva);
         result = instance.getAccionesDetectadas();
         assertEquals(expResult, result);
     }
@@ -171,7 +167,6 @@ public class DeteccionTest {
         instance.setAccionesDetectadas(AccionesDetectadas);
 
         AccionesDetectadas.add(AMejora);
-        AccionesDetectadas.add(APreventiva);
         AccionesDetectadas.add(ACorrectiva);
         
         instance.setAccionesDetectadas(AccionesDetectadas);        
@@ -200,7 +195,6 @@ public class DeteccionTest {
         Deteccion instance = new Deteccion();
         instance.addAccionDetectada(AMejora);
         instance.addAccionDetectada(ACorrectiva);
-        instance.addAccionDetectada(APreventiva);
     }
 
     /**
@@ -212,8 +206,6 @@ public class DeteccionTest {
         Deteccion instance = new Deteccion();
         instance.addAccionDetectada(AMejora);
         instance.addAccionDetectada(ACorrectiva);
-        instance.addAccionDetectada(APreventiva);
-        instance.removeAccionDetectada(APreventiva);
         instance.removeAccionDetectada(AMejora);
         instance.removeAccionDetectada(ACorrectiva);
     }
@@ -227,11 +219,9 @@ public class DeteccionTest {
         int IdAccionDetectada = 1;
         Deteccion instance = new Deteccion();
         ACorrectiva.setId(IdAccionDetectada);
-        APreventiva.setId(0);
         AMejora.setId(2);
         instance.addAccionDetectada(AMejora);
         instance.addAccionDetectada(ACorrectiva);
-        instance.addAccionDetectada(APreventiva);
         instance.removeAccionDetectada(IdAccionDetectada);
     }
 

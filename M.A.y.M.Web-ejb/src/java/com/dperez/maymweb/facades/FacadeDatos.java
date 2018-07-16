@@ -13,7 +13,6 @@ import com.dperez.maymweb.controlador.registro.ControladorEdicionRegistro;
 import com.dperez.maymweb.controlador.registro.ControladorRegistro;
 import com.dperez.maymweb.fortaleza.Fortaleza;
 import java.util.Date;
-import java.util.Map;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -82,18 +81,6 @@ public class FacadeDatos {
      */
     public int AgregarActividadMejora(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion, int IdUsuarioResponsable){
         return cReg.AgregarActividadMejora(IdAccion, FechaEstimadaImplementacion, Descripcion, IdUsuarioResponsable);
-    }
-    
-    /**
-     * Crea una nueva actividad preventiva, la persiste en la base de datos y se asocia a la accion preventiva.
-     * @param IdAccion
-     * @param FechaEstimadaImplementacion
-     * @param Descripcion
-     * @param IdUsuarioResponsable
-     * @return -1 si no se creo.
-     */
-    public int AgregarActividadPreventiva(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion, int IdUsuarioResponsable){
-        return cReg.AgregarActividadPreventiva(IdAccion, FechaEstimadaImplementacion, Descripcion, IdUsuarioResponsable);
     }
     
     /**
@@ -217,17 +204,6 @@ public class FacadeDatos {
      */
     public int RemoverActividadMejora(int IdAccion, int IdActividadMejora){
         return cEdicion.RemoverActividadMejora(IdAccion, IdActividadMejora);
-    }
-    
-    /**
-     * Remueve la actividad preventiva de la accion preventiva selaccionada y actualiza la base de datos.
-     * Elimina la actividad preventiva de la base de datos.
-     * @param IdAccion
-     * @param IdActividadPreventiva
-     * @return Retorna -1 si se actualizo. Retorna el IdAccion si no se elimino.
-     */
-    public int RemoverActividadPreventiva(int IdAccion, int IdActividadPreventiva){
-        return cEdicion.RemoverActividadPreventiva(IdAccion, IdActividadPreventiva);
     }
     
     /**
