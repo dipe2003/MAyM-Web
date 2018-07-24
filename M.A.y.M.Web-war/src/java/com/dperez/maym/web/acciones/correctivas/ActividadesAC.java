@@ -164,7 +164,7 @@ public class ActividadesAC implements Serializable {
         }else{
             // agregar el evento en el programador de tareas.
             Evento eventoNuevo = new Evento(TipoEvento.IMPLEMENTACION_ACTIVIDAD, ResponsableMedidaCorrectiva, AccionSeleccionada.getId(), idActividad);
-            pEventos.ProgramarEvento(FechaEstimadaImplementacionMedidaCorrectiva, eventoNuevo);
+            pEventos.ProgramarEvento(FechaEstimadaImplementacionMedidaPreventiva, eventoNuevo);
             // redirigir a la edicion de la accion correctiva.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/EditarAccionCorrectiva.xhtml?id="+AccionSeleccionada.getId());

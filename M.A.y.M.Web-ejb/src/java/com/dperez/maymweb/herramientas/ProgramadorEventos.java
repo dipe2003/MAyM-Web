@@ -59,7 +59,7 @@ public class ProgramadorEventos {
      */
     public boolean ExisteEvento(Evento evento){
         Collection<Timer> timers = timerService.getTimers();
-        List<Timer> timerList = new ArrayList<>();
+        //List<Timer> timerList = new ArrayList<>();
         Iterator<Timer> it = timers.iterator();
         Timer timer;
         while(it.hasNext()){
@@ -80,7 +80,7 @@ public class ProgramadorEventos {
      */
     public boolean RemoverEvento(Evento evento){
         Collection<Timer> timers = timerService.getTimers();
-        List<Timer> timerList = new ArrayList<>();
+        //List<Timer> timerList = new ArrayList<>();
         Iterator<Timer> it = timers.iterator();
         Timer timer;
         while(it.hasNext()){

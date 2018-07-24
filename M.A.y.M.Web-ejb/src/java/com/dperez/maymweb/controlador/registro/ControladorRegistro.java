@@ -176,6 +176,7 @@ public class ControladorRegistro {
         Accion accion = mAccion.GetAccion(IdAccion);
         if((accion.getClass())!= Mejora.class) throw new InvalidParameterException("El id no corresponde con una mejora");
         ((Mejora)accion).addActividadMejora((Actividad)medida);
+        accion.CambiarEstado();
         mAccion.ActualizarAccion(accion);
         return medida.getIdActividad();
     }
@@ -196,6 +197,7 @@ public class ControladorRegistro {
         Accion accion = mAccion.GetAccion(IdAccion);
         if((accion.getClass())!= Correctiva.class) throw new InvalidParameterException("El id no corresponde con una Correctiva");
         ((Correctiva)accion).addMedidaPreventiva(medida);
+        accion.CambiarEstado();
         mAccion.ActualizarAccion(accion);
         return medida.getIdActividad();
     }
@@ -216,6 +218,7 @@ public class ControladorRegistro {
         Accion accion = mAccion.GetAccion(IdAccion);
         if((accion.getClass())!= Correctiva.class) throw new InvalidParameterException("El id no corresponde con una Correctiva");
         ((Correctiva)accion).addMedidaCorrectiva(medida);
+        accion.CambiarEstado();
         mAccion.ActualizarAccion(accion);
         return medida.getIdActividad();
     }

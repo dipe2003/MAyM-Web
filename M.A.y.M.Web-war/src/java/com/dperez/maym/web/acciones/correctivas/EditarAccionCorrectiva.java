@@ -554,13 +554,13 @@ public class EditarAccionCorrectiva implements Serializable {
      */
     public void quitarMedidaCorrectiva(int IdActividad) throws IOException{
         FacesContext ctx = FacesContext.getCurrentInstance();
+        Actividad actividad = AccionSeleccionada.GetActividad(IdActividad);
         if(fDatos.RemoverMedidaCorrectiva(IdAccionSeleccionada, IdActividad)==-1){
             // Si no se actualizo muestra mensaje de error.
             ctx.addMessage("form_editar_accion:guardar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
             ctx.renderResponse();
         }else{
             // remover el evento del programador de tareas.
-            Actividad actividad = AccionSeleccionada.GetActividad(IdActividad);
             Evento eventoAccion = new Evento(TipoEvento.IMPLEMENTACION_ACTIVIDAD, actividad.getResponsableImplementacion().getId(),
                     AccionSeleccionada.getId(), IdActividad);
             if (pEventos.ExisteEvento(eventoAccion)){
@@ -579,13 +579,13 @@ public class EditarAccionCorrectiva implements Serializable {
      */
     public void quitarMedidaPreventiva(int IdActividad) throws IOException{
         FacesContext ctx = FacesContext.getCurrentInstance();
+        Actividad actividad = AccionSeleccionada.GetActividad(IdActividad);
         if(fDatos.RemoverMedidaPreventiva(IdAccionSeleccionada, IdActividad)==-1){
             // Si no se actualizo muestra mensaje de error.
             ctx.addMessage("form_editar_accion:guardar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
             ctx.renderResponse();
         }else{
-            // remover el evento del programador de tareas.
-            Actividad actividad = AccionSeleccionada.GetActividad(IdActividad);
+            // remover el evento del programador de tareas.           
             Evento eventoAccion = new Evento(TipoEvento.IMPLEMENTACION_ACTIVIDAD, actividad.getResponsableImplementacion().getId(),
                     AccionSeleccionada.getId(), IdActividad);
             if (pEventos.ExisteEvento(eventoAccion)){
