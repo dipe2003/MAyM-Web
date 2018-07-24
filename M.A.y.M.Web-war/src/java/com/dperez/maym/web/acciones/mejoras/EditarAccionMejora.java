@@ -441,13 +441,14 @@ public class EditarAccionMejora implements Serializable {
      */
     public void quitarActividad(int IdActividad) throws IOException{
         FacesContext ctx = FacesContext.getCurrentInstance();
+        Actividad actividad = ListaActividades.get((int)IdActividad);
         if(fDatos.RemoverActividadMejora(IdAccionSeleccionada, IdActividad)==-1){
             // Si no se actualizo muestra mensaje de error.
             ctx.addMessage("form_editar_accion:guardar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
             ctx.renderResponse();
         }else{
             // remover el evento del programador de tareas.
-            Actividad actividad = AccionSeleccionada.GetActividad(IdActividad);
+            
             Evento eventoAccion = new Evento(TipoEvento.IMPLEMENTACION_ACTIVIDAD, actividad.getResponsableImplementacion().getId(),
                     AccionSeleccionada.getId(), IdActividad);
             if (pEventos.ExisteEvento(eventoAccion)){
