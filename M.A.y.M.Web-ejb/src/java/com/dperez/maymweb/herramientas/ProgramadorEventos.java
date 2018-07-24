@@ -59,11 +59,10 @@ public class ProgramadorEventos {
      */
     public boolean ExisteEvento(Evento evento){
         Collection<Timer> timers = timerService.getTimers();
-        //List<Timer> timerList = new ArrayList<>();
         Iterator<Timer> it = timers.iterator();
         Timer timer;
         while(it.hasNext()){
-            timer = (Timer) it;
+            timer = (Timer) it.next();
             if (timer.getInfo() instanceof Evento) {
                 Evento e = (Evento) timer.getInfo();
                 if(e.getIdUsuarioResponsable() == evento.getIdUsuarioResponsable() && e.getTipo().equals(evento.getTipo())){
@@ -84,7 +83,7 @@ public class ProgramadorEventos {
         Iterator<Timer> it = timers.iterator();
         Timer timer;
         while(it.hasNext()){
-            timer = (Timer) it;
+            timer = (Timer) it.next();
             if (timer.getInfo() instanceof Evento) {
                 Evento e = (Evento) timer.getInfo();
                 if(e.getIdUsuarioResponsable() == evento.getIdUsuarioResponsable() && e.getTipo().equals(evento.getTipo())){
@@ -105,7 +104,7 @@ public class ProgramadorEventos {
         Iterator<Timer> it = timers.iterator();
         Timer timer;
         while(it.hasNext()){
-            timer = (Timer) it;
+            timer = (Timer) it.next();
             if (timer.getInfo() instanceof Evento) {
                 Evento e = (Evento) timer.getInfo();
                 if(e.getIdAccion() == IdAccion){

@@ -43,6 +43,7 @@ import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
 import static javax.faces.application.FacesMessage.SEVERITY_INFO;
+import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -50,10 +51,9 @@ import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 
-
-
 @Named
 @ViewScoped
+@ManagedBean
 public class EditarAccionCorrectiva implements Serializable {
     @Inject
     private FacadeAdministrador fAdmin;
@@ -554,7 +554,7 @@ public class EditarAccionCorrectiva implements Serializable {
      */
     public void quitarMedidaCorrectiva(int IdActividad) throws IOException{
         FacesContext ctx = FacesContext.getCurrentInstance();
-        Actividad actividad = AccionSeleccionada.GetActividad(IdActividad);
+        Actividad actividad = MedidasCorrectivas.get((int)IdActividad);
         if(fDatos.RemoverMedidaCorrectiva(IdAccionSeleccionada, IdActividad)==-1){
             // Si no se actualizo muestra mensaje de error.
             ctx.addMessage("form_editar_accion:guardar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
@@ -579,7 +579,7 @@ public class EditarAccionCorrectiva implements Serializable {
      */
     public void quitarMedidaPreventiva(int IdActividad) throws IOException{
         FacesContext ctx = FacesContext.getCurrentInstance();
-        Actividad actividad = AccionSeleccionada.GetActividad(IdActividad);
+        Actividad actividad = MedidasPreventivas.get((int)IdActividad);
         if(fDatos.RemoverMedidaPreventiva(IdAccionSeleccionada, IdActividad)==-1){
             // Si no se actualizo muestra mensaje de error.
             ctx.addMessage("form_editar_accion:guardar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
