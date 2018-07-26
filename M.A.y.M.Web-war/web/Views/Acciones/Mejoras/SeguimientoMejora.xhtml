@@ -121,7 +121,8 @@
                         <div class="panel-body">
                             <c:choose>
                                 <c:when test="#{not empty seguimientoMejora.listaActividades}">
-                                    <table class="table table-hover table-striped table-responsive">
+                                    <div class="table-responsive-sm">
+                                    <table class="table table-hover table-striped">
                                         <thead>
                                             <tr>
                                                 <th>Descripcion:</th>
@@ -177,6 +178,7 @@
                                             </c:forEach>
                                         </tbody>
                                     </table>
+                                    </div>
                                 </c:when>
                                 <c:otherwise>
                                     <div class="alert alert-info">

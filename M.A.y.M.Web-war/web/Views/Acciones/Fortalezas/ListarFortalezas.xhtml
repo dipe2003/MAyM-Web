@@ -28,8 +28,8 @@
                         </div>
                     </c:when>
                     <c:otherwise>
-                        
-                        <table class="table table-hover table-striped table-responsive">
+                        <div class="table-responsive-sm">
+                        <table class="table table-hover table-striped">
                             <thead style="font-size: 12px">
                                 <tr>
                                     <th>Fecha</th>
@@ -74,6 +74,7 @@
                                 </c:forEach>
                             </tbody>
                         </table> 
+                        </div>
                         <c:if test="#{listarFortalezas.cantidadPaginas > 1}">
                             <div class="container-fluid text-center" style="padding: 1%">
                                 <ul class="pagination">

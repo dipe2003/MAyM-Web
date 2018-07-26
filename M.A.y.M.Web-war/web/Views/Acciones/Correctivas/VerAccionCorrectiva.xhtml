@@ -120,7 +120,8 @@
                                     Si
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <table class="table table-hover table-striped table-responsive">
+                                            <div class="table-responsive-sm">
+                                            <table class="table table-hover table-striped">
                                                 <thead>
                                                     <tr>
                                                         <th>Nombre del Producto:</th>
@@ -136,6 +137,7 @@
                                                     </c:forEach>
                                                 </tbody>
                                             </table>
+                                            </div>
                                         </div>
                                     </div>
                                 </c:when>
@@ -169,7 +171,8 @@
                             <div class="panel-body">
                                 <c:choose>
                                     <c:when test="#{not empty verCorrectiva.medidasCorrectivas}">
-                                        <table class="table table-hover table-striped table-responsive">
+                                        <div class="table-responsive-sm">
+                                        <table class="table table-hover table-striped">
                                             <thead>
                                                 <tr>
                                                     <th>Descripcion:</th>
@@ -196,6 +199,7 @@
                                                 </c:forEach>
                                             </tbody>
                                         </table>
+                                        </div>
                                     </c:when>
                                     <c:otherwise>
                                         <div class="alert alert-info">
@@ -213,7 +217,8 @@
                             <div class="panel-body">
                                 <c:choose>
                                     <c:when test="#{not empty verCorrectiva.medidasPreventivas}">
-                                        <table class="table table-hover table-striped table-responsive">
+                                        <div class="table-responsive-sm">
+                                        <table class="table table-hover table-striped">
                                             <thead>
                                                 <tr>
                                                     <th>Descripcion:</th>
@@ -240,6 +245,7 @@
                                                 </c:forEach>
                                             </tbody>
                                         </table>
+                                        </div>
                                     </c:when>
                                     <c:otherwise>
                                         <div class="alert alert-info">
@@ -260,7 +266,8 @@
                             <div class="panel-body">
                                 <c:choose>
                                     <c:when test="#{verCorrectiva.comprobacionImplementacion != null}">
-                                        <table class="table table-hover table-striped table-responsive">
+                                        <div class="table-responsive-sm">
+                                        <table class="table table-hover table-striped">
                                             <thead>
                                                 <tr>
                                                     <th>Fecha Estimada:</th>
@@ -293,6 +300,7 @@
                                                 </tr>
                                             </tbody>
                                         </table>
+                                        </div>
                                     </c:when>
                                     <c:otherwise>
                                         <div class="alert alert-info">
@@ -309,7 +317,8 @@
                             <div class="panel-body">
                                 <c:choose>
                                     <c:when test="#{verCorrectiva.comprobacionEficacia != null}">
-                                        <table class="table table-hover table-striped table-responsive">
+                                        <div class="table-responsive-sm">
+                                        <table class="table table-hover table-striped">
                                             <thead>
                                                 <tr>
                                                     <th>Fecha Estimada:</th>
@@ -342,6 +351,7 @@
                                                 </tr>
                                             </tbody>
                                         </table>
+                                        </div>
                                     </c:when>
                                     <c:otherwise>
                                         <div class="alert alert-info">
@@ -362,7 +372,8 @@
                             <c:when test="#{not empty verCorrectiva.accionSeleccionada.adjuntos}">
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <table class="table table-hover table-striped table-responsive">
+                                        <div class="table-responsive-sm">
+                                        <table class="table table-hover table-striped">
                                             <thead>
                                                 <tr>
                                                     <th width="30%">Titulo del Adjunto:</th>
@@ -387,6 +398,7 @@
                                                 </c:forEach>
                                             </tbody>
                                         </table>
+                                        </div>
                                     </div>
                                 </div>
                             </c:when>

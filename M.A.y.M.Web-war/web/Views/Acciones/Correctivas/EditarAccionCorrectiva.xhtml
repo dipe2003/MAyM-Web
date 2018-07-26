@@ -252,7 +252,8 @@
                     <div class="panel-body">
                         <c:choose>
                             <c:when test="#{not empty editarAccionCorrectiva.medidasCorrectivas}">
-                                <table class="table table-hover table-striped table-responsive">
+                                <div class="table-responsive-sm">
+                                <table class="table table-hover table-striped">
                                     <thead>
                                         <tr>
                                             <th style="width: 55%">Descripcion:</th>
@@ -312,6 +313,7 @@
                                         </c:forEach>
                                     </tbody>
                                 </table>
+                                </div>
                             </c:when>
                             <c:otherwise>
                                 <div class="alert alert-info">
@@ -335,7 +337,8 @@
                     <div class="panel-body">
                         <c:choose>
                             <c:when test="#{not empty editarAccionCorrectiva.medidasPreventivas}">
-                                <table class="table table-hover table-striped table-responsive">
+                                <div class="table-responsive-sm">
+                                <table class="table table-hover table-striped">
                                     <thead>
                                         <tr>
                                             <th style="width: 55%">Descripcion:</th>
@@ -395,6 +398,7 @@
                                         </c:forEach>
                                     </tbody>
                                 </table>
+                                </div>
                             </c:when>
                             <c:otherwise>
                                 <div class="alert alert-info">
@@ -562,7 +566,8 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <table class="table table-hover table-striped table-responsive">
+                                            <div class="table-responsive-sm">
+                                            <table class="table table-hover table-striped">
                                                 <thead>
                                                     <tr>
                                                         <th width="30%">Titulo del Adjunto:</th>
@@ -601,6 +606,7 @@
                                                     </c:forEach>
                                                 </tbody>
                                             </table>
+                                            </div>
                                         </div>
                                     </div>
                                 </c:otherwise>

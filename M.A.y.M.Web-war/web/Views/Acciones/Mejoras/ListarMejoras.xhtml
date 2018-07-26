@@ -27,8 +27,9 @@
                             <strong>Info!</strong> No hay registros para listar.
                         </div>
                     </c:when>
-                    <c:otherwise>                    
-                        <table class="table table-hover table-striped table-responsive">
+                    <c:otherwise>            
+                        <div class="table-responsive-sm">
+                        <table class="table table-hover table-striped">
                             <thead style="font-size: 12px">
                                 <tr>
                                     <th style="width: 5%">Fecha</th>
@@ -148,6 +149,7 @@
                                 </c:forEach>
                             </tbody>
                         </table> 
+                        </div>
                         <c:if test="#{listarMejoras.cantidadPaginas > 1}">
                             <div class="container-fluid text-center" style="padding: 1%">
                                 <ul class="pagination">
