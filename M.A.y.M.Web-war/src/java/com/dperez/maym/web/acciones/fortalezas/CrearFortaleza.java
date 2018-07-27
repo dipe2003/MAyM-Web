@@ -184,7 +184,7 @@ public class CrearFortaleza implements Serializable {
         if(fortaleza != null){
             // redirigir a la lista de fortalezas.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Fortalezas/EditarFortaleza.xhtml?id="+fortaleza.getId());
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Fortalezas/ListarFortalezas.xhtml");
         }else{
             FacesContext.getCurrentInstance().addMessage("form_nueva_fortaleza:crear_fortaleza", new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Fortaleza", "No se pudo crear la Fortaleza" ));
             FacesContext.getCurrentInstance().renderResponse();

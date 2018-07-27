@@ -87,7 +87,8 @@
                                             <div class="radio" >
                                                 <f:selectItem itemLabel="#{tipo.descripcion}" itemValue="#{tipo}" />
                                             </div>
-                                        </c:forEach>                                        
+                                        </c:forEach>  
+                                        <f:ajax execute="@this"/>
                                     </h:selectOneRadio>
                                 </div> 
                             </div>
