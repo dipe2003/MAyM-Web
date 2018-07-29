@@ -50,6 +50,8 @@ public class CrearAccionCorrectiva implements Serializable {
     @Inject
     private FacadeDatos fDatos;
     
+    private ProductoInvolucrado productoInvolucrado;
+    
     private Empresa EmpresaLogueada;
     
     private Date FechaDeteccion;
@@ -69,9 +71,6 @@ public class CrearAccionCorrectiva implements Serializable {
     private Integer AreaSectorAccionSeleccionada;
     
     private Map<String, String> ListaProductosAfectados;
-    private String NombreProductoAfectado;
-    private String DatosProductoAfectado;
-    private String NombreProductoAfectadoOriginal;
     
     //  Getters
     
@@ -99,8 +98,6 @@ public class CrearAccionCorrectiva implements Serializable {
     public Integer getAreaSectorAccionSeleccionada() {return AreaSectorAccionSeleccionada;}
     
     public Map<String, String> getListaProductosAfectados(){return this.ListaProductosAfectados;}
-    public String getNombreProductoAfectado(){return this.NombreProductoAfectado;}
-    public String getDatosProductoAfectado(){return this.DatosProductoAfectado;}
     
     //  Setters
     
@@ -129,8 +126,6 @@ public class CrearAccionCorrectiva implements Serializable {
     public void setAreaSectorAccionSeleccionada(Integer AreaSectorAccionSeleccionada) {this.AreaSectorAccionSeleccionada = AreaSectorAccionSeleccionada;}
     
     public void setListaProductosAfectados(Map<String, String> ListaProductosAfectados) {this.ListaProductosAfectados = ListaProductosAfectados;}
-    public void setNombreProductoAfectado(String NombreProductoAfectado){this.NombreProductoAfectado = NombreProductoAfectado;}
-    public void setDatosProductoAfectado(String DatosProductoAfectado){this.DatosProductoAfectado = DatosProductoAfectado;}
     
     
     //  Metodos
@@ -143,6 +138,7 @@ public class CrearAccionCorrectiva implements Serializable {
         // Empresa
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        productoInvolucrado = new ProductoInvolucrado();
         EmpresaLogueada = (Empresa) request.getSession().getAttribute("Empresa");
         //  Detecciones
         TiposDeteccion = EnumTipoDeteccion.values();
@@ -204,61 +200,6 @@ public class CrearAccionCorrectiva implements Serializable {
         }
     }
     
-    /**
-     * Agrega un nuevo producto afectado a la lista de productos afectados para ser persistidos durante la creacion de la accion correctiva.
-     * Si el nombre del producto ya existe se sustituye
-     * Si el nombre o el datos estan vacios no se crea y se muestra el mensaje correspondiente.
-     */
-    public void nuevoProductoAfectado(){
-        if(NombreProductoAfectado!= null && DatosProductoAfectado !=null){
-            if(NombreProductoAfectado.isEmpty() || DatosProductoAfectado.isEmpty()){
-                FacesContext.getCurrentInstance().addMessage("form_nueva_accion_modal:btn_nuevo_producto", new FacesMessage(SEVERITY_FATAL, "No se pudo agregar producto", "No se pudo agregar producto" ));
-                FacesContext.getCurrentInstance().renderResponse();
-            }else{
-                this.ListaProductosAfectados.put(NombreProductoAfectado, DatosProductoAfectado);
-                this.NombreProductoAfectado = new String();
-                this.DatosProductoAfectado = new String();
-                FacesContext.getCurrentInstance().addMessage("form_nueva_accion_modal:btn_nuevo_producto", new FacesMessage(SEVERITY_INFO, "El producto fue agregado.", "El producto fue agregado."));
-                FacesContext.getCurrentInstance().renderResponse();
-            }
-        }
-    }
-    
-    /**
-     * Quita el producto seleccionado de la lista de productos afectados.
-     * @param NombreProducto
-     */
-    public void quitarProducto(String NombreProducto){
-        this.ListaProductosAfectados.remove(NombreProducto);
-    }
-    
-    /**
-     * Carga los datos del producto en los campos del formulario.
-     * Lo remueve de la lista.
-     * @param NombreProducto
-     */
-    public void cargarDatosProducto(String NombreProducto){
-        this.NombreProductoAfectado = NombreProducto;
-        this.DatosProductoAfectado = this.ListaProductosAfectados.get(NombreProducto);
-        this.NombreProductoAfectadoOriginal = this.NombreProductoAfectado;
-    }
-    
-    /**
-     * Guarda los datos del producto de los campos del formulario.
-     * Remueve de la lista los datos del producto anterior.
-     */
-    public void guardarCambiosProducto(){
-        if(!NombreProductoAfectado.equals(NombreProductoAfectadoOriginal) || !DatosProductoAfectado.equals(this.ListaProductosAfectados.get(NombreProductoAfectadoOriginal))){
-            this.ListaProductosAfectados.remove(NombreProductoAfectadoOriginal);
-            this.ListaProductosAfectados.put(NombreProductoAfectado, DatosProductoAfectado);
-            this.NombreProductoAfectado = new String();
-            this.DatosProductoAfectado = new String();
-            FacesContext.getCurrentInstance().addMessage("form_nueva_accion_modal:btn_editar_producto", new FacesMessage(SEVERITY_INFO, "El producto fue guardado.", "El producto fue guardado."));
-            FacesContext.getCurrentInstance().renderResponse();
-        }else{
-           FacesContext.getCurrentInstance().renderResponse(); 
-        }
-    }
     
     /**
      * Crea la accion correctiva con los datos ingresados.
@@ -292,10 +233,5 @@ public class CrearAccionCorrectiva implements Serializable {
     
     public void limpiarModalDeteccion(){
         this.NombreNuevaDeteccion = new String();
-    }
-    
-    public void limpiarModalProducto(){
-        this.NombreProductoAfectado = new String();
-        this.DatosProductoAfectado = new String();
     }
 }
