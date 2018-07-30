@@ -28,7 +28,6 @@ import java.util.TreeMap;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
-import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
 import static javax.faces.application.FacesMessage.SEVERITY_INFO;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
@@ -192,10 +191,10 @@ public class CrearAccionCorrectiva implements Serializable {
             this.DeteccionSeleccionada = det.getId();
             this.NombreNuevaDeteccion = new String();
             this.TipoDeDeteccionSeleccionada = det.getTipo();
-            FacesContext.getCurrentInstance().addMessage("form_nueva_accion_modal:btn_nueva_deteccion", new FacesMessage(SEVERITY_INFO, det.getNombre() + " fue creada.", det.getNombre() + " fue creada." ));
+            FacesContext.getCurrentInstance().addMessage("form_accion_modal:btn_nueva_deteccion", new FacesMessage(SEVERITY_INFO, det.getNombre() + " fue creada.", det.getNombre() + " fue creada." ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
-            FacesContext.getCurrentInstance().addMessage("form_nueva_accion_modal:btn_nueva_deteccion", new FacesMessage(SEVERITY_INFO, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
+            FacesContext.getCurrentInstance().addMessage("form_accion_modal:btn_nueva_deteccion", new FacesMessage(SEVERITY_INFO, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }
     }
@@ -226,7 +225,7 @@ public class CrearAccionCorrectiva implements Serializable {
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/ListarCorrectivas.xhtml");
         }else{
-            FacesContext.getCurrentInstance().addMessage("form_nueva_accion:crear_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Accion", "No se pudo crear la Accion" ));
+            FacesContext.getCurrentInstance().addMessage("form_accion:crear_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Accion", "No se pudo crear la Accion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }
     }

@@ -106,13 +106,13 @@ public class ProductoInvolucrado implements Serializable {
     private void nuevoProductoAfectado(){
         if(NombreProductoAfectado!= null && DatosProductoAfectado !=null){
             if(NombreProductoAfectado.isEmpty() || DatosProductoAfectado.isEmpty()){
-                FacesContext.getCurrentInstance().addMessage("form_accion_correctiva_modal:btn_nuevo_producto", new FacesMessage(SEVERITY_FATAL, "No se pudo agregar producto", "No se pudo agregar producto" ));
+                FacesContext.getCurrentInstance().addMessage("form_accion_modal:btn_nuevo_producto", new FacesMessage(SEVERITY_FATAL, "No se pudo agregar producto", "No se pudo agregar producto" ));
                 FacesContext.getCurrentInstance().renderResponse();
             }else{
                 this.ListaProductosAfectados.put(NombreProductoAfectado, DatosProductoAfectado);
                 this.NombreProductoAfectado = new String();
                 this.DatosProductoAfectado = new String();
-                FacesContext.getCurrentInstance().addMessage("form_accion_correctiva_modal:btn_nuevo_producto", new FacesMessage(SEVERITY_INFO, "El producto fue agregado.", "El producto fue agregado."));
+                FacesContext.getCurrentInstance().addMessage("form_accion_modal:btn_nuevo_producto", new FacesMessage(SEVERITY_INFO, "El producto fue agregado.", "El producto fue agregado."));
                 FacesContext.getCurrentInstance().renderResponse();
             }
         }
@@ -128,14 +128,14 @@ public class ProductoInvolucrado implements Serializable {
     private void nuevoProductoAfectado(int idAccionSeleccionada){
         if(NombreProductoAfectado!= null && DatosProductoAfectado !=null){
             if(NombreProductoAfectado.isEmpty() || DatosProductoAfectado.isEmpty()){
-                FacesContext.getCurrentInstance().addMessage("form_accion_correctiva_modal:btn_nuevo_producto", new FacesMessage(SEVERITY_FATAL, "No se pudo agregar producto", "No se pudo agregar producto" ));
+                FacesContext.getCurrentInstance().addMessage("form_accion_modal:btn_nuevo_producto", new FacesMessage(SEVERITY_FATAL, "No se pudo agregar producto", "No se pudo agregar producto" ));
                 FacesContext.getCurrentInstance().renderResponse();
             }else{
                 this.ListaProductosAfectados.put(NombreProductoAfectado, DatosProductoAfectado);
                 fDatos.AgregarProductoInvolucrado(idAccionSeleccionada, NombreProductoAfectado, DatosProductoAfectado);
                 this.NombreProductoAfectado = new String();
                 this.DatosProductoAfectado = new String();
-                FacesContext.getCurrentInstance().addMessage("form_accion_correctiva_modal:btn_nuevo_producto", new FacesMessage(SEVERITY_INFO, "El producto fue agregado.", "El producto fue agregado."));
+                FacesContext.getCurrentInstance().addMessage("form_accion_modal:btn_nuevo_producto", new FacesMessage(SEVERITY_INFO, "El producto fue agregado.", "El producto fue agregado."));
                 FacesContext.getCurrentInstance().renderResponse();
             }
         }
@@ -167,7 +167,7 @@ public class ProductoInvolucrado implements Serializable {
      */
     private void quitarProducto(String NombreProducto, int idAccionSeleccionada){
         if(fDatos.RemoverProductoInvolucrado(idAccionSeleccionada, NombreProducto)==-1){
-            FacesContext.getCurrentInstance().addMessage("form_accion_correctiva:btn_eliminar_accion", new FacesMessage(SEVERITY_FATAL, "No se pudo quitar producto", "No se pudo quitar producto" ));
+            FacesContext.getCurrentInstance().addMessage("form_accion:btn_eliminar_accion", new FacesMessage(SEVERITY_FATAL, "No se pudo quitar producto", "No se pudo quitar producto" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             this.ListaProductosAfectados.remove(NombreProducto);
@@ -205,7 +205,7 @@ public class ProductoInvolucrado implements Serializable {
             this.ListaProductosAfectados.put(NombreProductoAfectado, DatosProductoAfectado);
             this.NombreProductoAfectado = new String();
             this.DatosProductoAfectado = new String();
-            FacesContext.getCurrentInstance().addMessage("form_accion_correctiva_modal:btn_editar_producto", new FacesMessage(SEVERITY_INFO, "El producto fue guardado.", "El producto fue guardado."));
+            FacesContext.getCurrentInstance().addMessage("form_accion_modal:btn_editar_producto", new FacesMessage(SEVERITY_INFO, "El producto fue guardado.", "El producto fue guardado."));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             FacesContext.getCurrentInstance().renderResponse();
@@ -226,7 +226,7 @@ public class ProductoInvolucrado implements Serializable {
             fDatos.RemoverProductoInvolucrado(idAccionSeleccionada, NombreProductoAfectadoOriginal);
             this.NombreProductoAfectado = new String();
             this.DatosProductoAfectado = new String();
-            FacesContext.getCurrentInstance().addMessage("form_accion_correctiva_modal:btn_editar_producto", new FacesMessage(SEVERITY_INFO, "El producto fue guardado.", "El producto fue guardado."));
+            FacesContext.getCurrentInstance().addMessage("form_accion_modal:btn_editar_producto", new FacesMessage(SEVERITY_INFO, "El producto fue guardado.", "El producto fue guardado."));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             FacesContext.getCurrentInstance().renderResponse();

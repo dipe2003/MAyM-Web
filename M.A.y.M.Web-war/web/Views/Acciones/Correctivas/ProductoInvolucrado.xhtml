@@ -60,7 +60,7 @@ and open the template in the editor.
                                         <h:commandButton id="btn_nuevo_producto" style="width: 99%;" class="btn btn-primary" value="Guardar" action="#{productoInvolucrado.nuevoProductoAfectadoGenerico()}" >
                                             <f:ajax execute="panel_modal_producto" onevent="indicador" />
                                             <f:ajax render="panel_modal_producto panel_mensajes_modal_producto" />
-                                            <f:ajax render="form_accion_correctiva:panel_producto_afectado" />                                                       
+                                            <f:ajax render="form_accion:panel_producto_afectado" />                                                       
                                             
                                         </h:commandButton>
                                     </c:otherwise>
@@ -124,7 +124,7 @@ and open the template in the editor.
                                     <c:otherwise>
                                         <h:commandButton id="btn_editar_producto" style="width: 99%;" class="btn btn-primary" value="Guardar" action="#{productoInvolucrado.guardarCambiosProductoGenerico()}" >
                                             <f:ajax execute="panel_modal_editar_producto" onevent="indicador" />
-                                            <f:ajax render="form_accion_correctiva:panel_producto_afectado" />                                                        
+                                            <f:ajax render="form_accion:panel_producto_afectado" />                                                        
                                             <f:ajax render="panel_modal_editar_producto panel_mensajes_modal_editar_producto" />
                                         </h:commandButton>
                                     </c:otherwise>

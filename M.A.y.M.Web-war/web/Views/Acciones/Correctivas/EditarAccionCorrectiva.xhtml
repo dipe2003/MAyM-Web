@@ -18,7 +18,7 @@
             </div>                   
         </div>
         <div class="container-fluid" style="padding: 1%">
-            <h:form id="form_accion_correctiva" enctype="multipart/form-data">
+            <h:form id="form_accion" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-sm-10">
                         <div class="panel panel-default">
@@ -161,7 +161,7 @@
                                     <div class="form-group">
                                         <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_nuevo_producto" >
                                             <span class="glyphicon glyphicon-plus" style="font-family: sans-serif;"> Agregar Producto</span>
-                                            <f:ajax delay="100" render="form_accion_correctiva_modal:modal_nuevo_producto" />
+                                            <f:ajax delay="100" render="form_accion_modal:modal_nuevo_producto" />
                                         </h:commandLink> 
                                     </div>   
                                 </c:when>
@@ -173,7 +173,7 @@
                                     <div class="form-group">
                                         <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_nuevo_producto" >
                                             <span class="glyphicon glyphicon-plus" style="font-family: sans-serif;"> Agregar</span>
-                                            <f:ajax delay="100" render="form_accion_correctiva_modal:modal_nuevo_producto" />
+                                            <f:ajax delay="100" render="form_accion_modal:modal_nuevo_producto" />
                                         </h:commandLink> 
                                     </div>  
                                     
@@ -196,7 +196,7 @@
                                                                     <h:commandLink class="btn btn-primary"  p:data-toggle="modal" p:data-target="#modal_editar_producto" 
                                                                                    action="#{productoInvolucrado.cargarDatosProducto(producto.key)}">
                                                                         <span class="glyphicon glyphicon-pencil"></span>
-                                                                        <f:ajax delay="400" render="form_accion_correctiva_modal:panel_modal_editar_producto" />
+                                                                        <f:ajax delay="400" render="form_accion_modal:panel_modal_editar_producto" />
                                                                     </h:commandLink>
                                                                     <h:commandLink class="btn btn-danger" action="#{productoInvolucrado.quitarProductoGenerico(producto.key)}" 
                                                                                    onclick="if (! confirm('Seguro que va a eliminar este Producto? ')) return false">
@@ -665,7 +665,7 @@
                 </div>
                 
             </h:form>
-            <h:form id="form_accion_correctiva_modal" enctype="multipart/form-data">
+            <h:form id="form_accion_modal" enctype="multipart/form-data">
                 <!-- Modal Nueva Deteccion -->
                 <div id="modal_Nueva" class="modal fade" style="padding-top: 15%;" role="dialog">
                     <div class="modal-dialog">
@@ -716,8 +716,8 @@
                                             <c:if test="#{editarAccionCorrectiva.nombreNuevaDeteccion != '' and editarAccionCorrectiva.nombreNuevaDeteccion != null}" >
                                                 <h:commandButton id="btn_nueva_deteccion" style="width: 99%;" class="btn btn-primary" value="Guardar" action="#{editarAccionCorrectiva.nuevaDeteccion()}">
                                                     <f:ajax execute="panel_modal" onevent="indicador" />
-                                                    <f:ajax render="form_accion_correctiva:panel_tipodeteccion" />
-                                                    <f:ajax render="form_accion_correctiva:deteccion" />
+                                                    <f:ajax render="form_accion:panel_tipodeteccion" />
+                                                    <f:ajax render="form_accion:deteccion" />
                                                     <f:ajax render="panel_modal panel_mensajes_modal" />
                                                 </h:commandButton>
                                             </c:if>
@@ -782,8 +782,8 @@
                                                 <c:otherwise>
                                                     <h:commandButton id="btn_nueva_codificacion" style="width: 99%;" class="btn btn-primary" value="Guardar" action="#{editarAccionCorrectiva.nuevaCodificacion()}" >
                                                         <f:ajax execute="panel_modal_codificacion" onevent="indicador" />
-                                                        <f:ajax render="form_accion_correctiva:panel_codificaciones" />
-                                                        <f:ajax render="form_accion_correctiva:codificacion" />
+                                                        <f:ajax render="form_accion:panel_codificaciones" />
+                                                        <f:ajax render="form_accion:codificacion" />
                                                         <f:ajax render="panel_modal_codificacion panel_mensajes_modal_codificacion" />
                                                     </h:commandButton>
                                                 </c:otherwise>
@@ -826,7 +826,7 @@
                                             <div class="form-group">
                                                 <h:inputFile value="#{editarAccionCorrectiva.archivoAdjunto}" class="btn btn-primary" p:accept="image/x-png,image/gif,image/jpeg,application/pdf">
                                                     <f:ajax event="change" listener="#{editarAccionCorrectiva.setArchivoAdjunto(editarAccionCorrectiva.archivoAdjunto)}" />
-                                                    <f:ajax event="change" listener="#{editarAccionCorrectiva.agregarAdjunto()}" render="form_accion_correctiva:panel_lista_adjuntos panel_modal_adjunto" onevent="indicador"/>
+                                                    <f:ajax event="change" listener="#{editarAccionCorrectiva.agregarAdjunto()}" render="form_accion:panel_lista_adjuntos panel_modal_adjunto" onevent="indicador"/>
                                                 </h:inputFile>
                                             </div>
                                         </c:if>
