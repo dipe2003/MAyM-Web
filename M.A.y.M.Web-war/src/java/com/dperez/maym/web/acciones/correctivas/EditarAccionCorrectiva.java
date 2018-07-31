@@ -65,8 +65,6 @@ public class EditarAccionCorrectiva implements Serializable {
     @Inject
     private ProgramadorEventos pEventos;
     
-    private ProductoInvolucrado productoInvolucrado;
-    
     private int IdAccionSeleccionada;
     private Accion AccionSeleccionada;
     private Empresa EmpresaLogueada;
@@ -272,7 +270,8 @@ public class EditarAccionCorrectiva implements Serializable {
         }catch(NumberFormatException nEx){};
         
         if(IdAccionSeleccionada != 0){
-            productoInvolucrado = new ProductoInvolucrado(IdAccionSeleccionada);
+            ProductoInvolucrado productoInvolucrado = context.getApplication().evaluateExpressionGet(context, "#{productoInvolucrado}", ProductoInvolucrado.class);
+            productoInvolucrado.setIdAccionSeleccionada(IdAccionSeleccionada);
             AccionSeleccionada = (Correctiva) fLectura.GetAccion(IdAccionSeleccionada);
             FechaDeteccion = AccionSeleccionada.getFechaDeteccion();
             Descripcion = AccionSeleccionada.getDescripcion();

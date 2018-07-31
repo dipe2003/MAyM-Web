@@ -137,7 +137,7 @@ public class CrearAccionCorrectiva implements Serializable {
         // Empresa
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        productoInvolucrado = new ProductoInvolucrado();
+        productoInvolucrado = context.getApplication().evaluateExpressionGet(context, "#{productoInvolucrado}", ProductoInvolucrado.class);
         EmpresaLogueada = (Empresa) request.getSession().getAttribute("Empresa");
         //  Detecciones
         TiposDeteccion = EnumTipoDeteccion.values();
@@ -215,6 +215,9 @@ public class CrearAccionCorrectiva implements Serializable {
                 Descripcion, TipoDesvioSeleccionado, AreaSectorAccionSeleccionada, DeteccionSeleccionada, empresa.getId());
         
         if(accion != null){
+            if(productoInvolucrado.getListaProductosAfectados()!=null){
+                ListaProductosAfectados = productoInvolucrado.getListaProductosAfectados();
+            }
             // agrega los productos afectados
             if(!ListaProductosAfectados.isEmpty()) {
                 for(Map.Entry entry: ListaProductosAfectados.entrySet()){

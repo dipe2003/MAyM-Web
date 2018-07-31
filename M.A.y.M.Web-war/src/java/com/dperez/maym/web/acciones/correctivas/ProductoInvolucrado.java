@@ -7,7 +7,6 @@ package com.dperez.maym.web.acciones.correctivas;
 
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.acciones.Correctiva;
-import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.producto.Producto;
@@ -58,6 +57,7 @@ public class ProductoInvolucrado implements Serializable {
     public String getDatosProductoAfectado(){return this.DatosProductoAfectado;}
     
     //comprobaciones
+    public void setIdAccionSeleccionada(int IdAccionSeleccionada){this.IdAccionSeleccionada = IdAccionSeleccionada;}
     public void setListaProductosAfectados(Map<String, String> ListaProductosAfectados) {this.ListaProductosAfectados = ListaProductosAfectados;}
     public void setNombreProductoAfectado(String NombreProductoAfectado){this.NombreProductoAfectado = NombreProductoAfectado;}
     public void setDatosProductoAfectado(String DatosProductoAfectado){this.DatosProductoAfectado = DatosProductoAfectado;}
