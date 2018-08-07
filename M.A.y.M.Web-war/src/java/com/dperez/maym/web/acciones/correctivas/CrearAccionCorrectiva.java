@@ -5,11 +5,11 @@
 */
 package com.dperez.maym.web.acciones.correctivas;
 
+import com.dperez.maym.web.configuraciones.ModalDetecciones;
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.acciones.EnumAccion;
 import com.dperez.maymweb.accion.acciones.EnumTipoDesvio;
 import com.dperez.maymweb.area.Area;
-import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeAdministrador;
@@ -28,7 +28,6 @@ import java.util.TreeMap;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
-import static javax.faces.application.FacesMessage.SEVERITY_INFO;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -49,6 +48,8 @@ public class CrearAccionCorrectiva implements Serializable {
     @Inject
     private FacadeDatos fDatos;
     
+    private ModalDetecciones modalDetecciones;
+    
     private ProductoInvolucrado productoInvolucrado;
     
     private Empresa EmpresaLogueada;
@@ -59,7 +60,7 @@ public class CrearAccionCorrectiva implements Serializable {
     
     private EnumTipoDeteccion[] TiposDeteccion;
     private EnumTipoDeteccion TipoDeDeteccionSeleccionada;
-    private String NombreNuevaDeteccion;
+
     private Map<Integer, String> ListaDetecciones;
     private Integer DeteccionSeleccionada;
     
@@ -87,7 +88,6 @@ public class CrearAccionCorrectiva implements Serializable {
     public EnumTipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
     public EnumTipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
     public Map<Integer, String> getListaDetecciones(){return this.ListaDetecciones;}
-    public String getNombreNuevaDeteccion(){return this.NombreNuevaDeteccion;}
     public Integer getDeteccionSeleccionada(){return this.DeteccionSeleccionada;}
     
     public EnumTipoDesvio[] getTiposDesvios(){return this.TiposDesvios;}
@@ -115,7 +115,6 @@ public class CrearAccionCorrectiva implements Serializable {
     public void setTipoDeDeteccionSeleccionada(EnumTipoDeteccion TipoDeteccion){this.TipoDeDeteccionSeleccionada = TipoDeteccion;}
     public void setTiposDeteccion(EnumTipoDeteccion[] TiposDeteccion){this.TiposDeteccion = TiposDeteccion;}
     public void setListaDetecciones(Map<Integer, String> ListaDetecciones){this.ListaDetecciones = ListaDetecciones;}
-    public void setNombreNuevaDeteccion(String NombreNuevaDeteccion){this.NombreNuevaDeteccion = NombreNuevaDeteccion;}
     public void setDeteccionSeleccionada(Integer DeteccionSeleccionada){this.DeteccionSeleccionada = DeteccionSeleccionada;}
     
     public void setTiposDesvios(EnumTipoDesvio[] TiposDesvios){this.TiposDesvios = TiposDesvios;}
@@ -138,18 +137,14 @@ public class CrearAccionCorrectiva implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         productoInvolucrado = context.getApplication().evaluateExpressionGet(context, "#{productoInvolucrado}", ProductoInvolucrado.class);
+        
         EmpresaLogueada = (Empresa) request.getSession().getAttribute("Empresa");
+        
         //  Detecciones
+        modalDetecciones = context.getApplication().evaluateExpressionGet(context, "#{modalDetecciones}", ModalDetecciones.class);
         TiposDeteccion = EnumTipoDeteccion.values();
         TipoDeDeteccionSeleccionada = EnumTipoDeteccion.INTERNA;
-        this.ListaDetecciones = new HashMap<>();
-        List<Deteccion> tmpDetecciones = fLectura.ListarDetecciones();
-        for(Deteccion deteccion:tmpDetecciones){
-            if (deteccion.getTipo().equals(EnumTipoDeteccion.INTERNA)){
-                ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
-            }
-            ListaDetecciones = new TreeMap<>(ListaDetecciones);
-        }
+        ListaDetecciones = new TreeMap<>(modalDetecciones.getListaDetecciones());
         
         //  Tipo de desvios
         TiposDesvios = EnumTipoDesvio.values();
@@ -170,35 +165,8 @@ public class CrearAccionCorrectiva implements Serializable {
      * Actualiza la lista de detecciones segun la seleccion de tipo de deteccion.
      */
     public void actualizarDeteccion(){
-        List<Deteccion> tmpDetecciones = fLectura.ListarDetecciones();
-        this.ListaDetecciones.clear();
-        for(Deteccion deteccion:tmpDetecciones){
-            if (deteccion.getTipo().equals(TipoDeDeteccionSeleccionada)){
-                ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
-            }
-        }
+        ListaDetecciones = new TreeMap<>(modalDetecciones.getListaDetecciones());
     }
-    
-    /**
-     * Crea nueva deteccion con el tipo interna/externa seleccionado.
-     * Si no se crea se muestra un mensaje
-     */
-    public void nuevaDeteccion() {
-        // Crear Nueva Deteccion y actualizar lista
-        Deteccion det = fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoDeDeteccionSeleccionada);
-        if(det != null){
-            actualizarDeteccion();
-            this.DeteccionSeleccionada = det.getId();
-            this.NombreNuevaDeteccion = new String();
-            this.TipoDeDeteccionSeleccionada = det.getTipo();
-            FacesContext.getCurrentInstance().addMessage("form_accion_modal:btn_nueva_deteccion", new FacesMessage(SEVERITY_INFO, det.getNombre() + " fue creada.", det.getNombre() + " fue creada." ));
-            FacesContext.getCurrentInstance().renderResponse();
-        }else{
-            FacesContext.getCurrentInstance().addMessage("form_accion_modal:btn_nueva_deteccion", new FacesMessage(SEVERITY_INFO, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
-            FacesContext.getCurrentInstance().renderResponse();
-        }
-    }
-    
     
     /**
      * Crea la accion correctiva con los datos ingresados.
@@ -231,9 +199,5 @@ public class CrearAccionCorrectiva implements Serializable {
             FacesContext.getCurrentInstance().addMessage("form_accion:crear_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Accion", "No se pudo crear la Accion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }
-    }
-    
-    public void limpiarModalDeteccion(){
-        this.NombreNuevaDeteccion = new String();
     }
 }

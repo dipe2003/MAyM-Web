@@ -5,6 +5,7 @@
 */
 package com.dperez.maym.web.acciones.correctivas;
 
+import com.dperez.maym.web.configuraciones.ModalDetecciones;
 import com.dperez.maym.web.herramientas.CargarArchivo;
 import com.dperez.maymweb.herramientas.Evento;
 import com.dperez.maymweb.herramientas.ProgramadorEventos;
@@ -19,7 +20,6 @@ import com.dperez.maymweb.accion.adjunto.Adjunto;
 import com.dperez.maymweb.accion.adjunto.EnumTipoAdjunto;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
-import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeAdministrador;
@@ -71,6 +71,8 @@ public class EditarAccionCorrectiva implements Serializable {
     
     private Empresa EmpresaAccion;
     
+    private ModalDetecciones modalDetecciones;
+    
     private Date FechaDeteccion;
     private String strFechaDeteccion;
     private String Descripcion;
@@ -82,7 +84,6 @@ public class EditarAccionCorrectiva implements Serializable {
     
     private EnumTipoDeteccion[] TiposDeteccion;
     private EnumTipoDeteccion TipoDeDeteccionSeleccionada;
-    private String NombreNuevaDeteccion;
     private Map<Integer, String> ListaDetecciones;
     private Integer DeteccionSeleccionada;
     
@@ -143,7 +144,6 @@ public class EditarAccionCorrectiva implements Serializable {
     public EnumTipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
     public EnumTipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
     public Map<Integer, String> getListaDetecciones(){return this.ListaDetecciones;}
-    public String getNombreNuevaDeteccion(){return this.NombreNuevaDeteccion;}
     public Integer getDeteccionSeleccionada(){return this.DeteccionSeleccionada;}
     
     public EnumTipoDesvio[] getTiposDesvios(){return this.TiposDesvios;}
@@ -210,7 +210,6 @@ public class EditarAccionCorrectiva implements Serializable {
     public void setTipoDeDeteccionSeleccionada(EnumTipoDeteccion TipoDeteccion){this.TipoDeDeteccionSeleccionada = TipoDeteccion;}
     public void setTiposDeteccion(EnumTipoDeteccion[] TiposDeteccion){this.TiposDeteccion = TiposDeteccion;}
     public void setListaDetecciones(Map<Integer, String> ListaDetecciones){this.ListaDetecciones = ListaDetecciones;}
-    public void setNombreNuevaDeteccion(String NombreNuevaDeteccion){this.NombreNuevaDeteccion = NombreNuevaDeteccion;}
     public void setDeteccionSeleccionada(Integer DeteccionSeleccionada){this.DeteccionSeleccionada = DeteccionSeleccionada;}
     
     public void setTiposDesvios(EnumTipoDesvio[] TiposDesvios){this.TiposDesvios = TiposDesvios;}
@@ -263,7 +262,7 @@ public class EditarAccionCorrectiva implements Serializable {
         ListaProductosAfectados = new HashMap<>();
         // Empresa
         EmpresaLogueada = (Empresa) request.getSession().getAttribute("Empresa");
-        // recuperar el id para llenar datos de la accion correctiva y el resto de las propiedades.        
+        // recuperar el id para llenar datos de la accion correctiva y el resto de las propiedades.
         IdAccionSeleccionada = 0;
         try{
             IdAccionSeleccionada = Integer.parseInt(request.getParameter("id"));
@@ -272,6 +271,7 @@ public class EditarAccionCorrectiva implements Serializable {
         if(IdAccionSeleccionada != 0){
             ProductoInvolucrado productoInvolucrado = context.getApplication().evaluateExpressionGet(context, "#{productoInvolucrado}", ProductoInvolucrado.class);
             productoInvolucrado.setIdAccionSeleccionada(IdAccionSeleccionada);
+            
             AccionSeleccionada = (Correctiva) fLectura.GetAccion(IdAccionSeleccionada);
             FechaDeteccion = AccionSeleccionada.getFechaDeteccion();
             Descripcion = AccionSeleccionada.getDescripcion();
@@ -280,6 +280,7 @@ public class EditarAccionCorrectiva implements Serializable {
             EmpresaAccion = AccionSeleccionada.getEmpresaAccion();
             
             //  Codificaciones
+            modalDetecciones = context.getApplication().evaluateExpressionGet(context, "#{modalDetecciones}", ModalDetecciones.class);
             ListaCodificaciones = new HashMap<>();
             List<Codificacion> tmpCodificaciones = fLectura.ListarCodificaciones(EmpresaLogueada.getId());
             for(Codificacion codificacion:tmpCodificaciones){
@@ -290,16 +291,8 @@ public class EditarAccionCorrectiva implements Serializable {
             
             //  Detecciones
             TiposDeteccion = EnumTipoDeteccion.values();
+            ListaDetecciones = new TreeMap<>(modalDetecciones.getListaDetecciones());
             TipoDeDeteccionSeleccionada = AccionSeleccionada.getGeneradaPor().getTipo();
-            
-            this.ListaDetecciones = new HashMap<>();
-            List<Deteccion> tmpDetecciones = fLectura.ListarDetecciones();
-            for(Deteccion deteccion:tmpDetecciones){
-                if (deteccion.getTipo().equals(TipoDeDeteccionSeleccionada)){
-                    ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
-                }
-            }
-            ListaDetecciones = new TreeMap<>(ListaDetecciones);
             DeteccionSeleccionada = AccionSeleccionada.getGeneradaPor().getId();
             
             //  Tipo de desvios
@@ -369,33 +362,9 @@ public class EditarAccionCorrectiva implements Serializable {
      * Actualiza la lista de detecciones segun la seleccion de tipo de deteccion.
      */
     public void actualizarDeteccion(){
-        List<Deteccion> tmpDetecciones = fLectura.ListarDetecciones();
-        for(Deteccion deteccion:tmpDetecciones){
-            if (deteccion.getTipo().equals(TipoDeDeteccionSeleccionada)){
-                ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
-            }
-        }
+        ListaDetecciones = new TreeMap<>(modalDetecciones.getListaDetecciones());
     }
-    
-    /**
-     * Crea nueva deteccion con el tipo interna/externa seleccionado.
-     * Se verifica que el nombre no sea vacio. Si es vacio no se crea y se muestra un mensaje
-     */
-    public void nuevaDeteccion(){
-        // Crear Nueva Deteccion y actualizar lista
-        Deteccion det = fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoDeDeteccionSeleccionada);
-        if(det != null){
-            actualizarDeteccion();
-            this.DeteccionSeleccionada = det.getId();
-            this.NombreNuevaDeteccion = new String();
-            this.TipoDeDeteccionSeleccionada = det.getTipo();
-            FacesContext.getCurrentInstance().addMessage("form_accion_modal:btn_nueva_deteccion", new FacesMessage(SEVERITY_INFO, det.getNombre() + " fue creada.", det.getNombre() + " fue creada."));
-            FacesContext.getCurrentInstance().renderResponse();
-        }else{
-            FacesContext.getCurrentInstance().addMessage("form_accion_modal:btn_nueva_deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
-            FacesContext.getCurrentInstance().renderResponse();
-        }
-    }
+
     
     /**
      * Crea nueva codificacion.
@@ -410,10 +379,10 @@ public class EditarAccionCorrectiva implements Serializable {
             this.CodificacionSeleccionada = cod.getId();
             this.NombreNuevaCodificacion = new String();
             this.DescripcionNuevaCodificacion = new String();
-            FacesContext.getCurrentInstance().addMessage("form_editar_accion_modal:btn_nueva_codificacion", new FacesMessage(SEVERITY_INFO, cod.getNombre() + " fue creada.", cod.getNombre() + " fue creada."));
+            FacesContext.getCurrentInstance().addMessage("form_accion_modal:btn_nueva_codificacion", new FacesMessage(SEVERITY_INFO, cod.getNombre() + " fue creada.", cod.getNombre() + " fue creada."));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
-            FacesContext.getCurrentInstance().addMessage("form_editar_accion_modal:btn_nueva_codificacion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva codificacion", "No se pudo crear nueva codificacion" ));
+            FacesContext.getCurrentInstance().addMessage("form_accion_modal:btn_nueva_codificacion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva codificacion", "No se pudo crear nueva codificacion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }
     }
@@ -482,7 +451,7 @@ public class EditarAccionCorrectiva implements Serializable {
         Actividad actividad = MedidasCorrectivas.get((int)IdActividad);
         if(fDatos.RemoverMedidaCorrectiva(IdAccionSeleccionada, IdActividad)==-1){
             // Si no se actualizo muestra mensaje de error.
-            ctx.addMessage("form_editar_accion:guardar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
+            ctx.addMessage("form_accion:guardar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
             ctx.renderResponse();
         }else{
             // remover el evento del programador de tareas.
@@ -507,10 +476,10 @@ public class EditarAccionCorrectiva implements Serializable {
         Actividad actividad = MedidasPreventivas.get((int)IdActividad);
         if(fDatos.RemoverMedidaPreventiva(IdAccionSeleccionada, IdActividad)==-1){
             // Si no se actualizo muestra mensaje de error.
-            ctx.addMessage("form_editar_accion:guardar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
+            ctx.addMessage("form_accion:guardar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
             ctx.renderResponse();
         }else{
-            // remover el evento del programador de tareas.           
+            // remover el evento del programador de tareas.
             Evento eventoAccion = new Evento(TipoEvento.IMPLEMENTACION_ACTIVIDAD, actividad.getResponsableImplementacion().getId(),
                     AccionSeleccionada.getId(), IdActividad);
             if (pEventos.ExisteEvento(eventoAccion)){
@@ -534,7 +503,7 @@ public class EditarAccionCorrectiva implements Serializable {
         if(fDatos.EditarAccion(IdAccionSeleccionada, EnumAccion.CORRECTIVA, FechaDeteccion, Descripcion, AnalisisCausa, TipoDesvioSeleccionado,
                 AreaSectorAccionSeleccionada, DeteccionSeleccionada, CodificacionSeleccionada) == -1){
             // Si no se actualizo muestra mensaje de error.
-            ctx.addMessage("form_editar_accion:guardar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
+            ctx.addMessage("form_accion:guardar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
             ctx.renderResponse();
         }else{
             if(!this.MedidasCorrectivas.isEmpty() || !this.MedidasPreventivas.isEmpty()){
@@ -578,7 +547,7 @@ public class EditarAccionCorrectiva implements Serializable {
                 }
             }
             // Si la actualizacion se realizo correctamente redirige a lista de acciones.
-            ctx.addMessage("form_editar_accion:guardar_accion", new FacesMessage(SEVERITY_INFO, "Los datos se guardaron.", "Los datos se guardaron." ));
+            ctx.addMessage("form_accion:guardar_accion", new FacesMessage(SEVERITY_INFO, "Los datos se guardaron.", "Los datos se guardaron." ));
             ctx.renderResponse();
         }
     }
@@ -591,7 +560,7 @@ public class EditarAccionCorrectiva implements Serializable {
     public void eliminarAccion() throws IOException{
         if(fAdmin.EliminarAccion(IdAccionSeleccionada)==-1){
             // Si no se elimino muestra mensaje de error.
-            FacesContext.getCurrentInstance().addMessage("form_editar_accion:eliminar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar la Accion", "No se pudo eliminar la Accion" ));
+            FacesContext.getCurrentInstance().addMessage("form_accion:eliminar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar la Accion", "No se pudo eliminar la Accion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             // Eliminar todos los archivos adjuntos del disco.
@@ -607,10 +576,7 @@ public class EditarAccionCorrectiva implements Serializable {
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/ListarCorrectivas.xhtml");
         }
     }
-    
-    public void limpiarModalDeteccion(){
-        this.NombreNuevaDeteccion = new String();
-    }
+
     public void limpiarModalCodificacion(){
         this.NombreNuevaCodificacion = new String();
         this.DescripcionNuevaCodificacion = new String();

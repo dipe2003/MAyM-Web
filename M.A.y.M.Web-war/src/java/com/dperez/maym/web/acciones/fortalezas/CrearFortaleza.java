@@ -5,6 +5,7 @@
 */
 package com.dperez.maym.web.acciones.fortalezas;
 
+import com.dperez.maym.web.configuraciones.ModalDetecciones;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
@@ -22,6 +23,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
@@ -49,6 +51,8 @@ public class CrearFortaleza implements Serializable {
     
     private Empresa EmpresaLogueada;
     
+    private ModalDetecciones modalDetecciones;
+    
     private Date FechaDeteccion;
     private String strFechaDeteccion;
     
@@ -57,8 +61,7 @@ public class CrearFortaleza implements Serializable {
     private EnumTipoDeteccion[] TiposDeteccion;
     private EnumTipoDeteccion TipoDeDeteccionSeleccionada;
 
-    private String NombreNuevaDeteccion;
-    private Map<Integer, Deteccion> ListaDetecciones;
+    private Map<Integer, String> ListaDetecciones;
     private Integer DeteccionSeleccionada;
     
     private Map<Integer, Area> ListaAreasSectores;
@@ -79,8 +82,7 @@ public class CrearFortaleza implements Serializable {
     
     public EnumTipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
     public EnumTipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
-    public Map<Integer, Deteccion> getListaDetecciones(){return this.ListaDetecciones;}
-    public String getNombreNuevaDeteccion(){return this.NombreNuevaDeteccion;}
+    public Map<Integer, String> getListaDetecciones(){return this.ListaDetecciones;}
     public Integer getDeteccionSeleccionada(){return this.DeteccionSeleccionada;}
     
     public Map<Integer, Area> getListaAreasSectores(){return this.ListaAreasSectores;}
@@ -102,8 +104,7 @@ public class CrearFortaleza implements Serializable {
     
     public void setTipoDeDeteccionSeleccionada(EnumTipoDeteccion TipoDeteccion){this.TipoDeDeteccionSeleccionada = TipoDeteccion;}
     public void setTiposDeteccion(EnumTipoDeteccion[] TiposDeteccion){this.TiposDeteccion = TiposDeteccion;}
-    public void setListaDetecciones(Map<Integer, Deteccion> ListaDetecciones){this.ListaDetecciones = ListaDetecciones;}
-    public void setNombreNuevaDeteccion(String NombreNuevaDeteccion){this.NombreNuevaDeteccion = NombreNuevaDeteccion;}
+    public void setListaDetecciones(Map<Integer, String> ListaDetecciones){this.ListaDetecciones = ListaDetecciones;}
     public void setDeteccionSeleccionada(Integer DeteccionSeleccionada){this.DeteccionSeleccionada = DeteccionSeleccionada;}
     
     public void setListaAreaSectores(Map<Integer, Area> ListaAreasSectores){this.ListaAreasSectores = ListaAreasSectores;}
@@ -120,16 +121,12 @@ public class CrearFortaleza implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         EmpresaLogueada = (Empresa) request.getSession().getAttribute("Empresa");
+        
         //  Detecciones
+        modalDetecciones = context.getApplication().evaluateExpressionGet(context, "#{modalDetecciones}", ModalDetecciones.class);
         TiposDeteccion = EnumTipoDeteccion.values();
         TipoDeDeteccionSeleccionada = EnumTipoDeteccion.INTERNA;
-        this.ListaDetecciones = new HashMap<>();
-        List<Deteccion> tmpDetecciones = fLectura.ListarDetecciones();
-        for(Deteccion deteccion:tmpDetecciones){
-            if (deteccion.getTipo().equals(EnumTipoDeteccion.INTERNA)){
-                ListaDetecciones.put(deteccion.getId(), deteccion);
-            }
-        }
+        ListaDetecciones = new TreeMap<>(modalDetecciones.getListaDetecciones());
         
         // Areas Sectores
         ListaAreasSectores = new HashMap<>();
@@ -143,32 +140,9 @@ public class CrearFortaleza implements Serializable {
      * Actualiza la lista de detecciones segun la seleccion de tipo de deteccion.
      */
     public void actualizarDeteccion(){
-        List<Deteccion> tmpDetecciones = fLectura.ListarDetecciones();
-        for(Deteccion deteccion:tmpDetecciones){
-            ListaDetecciones.put(deteccion.getId(), deteccion);
-        }
+        ListaDetecciones = new TreeMap<>(modalDetecciones.getListaDetecciones());
     }
-    
-    /**
-     * Crea nueva deteccion con el tipo interna/externa seleccionado.
-     * Se verifica que el nombre no sea vacio. Si es vacio no se crea y se muestra un mensaje
-     */
-    public void nuevaDeteccion(){
-        // Crear Nueva Deteccion y actualizar lista
-        Deteccion det = fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoDeDeteccionSeleccionada);
-        if(det != null){
-            actualizarDeteccion();           
-            this.DeteccionSeleccionada = det.getId();
-            this.NombreNuevaDeteccion = new String();
-            this.TipoDeDeteccionSeleccionada = det.getTipo();
-            FacesContext.getCurrentInstance().addMessage("form_nueva_fortaleza_modal:btn_nueva_deteccion", new FacesMessage(SEVERITY_INFO, det.getNombre() + " fue creada.", det.getNombre() + " fue creada." ));
-            FacesContext.getCurrentInstance().renderResponse();
-        }else{
-            FacesContext.getCurrentInstance().addMessage("form_nueva_fortaleza_modal:btn_nueva_deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
-            FacesContext.getCurrentInstance().renderResponse();
-        }
-    }
-    
+        
     /**
      * Crea la fortaleza con los datos ingresados.
      * Si no se creo se muestra mensaje de error.
@@ -186,12 +160,8 @@ public class CrearFortaleza implements Serializable {
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Fortalezas/ListarFortalezas.xhtml");
         }else{
-            FacesContext.getCurrentInstance().addMessage("form_nueva_fortaleza:crear_fortaleza", new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Fortaleza", "No se pudo crear la Fortaleza" ));
+            FacesContext.getCurrentInstance().addMessage("form_accion:crear_fortaleza", new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Fortaleza", "No se pudo crear la Fortaleza" ));
             FacesContext.getCurrentInstance().renderResponse();
         }
-    }
-    
-      public void limpiarModalDeteccion(){
-        this.NombreNuevaDeteccion = new String();
     }
 }

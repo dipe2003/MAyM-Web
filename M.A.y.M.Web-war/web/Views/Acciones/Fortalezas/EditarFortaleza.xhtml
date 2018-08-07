@@ -18,7 +18,7 @@
             </div>      
         </div>
         <div class="container-fluid" style="padding: 1%">
-            <h:form id="form_nueva_fortaleza">
+            <h:form id="form_accion">
                 
                 <!-- Descripcion -->
                 <div class="panel panel-primary">
@@ -71,7 +71,7 @@
                                                      required="true" requiredMessage="No se selecciono Deteccion.">
                                         <f:selectItem itemLabel="-- Seleccionar Deteccion ---" itemDisabled="true"  noSelectionOption="false"  />
                                         <c:forEach items="#{editarFortaleza.listaDetecciones}" var="deteccion">
-                                            <f:selectItem itemLabel="#{deteccion.value.nombre}" itemValue="#{deteccion.key}" />
+                                            <f:selectItem itemLabel="#{deteccion.value}" itemValue="#{deteccion.key}" />
                                         </c:forEach>
                                         <f:ajax execute="@this"/>
                                     </h:selectOneMenu>                                    
@@ -133,72 +133,7 @@
             </h:form>
             <h:form id="form_editar_fortaleza_modal">
                 <!-- Modal Nueva Deteccion -->
-                <div id="modal_Nueva" class="modal fade" style="padding-top: 15%;" role="dialog">
-                    <div class="modal-dialog">
-                        <h:panelGroup id="panel_modal">
-                            <!-- Modal content-->
-                            <div class="modal-content">
-                                <div class="modal-header" style="background-color: gray; color: white;">
-                                    <h4 class="modal-title">Deteccion</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="form-group">
-                                        <strong><label for="nombre_nueva_deteccion">Nombre</label></strong>
-                                        <h:inputText id="nombre_nueva_deteccion" class="form-control" value="#{editarFortaleza.nombreNuevaDeteccion}" 
-                                                     required="true" requiredMessage="Se debe ingresar nombre de Deteccion" p:placeholder="Nombre de Deteccion." >
-                                            <f:ajax execute="@this" event="change" render="panel_modal" />
-                                        </h:inputText>
-                                    </div>
-                                    <div class="form-group">
-                                        <strong><label for="tipo_nueva_deteccion">Tipo</label></strong>                                 
-                                        <h:selectOneRadio id="tipo_nueva_deteccion" value="#{editarFortaleza.tipoDeDeteccionSeleccionada}" >
-                                            <c:forEach items="#{editarFortaleza.tiposDeteccion}" var="tipo">
-                                                <div class="radio" >
-                                                    <f:selectItem itemLabel="#{tipo.descripcion}" itemValue="#{tipo}" />
-                                                </div>
-                                            </c:forEach>
-                                            <f:ajax execute="@this" event="change" />
-                                        </h:selectOneRadio>  
-                                    </div>
-                                    <h:panelGroup id="panel_mensajes_modal">
-                                        <div class="form-group-sm">
-                                            <h:message for="nombre_nueva_deteccion" class="msj_error"/>
-                                        </div>
-                                        <div class="form-group-sm">
-                                            <h:message for="tipo_nueva_deteccion" class="msj_error"/>
-                                        </div>
-                                        <div class="form-group-sm">
-                                            <h:message for="btn_nueva_deteccion" class="msj_info"/>
-                                        </div>
-                                        
-                                    </h:panelGroup>
-                                </div>
-                                <div class="modal-footer">
-                                    <div class="row">
-                                        <div class="col-sm-6" >
-                                            <c:if test="#{editarFortaleza.nombreNuevaDeteccion == '' || editarFortaleza.nombreNuevaDeteccion == null  }" >
-                                                <h:commandButton id="btn_nueva_deteccion" title="No se ingreso nombre de deteccion." style="width: 99%;" class="btn btn-primary disabled" value="Guardar" disabled="true" />
-                                            </c:if>
-                                            <c:if test="#{editarFortaleza.nombreNuevaDeteccion != '' and editarFortaleza.nombreNuevaDeteccion != null}" >
-                                                <h:commandButton id="btn_nueva_deteccion" style="width: 99%;" class="btn btn-primary" value="Guardar" action="#{editarFortaleza.nuevaDeteccion()}">
-                                                    <f:ajax execute="panel_modal" onevent="indicador" />
-                                                    <f:ajax render="form_editar_fortaleza:panel_tipodeteccion" />
-                                                    <f:ajax render="form_editar_fortaleza:deteccion" />
-                                                    <f:ajax render="panel_modal panel_mensajes_modal" />
-                                                </h:commandButton>
-                                            </c:if>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <h:commandButton class="btn btn-default" style="width: 99%;" p:data-dismiss="modal" action="#{editarFortaleza.limpiarModalDeteccion()}" value="Cerrar">
-                                                <f:ajax render="panel_modal panel_mensajes_modal" />
-                                            </h:commandButton>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </h:panelGroup>
-                    </div>
-                </div>
+                <ui:include src="../../Configuraciones/ModalDetecciones.xhtml"/>  
             </h:form>
         </div>
     </ui:define>

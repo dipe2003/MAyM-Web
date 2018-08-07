@@ -5,10 +5,10 @@
 */
 package com.dperez.maym.web.acciones.mejoras;
 
+import com.dperez.maym.web.configuraciones.ModalDetecciones;
 import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.acciones.EnumAccion;
 import com.dperez.maymweb.area.Area;
-import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeAdministrador;
@@ -27,8 +27,6 @@ import java.util.TreeMap;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
-import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
-import static javax.faces.application.FacesMessage.SEVERITY_INFO;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -49,13 +47,14 @@ public class CrearAccionMejora implements Serializable {
     
     private Empresa EmpresaLogueada;
     
+    private ModalDetecciones modalDetecciones;
+    
     private Date FechaDeteccion;
     private String strFechaDeteccion;
     private String Descripcion;
     
     private EnumTipoDeteccion[] TiposDeteccion;
     private EnumTipoDeteccion TipoDeDeteccionSeleccionada;
-    private String NombreNuevaDeteccion;
     private Map<Integer, String> ListaDetecciones;
     private Integer DeteccionSeleccionada;
     
@@ -77,7 +76,6 @@ public class CrearAccionMejora implements Serializable {
     public EnumTipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
     public EnumTipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
     public Map<Integer, String> getListaDetecciones(){return this.ListaDetecciones;}
-    public String getNombreNuevaDeteccion(){return this.NombreNuevaDeteccion;}
     public Integer getDeteccionSeleccionada(){return this.DeteccionSeleccionada;}
     
     public Map<Integer, Area> getListaAreasSectores(){return this.ListaAreasSectores;}
@@ -99,7 +97,6 @@ public class CrearAccionMejora implements Serializable {
     public void setTipoDeDeteccionSeleccionada(EnumTipoDeteccion TipoDeteccion){this.TipoDeDeteccionSeleccionada = TipoDeteccion;}
     public void setTiposDeteccion(EnumTipoDeteccion[] TiposDeteccion){this.TiposDeteccion = TiposDeteccion;}
     public void setListaDetecciones(Map<Integer, String> ListaDetecciones){this.ListaDetecciones = ListaDetecciones;}
-    public void setNombreNuevaDeteccion(String NombreNuevaDeteccion){this.NombreNuevaDeteccion = NombreNuevaDeteccion;}
     public void setDeteccionSeleccionada(Integer DeteccionSeleccionada){this.DeteccionSeleccionada = DeteccionSeleccionada;}
     
     public void setListaAreaSectores(Map<Integer, Area> ListaAreasSectores){this.ListaAreasSectores = ListaAreasSectores;}
@@ -117,17 +114,12 @@ public class CrearAccionMejora implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         EmpresaLogueada = (Empresa) request.getSession().getAttribute("Empresa");
+        
         //  Detecciones
         TiposDeteccion = EnumTipoDeteccion.values();
         TipoDeDeteccionSeleccionada = EnumTipoDeteccion.INTERNA;
-        this.ListaDetecciones = new HashMap<>();
-        List<Deteccion> tmpDetecciones = fLectura.ListarDetecciones();
-        for(Deteccion deteccion:tmpDetecciones){
-            if (deteccion.getTipo().equals(EnumTipoDeteccion.INTERNA)){
-                ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
-            }
-        }
-        ListaDetecciones = new TreeMap<>(ListaDetecciones);
+        ListaDetecciones = new TreeMap<>(modalDetecciones.getListaDetecciones());
+        
         // Areas Sectores
         ListaAreasSectores = new HashMap<>();
         List<Area> tmpAreas = fLectura.ListarAreasSectores(EmpresaLogueada.getId());
@@ -141,35 +133,8 @@ public class CrearAccionMejora implements Serializable {
      * Actualiza la lista de detecciones segun la seleccion de tipo de deteccion.
      */
     public void actualizarDeteccion(){
-        List<Deteccion> tmpDetecciones = fLectura.ListarDetecciones();
-        this.ListaDetecciones.clear();
-        for(Deteccion deteccion:tmpDetecciones){
-            if (deteccion.getTipo().equals(TipoDeDeteccionSeleccionada)){
-                ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
-            }
-        }
-        ListaDetecciones = new TreeMap<>(ListaDetecciones);
-    }
-    
-    /**
-     * Crea nueva deteccion con el tipo interna/externa seleccionado.
-     * Se no se crea se muestra un mensaje
-     */
-    public void nuevaDeteccion(){
-        // Crear Nueva Deteccion y actualizar lista
-        Deteccion det = fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoDeDeteccionSeleccionada);
-        if(det != null){
-            actualizarDeteccion();
-            this.DeteccionSeleccionada = det.getId();
-            this.NombreNuevaDeteccion = new String();
-            this.TipoDeDeteccionSeleccionada = det.getTipo();
-            FacesContext.getCurrentInstance().addMessage("form_nueva_accion_modal:btn_nueva_deteccion", new FacesMessage(SEVERITY_INFO, det.getNombre() + " fue creada.", det.getNombre() + " fue creada." ));
-            FacesContext.getCurrentInstance().renderResponse();
-        }else{
-            FacesContext.getCurrentInstance().addMessage("form_nueva_accion_modal:btn_nueva_deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
-            FacesContext.getCurrentInstance().renderResponse();
-        }
-    }
+        ListaDetecciones = new TreeMap<>(modalDetecciones.getListaDetecciones());
+    }    
     
     /**
      * Crea la accion correctiva con los datos ingresados.
@@ -188,13 +153,8 @@ public class CrearAccionMejora implements Serializable {
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Mejoras/ListarMejoras.xhtml");
         }else{
-            FacesContext.getCurrentInstance().addMessage("form_nueva_accion:crear_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Accion", "No se pudo crear la Accion" ));
+            FacesContext.getCurrentInstance().addMessage("form_accion:crear_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Accion", "No se pudo crear la Accion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }
-    }
-    
-      public void limpiarModalDeteccion(){
-        this.NombreNuevaDeteccion = new String();
-    }
-    
+    }    
 }

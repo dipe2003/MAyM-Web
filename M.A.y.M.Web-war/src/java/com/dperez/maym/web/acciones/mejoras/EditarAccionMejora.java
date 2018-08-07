@@ -5,6 +5,7 @@
 */
 package com.dperez.maym.web.acciones.mejoras;
 
+import com.dperez.maym.web.configuraciones.ModalDetecciones;
 import com.dperez.maym.web.herramientas.CargarArchivo;
 import com.dperez.maymweb.herramientas.Evento;
 import com.dperez.maymweb.herramientas.ProgramadorEventos;
@@ -69,6 +70,8 @@ public class EditarAccionMejora implements Serializable {
     
     private Empresa EmpresaAccion;
     
+    private ModalDetecciones modalDetecciones;
+    
     private Date FechaDeteccion;
     private String strFechaDeteccion;
     private String Descripcion;
@@ -80,7 +83,6 @@ public class EditarAccionMejora implements Serializable {
     
     private EnumTipoDeteccion[] TiposDeteccion;
     private EnumTipoDeteccion TipoDeDeteccionSeleccionada;
-    private String NombreNuevaDeteccion;
     private Map<Integer, String> ListaDetecciones;
     private Integer DeteccionSeleccionada;
     
@@ -135,7 +137,6 @@ public class EditarAccionMejora implements Serializable {
     public EnumTipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
     public EnumTipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
     public Map<Integer, String> getListaDetecciones(){return this.ListaDetecciones;}
-    public String getNombreNuevaDeteccion(){return this.NombreNuevaDeteccion;}
     public Integer getDeteccionSeleccionada(){return this.DeteccionSeleccionada;}
     
     public Map<Integer, Area> getListaAreasSectores() {return this.ListaAreasSectores;}
@@ -196,7 +197,6 @@ public class EditarAccionMejora implements Serializable {
     public void setTipoDeDeteccionSeleccionada(EnumTipoDeteccion TipoDeteccion){this.TipoDeDeteccionSeleccionada = TipoDeteccion;}
     public void setTiposDeteccion(EnumTipoDeteccion[] TiposDeteccion){this.TiposDeteccion = TiposDeteccion;}
     public void setListaDetecciones(Map<Integer, String> ListaDetecciones){this.ListaDetecciones = ListaDetecciones;}
-    public void setNombreNuevaDeteccion(String NombreNuevaDeteccion){this.NombreNuevaDeteccion = NombreNuevaDeteccion;}
     public void setDeteccionSeleccionada(Integer DeteccionSeleccionada){this.DeteccionSeleccionada = DeteccionSeleccionada;}
     
     public void setListaAreasSectores(Map<Integer, Area> ListaAreasSectores) {this.ListaAreasSectores = ListaAreasSectores;}
@@ -260,18 +260,10 @@ public class EditarAccionMejora implements Serializable {
             CodificacionSeleccionada = AccionSeleccionada.getCodificacionAccion().getId();
             
             //  Detecciones
+            ListaDetecciones = new TreeMap<>(modalDetecciones.getListaDetecciones());
             TiposDeteccion = EnumTipoDeteccion.values();
             TipoDeDeteccionSeleccionada = AccionSeleccionada.getGeneradaPor().getTipo();
-            
-            this.ListaDetecciones = new HashMap<>();
-            List<Deteccion> tmpDetecciones = fLectura.ListarDetecciones();
-            for(Deteccion deteccion:tmpDetecciones){
-                if (deteccion.getTipo().equals(TipoDeDeteccionSeleccionada)){
-                    ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
-                }
-            }
-            ListaDetecciones = new TreeMap<>(ListaDetecciones);
-            DeteccionSeleccionada = AccionSeleccionada.getGeneradaPor().getId();
+            DeteccionSeleccionada = AccionSeleccionada.getGeneradaPor().getId();            
             
             // Actividades
             List<Actividad> actividades = ((Mejora)AccionSeleccionada).getActividades();
@@ -329,33 +321,7 @@ public class EditarAccionMejora implements Serializable {
      * Actualiza la lista de detecciones segun la seleccion de tipo de deteccion.
      */
     public void actualizarDeteccion(){
-        List<Deteccion> tmpDetecciones = fLectura.ListarDetecciones();
-        for(Deteccion deteccion:tmpDetecciones){
-            if (deteccion.getTipo().equals(TipoDeDeteccionSeleccionada)){
-                ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
-            }
-        }
-        ListaDetecciones = new TreeMap<>(ListaDetecciones);
-    }
-    
-    /**
-     * Crea nueva deteccion con el tipo interna/externa seleccionado.
-     * Se verifica que el nombre no sea vacio. Si es vacio no se crea y se muestra un mensaje
-     */
-    public void nuevaDeteccion(){
-        // Crear Nueva Deteccion y actualizar lista
-        Deteccion det = fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoDeDeteccionSeleccionada);
-        if(det != null){
-            actualizarDeteccion();
-            this.DeteccionSeleccionada = det.getId();
-            this.NombreNuevaDeteccion = new String();
-            this.TipoDeDeteccionSeleccionada = det.getTipo();
-            FacesContext.getCurrentInstance().addMessage("form_editar_accion_modal:btn_nueva_deteccion", new FacesMessage(SEVERITY_INFO, det.getNombre() + " fue creada.", det.getNombre() + " fue creada." ));
-            FacesContext.getCurrentInstance().renderResponse();
-        }else{
-            FacesContext.getCurrentInstance().addMessage("form_editar_accion_modal:btn_nueva_deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
-            FacesContext.getCurrentInstance().renderResponse();
-        }
+        ListaDetecciones = new TreeMap<>(modalDetecciones.getListaDetecciones());
     }
     
     /**
@@ -371,10 +337,10 @@ public class EditarAccionMejora implements Serializable {
             this.CodificacionSeleccionada = cod.getId();
             this.NombreNuevaCodificacion = new String();
             this.DescripcionNuevaCodificacion = new String();
-            FacesContext.getCurrentInstance().addMessage("form_editar_accion_modal:btn_nueva_codificacion", new FacesMessage(SEVERITY_INFO, cod.getNombre() + " fue creada.", cod.getNombre() + " fue creada."));
+            FacesContext.getCurrentInstance().addMessage("form_accion_modal:btn_nueva_codificacion", new FacesMessage(SEVERITY_INFO, cod.getNombre() + " fue creada.", cod.getNombre() + " fue creada."));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
-            FacesContext.getCurrentInstance().addMessage("form_editar_accion_modal:btn_nueva_codificacion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva codificacion", "No se pudo crear nueva codificacion" ));
+            FacesContext.getCurrentInstance().addMessage("form_accion_modal:btn_nueva_codificacion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva codificacion", "No se pudo crear nueva codificacion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }
     }
@@ -444,7 +410,7 @@ public class EditarAccionMejora implements Serializable {
         Actividad actividad = ListaActividades.get((int)IdActividad);
         if(fDatos.RemoverActividadMejora(IdAccionSeleccionada, IdActividad)==-1){
             // Si no se actualizo muestra mensaje de error.
-            ctx.addMessage("form_editar_accion:guardar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
+            ctx.addMessage("form_accion:guardar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
             ctx.renderResponse();
         }else{
             // remover el evento del programador de tareas.
@@ -470,7 +436,7 @@ public class EditarAccionMejora implements Serializable {
         if(fDatos.EditarAccion(IdAccionSeleccionada, EnumAccion.MEJORA, FechaDeteccion, Descripcion, AnalisisCausa,null,
                 AreaSectorAccionSeleccionada, DeteccionSeleccionada, CodificacionSeleccionada) == -1){
             // Si no se actualizo muestra mensaje de error.
-            FacesContext.getCurrentInstance().addMessage("form_editar_accion:guardar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
+            FacesContext.getCurrentInstance().addMessage("form_accion:guardar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             if(!this.ListaActividades.isEmpty()){
@@ -511,7 +477,7 @@ public class EditarAccionMejora implements Serializable {
                     pEventos.ProgramarEvento(FechaEstimadaVerificacion, eventoNuevo);
                 }
             }
-            FacesContext.getCurrentInstance().addMessage("form_editar_accion:guardar_accion", new FacesMessage(SEVERITY_INFO, "Los datos se guardaron.", "Los datos se guardaron." ));
+            FacesContext.getCurrentInstance().addMessage("form_accion:guardar_accion", new FacesMessage(SEVERITY_INFO, "Los datos se guardaron.", "Los datos se guardaron." ));
             FacesContext.getCurrentInstance().renderResponse();
         }
     }
@@ -524,7 +490,7 @@ public class EditarAccionMejora implements Serializable {
     public void eliminarAccion() throws IOException{
         if(fAdmin.EliminarAccion(IdAccionSeleccionada)==-1){
             // Si no se elimino muestra mensaje de error.
-            FacesContext.getCurrentInstance().addMessage("form_editar_accion:eliminar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar la Accion", "No se pudo eliminar la Accion" ));
+            FacesContext.getCurrentInstance().addMessage("form_accion:eliminar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar la Accion", "No se pudo eliminar la Accion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             // Eliminar todos los archivos adjuntos del disco.
@@ -540,11 +506,7 @@ public class EditarAccionMejora implements Serializable {
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Mejoras/ListarMejoras.xhtml");
         }
     }
-    
-    public void limpiarModalDeteccion(){
-        this.NombreNuevaDeteccion = new String();
-    }
-    
+   
     public void limpiarModalCodificacion(){
         this.NombreNuevaCodificacion = new String();
         this.DescripcionNuevaCodificacion = new String();

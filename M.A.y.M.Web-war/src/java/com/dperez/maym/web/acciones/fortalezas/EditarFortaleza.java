@@ -5,8 +5,8 @@
 */
 package com.dperez.maym.web.acciones.fortalezas;
 
+import com.dperez.maym.web.configuraciones.ModalDetecciones;
 import com.dperez.maymweb.area.Area;
-import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeAdministrador;
@@ -22,10 +22,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
-import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
 import static javax.faces.application.FacesMessage.SEVERITY_INFO;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -47,6 +47,8 @@ public class EditarFortaleza implements Serializable {
     
     private Empresa EmpresaLogueada;
     
+    private ModalDetecciones modalDetecciones;
+    
     private int IdFortaleza;
     
     private Date FechaDeteccion;
@@ -56,7 +58,7 @@ public class EditarFortaleza implements Serializable {
     private EnumTipoDeteccion[] TiposDeteccion;
     private EnumTipoDeteccion TipoDeDeteccionSeleccionada;
     private String NombreNuevaDeteccion;
-    private Map<Integer, Deteccion> ListaDetecciones;
+    private Map<Integer, String> ListaDetecciones;
     private Integer DeteccionSeleccionada;
     
     private Map<Integer, Area> ListaAreasSectores;
@@ -78,7 +80,7 @@ public class EditarFortaleza implements Serializable {
     public EnumTipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
     public EnumTipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
     
-    public Map<Integer, Deteccion> getListaDetecciones(){return this.ListaDetecciones;}
+    public Map<Integer, String> getListaDetecciones(){return this.ListaDetecciones;}
     public String getNombreNuevaDeteccion(){return this.NombreNuevaDeteccion;}
     public Integer getDeteccionSeleccionada(){return this.DeteccionSeleccionada;}
     
@@ -103,7 +105,7 @@ public class EditarFortaleza implements Serializable {
     public void setTipoDeDeteccionSeleccionada(EnumTipoDeteccion TipoDeteccion){this.TipoDeDeteccionSeleccionada = TipoDeteccion;}
     public void setTiposDeteccion(EnumTipoDeteccion[] TiposDeteccion){this.TiposDeteccion = TiposDeteccion;}
     
-    public void setListaDetecciones(Map<Integer, Deteccion> ListaDetecciones){this.ListaDetecciones = ListaDetecciones;}
+    public void setListaDetecciones(Map<Integer, String> ListaDetecciones){this.ListaDetecciones = ListaDetecciones;}
     public void setNombreNuevaDeteccion(String NombreNuevaDeteccion){this.NombreNuevaDeteccion = NombreNuevaDeteccion;}
     public void setDeteccionSeleccionada(Integer DeteccionSeleccionada){this.DeteccionSeleccionada = DeteccionSeleccionada;}
     
@@ -130,14 +132,8 @@ public class EditarFortaleza implements Serializable {
             
             //  Detecciones
             TiposDeteccion = EnumTipoDeteccion.values();
-            TipoDeDeteccionSeleccionada = EnumTipoDeteccion.INTERNA;
-            this.ListaDetecciones = new HashMap<>();
-            List<Deteccion> tmpDetecciones = fLectura.ListarDetecciones();
-            for(Deteccion deteccion:tmpDetecciones){
-                if (deteccion.getTipo().equals(EnumTipoDeteccion.INTERNA)){
-                    ListaDetecciones.put(deteccion.getId(), deteccion);
-                }
-            }
+            ListaDetecciones = new TreeMap<>(modalDetecciones.getListaDetecciones());
+            TipoDeDeteccionSeleccionada = FortalezaSeleccionada.getGeneradaPor().getTipo();
             DeteccionSeleccionada = FortalezaSeleccionada.getGeneradaPor().getId();
             
             // Areas Sectores
@@ -155,34 +151,8 @@ public class EditarFortaleza implements Serializable {
      * Actualiza la lista de detecciones segun la seleccion de tipo de deteccion.
      */
     public void actualizarDeteccion(){
-        List<Deteccion> tmpDetecciones = fLectura.ListarDetecciones();
-        for(Deteccion deteccion:tmpDetecciones){
-            if (deteccion.getTipo().equals(TipoDeDeteccionSeleccionada)){
-                ListaDetecciones.put(deteccion.getId(), deteccion);
-            }
-        }
+       ListaDetecciones = new TreeMap<>(modalDetecciones.getListaDetecciones());
     }
-    
-    /**
-     * Crea nueva deteccion con el tipo interna/externa seleccionado.
-     * Se verifica que el nombre no sea vacio. Si es vacio no se crea y se muestra un mensaje
-     */
-    public void nuevaDeteccion(){
-        // Crear Nueva Deteccion y actualizar lista
-        Deteccion det = fAdmin.NuevaDeteccion(NombreNuevaDeteccion, TipoDeDeteccionSeleccionada);
-        if(det != null){
-            actualizarDeteccion();
-            this.DeteccionSeleccionada = det.getId();
-            this.NombreNuevaDeteccion = new String();
-            this.TipoDeDeteccionSeleccionada = det.getTipo();
-            FacesContext.getCurrentInstance().addMessage("form_editar_fortaleza_modal:btn_nueva_deteccion", new FacesMessage(SEVERITY_INFO, det.getNombre() + " fue creada.", det.getNombre() + " fue creada." ));
-            FacesContext.getCurrentInstance().renderResponse();
-        }else{
-            FacesContext.getCurrentInstance().addMessage("form_editar_fortaleza_modal:btn_nueva_deteccion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
-            FacesContext.getCurrentInstance().renderResponse();
-        }
-    }
-    
     
     /**
      * Actualiza la fortaleza con los datos nuevos.
@@ -194,10 +164,10 @@ public class EditarFortaleza implements Serializable {
         // actualizar fortaleza
         if(fDatos.EditarFortaleza(IdFortaleza, FechaDeteccion, Descripcion, DeteccionSeleccionada, AreaSectorAccionSeleccionada) == -1){
             // Si no se actualizo muestra mensaje de error.
-            FacesContext.getCurrentInstance().addMessage("form_editar_fortaleza:guardar_fortaleza", new FacesMessage(SEVERITY_INFO, "No se pudo editar la fortaleza", "No se pudo editar la fortaleza" ));
+            FacesContext.getCurrentInstance().addMessage("form_accion:guardar_fortaleza", new FacesMessage(SEVERITY_INFO, "No se pudo editar la fortaleza", "No se pudo editar la fortaleza" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
-            FacesContext.getCurrentInstance().addMessage("form_editar_fortaleza:guardar_fortaleza", new FacesMessage(SEVERITY_INFO, "Los datos se guardaron.", "Los datos se guardaron." ));
+            FacesContext.getCurrentInstance().addMessage("form_accion:guardar_fortaleza", new FacesMessage(SEVERITY_INFO, "Los datos se guardaron.", "Los datos se guardaron." ));
             FacesContext.getCurrentInstance().renderResponse();
         }
     }
@@ -209,17 +179,13 @@ public class EditarFortaleza implements Serializable {
     public void eliminarFortaleza() throws IOException{
         if(fAdmin.EliminarFortaleza(IdFortaleza)==-1){
             // Si no se elimino muestra mensaje de error.
-            FacesContext.getCurrentInstance().addMessage("form_editar_fortaleza:eliminar_fortaleza", new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar la Accion", "No se pudo eliminar la Accion" ));
+            FacesContext.getCurrentInstance().addMessage("form_accion:eliminar_fortaleza", new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar la Accion", "No se pudo eliminar la Accion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             // Si la eliminacion se realizo correctamente redirige a lista de fortalezas.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Fortalezas/ListarFortalezas.xhtml?PAGINA");
         }
-    }
-    
-    public void limpiarModalDeteccion(){
-        this.NombreNuevaDeteccion = new String();
     }
     
 }
