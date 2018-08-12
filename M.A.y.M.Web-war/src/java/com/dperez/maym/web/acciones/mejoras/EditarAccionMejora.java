@@ -19,7 +19,6 @@ import com.dperez.maymweb.accion.adjunto.Adjunto;
 import com.dperez.maymweb.accion.adjunto.EnumTipoAdjunto;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
-import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeAdministrador;
@@ -40,7 +39,6 @@ import java.util.TreeMap;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
-import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
 import static javax.faces.application.FacesMessage.SEVERITY_INFO;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -63,7 +61,7 @@ public class EditarAccionMejora implements Serializable {
     private CargarArchivo cArchivo;
     @Inject
     private ProgramadorEventos pEventos;
-    
+        
     private int IdAccionSeleccionada;
     private Accion AccionSeleccionada;
     private Empresa EmpresaLogueada;
@@ -91,8 +89,6 @@ public class EditarAccionMejora implements Serializable {
     
     private Map<Integer, String> ListaCodificaciones;
     private Integer CodificacionSeleccionada;
-    private String NombreNuevaCodificacion;
-    private String DescripcionNuevaCodificacion;
     
     private Map<Integer, Actividad> ListaActividades;
     
@@ -131,8 +127,6 @@ public class EditarAccionMejora implements Serializable {
     
     public Map<Integer, String> getListaCodificaciones(){return this.ListaCodificaciones;}
     public Integer getCodificacionSeleccionada() {return CodificacionSeleccionada;}
-    public String getNombreNuevaCodificacion() {return NombreNuevaCodificacion;}
-    public String getDescripcionNuevaCodificacion() {return DescripcionNuevaCodificacion;}
     
     public EnumTipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
     public EnumTipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
@@ -191,9 +185,7 @@ public class EditarAccionMejora implements Serializable {
     
     public void setListaCodificaciones(Map<Integer, String> ListaCodificaciones){this.ListaCodificaciones = ListaCodificaciones;}
     public void setCodificacionSeleccionada(Integer CodificacionSeleccionada) {this.CodificacionSeleccionada = CodificacionSeleccionada;}
-    public void setNombreNuevaCodificacion(String NombreNuevaCodificacion) {this.NombreNuevaCodificacion = NombreNuevaCodificacion;}
-    public void setDescripcionNuevaCodificacion(String DescripcionNuevaCodificacion) {this.DescripcionNuevaCodificacion = DescripcionNuevaCodificacion;}
-    
+ 
     public void setTipoDeDeteccionSeleccionada(EnumTipoDeteccion TipoDeteccion){this.TipoDeDeteccionSeleccionada = TipoDeteccion;}
     public void setTiposDeteccion(EnumTipoDeteccion[] TiposDeteccion){this.TiposDeteccion = TiposDeteccion;}
     public void setListaDetecciones(Map<Integer, String> ListaDetecciones){this.ListaDetecciones = ListaDetecciones;}
@@ -250,16 +242,18 @@ public class EditarAccionMejora implements Serializable {
             Descripcion = AccionSeleccionada.getDescripcion();
             AnalisisCausa = AccionSeleccionada.getAnalisisCausa();
             EmpresaAccion = AccionSeleccionada.getEmpresaAccion();
+            
             //  Codificaciones
-            ListaCodificaciones = new HashMap<>();
-            List<Codificacion> tmpCodificaciones = fLectura.ListarCodificaciones(EmpresaLogueada.getId());
-            for(Codificacion codificacion:tmpCodificaciones){
-                ListaCodificaciones.put(codificacion.getId(), codificacion.getNombre());
+            ListaCodificaciones = new TreeMap<>();
+            List<Codificacion> tmpLista = fLectura.ListarCodificaciones(EmpresaLogueada.getId());
+            for (int i = 0; i < tmpLista.size(); i++) {
+                ListaCodificaciones.put(tmpLista.get(i).getId(), tmpLista.get(i).getNombre());
             }
             ListaCodificaciones = new TreeMap<>(ListaCodificaciones);
             CodificacionSeleccionada = AccionSeleccionada.getCodificacionAccion().getId();
             
             //  Detecciones
+            modalDetecciones = context.getApplication().evaluateExpressionGet(context, "#{modalDetecciones}", ModalDetecciones.class);
             ListaDetecciones = new TreeMap<>(modalDetecciones.getListaDetecciones());
             TiposDeteccion = EnumTipoDeteccion.values();
             TipoDeDeteccionSeleccionada = AccionSeleccionada.getGeneradaPor().getTipo();
@@ -322,39 +316,6 @@ public class EditarAccionMejora implements Serializable {
      */
     public void actualizarDeteccion(){
         ListaDetecciones = new TreeMap<>(modalDetecciones.getListaDetecciones());
-    }
-    
-    /**
-     * Crea nueva codificacion.
-     * Si estan no se crea se muestra un mensaje
-     */
-    public void nuevaCodificacion(){
-        // Crear Nueva Codificacion y actualizar lista
-        Codificacion cod = fAdmin.NuevaCodificacion(NombreNuevaCodificacion, DescripcionNuevaCodificacion);
-        if(cod != null){
-            fAdmin.ModificarEmpresaCodificacion(cod.getId(), true, EmpresaLogueada.getId());
-            actualizarCodificacion();
-            this.CodificacionSeleccionada = cod.getId();
-            this.NombreNuevaCodificacion = new String();
-            this.DescripcionNuevaCodificacion = new String();
-            FacesContext.getCurrentInstance().addMessage("form_accion_modal:btn_nueva_codificacion", new FacesMessage(SEVERITY_INFO, cod.getNombre() + " fue creada.", cod.getNombre() + " fue creada."));
-            FacesContext.getCurrentInstance().renderResponse();
-        }else{
-            FacesContext.getCurrentInstance().addMessage("form_accion_modal:btn_nueva_codificacion", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nueva codificacion", "No se pudo crear nueva codificacion" ));
-            FacesContext.getCurrentInstance().renderResponse();
-        }
-    }
-    
-    /**
-     * Actualiza la lista de codificaciones.
-     */
-    public void actualizarCodificacion(){
-        List<Codificacion> tmpCodificacion = fLectura.ListarCodificaciones(EmpresaLogueada.getId());
-        this.ListaCodificaciones.clear();
-        for(Codificacion codificacion:tmpCodificacion){
-            ListaCodificaciones.put(codificacion.getId(), codificacion.getNombre());
-        }
-        ListaCodificaciones = new TreeMap<>(ListaCodificaciones);
     }
     
     /**
@@ -505,10 +466,5 @@ public class EditarAccionMejora implements Serializable {
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Mejoras/ListarMejoras.xhtml");
         }
-    }
-   
-    public void limpiarModalCodificacion(){
-        this.NombreNuevaCodificacion = new String();
-        this.DescripcionNuevaCodificacion = new String();
     }
 }
