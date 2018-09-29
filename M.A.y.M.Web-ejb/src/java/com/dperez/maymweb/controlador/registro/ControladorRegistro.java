@@ -117,7 +117,7 @@ public class ControladorRegistro {
             }else{
                 Codificacion codificacion = mCodificacion.GetCodificacion(existe);
                 accion.setCodificacionAccion(codificacion);
-            }            
+            }
             accion.setId(mAccion.CrearAccion(accion));
         }
         if(accion.getId()!=-1){
@@ -136,11 +136,11 @@ public class ControladorRegistro {
      */
     public int AgregarProductoInvolucrado(int AccionCorrectiva, String NombreProducto, String DatosProducto){
         Correctiva correctiva = (Correctiva) mAccion.GetAccion(AccionCorrectiva);
-        Producto producto = new Producto(NombreProducto, DatosProducto);
+        Producto producto = correctiva.addProductoAfectado(NombreProducto, DatosProducto);
         if(mProducto.CrearProducto(producto)!=-1){
-            correctiva.addProductoAfectado(producto);
+            return mAccion.ActualizarAccion(correctiva);
         }
-        return mAccion.ActualizarAccion(correctiva);
+        return -1;
     }
     
     /**
@@ -156,7 +156,7 @@ public class ControladorRegistro {
         Adjunto adjunto = new Adjunto(TituloAdjunto, UbicacionAdjunto, TipoAdjunto);
         if(mAdjunto.CrearAdjunto(adjunto)!=-1){
             accion.addAdjunto(adjunto);
-        }        
+        }
         return mAccion.ActualizarAccion(accion);
     }
     
@@ -180,7 +180,7 @@ public class ControladorRegistro {
         mAccion.ActualizarAccion(accion);
         return medida.getIdActividad();
     }
-        
+    
     /**
      * Crea una nueva medida preventiva, la persiste en la base de datos y se asocia a la accion correctiva.
      * @param IdAccion
@@ -190,16 +190,20 @@ public class ControladorRegistro {
      * @return -1 si no se creo.
      */
     public int AgregarMedidaPreventiva(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion, int IdUsuarioResponsable ){
-        Actividad medida = new Actividad(FechaEstimadaImplementacion, Descripcion);
-        Usuario usuario = mUsuario.GetUsuario(IdUsuarioResponsable);
-        medida.setResponsableImplementacion(usuario);
-        medida.setIdActividad(mMedida.CrearActividad(medida));
         Accion accion = mAccion.GetAccion(IdAccion);
-        if((accion.getClass())!= Correctiva.class) throw new InvalidParameterException("El id no corresponde con una Correctiva");
-        ((Correctiva)accion).addMedidaPreventiva(medida);
-        accion.CambiarEstado();
-        mAccion.ActualizarAccion(accion);
-        return medida.getIdActividad();
+        if((accion.getClass())!= Correctiva.class) {
+            throw new InvalidParameterException("El id no corresponde con una Correctiva");
+        }else{
+            Actividad medida = ((Correctiva)accion).addMedidaPreventiva(FechaEstimadaImplementacion, Descripcion);
+            Usuario usuario = mUsuario.GetUsuario(IdUsuarioResponsable);
+            medida.setResponsableImplementacion(usuario);
+            accion.CambiarEstado();
+            mMedida.CrearActividad(medida);
+            if(mAccion.ActualizarAccion(accion)!=-1){
+                return medida.getIdActividad();
+            }
+            return -1;
+        }
     }
     
     /**
@@ -211,16 +215,20 @@ public class ControladorRegistro {
      * @return -1 si no se creo.
      */
     public int AgregarMedidaCorrectiva(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion, int IdUsuarioResponsable){
-        Actividad medida = new Actividad(FechaEstimadaImplementacion, Descripcion);
-        Usuario usuario = mUsuario.GetUsuario(IdUsuarioResponsable);
-        medida.setResponsableImplementacion(usuario);
-        medida.setIdActividad(mMedida.CrearActividad(medida));
         Accion accion = mAccion.GetAccion(IdAccion);
-        if((accion.getClass())!= Correctiva.class) throw new InvalidParameterException("El id no corresponde con una Correctiva");
-        ((Correctiva)accion).addMedidaCorrectiva(medida);
-        accion.CambiarEstado();
-        mAccion.ActualizarAccion(accion);
-        return medida.getIdActividad();
+        if((accion.getClass())!= Correctiva.class) {
+            throw new InvalidParameterException("El id no corresponde con una Correctiva");
+        }else{
+            Actividad medida = ((Correctiva)accion).addMedidaCorrectiva(FechaEstimadaImplementacion, Descripcion);
+            Usuario usuario = mUsuario.GetUsuario(IdUsuarioResponsable);
+            medida.setResponsableImplementacion(usuario);
+            accion.CambiarEstado();
+             mMedida.CrearActividad(medida);
+            if(mAccion.ActualizarAccion(accion)!=-1){
+                return medida.getIdActividad();
+            }
+            return -1;
+        }
     }
     
     /**

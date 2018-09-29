@@ -49,16 +49,7 @@ public class Producto implements Serializable, Comparable<Producto>{
     public void setDatos(String Datos) {this.Datos = Datos;}
     
     public void setAccionCorrectivaConProductoAfectado(Correctiva AccionCorrectivaConProductoAfectado) {
-        if(AccionCorrectivaConProductoAfectado == null && this.AccionCorrectivaConProductoAfectado != null){
-            this.AccionCorrectivaConProductoAfectado.getProductosAfectados().remove(this);
-            this.AccionCorrectivaConProductoAfectado = null;
-        }else{
-            if(AccionCorrectivaConProductoAfectado != null){
-                this.AccionCorrectivaConProductoAfectado = AccionCorrectivaConProductoAfectado;
-                if(!AccionCorrectivaConProductoAfectado.getProductosAfectados().contains(this))
-                    this.AccionCorrectivaConProductoAfectado.addProductoAfectado(this);
-            }
-        }
+        this.AccionCorrectivaConProductoAfectado = AccionCorrectivaConProductoAfectado;
     }
 
     @Override

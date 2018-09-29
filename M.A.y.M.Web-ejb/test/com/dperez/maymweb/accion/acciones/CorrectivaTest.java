@@ -8,6 +8,7 @@ package com.dperez.maymweb.accion.acciones;
 import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.producto.Producto;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -21,11 +22,7 @@ import static org.junit.Assert.*;
  * @author dperez
  */
 public class CorrectivaTest {
-    
-    private final Actividad mc = new Actividad();
-    private final Actividad mp = new Actividad();
-    private final Producto prodAfectado = new Producto();
-    
+
     public CorrectivaTest() {
     }
     
@@ -53,7 +50,7 @@ public class CorrectivaTest {
         System.out.println("getMedidasCorrectivas");
         Correctiva instance = new Correctiva();
         List<Actividad> expResult = new ArrayList<>();
-        expResult.add(mc);
+        expResult.add(instance.addMedidaCorrectiva(new Date(), "descripcion"));
         instance.setMedidasCorrectivas(expResult);
         List<Actividad> result = instance.getMedidasCorrectivas();
         assertEquals(expResult, result);
@@ -67,7 +64,7 @@ public class CorrectivaTest {
         System.out.println("getMedidasPreventivas");
         Correctiva instance = new Correctiva();
         List<Actividad> expResult = new ArrayList<>();
-        expResult.add(mp);
+       expResult.add(instance.addMedidaPreventiva(new Date(), "descripcion"));
         instance.setMedidasPreventivas(expResult);
         List<Actividad> result = instance.getMedidasPreventivas();
         assertEquals(expResult, result);
@@ -94,8 +91,7 @@ public class CorrectivaTest {
         System.out.println("getProductosAfectados");
         Correctiva instance = new Correctiva();
         List<Producto> expResult = new ArrayList<>();
-        expResult.add(prodAfectado);
-        instance.addProductoAfectado(prodAfectado);
+        expResult.add(instance.addProductoAfectado("nombre", "datos"));
         List<Producto> result = instance.getProductosAfectados();
         assertEquals(expResult, result);
     }
@@ -106,9 +102,9 @@ public class CorrectivaTest {
     @Test
     public void testSetMedidasCorrectivas() {
         System.out.println("setMedidasCorrectivas");
-        List<Actividad> MedidasCorrectivas = new ArrayList<>();
-        MedidasCorrectivas.add(mc);
         Correctiva instance = new Correctiva();
+        List<Actividad> MedidasCorrectivas = new ArrayList<>();
+        MedidasCorrectivas.add(instance.addMedidaCorrectiva(new Date(), "descripcion"));        
         instance.setMedidasCorrectivas(MedidasCorrectivas);
     }
     
@@ -118,9 +114,9 @@ public class CorrectivaTest {
     @Test
     public void testSetMedidasPreventivas() {
         System.out.println("setMedidasPreventivas");
-        List<Actividad> MedidasPreventivas = new ArrayList<>();
-        MedidasPreventivas.add(mp);
         Correctiva instance = new Correctiva();
+        List<Actividad> MedidasPreventivas = new ArrayList<>();
+        MedidasPreventivas.add(instance.addMedidaPreventiva(new Date(), "descripcion"));        
         instance.setMedidasPreventivas(MedidasPreventivas);
     }
     
@@ -153,7 +149,7 @@ public class CorrectivaTest {
     public void testAddMedidaCorrectiva() {
         System.out.println("addMedidaCorrectiva");
         Correctiva instance = new Correctiva();
-        instance.addMedidaCorrectiva(mc);
+        instance.addMedidaCorrectiva(new Date(), "descripcion");
     }
     
     /**
@@ -163,7 +159,7 @@ public class CorrectivaTest {
     public void testRemoveMedidaCorrectiva_MedidaCorrectiva() {
         System.out.println("removeMedidaCorrectiva");
         Correctiva instance = new Correctiva();
-        instance.addMedidaCorrectiva(mc);
+        Actividad mc = instance.addMedidaCorrectiva(new Date(), "descripcion");
         instance.removeMedidaCorrectiva(mc);
     }
         
@@ -174,7 +170,7 @@ public class CorrectivaTest {
     public void testAddMedidaPreventiva() {
         System.out.println("addMedidaPreventiva");
         Correctiva instance = new Correctiva();
-        instance.addMedidaPreventiva(mp);
+        instance.addMedidaPreventiva(new Date(), "descripcion");
     }
     
     /**
@@ -184,7 +180,7 @@ public class CorrectivaTest {
     public void testRemoveMedidaPreventiva_MedidaPreventiva() {
         System.out.println("removeMedidaPreventiva");
         Correctiva instance = new Correctiva();
-        instance.addMedidaPreventiva(mp);
+        Actividad mp = instance.addMedidaPreventiva(new Date(), "descripcion");
         instance.removeMedidaPreventiva(mp);
     }
         
@@ -195,7 +191,7 @@ public class CorrectivaTest {
     public void testAddProductoAfectado() {
         System.out.println("addProductoAfectado");
         Correctiva instance = new Correctiva();
-        instance.addProductoAfectado(prodAfectado);
+        instance.addProductoAfectado("nombre", "datos");
     }
     
     /**
@@ -205,6 +201,7 @@ public class CorrectivaTest {
     public void testRemoveProductoAfectado() {
         System.out.println("removeProductoAfectado");
         Correctiva instance = new Correctiva();
+        Producto prodAfectado = instance.addProductoAfectado("nombre", "datos");
         instance.removeProductoAfectado(prodAfectado);
     }
     
@@ -214,10 +211,10 @@ public class CorrectivaTest {
     @Test
     public void testRemoveProducoAfectado() {
         System.out.println("removeProducoAfectado");
-        int IdProductoAfectado = 1;
-        prodAfectado.setId(IdProductoAfectado);
         Correctiva instance = new Correctiva();
-        instance.addProductoAfectado(prodAfectado);
+        int IdProductoAfectado = 1;
+        Producto prodAfectado = instance.addProductoAfectado("nombre", "datos");
+        prodAfectado.setId(IdProductoAfectado);
         instance.removeProducoAfectado(IdProductoAfectado);
     }
     

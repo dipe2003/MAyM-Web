@@ -91,10 +91,11 @@ public class Correctiva extends Accion implements Serializable {
     
     // Listas
     // Medidas Correctivas
-    public void addMedidaCorrectiva(Actividad MedidaCorrectiva){
+    public Actividad addMedidaCorrectiva(Date fechaEstimadaImplementacion, String descripcion){
+        Actividad MedidaCorrectiva = new Actividad(fechaEstimadaImplementacion, descripcion);
         this.MedidasCorrectivas.add(MedidaCorrectiva);
-        if(MedidaCorrectiva.getAccionActividad()== null || !MedidaCorrectiva.getAccionActividad().equals(this))
-            MedidaCorrectiva.setAccionActividad(this);
+        MedidaCorrectiva.setAccionActividad(this);
+        return MedidaCorrectiva;
     }
     
     public void removeMedidaCorrectiva(Actividad MedidaCorrectiva){
@@ -105,10 +106,11 @@ public class Correctiva extends Accion implements Serializable {
     
     
 //Medidas Preventivas
-    public void addMedidaPreventiva(Actividad MedidaPreventiva){
+    public Actividad addMedidaPreventiva(Date fechaEstimadaImplementacion, String descripcion){
+        Actividad MedidaPreventiva = new Actividad(fechaEstimadaImplementacion, descripcion);
         this.MedidasPreventivas.add(MedidaPreventiva);
-        if(MedidaPreventiva.getAccionActividad()== null || !MedidaPreventiva.getAccionActividad().equals(this))
-            MedidaPreventiva.setAccionActividad(this);
+        MedidaPreventiva.setAccionActividad(this);
+        return MedidaPreventiva;
     }
     
     public void removeMedidaPreventiva(Actividad MedidaPreventiva){
@@ -118,10 +120,11 @@ public class Correctiva extends Accion implements Serializable {
     }
     
 //Productos Afectados
-    public void addProductoAfectado(Producto ProductoAfectado){
+    public Producto addProductoAfectado(String nombre, String datos){
+        Producto ProductoAfectado = new Producto(nombre, datos);
         this.ProductosAfectados.add(ProductoAfectado);
-        if(ProductoAfectado.getAccionCorrectivaConProductoAfectado()==null || !ProductoAfectado.getAccionCorrectivaConProductoAfectado().equals(this))
-            ProductoAfectado.setAccionCorrectivaConProductoAfectado(this);
+        ProductoAfectado.setAccionCorrectivaConProductoAfectado(this);
+        return ProductoAfectado;
     }
     
     public void removeProductoAfectado(Producto ProductoAfectado){
