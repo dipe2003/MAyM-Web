@@ -80,6 +80,14 @@ public class Actividad implements Serializable, Comparable<Actividad> {
         }
     }
 
+    /**
+     * Comprueba si la fecha de implentación es null.
+     * @return 
+     */
+    public boolean EstaImplementada(){
+        return FechaImplementacion != null;
+    }
+
     @Override
     public int compareTo(Actividad OtraActividad) {
         return this.FechaEstimadaImplementacion.compareTo(OtraActividad.FechaEstimadaImplementacion);

@@ -98,7 +98,7 @@ public class Mejora extends Accion implements Serializable {
     }
 
     @Override
-    public boolean EstaImplementada() {
+    public boolean EstanImplementadaActividades() {
         boolean implementada = true;
         for(Actividad actividad: this.Actividades){
             if(actividad.getFechaImplementacion() == null){

@@ -240,7 +240,7 @@ public class SeguimientoMejora implements Serializable {
                     ListaUsuarios.put(usuario.getId(), usuario);
                 }
             }
-            EstaImplementada = AccionSeleccionada.EstaImplementada();
+            EstaImplementada = AccionSeleccionada.EstanImplementadaActividades();
             EmpresaAccion = AccionSeleccionada.getEmpresaAccion();
         }
         

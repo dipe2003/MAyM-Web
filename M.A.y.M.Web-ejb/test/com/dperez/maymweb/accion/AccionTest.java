@@ -331,7 +331,7 @@ public class AccionTest {
         public void CambiarEstado(){}
 
         @Override
-        public boolean EstaImplementada() {
+        public boolean EstanImplementadaActividades() {
             assertTrue("implementada en subclases", true);
             return true;
         }

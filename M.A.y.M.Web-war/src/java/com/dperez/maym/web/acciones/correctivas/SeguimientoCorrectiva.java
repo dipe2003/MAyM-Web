@@ -277,7 +277,7 @@ public class SeguimientoCorrectiva implements Serializable {
                 }
             }
             TipoDesvio = ((Correctiva)AccionSeleccionada).getTipo();
-            EstaImplementada = AccionSeleccionada.EstaImplementada();
+            EstaImplementada = AccionSeleccionada.EstanImplementadaActividades();
             EmpresaAccion = AccionSeleccionada.getEmpresaAccion();
             //  Resultado de comprobaciones
             Comprobaciones = EnumComprobacion.values();

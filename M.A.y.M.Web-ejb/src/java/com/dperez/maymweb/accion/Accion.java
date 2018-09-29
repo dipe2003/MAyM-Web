@@ -195,6 +195,46 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
         }
     }
     
+    /**
+     * Comprueba que todas las actividades de la lista esten implementadas.
+     * @param actividades lista de actividades a comprobar.
+     * @return
+     */
+    protected boolean EstanImplementadasActividades(List<Actividad> actividades){
+        boolean implementada = true;
+        for(Actividad medida: actividades){
+            if(!medida.EstaImplementada()){
+                implementada = false;
+                break;
+            }
+        }
+        return implementada;
+    }
+    
+    /**
+     * Comprueba si existe alguna actividad implementada en la lsita.
+     * @param actividades lista de actividades a comprobar
+     * @return 
+     */
+    protected boolean ExisteAlgunaActividadImplementada(List<Actividad> actividades){
+        boolean implementada = false;
+        for(Actividad medida: actividades){
+            if(!medida.EstaImplementada()){
+                implementada = true;
+                break;
+            }
+        }
+        return implementada;
+    }
+    
+    public boolean SeComproboImplementacion(){
+        return ComprobacionImplementacion != null && ComprobacionImplementacion.getFechaComprobacion() != null;
+    }
+    
+    public boolean SeComproboEficacia(){
+        return ComprobacionEficacia != null && ComprobacionEficacia.getFechaComprobacion() != null;
+    }
+    
     /***
      * Chequea las Medidas y cambia el estado de la accion de acuerdo a su implementacion.
      */
@@ -204,7 +244,7 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
      * Comprueba que todas actividades esten implementadas.
      * @return 
      */
-    public abstract boolean EstaImplementada();
+    public abstract boolean EstanImplementadaActividades();
     
     /**
      * Devuelve la actividad especificada.

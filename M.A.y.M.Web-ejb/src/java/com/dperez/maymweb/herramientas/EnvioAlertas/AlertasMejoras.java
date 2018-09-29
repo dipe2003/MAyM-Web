@@ -48,7 +48,7 @@ public class AlertasMejoras implements Runnable {
             if(accion.getEstadoAccion() != EnumEstado.CERRADA && accion.getEstadoAccion() != EnumEstado.DESESTIMADA && 
                     accion.getComprobacionImplementacion() != null && accion.getComprobacionEficacia() != null){
                 // Primero Si esta implementada
-                if(accion.EstaImplementada()){
+                if(accion.EstanImplementadaActividades()){
                     if(accion.getEstadoAccion() == EnumEstado.PROCESO_IMP){
                         if(accion.getComprobacionImplementacion().getFechaComprobacion() == null ||
                                 accion.getComprobacionImplementacion().getFechaEstimada().compareTo(Hoy)< 0){
