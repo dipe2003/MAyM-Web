@@ -219,7 +219,7 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
     protected boolean ExisteAlgunaActividadImplementada(List<Actividad> actividades){
         boolean implementada = false;
         for(Actividad medida: actividades){
-            if(!medida.EstaImplementada()){
+            if(medida.EstaImplementada()){
                 implementada = true;
                 break;
             }
