@@ -5,8 +5,14 @@
 */
 package com.dperez.maym.web.acciones.correctivas;
 
+import com.dperez.maym.web.acciones.filtros.DatosFiltros;
+import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.accion.acciones.Correctiva;
+import com.dperez.maymweb.area.Area;
+import com.dperez.maymweb.codificacion.Codificacion;
+import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.empresa.Empresa;
+import com.dperez.maymweb.estado.EnumEstado;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.Serializable;
@@ -35,13 +41,37 @@ public class ListarCorrectivas implements Serializable{
     private List<Correctiva> ListaAcciones;
     
     // Pagination
-    private static final int MAX_ITEMS = 10;
+    private static final int MAX_ITEMS = 30;
     private int CantidadPaginas;
     private int PaginaActual;
     private List<Correctiva> ListaCompletaAcciones;
     
+    // Filtros
+    private DatosFiltros filtros = new DatosFiltros();
+    private List<Area> areasEnRegistros = new ArrayList<>();
+     private List<Codificacion> codificacionesEnRegistros = new ArrayList<>();
+      private List<Deteccion> deteccionesEnRegistros = new ArrayList<>();
+      private EnumEstado[] estadosEnRegistros = EnumEstado.values();
+    
     //  Getters
     public List<Correctiva>getListaAcciones() {return ListaAcciones;}
+
+    public List<Area> getAreasEnRegistros() {
+        return areasEnRegistros;
+    }
+
+    public List<Codificacion> getCodificacionesEnRegistros() {
+        return codificacionesEnRegistros;
+    }
+
+    public List<Deteccion> getDeteccionesEnRegistros() {
+        return deteccionesEnRegistros;
+    }
+
+    public EnumEstado[] getEstadosEnRegistros() {
+        return estadosEnRegistros;
+    }
+    
     
     // Paginacion
     public static int getMAX_ITEMS() {return MAX_ITEMS;}
@@ -52,6 +82,24 @@ public class ListarCorrectivas implements Serializable{
     public void setListaAcciones(List<Correctiva> ListaAcciones) {this.ListaAcciones = ListaAcciones;}
     
     // Metodos
+
+    public void setAreasEnRegistros(List<Area> areasEnRegistros) {
+        this.areasEnRegistros = areasEnRegistros;
+    }
+
+    public void setCodificacionesEnRegistros(List<Codificacion> codificacionesEnRegistros) {
+        this.codificacionesEnRegistros = codificacionesEnRegistros;
+    }
+
+    public void setDeteccionesEnRegistros(List<Deteccion> deteccionesEnRegistros) {
+        this.deteccionesEnRegistros = deteccionesEnRegistros;
+    }
+
+    public void setEstadosEnRegistros(EnumEstado[] estadosEnRegistros) {
+        this.estadosEnRegistros = estadosEnRegistros;
+    }
+ 
+    
     
     //  Inicializacion
     @PostConstruct
@@ -82,6 +130,9 @@ public class ListarCorrectivas implements Serializable{
         
         // llenar la lista con todas las areas registradas.
         cargarPagina(PaginaActual);
+        
+        // datos para filtros
+        areasEnRegistros = filtros.ExtraerAreas((List<Accion>)(List<?>) ListaCompletaAcciones);
     }
     
     /**

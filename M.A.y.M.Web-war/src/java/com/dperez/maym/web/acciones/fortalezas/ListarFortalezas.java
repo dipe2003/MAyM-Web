@@ -33,7 +33,7 @@ public class ListarFortalezas implements Serializable{
     private List<Fortaleza> ListaFortalezas;
     
     // Pagination
-    private static final int MAX_ITEMS = 10;
+    private static final int MAX_ITEMS = 30;
     private int CantidadPaginas;
     private int PaginaActual;
     private List<Fortaleza> ListaCompletaFortalezas;
