@@ -46,32 +46,19 @@ public class ListarCorrectivas implements Serializable{
     private int PaginaActual;
     private List<Correctiva> ListaCompletaAcciones;
     
-    // Filtros
+    // Variabels de Filtros
     private DatosFiltros filtros = new DatosFiltros();
     private List<Area> areasEnRegistros = new ArrayList<>();
-     private List<Codificacion> codificacionesEnRegistros = new ArrayList<>();
-      private List<Deteccion> deteccionesEnRegistros = new ArrayList<>();
-      private EnumEstado[] estadosEnRegistros = EnumEstado.values();
+    private List<Codificacion> codificacionesEnRegistros = new ArrayList<>();
+    private List<Deteccion> deteccionesEnRegistros = new ArrayList<>();
+    private EnumEstado[] estadosEnRegistros = EnumEstado.values();
     
     //  Getters
     public List<Correctiva>getListaAcciones() {return ListaAcciones;}
-
-    public List<Area> getAreasEnRegistros() {
-        return areasEnRegistros;
-    }
-
-    public List<Codificacion> getCodificacionesEnRegistros() {
-        return codificacionesEnRegistros;
-    }
-
-    public List<Deteccion> getDeteccionesEnRegistros() {
-        return deteccionesEnRegistros;
-    }
-
-    public EnumEstado[] getEstadosEnRegistros() {
-        return estadosEnRegistros;
-    }
-    
+    public List<Area> getAreasEnRegistros() {return areasEnRegistros;}    
+    public List<Codificacion> getCodificacionesEnRegistros() {return codificacionesEnRegistros;}    
+    public List<Deteccion> getDeteccionesEnRegistros() {return deteccionesEnRegistros;}    
+    public EnumEstado[] getEstadosEnRegistros() {return estadosEnRegistros;}    
     
     // Paginacion
     public static int getMAX_ITEMS() {return MAX_ITEMS;}
@@ -80,25 +67,18 @@ public class ListarCorrectivas implements Serializable{
     
     //  Setters
     public void setListaAcciones(List<Correctiva> ListaAcciones) {this.ListaAcciones = ListaAcciones;}
+    public void setAreasEnRegistros(List<Area> areasEnRegistros) {this.areasEnRegistros = areasEnRegistros;}    
+    public void setCodificacionesEnRegistros(List<Codificacion> codificacionesEnRegistros) {this.codificacionesEnRegistros = codificacionesEnRegistros;}    
+    public void setDeteccionesEnRegistros(List<Deteccion> deteccionesEnRegistros) {this.deteccionesEnRegistros = deteccionesEnRegistros;}
+    public void setEstadosEnRegistros(EnumEstado[] estadosEnRegistros) {this.estadosEnRegistros = estadosEnRegistros;}
     
-    // Metodos
-
-    public void setAreasEnRegistros(List<Area> areasEnRegistros) {
-        this.areasEnRegistros = areasEnRegistros;
+    // Metodos de filtro
+    public void filtrarPorArea(int idArea){
+        cargarPagina(PaginaActual, filtros.FiltrarAccionesPorArea((List<Accion>)(List<?>) ListaCompletaAcciones, idArea));
+        CantidadPaginas = calcularCantidadPaginas(ListaAcciones.size());
     }
-
-    public void setCodificacionesEnRegistros(List<Codificacion> codificacionesEnRegistros) {
-        this.codificacionesEnRegistros = codificacionesEnRegistros;
-    }
-
-    public void setDeteccionesEnRegistros(List<Deteccion> deteccionesEnRegistros) {
-        this.deteccionesEnRegistros = deteccionesEnRegistros;
-    }
-
-    public void setEstadosEnRegistros(EnumEstado[] estadosEnRegistros) {
-        this.estadosEnRegistros = estadosEnRegistros;
-    }
- 
+    
+    
     
     
     //  Inicializacion
@@ -121,36 +101,49 @@ public class ListarCorrectivas implements Serializable{
         ListaAcciones = new ArrayList<>();
         ListaCompletaAcciones = (List<Correctiva>)(List<?>)fLectura.ListarAccionesCorrectivas();
         
-        Double resto = (double) ListaCompletaAcciones.size() / (double) MAX_ITEMS;
-        CantidadPaginas = resto.intValue();
-        resto = resto - resto.intValue();
-        if(resto > 0){
-            CantidadPaginas ++;
-        }
+        CantidadPaginas = calcularCantidadPaginas(ListaCompletaAcciones.size());
         
         // llenar la lista con todas las areas registradas.
-        cargarPagina(PaginaActual);
+        cargarPagina(PaginaActual, (List<Accion>)(List<?>)ListaCompletaAcciones);
         
         // datos para filtros
         areasEnRegistros = filtros.ExtraerAreas((List<Accion>)(List<?>) ListaCompletaAcciones);
+        codificacionesEnRegistros = filtros.ExtraerCodificaciones((List<Accion>)(List<?>) ListaCompletaAcciones);
+        deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>)(List<?>) ListaCompletaAcciones);
+    }
+    
+    /**
+     * Calcula la cantidad de paginas necsarias para mostrar el total de acciones de acuerdo al maximo definido por cada una.
+     * @param cantidadAcciones
+     * @return 
+     */
+    private int calcularCantidadPaginas(int cantidadAcciones){
+        Double resto = (double) cantidadAcciones / (double) MAX_ITEMS;
+        int cantidad = resto.intValue();
+        resto = resto - resto.intValue();
+        if(resto > 0){
+            cantidad ++;
+        }
+        return cantidad;
     }
     
     /**
      * Carga la lista de acciones para visualizar.
      * @param pagina
+     * @param acciones
      */
-    public void cargarPagina(int pagina){
+    public void cargarPagina(int pagina, List<Accion> acciones){
         int min = 0;
         int max = MAX_ITEMS;
         if(pagina!= 1) {
             min = (pagina-1) * MAX_ITEMS;
             max = min + MAX_ITEMS;
         }
-        if(max > ListaCompletaAcciones.size()) max = ListaCompletaAcciones.size();
+        if(max > acciones.size()) max = acciones.size();
         ListaAcciones.clear();
-        Collections.sort(ListaCompletaAcciones);
+        Collections.sort(acciones);
         for(int i = min; i < max; i++){
-            Correctiva accion = ListaCompletaAcciones.get(i);
+            Correctiva accion = (Correctiva) acciones.get(i);
             ListaAcciones.add(accion);
         }
         Collections.sort(ListaAcciones);

@@ -21,68 +21,102 @@
                 </div>                  
             </div>  
             <h:form id="listado-correctivas">
-            <div class="col-sm-9">
-                <div class="container-fluid">            
-                    <div class="panel panel-info">
-                        <div class="panel-heading">Filtrar y Ordenar</div>
-                        <div class="panel-body">
-                            <div class="table-responsive-sm">
-                                <table class="table table-hover">
-                                    <thead style="font-size: 12px">
-                                        <tr>
-                                            <th style="width: 5%">Fecha</th>
-                                            <th style="width: 5%">Area</th>
-                                            <th style="width: 10%">Generada Por</th>                                        
-                                            <th style="width: 5%">Codificacion</th>
-                                            <th style="width: 5%">Estado</th>
-                                        </tr>
-                                    </thead>                            
-                                    <tbody style="font-size: 11px">
-                                        <tr>
-                                            <td>
-                                                ORDEN FECHA
-                                            </td>
-                                            <td>
-                                                <h:panelGroup id="drop-filtro-areas">
-                                                  <div class="dropdown">
-                                                    <button class="btn btn-primary dropdown-toggle" type="button" id="combo-filtro-area" data-toggle="dropdown">
-                                                        Areas                                                       <span class="caret"></span></button>
-                                                    <ul class="dropdown-menu" role="menu" aria-labelledby="combo-filtro-area">
-                                                        <c:forEach items="#{listarCorrectivas.areasEnRegistros}" var="area" >
-                                                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">#{area.nombre}</a></li>
-                                                        </c:forEach>
-                                                    </ul>
-                                                </div>
+                <div class="col-sm-9">
+                    <div class="container-fluid">            
+                        <div class="panel panel-info">
+                            <div class="panel-heading">Filtrar y Ordenar</div>
+                            <div class="panel-body">
+                                <div class="table-responsive-sm">
+                                    <table class="table table-hover">
+                                        <thead style="font-size: 12px">
+                                            <tr>
+                                                <th style="width: 5%">Fecha</th>
+                                                <th style="width: 5%">Area</th>
+                                                <th style="width: 10%">Generada Por</th>                                        
+                                                <th style="width: 5%">Codificacion</th>
+                                                <th style="width: 5%">Estado</th>
+                                            </tr>
+                                        </thead>                            
+                                        <tbody style="font-size: 11px">
+                                            <tr>
+                                                <td>
+                                                    ORDEN FECHA
+                                                </td>
+                                                <td>
+                                                    <h:panelGroup id="drop-filtro-areas">
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-primary dropdown-toggle" type="button" id="combo-filtro-area" data-toggle="dropdown">
+                                                                Areas<span class="caret"></span></button>
+                                                            <ul class="dropdown-menu" role="menu" aria-labelledby="combo-filtro-area">
+                                                                <c:forEach items="#{listarCorrectivas.areasEnRegistros}" var="area" >
+                                                                    <li role="presentation"><h:commandLink role="menuitem" tabindex="-1" action="#{listarCorrectivas.filtrarPorArea(area.id)}" value="#{area.nombre}">
+                                                                            <f:ajax delay="10" render="form_tabla_acciones" />
+                                                                        </h:commandLink>
+                                                                    </li>                                                                    
+                                                                </c:forEach>
+                                                            </ul>
+                                                        </div>
                                                     </h:panelGroup>
-                                            </td>
-                                            <td>
-                                                FILTRO GENERADA POR
-                                            </td>
-                                            <td>
-                                                FILTRO CODIFICACION
-                                            </td>
-                                            <td>
-                                                <div class="dropdown">
-                                                    <button class="btn btn-primary dropdown-toggle" type="button" id="combo-filtro-estado" data-toggle="dropdown">Estados
-                                                        <span class="caret"></span></button>
-                                                    <ul class="dropdown-menu" role="menu" aria-labelledby="combo-filtro-estado">
-                                                        <c:forEach items="#{listarCorrectivas.estadosEnRegistros}" var="estado" >
-                                                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">#{estado.descripcion}</a></li>
-                                                        </c:forEach>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                                </td>
+                                                <td>
+                                                    <h:panelGroup id="drop-filtro-deteccion">
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-primary dropdown-toggle" type="button" id="combo-filtro-deteccion" data-toggle="dropdown">
+                                                                Generada Por<span class="caret"></span></button>
+                                                            <ul class="dropdown-menu" role="menu" aria-labelledby="combo-filtro-deteccion">
+                                                                <c:forEach items="#{listarCorrectivas.deteccionesEnRegistros}" var="deteccion" >
+                                                                    <li role="presentation"><h:commandLink role="menuitem" tabindex="-1" action="#" value="#{deteccion.nombre}">
+                                                                            <f:ajax render="form_tabla_acciones" />
+                                                                        </h:commandLink>
+                                                                    </li>
+                                                                </c:forEach>
+                                                            </ul>
+                                                        </div>
+                                                    </h:panelGroup>
+                                                </td>
+                                                <td>
+                                                    <h:panelGroup id="drop-filtro-codificacion">
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-primary dropdown-toggle" type="button" id="combo-filtro-codificacion" data-toggle="dropdown">
+                                                                Codificacion<span class="caret"></span></button>
+                                                            <ul class="dropdown-menu" role="menu" aria-labelledby="combo-filtro-codificacion">
+                                                                <c:forEach items="#{listarCorrectivas.codificacionesEnRegistros}" var="codificacion" >
+                                                                    <li role="presentation"><h:commandLink role="menuitem" tabindex="-1" action="#" value="#{codificacion.nombre}">
+                                                                            <f:ajax render="form_tabla_acciones" />
+                                                                        </h:commandLink>
+                                                                    </li>
+                                                                </c:forEach>
+                                                            </ul>
+                                                        </div>
+                                                    </h:panelGroup>
+                                                </td>
+                                                <td>
+                                                    <h:panelGroup id="drop-filtro-estado">
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-primary dropdown-toggle" type="button" id="combo-filtro-estado" data-toggle="dropdown">Estados
+                                                                <span class="caret"></span></button>
+                                                            <ul class="dropdown-menu" role="menu" aria-labelledby="combo-filtro-estado">
+                                                                <c:forEach items="#{listarCorrectivas.estadosEnRegistros}" var="estado" >
+                                                                    <li role="presentation"><h:commandLink role="menuitem" tabindex="-1" action="#" value="#{estado.descripcion}">
+                                                                            <f:ajax render="form_tabla_acciones" />
+                                                                        </h:commandLink>
+                                                                    </li>
+                                                                </c:forEach>
+                                                            </ul>
+                                                        </div>
+                                                    </h:panelGroup>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
             </h:form>
         </div>
-
+        
         <div class="container-fluid" style="padding: 1%">
             <h:form id="form_tabla_acciones" >
                 <c:choose>
@@ -108,9 +142,9 @@
                                         <th style="width: 5%">Estado</th>
                                         <th style="width: 13%"></th>
                                     </tr>
-
+                                    
                                 </thead>
-
+                                
                                 <tbody style="font-size: 11px">
                                     <c:forEach items="#{listarCorrectivas.listaAcciones}" var="accion">
                                         <tr>
