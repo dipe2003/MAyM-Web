@@ -21,6 +21,12 @@ import java.util.List;
 public class DatosFiltros implements Serializable {
     
     //  Metodos
+    
+    /**
+     * Devuelve una lista de areas que pertenezcan a las acciones.
+     * @param acciones
+     * @return 
+     */
     public List<Area> ExtraerAreas(List<Accion> acciones){
         List<Area> areas = new ArrayList<>();
         for(Accion accion:acciones){
@@ -31,6 +37,11 @@ public class DatosFiltros implements Serializable {
         return areas;
     }
     
+    /**
+     * Devuelve una lista de codificaciones que pertenezcan a las acciones.
+     * @param acciones
+     * @return 
+     */
     public List<Codificacion> ExtraerCodificaciones(List<Accion> acciones){
         List<Codificacion> codificaciones = new ArrayList<>();
         for(Accion accion:acciones){
@@ -41,6 +52,11 @@ public class DatosFiltros implements Serializable {
         return codificaciones;
     }
     
+    /**
+     * Devuelve una lista de detecciones que pertenezcan a las acciones.
+     * @param acciones
+     * @return 
+     */
       public List<Deteccion> ExtraerDetecciones(List<Accion> acciones){
         List<Deteccion> detecciones = new ArrayList<>();
         for(Accion accion:acciones){
@@ -51,10 +67,16 @@ public class DatosFiltros implements Serializable {
         return detecciones;
     }
       
-    public List<Accion> FiltrarAccionesPorArea(List<Accion> acciones, int idArea){
+      /**
+       * Devuelve una lista de acciones que pertenezcan a las areas indicadas.
+       * @param acciones
+       * @param areas
+       * @return 
+       */
+    public List<Accion> FiltrarAccionesPorArea(List<Accion> acciones, List<Integer> areas){
          List<Accion> accionesFiltradas = new ArrayList<>();
         for(Accion accion:acciones){
-            if(accion.getAreaSectorAccion().getId()== idArea){
+            if(areas.contains(accion.getAreaSectorAccion().getId())){
                 accionesFiltradas.add(accion);
             }
         }

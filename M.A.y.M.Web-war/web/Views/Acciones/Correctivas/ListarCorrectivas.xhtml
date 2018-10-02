@@ -47,17 +47,26 @@
                                                         <div class="dropdown">
                                                             <button class="btn btn-primary dropdown-toggle" type="button" id="combo-filtro-area" data-toggle="dropdown">
                                                                 Areas<span class="caret"></span></button>
-                                                            <ul class="dropdown-menu" role="menu" aria-labelledby="combo-filtro-area">
-                                                                <c:forEach items="#{listarCorrectivas.areasEnRegistros}" var="area" >
-                                                                    <li role="presentation"><h:commandLink role="menuitem" tabindex="-1" action="#{listarCorrectivas.filtrarPorArea(area.id)}" value="#{area.nombre}">
-                                                                            <f:ajax delay="10" render="form_tabla_acciones" />
+                                                            <ul class="dropdown-menu" role="menu" aria-labelledby="combo-filtro-area" style="font-size: 10px; width: 600px">                                                                
+                                                                    <h:selectManyCheckbox value="#{listarCorrectivas.areasSeleccionadas}" id="areas-disponibles" > 
+                                                                        <c:forEach var="area" items="#{listarCorrectivas.areasEnRegistros}" >
+                                                                            <f:selectItem itemValue="#{area.id}" itemLabel="#{area.nombre}" />                                                                     
+                                                                        </c:forEach>
+                                                                    </h:selectManyCheckbox>
+                                                                <div class="row">
+                                                                    <div class="col-sm-6">
+                                                                        <h:commandLink class="btn btn-primary" role="menuitem" tabindex="-1" action="#{listarCorrectivas.filtrarPorArea()}" value="Filtrar">
+                                                                            <f:ajax delay="10" execute="drop-filtro-areas" render="form_tabla_acciones" />
                                                                         </h:commandLink>
-                                                                    </li>                                                                    
-                                                                </c:forEach>
+                                                                    </div>
+                                                                    <div class="col-sm-6">
+                                                                        
+                                                                    </div>
+                                                                </div>
                                                             </ul>
                                                         </div>
                                                     </h:panelGroup>
-                                                </td>
+                                                </td> 
                                                 <td>
                                                     <h:panelGroup id="drop-filtro-deteccion">
                                                         <div class="dropdown">
