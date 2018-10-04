@@ -49,9 +49,10 @@
                                                                 Areas<span class="caret"></span></button>
                                                             <ul class="dropdown-menu" role="menu" aria-labelledby="combo-filtro-area" style="font-size: 10px; width: 600px">                                                                
                                                                     <h:selectManyCheckbox value="#{listarCorrectivas.areasSeleccionadas}" id="areas-disponibles" > 
-                                                                        <c:forEach var="area" items="#{listarCorrectivas.areasEnRegistros}" >
-                                                                            <f:selectItem itemValue="#{area.id}" itemLabel="#{area.nombre}" />                                                                     
+                                                                        <c:forEach var="entry" items="#{listarCorrectivas.areasEnRegistros}" >
+                                                                            <f:selectItem itemValue="#{entry.key}" itemLabel="#{entry.value.nombre}" />                                                                     
                                                                         </c:forEach>
+                                                                        <f:passThroughAttribute name="checked" value="true" />
                                                                     </h:selectManyCheckbox>
                                                                 <div class="row">
                                                                     <div class="col-sm-6">

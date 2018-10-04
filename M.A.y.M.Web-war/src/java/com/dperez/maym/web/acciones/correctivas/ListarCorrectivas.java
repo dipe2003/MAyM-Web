@@ -18,7 +18,9 @@ import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -48,7 +50,7 @@ public class ListarCorrectivas implements Serializable{
     
     // Variabels de Filtros
     private DatosFiltros filtros = new DatosFiltros();
-    private List<Area> areasEnRegistros = new ArrayList<>();
+    private Map<String, Area> areasEnRegistros = new HashMap<>();
     private List<Codificacion> codificacionesEnRegistros = new ArrayList<>();
     private List<Deteccion> deteccionesEnRegistros = new ArrayList<>();
     private EnumEstado[] estadosEnRegistros = EnumEstado.values();
@@ -56,7 +58,7 @@ public class ListarCorrectivas implements Serializable{
     
     //  Getters
     public List<Correctiva>getListaAcciones() {return ListaAcciones;}
-    public List<Area> getAreasEnRegistros() {return areasEnRegistros;}
+    public Map<String, Area> getAreasEnRegistros() {return areasEnRegistros;}
     public List<Codificacion> getCodificacionesEnRegistros() {return codificacionesEnRegistros;}
     public List<Deteccion> getDeteccionesEnRegistros() {return deteccionesEnRegistros;}
     public EnumEstado[] getEstadosEnRegistros() {return estadosEnRegistros;}
@@ -72,7 +74,7 @@ public class ListarCorrectivas implements Serializable{
     
     //  Setters
     public void setListaAcciones(List<Correctiva> ListaAcciones) {this.ListaAcciones = ListaAcciones;}
-    public void setAreasEnRegistros(List<Area> areasEnRegistros) {this.areasEnRegistros = areasEnRegistros;}
+    public void setAreasEnRegistros(Map<String, Area> areasEnRegistros) {this.areasEnRegistros = areasEnRegistros;}
     public void setCodificacionesEnRegistros(List<Codificacion> codificacionesEnRegistros) {this.codificacionesEnRegistros = codificacionesEnRegistros;}
     public void setDeteccionesEnRegistros(List<Deteccion> deteccionesEnRegistros) {this.deteccionesEnRegistros = deteccionesEnRegistros;}
     public void setEstadosEnRegistros(EnumEstado[] estadosEnRegistros) {this.estadosEnRegistros = estadosEnRegistros;}
@@ -121,6 +123,8 @@ public class ListarCorrectivas implements Serializable{
         
         // datos para filtros
         areasEnRegistros = filtros.ExtraerAreas((List<Accion>)(List<?>) ListaCompletaAcciones);
+        areasSeleccionadas = areasEnRegistros.keySet().toArray(new String[areasEnRegistros.size()]);
+        
         codificacionesEnRegistros = filtros.ExtraerCodificaciones((List<Accion>)(List<?>) ListaCompletaAcciones);
         deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>)(List<?>) ListaCompletaAcciones);
     }

@@ -11,7 +11,10 @@ import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  *
@@ -27,15 +30,16 @@ public class DatosFiltros implements Serializable {
      * @param acciones
      * @return 
      */
-    public List<Area> ExtraerAreas(List<Accion> acciones){
-        List<Area> areas = new ArrayList<>();
+    public Map<String, Area> ExtraerAreas(List<Accion> acciones){
+        Map<String, Area> areas = new HashMap<>();
         for(Accion accion:acciones){
-            if(!areas.contains(accion.getAreaSectorAccion())){
-                areas.add(accion.getAreaSectorAccion());
+            if(!areas.containsKey(String.valueOf(accion.getAreaSectorAccion().getId()))){
+                areas.put(String.valueOf(accion.getAreaSectorAccion().getId()), accion.getAreaSectorAccion());
             }
         }
-        return areas;
+        return new TreeMap<>(areas);
     }
+
     
     /**
      * Devuelve una lista de codificaciones que pertenezcan a las acciones.
