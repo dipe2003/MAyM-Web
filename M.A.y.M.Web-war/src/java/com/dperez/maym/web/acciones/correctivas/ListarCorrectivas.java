@@ -49,7 +49,7 @@ public class ListarCorrectivas implements Serializable{
     private List<Correctiva> ListaCompletaAcciones;
     
     // Variabels de Filtros
-    private DatosFiltros filtros = new DatosFiltros();
+    private final DatosFiltros filtros = new DatosFiltros();
     private Map<String, Area> areasEnRegistros = new HashMap<>();
     private List<Codificacion> codificacionesEnRegistros = new ArrayList<>();
     private List<Deteccion> deteccionesEnRegistros = new ArrayList<>();
@@ -61,11 +61,8 @@ public class ListarCorrectivas implements Serializable{
     public Map<String, Area> getAreasEnRegistros() {return areasEnRegistros;}
     public List<Codificacion> getCodificacionesEnRegistros() {return codificacionesEnRegistros;}
     public List<Deteccion> getDeteccionesEnRegistros() {return deteccionesEnRegistros;}
-    public EnumEstado[] getEstadosEnRegistros() {return estadosEnRegistros;}
-
-    public String[] getAreasSeleccionadas() {
-        return areasSeleccionadas;
-    }
+    public EnumEstado[] getEstadosEnRegistros() {return estadosEnRegistros;}    
+    public String[] getAreasSeleccionadas() {return areasSeleccionadas;}
     
     // Paginacion
     public static int getMAX_ITEMS() {return MAX_ITEMS;}
@@ -78,23 +75,40 @@ public class ListarCorrectivas implements Serializable{
     public void setCodificacionesEnRegistros(List<Codificacion> codificacionesEnRegistros) {this.codificacionesEnRegistros = codificacionesEnRegistros;}
     public void setDeteccionesEnRegistros(List<Deteccion> deteccionesEnRegistros) {this.deteccionesEnRegistros = deteccionesEnRegistros;}
     public void setEstadosEnRegistros(EnumEstado[] estadosEnRegistros) {this.estadosEnRegistros = estadosEnRegistros;}
-
-    public void setAreasSeleccionadas(String[] areasSeleccionadas) {
-        this.areasSeleccionadas = areasSeleccionadas;
-    }
+    public void setAreasSeleccionadas(String[] areasSeleccionadas) {this.areasSeleccionadas = areasSeleccionadas;}
     
     // Metodos de filtro
     public void filtrarPorArea(){
-        List<Integer> areas = new ArrayList<>();
-        for(String id:areasSeleccionadas){
-            areas.add(Integer.parseInt(id));
-        }
-        cargarPagina(PaginaActual, filtros.FiltrarAccionesPorArea((List<Accion>)(List<?>) ListaCompletaAcciones, areas));
+        cargarPagina(PaginaActual, filtros.FiltrarAccionesPorArea((List<Accion>)(List<?>) ListaCompletaAcciones, ObtenerIdAreasFiltradas(areasSeleccionadas)));
         CantidadPaginas = calcularCantidadPaginas(ListaAcciones.size());
     }
     
+    // Metodos de filtro
+    public void quitarFiltroPorArea(){
+        cargarPagina(PaginaActual, filtros.FiltrarAccionesPorArea((List<Accion>)(List<?>) ListaCompletaAcciones, ObtenerIdAreasFiltradas(areasSeleccionadas)));
+        CantidadPaginas = calcularCantidadPaginas(ListaAcciones.size());
+    }
     
+    /**
+     * Llena las listas para filtros con los valores originales.
+     */
+    private void ResetListasAreas(){
+        areasEnRegistros = filtros.ExtraerAreas((List<Accion>)(List<?>) ListaCompletaAcciones);
+        areasSeleccionadas = areasEnRegistros.keySet().toArray(new String[areasEnRegistros.size()]);
+    }
     
+    /**
+     * Obtiene los ids como enteros del array de strings.
+     * @param areas
+     * @return 
+     */
+    private List<Integer> ObtenerIdAreasFiltradas(String[] areas){
+        List<Integer> ids = new ArrayList<>();
+        for(String id:areas){
+            ids.add(Integer.parseInt(id));
+        }
+        return ids;
+    }
     
     //  Inicializacion
     @PostConstruct
@@ -122,8 +136,7 @@ public class ListarCorrectivas implements Serializable{
         cargarPagina(PaginaActual, (List<Accion>)(List<?>)ListaCompletaAcciones);
         
         // datos para filtros
-        areasEnRegistros = filtros.ExtraerAreas((List<Accion>)(List<?>) ListaCompletaAcciones);
-        areasSeleccionadas = areasEnRegistros.keySet().toArray(new String[areasEnRegistros.size()]);
+        ResetListasAreas ();
         
         codificacionesEnRegistros = filtros.ExtraerCodificaciones((List<Accion>)(List<?>) ListaCompletaAcciones);
         deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>)(List<?>) ListaCompletaAcciones);
