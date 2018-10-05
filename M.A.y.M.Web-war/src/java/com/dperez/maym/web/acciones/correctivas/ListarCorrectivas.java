@@ -61,7 +61,7 @@ public class ListarCorrectivas implements Serializable{
     public Map<String, Area> getAreasEnRegistros() {return areasEnRegistros;}
     public List<Codificacion> getCodificacionesEnRegistros() {return codificacionesEnRegistros;}
     public List<Deteccion> getDeteccionesEnRegistros() {return deteccionesEnRegistros;}
-    public EnumEstado[] getEstadosEnRegistros() {return estadosEnRegistros;}    
+    public EnumEstado[] getEstadosEnRegistros() {return estadosEnRegistros;}
     public String[] getAreasSeleccionadas() {return areasSeleccionadas;}
     
     // Paginacion
@@ -78,15 +78,17 @@ public class ListarCorrectivas implements Serializable{
     public void setAreasSeleccionadas(String[] areasSeleccionadas) {this.areasSeleccionadas = areasSeleccionadas;}
     
     // Metodos de filtro
-    public void filtrarPorArea(){
-        cargarPagina(PaginaActual, filtros.FiltrarAccionesPorArea((List<Accion>)(List<?>) ListaCompletaAcciones, ObtenerIdAreasFiltradas(areasSeleccionadas)));
-        CantidadPaginas = calcularCantidadPaginas(ListaAcciones.size());
+    public void filtrarPorArea(){  
+        List<Accion> acciones = filtros.FiltrarAccionesPorArea((List<Accion>)(List<?>) ListaCompletaAcciones, ObtenerIdAreasFiltradas(areasSeleccionadas));
+        cargarPagina(PaginaActual, acciones); 
+        CantidadPaginas = calcularCantidadPaginas(acciones.size());
     }
     
     // Metodos de filtro
-    public void quitarFiltroPorArea(){
-        cargarPagina(PaginaActual, filtros.FiltrarAccionesPorArea((List<Accion>)(List<?>) ListaCompletaAcciones, ObtenerIdAreasFiltradas(areasSeleccionadas)));
-        CantidadPaginas = calcularCantidadPaginas(ListaAcciones.size());
+    public void quitarFiltroPorArea(){        
+        CantidadPaginas = calcularCantidadPaginas(ListaCompletaAcciones.size());
+        cargarPagina(PaginaActual, (List<Accion>)(List<?>)ListaCompletaAcciones);  
+        ResetListasAreas();
     }
     
     /**
@@ -96,11 +98,11 @@ public class ListarCorrectivas implements Serializable{
         areasEnRegistros = filtros.ExtraerAreas((List<Accion>)(List<?>) ListaCompletaAcciones);
         areasSeleccionadas = areasEnRegistros.keySet().toArray(new String[areasEnRegistros.size()]);
     }
-    
+       
     /**
      * Obtiene los ids como enteros del array de strings.
      * @param areas
-     * @return 
+     * @return
      */
     private List<Integer> ObtenerIdAreasFiltradas(String[] areas){
         List<Integer> ids = new ArrayList<>();
@@ -109,7 +111,7 @@ public class ListarCorrectivas implements Serializable{
         }
         return ids;
     }
-    
+        
     //  Inicializacion
     @PostConstruct
     public void init(){

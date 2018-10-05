@@ -78,7 +78,7 @@ public class DatosFiltros implements Serializable {
        * @return 
        */
     public List<Accion> FiltrarAccionesPorArea(List<Accion> acciones, List<Integer> areas){
-         List<Accion> accionesFiltradas = new ArrayList<>();
+        List<Accion> accionesFiltradas = new ArrayList<>();
         for(Accion accion:acciones){
             if(areas.contains(accion.getAreaSectorAccion().getId())){
                 accionesFiltradas.add(accion);
