@@ -34,34 +34,31 @@
                                                     ORDEN FECHA
                                                 </td>
                                                 <td>
-                                                    <h:panelGroup id="drop-filtro-areas">
-                                                        <div class="dropdown">
-                                                            <button class="btn btn-primary dropdown-toggle" type="button" id="combo-filtro-area" data-toggle="dropdown">
-                                                                Areas<span class="caret"></span></button>
-                                                            <ul class="dropdown-menu" role="menu" aria-labelledby="combo-filtro-area" style="font-size: 10px; width: 600px">
-                                                                
-                                                                <h:selectManyListbox value="#{listarCorrectivas.areasSeleccionadas}" >
-                                                                    <c:forEach var="entry" items="#{listarCorrectivas.areasEnRegistros}" >
-                                                                        <f:selectItem itemLabel="#{entry.value.nombre}" itemValue="#{entry.key}"/>
-                                                                        <f:passThroughAttribute name="checked" value="true" />
-                                                                    </c:forEach>
-                                                                </h:selectManyListbox>
-                                                                
-                                                                <div class="row">
-                                                                    <div class="col-md-6">
-                                                                        <h:commandLink class="btn btn-primary" role="menuitem" tabindex="-1" action="#{listarCorrectivas.filtrarPorArea()}" value="Filtrar">
-                                                                            <f:ajax delay="10" execute="drop-filtro-areas" render="form_tabla_acciones"  onevent="indicador" />
-                                                                        </h:commandLink>
-                                                                    </div>
-                                                                    <div class="col-md-6">
-                                                                        <h:commandLink class="btn btn-primary" role="menuitem" tabindex="-1" action="#{listarCorrectivas.quitarFiltroPorArea()}" value="Quitar Filtro">
-                                                                            <f:ajax delay="10" execute="drop-filtro-areas" render="form_tabla_acciones drop-filtro-areas"  onevent="indicador" />
-                                                                        </h:commandLink>
-                                                                    </div>
-                                                                </div>                                                         
-                                                            </ul>
-                                                        </div>
-                                                    </h:panelGroup>
+                                                    <button class="btn btn-primary" type="button" id="combo-filtro-area" data-toggle="collapse" data-target="#collapse-filtro-areas">
+                                                        Areas<span class="caret"></span></button>
+                                                    <div class="collapse" id="collapse-filtro-areas">
+                                                        <h:panelGroup id="drop-filtro-areas">
+                                                            <h:selectManyListbox value="#{listarCorrectivas.areasSeleccionadas}" >
+                                                                <c:forEach var="entry" items="#{listarCorrectivas.areasEnRegistros}" >
+                                                                    <f:selectItem itemLabel="#{entry.value.nombre}" itemValue="#{entry.key}"/>
+                                                                    <f:passThroughAttribute name="checked" value="true" />
+                                                                </c:forEach>
+                                                            </h:selectManyListbox>
+                                                            
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <h:commandLink class="btn btn-primary" role="menuitem" tabindex="-1" action="#{listarCorrectivas.filtrarPorArea()}" value="Filtrar">
+                                                                        <f:ajax delay="10" execute="drop-filtro-areas" render="form_tabla_acciones"  onevent="indicador" />
+                                                                    </h:commandLink>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <h:commandLink class="btn btn-primary" role="menuitem" tabindex="-1" action="#{listarCorrectivas.quitarFiltroPorArea()}" value="Quitar Filtro">
+                                                                        <f:ajax delay="10" execute="drop-filtro-areas" render="form_tabla_acciones drop-filtro-areas"  onevent="indicador" />
+                                                                    </h:commandLink>
+                                                                </div>
+                                                            </div>  
+                                                        </h:panelGroup>
+                                                    </div>
                                                 </td> 
                                                 <td>
                                                     <h:panelGroup id="drop-filtro-deteccion">
