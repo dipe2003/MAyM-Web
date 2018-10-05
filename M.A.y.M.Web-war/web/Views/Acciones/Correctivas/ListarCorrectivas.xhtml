@@ -38,16 +38,19 @@
                                                         Areas<span class="caret"></span></button>
                                                     <div class="collapse" id="collapse-filtro-areas">
                                                         <h:panelGroup id="drop-filtro-areas">
-                                                            <h:selectManyListbox value="#{listarCorrectivas.areasSeleccionadas}" >
+                                                            <h:selectManyListbox value="#{listarCorrectivas.areasSeleccionadas}" style="height:100px" >
                                                                 <c:forEach var="entry" items="#{listarCorrectivas.areasEnRegistros}" >
                                                                     <f:selectItem itemLabel="#{entry.value.nombre}" itemValue="#{entry.key}"/>
                                                                     <f:passThroughAttribute name="checked" value="true" />
                                                                 </c:forEach>
                                                             </h:selectManyListbox>
-                                                            
+
                                                             <div class="row">
                                                                 <div class="col-md-6">
-                                                                    <h:commandLink class="btn btn-primary" role="menuitem" tabindex="-1" action="#{listarCorrectivas.filtrarPorArea()}" value="Filtrar">
+                                                                    <h:commandLink class="btn btn-primary" role="menuitem" tabindex="-1" action="#{listarCorrectivas.filtrarPorArea()}"
+                                                                                    value="Filtrar">
+                                                                        <f:passThroughAttribute name="data-togle" value="collapse" />
+                                                                        <f:passThroughAttribute name="data-target" value="#collapse-filtro-areas"/>
                                                                         <f:ajax delay="10" execute="drop-filtro-areas" render="form_tabla_acciones"  onevent="indicador" />
                                                                     </h:commandLink>
                                                                 </div>
@@ -56,7 +59,7 @@
                                                                         <f:ajax delay="10" execute="drop-filtro-areas" render="form_tabla_acciones drop-filtro-areas"  onevent="indicador" />
                                                                     </h:commandLink>
                                                                 </div>
-                                                            </div>  
+                                                            </div>
                                                         </h:panelGroup>
                                                     </div>
                                                 </td> 
