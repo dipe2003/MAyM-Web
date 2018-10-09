@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -128,7 +130,7 @@ public class ListarCorrectivas implements Serializable{
         areasSeleccionadas = areasEnRegistros.keySet().toArray(new String[areasEnRegistros.size()]);
     }
     
-    public void filtrarPorArea(){
+    public void filtrarPorArea(AjaxBehaviorEvent event){
         filtrosAplicados.add("areas");
         FiltrarAcciones();
     }
@@ -209,6 +211,7 @@ public class ListarCorrectivas implements Serializable{
             accionesFiltradas = (List<Correctiva>)(List<?>)filtrarPorArea(accionesFiltradas);
             // actualizar lista de fechas disponibles, detecciones, codificaciones y estados
             deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>)(List<?>)accionesFiltradas);
+            deteccionesSeleccionadas = new String[0];
         }
         
         // Filtro de Detecciones
