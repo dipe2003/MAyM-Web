@@ -39,10 +39,10 @@
                                                     <div class="collapse" id="collapse-filtro-areas">
                                                         <h:panelGroup id="drop-filtro-areas">
                                                             <f:ajax execute="@this" event="change" onevent="indicador"  listener="#{listarCorrectivas.filtrarPorArea(event)}" render="form_tabla_acciones drop-filtro-deteccion">
-                                                                <h:selectManyListbox id="selectmanyareas" value="#{listarCorrectivas.areasSeleccionadas}" style="height:100px" >
+                                                                <h:selectManyListbox value="#{listarCorrectivas.areasSeleccionadas}" style="height:100px" >
                                                                     <c:forEach var="entry" items="#{listarCorrectivas.areasEnRegistros}" >
                                                                         <f:selectItem itemLabel="#{entry.value.nombre}" itemValue="#{entry.key}"/>
-                                                                        <f:passThroughAttribute name="checked" value="true" />
+                                                                        <f:passThroughAttribute name="selected" value="true" />
                                                                     </c:forEach>
                                                                 </h:selectManyListbox>
                                                             </f:ajax>
@@ -63,27 +63,20 @@
                                                         Detecciones<span class="caret"></span></button>
                                                     <div class="collapse" id="collapse-filtro-deteccion">
                                                         <h:panelGroup id="drop-filtro-deteccion">
-                                                            <h:selectManyListbox value="#{listarCorrectivas.deteccionesSeleccionadas}" style="height:100px" >
-                                                                <c:forEach var="entry" items="#{listarCorrectivas.deteccionesEnRegistros}" >
-                                                                    <f:selectItem itemLabel="#{entry.value.nombre}" itemValue="#{entry.key}"/>
-                                                                    
-                                                                </c:forEach>
-                                                            </h:selectManyListbox>
-                                                            
+                                                            <f:ajax execute="@this" event="change" onevent="indicador"  listener="#{listarCorrectivas.filtrarPorDeteccion(event)}" render="form_tabla_acciones drop-filtro-area">
+                                                                <h:selectManyListbox value="#{listarCorrectivas.deteccionesSeleccionadas}" style="height:100px" >
+                                                                    <c:forEach var="entry" items="#{listarCorrectivas.deteccionesEnRegistros}" >
+                                                                        <f:selectItem itemLabel="#{entry.value.nombre}" itemValue="#{entry.key}"/>
+                                                                        <f:passThroughAttribute name="selected" value="true" />
+                                                                    </c:forEach>
+                                                                </h:selectManyListbox>
+                                                            </f:ajax>
                                                             <div class="row">
-                                                                <div class="col-md-6">
-                                                                    <h:commandLink class="btn btn-primary" role="menuitem" tabindex="-1" action="#{listarCorrectivas.filtrarPorDeteccion()}"
-                                                                                   value="Filtrar">
-                                                                        <f:passThroughAttribute name="data-toggle" value="collapse" />
-                                                                        <f:passThroughAttribute name="data-target" value="#collapse-filtro-deteccion"/>
-                                                                        <f:ajax delay="10" execute="drop-filtro-deteccion" render="form_tabla_acciones" onevent="indicador" />
-                                                                    </h:commandLink>
-                                                                </div>
-                                                                <div class="col-md-6">
+                                                                <div class="col-md-12">
                                                                     <h:commandLink class="btn btn-primary" role="menuitem" tabindex="-1" action="#{listarCorrectivas.quitarFiltroPorDeteccion()}" value="Quitar Filtro">
                                                                         <f:passThroughAttribute name="data-toggle" value="collapse" />
                                                                         <f:passThroughAttribute name="data-target" value="#collapse-filtro-deteccion"/>
-                                                                        <f:ajax delay="10" execute="drop-filtro-deteccion" render="form_tabla_acciones drop-filtro-deteccion"  onevent="indicador" />
+                                                                        <f:ajax delay="10" execute="drop-filtro-deteccion" render="form_tabla_acciones drop-filtro-deteccion"  onevent="indicador" />                                                                           
                                                                     </h:commandLink>
                                                                 </div>
                                                             </div>
@@ -91,22 +84,39 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <h:panelGroup id="drop-filtro-codificacion">
-                                                        <div class="dropdown">
-                                                            <button class="btn btn-primary dropdown-toggle" type="button" id="combo-filtro-codificacion" data-toggle="dropdown">
-                                                                Codificacion<span class="caret"></span></button>
+                                                    <button class="btn btn-primary dropdown-toggle" type="button" id="combo-filtro-codificacion" data-toggle="collapse" data-target="#collapse-filtro-codificacion">
+                                                            Codificacion<span class="caret"></span></button>
+                                                    <div class="collapse" id="collapse-filtro-codificacion">
+                                                        <h:panelGroup id="drop-filtro-codificacion">
                                                             
-                                                        </div>
-                                                    </h:panelGroup>
+                                                        </h:panelGroup>
+                                                    </div>
+                                                    
                                                 </td>
                                                 <td>
-                                                    <h:panelGroup id="drop-filtro-estado">
-                                                        <div class="dropdown">
-                                                            <button class="btn btn-primary dropdown-toggle" type="button" id="combo-filtro-estado" data-toggle="dropdown">Estados
-                                                                <span class="caret"></span></button>
-                                                            
-                                                        </div>
-                                                    </h:panelGroup>
+                                                    <button class="btn btn-primary dropdown-toggle" type="button" id="combo-filtro-estado" data-toggle="collapse" data-target="#collapse-filtro-estados">
+                                                        Estados <span class="caret"></span></button>
+                                                    <div class="collapse" id="collapse-filtro-estados">
+                                                        <h:panelGroup id="drop-filtro-estado">
+                                                            <f:ajax execute="@this" event="change" onevent="indicador"  listener="#{listarCorrectivas.filtrarPorEstado(event)}" render="form_tabla_acciones drop-filtro-estado">
+                                                                <h:selectManyListbox value="#{listarCorrectivas.estadosSeleccionados}" style="height:100px" >
+                                                                    <c:forEach var="entry" items="#{listarCorrectivas.estadosEnRegistros}" >
+                                                                        <f:selectItem itemLabel="#{entry.descripcion}" itemValue="#{entry}"/>
+                                                                        <f:passThroughAttribute name="selected" value="true" />
+                                                                    </c:forEach>
+                                                                </h:selectManyListbox>
+                                                            </f:ajax>
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <h:commandLink class="btn btn-primary" role="menuitem" tabindex="-1" action="#{listarCorrectivas.quitarFiltroPorEstado()}" value="Quitar Filtro">
+                                                                        <f:passThroughAttribute name="data-toggle" value="collapse" />
+                                                                        <f:passThroughAttribute name="data-target" value="#collapse-filtro-estados"/>
+                                                                        <f:ajax delay="10" execute="drop-filtro-estado" render="form_tabla_acciones drop-filtro-estado"  onevent="indicador" />                                                                           
+                                                                    </h:commandLink>
+                                                                </div>
+                                                            </div>
+                                                        </h:panelGroup>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         </tbody>

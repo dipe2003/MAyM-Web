@@ -9,6 +9,7 @@ import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
+import com.dperez.maymweb.estado.EnumEstado;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -112,4 +113,39 @@ public class DatosFiltros implements Serializable {
         return new TreeMap<>(codificaciones);
     }
     
+    /**
+     * Devuelve una lista de acciones que contengan la misma codificacion.
+     * @param acciones
+     * @param codificaciones
+     * @return
+     */
+    public List<Accion> FiltrarAccionesPorCodificacion(List<Accion> acciones, List<Integer> codificaciones){
+        List<Accion> accionesFiltradas = new ArrayList<>();
+        for(Accion accion:acciones){
+            if(codificaciones.contains(accion.getCodificacionAccion().getId())){
+                accionesFiltradas.add(accion);
+            }
+        }
+        return accionesFiltradas;
+    }
+    
+    //**********************************************************************
+    // Metodos de filtro de Estado
+    //**********************************************************************
+    
+        /**
+     * Devuelve una lista de acciones que contengan el mismo Estado
+     * @param acciones
+     * @param estados
+     * @return
+     */
+    public List<Accion> FiltrarAccionesPorEstado(List<Accion> acciones, List<EnumEstado> estados){
+        List<Accion> accionesFiltradas = new ArrayList<>();
+        for(Accion accion:acciones){
+            if(estados.stream().anyMatch(e->e.equals(accion.getEstadoAccion()))){
+                accionesFiltradas.add(accion);
+            }
+        }
+        return accionesFiltradas;
+    }
 }
