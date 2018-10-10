@@ -21,7 +21,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
@@ -115,9 +114,8 @@ public class ListarCorrectivas implements Serializable{
      */
     public void quitarFiltroPorArea(){
         filtrosAplicados.remove("areas");
-        CantidadPaginas = calcularCantidadPaginas(ListaCompletaAcciones.size());
-        cargarPagina(PaginaActual, (List<Accion>)(List<?>)ListaCompletaAcciones);
-        ResetListasAreas();
+        //ResetListasAreas();
+        FiltrarAcciones();
     }
     
     /**
@@ -129,7 +127,9 @@ public class ListarCorrectivas implements Serializable{
     }
     
     public void filtrarPorArea(AjaxBehaviorEvent event){
-        filtrosAplicados.add("areas");
+        if(!filtrosAplicados.contains("areas")){
+            filtrosAplicados.add("areas");
+        }
         FiltrarAcciones();
     }
     
@@ -150,11 +150,10 @@ public class ListarCorrectivas implements Serializable{
      * Llena la lista de acciones con todas las acciones.
      * Carga la pagina nuevamente.
      */
-    public void quitarFiltroPorDeteccion(){
+    public void quitarFiltroPorDeteccion(){        
         filtrosAplicados.remove("detecciones");
-        CantidadPaginas = calcularCantidadPaginas(ListaCompletaAcciones.size());
-        cargarPagina(PaginaActual, (List<Accion>)(List<?>)ListaCompletaAcciones);
-        ResetListasDeteccion();
+        //ResetListasDeteccion();
+        FiltrarAcciones();
     }
     
     /**
@@ -166,7 +165,9 @@ public class ListarCorrectivas implements Serializable{
     }
     
     public void filtrarPorDeteccion(AjaxBehaviorEvent event){
-        filtrosAplicados.add("detecciones");
+        if(!filtrosAplicados.contains("detecciones")){
+            filtrosAplicados.add("detecciones");
+        }
         FiltrarAcciones();
     }
     
@@ -193,9 +194,8 @@ public class ListarCorrectivas implements Serializable{
      */
     public void quitarFiltroPorEstado(){
         filtrosAplicados.remove("estados");
-        CantidadPaginas = calcularCantidadPaginas(ListaCompletaAcciones.size());
-        cargarPagina(PaginaActual, (List<Accion>)(List<?>)ListaCompletaAcciones);
-        ResetListasEstado();
+        //ResetListasEstado();
+        FiltrarAcciones();
     }
     
     /**
@@ -206,7 +206,9 @@ public class ListarCorrectivas implements Serializable{
     }
     
     public void filtrarPorEstado(AjaxBehaviorEvent event){
-        filtrosAplicados.add("estados");
+        if(!filtrosAplicados.contains("estados")){
+            filtrosAplicados.add("estados");
+        }
         FiltrarAcciones();
     }
     
@@ -247,14 +249,14 @@ public class ListarCorrectivas implements Serializable{
         // Filtro de Areas
         if(filtrosAplicados.contains("areas")){
             accionesFiltradas = (List<Correctiva>)(List<?>)filtrarPorArea(accionesFiltradas);
-            // actualizar lista de fechas disponibles, detecciones, codificaciones y estados
+            // actualizar lista de fechas disponibles, detecciones, codificaciones
             deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>)(List<?>)accionesFiltradas);
         }
         
         // Filtro de Detecciones
         if(filtrosAplicados.contains("detecciones")){
             accionesFiltradas = (List<Correctiva>)(List<?>) filtrarPorDeteccion(accionesFiltradas);
-            // actualizar lista de fechas disponibles, areas, codificaciones y estados
+            // actualizar lista de fechas disponibles, areas, codificaciones
             areasEnRegistros = filtros.ExtraerAreas((List<Accion>)(List<?>)accionesFiltradas);
         }
         
@@ -272,7 +274,7 @@ public class ListarCorrectivas implements Serializable{
             accionesFiltradas = (List<Correctiva>)(List<?>)filtrarPorEstado(accionesFiltradas);
             // actualizar lista de fechas disponibles, detecciones, codificaciones y estados
             areasEnRegistros = filtros.ExtraerAreas((List<Accion>)(List<?>)accionesFiltradas);
-            deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>)(List<?>)accionesFiltradas);            
+            deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>)(List<?>)accionesFiltradas);
         }
         
         // Cargar pagina
@@ -308,11 +310,13 @@ public class ListarCorrectivas implements Serializable{
         
         // datos para filtros
         ResetListasAreas ();
+        areasSeleccionadas = areasEnRegistros.keySet().toArray(new String[areasEnRegistros.size()]);
         
         ResetListasDeteccion();
+        deteccionesSeleccionadas = deteccionesEnRegistros.keySet().toArray(new String[deteccionesEnRegistros.size()]);
         
         ResetListasEstado();
-        
+        estadosSeleccionados = estadosEnRegistros.clone();
         codificacionesEnRegistros = filtros.ExtraerCodificaciones((List<Accion>)(List<?>) ListaCompletaAcciones);
     }
     
