@@ -107,7 +107,7 @@ public class DatosFiltros implements Serializable {
         Map<String, Codificacion> codificaciones = new HashMap<>();
         for(Accion accion:acciones){
             if(!codificaciones.containsKey(String.valueOf(accion.getCodificacionAccion().getId()))){
-                codificaciones.put(String.valueOf(accion.getAreaSectorAccion().getId()), accion.getCodificacionAccion());
+                codificaciones.put(String.valueOf(accion.getCodificacionAccion().getId()), accion.getCodificacionAccion());
             }
         }
         return new TreeMap<>(codificaciones);

@@ -114,7 +114,7 @@ public class ListarCorrectivas implements Serializable{
      */
     public void quitarFiltroPorArea(){
         filtrosAplicados.remove("areas");
-        //ResetListasAreas();
+        ResetListasAreas();
         FiltrarAcciones();
     }
     
@@ -152,7 +152,7 @@ public class ListarCorrectivas implements Serializable{
      */
     public void quitarFiltroPorDeteccion(){        
         filtrosAplicados.remove("detecciones");
-        //ResetListasDeteccion();
+        ResetListasDeteccion();
         FiltrarAcciones();
     }
     
@@ -172,11 +172,49 @@ public class ListarCorrectivas implements Serializable{
     }
     
     //**********************************************************************
+    // Metodos de filtro de Codificacion
+    //**********************************************************************
+    
+    /**
+     * Llena la lista de acciones con las que contengan las codificaciones seleccionadas.
+     * @param accionesAFiltrar
+     * @return
+     */
+    private List<Accion> filtrarPorCodificacion(List<Correctiva> accionesAFiltrar){
+       return filtros.FiltrarAccionesPorCodificacion((List<Accion>)(List<?>) accionesAFiltrar, ObtenerIdsSeleccionados(codificacionesSeleccionadas));
+    }
+    
+    /**
+     * Llena la lista de acciones con todas las acciones.
+     * Carga la pagina nuevamente.
+     */
+    public void quitarFiltroPorCodificacion(){
+        filtrosAplicados.remove("codificaciones");
+        ResetListasCodificacion();
+        FiltrarAcciones();
+    }
+    
+    /**
+     * Llena las listas para filtros con los valores originales.
+     */
+    private void ResetListasCodificacion(){
+        codificacionesEnRegistros = filtros.ExtraerCodificaciones((List<Accion>)(List<?>) ListaCompletaAcciones);
+        codificacionesSeleccionadas = codificacionesEnRegistros.keySet().toArray(new String[codificacionesEnRegistros.size()]);
+    }
+    
+    public void filtrarPorCodificacion(AjaxBehaviorEvent event){
+        if(!filtrosAplicados.contains("codificaciones")){
+            filtrosAplicados.add("codificaciones");
+        }
+        FiltrarAcciones();
+    }
+    
+    //**********************************************************************
     // Metodos de filtro de Estado
     //**********************************************************************
     
     /**
-     * Llena la lista de acciones con las que contengan los estados seleccionadas.
+     * Llena la lista de acciones con las que contengan los estados seleccionados.
      * @param accionesAFiltrar
      * @return
      */
@@ -194,7 +232,7 @@ public class ListarCorrectivas implements Serializable{
      */
     public void quitarFiltroPorEstado(){
         filtrosAplicados.remove("estados");
-        //ResetListasEstado();
+        ResetListasEstado();
         FiltrarAcciones();
     }
     
@@ -244,13 +282,16 @@ public class ListarCorrectivas implements Serializable{
             // actualizar lista de areas disponibles, detecciones, codificaciones y estados
 //            areasEnRegistros = filtros.ExtraerAreas((List<Accion>)(List<?>)accionesFiltradas);
 //            deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>)(List<?>)accionesFiltradas);
+//codificacionesEnRegistros = filtros.ExtraerCodificaciones((List<Accion>)(List<?>) accionesFiltradas);
         }
         
         // Filtro de Areas
         if(filtrosAplicados.contains("areas")){
             accionesFiltradas = (List<Correctiva>)(List<?>)filtrarPorArea(accionesFiltradas);
             // actualizar lista de fechas disponibles, detecciones, codificaciones
-            deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>)(List<?>)accionesFiltradas);
+            deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>)(List<?>)accionesFiltradas);            
+            codificacionesEnRegistros = filtros.ExtraerCodificaciones((List<Accion>)(List<?>) accionesFiltradas);
+            
         }
         
         // Filtro de Detecciones
@@ -258,15 +299,16 @@ public class ListarCorrectivas implements Serializable{
             accionesFiltradas = (List<Correctiva>)(List<?>) filtrarPorDeteccion(accionesFiltradas);
             // actualizar lista de fechas disponibles, areas, codificaciones
             areasEnRegistros = filtros.ExtraerAreas((List<Accion>)(List<?>)accionesFiltradas);
+            codificacionesEnRegistros = filtros.ExtraerCodificaciones((List<Accion>)(List<?>) accionesFiltradas);
         }
         
         // Filtro de Codificaciones
         if(filtrosAplicados.contains("codificaciones")){
             // aplicar filtro de Codificaciones
-            // accionesFiltradas = filtrarPorCodifiacion(accionesAFiltrar);
+            accionesFiltradas = (List<Correctiva>)(List<?>)filtrarPorCodificacion(accionesFiltradas);           
             // actualizar lista de fechas disponibles, areas, detecciones y estados
-//            areasEnRegistros = filtros.ExtraerAreas((List<Accion>)(List<?>)accionesFiltradas);
-//            deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>)(List<?>)accionesFiltradas);
+            areasEnRegistros = filtros.ExtraerAreas((List<Accion>)(List<?>)accionesFiltradas);
+            deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>)(List<?>)accionesFiltradas);
         }
         
         // Filtro de Estados
@@ -275,6 +317,7 @@ public class ListarCorrectivas implements Serializable{
             // actualizar lista de fechas disponibles, detecciones, codificaciones y estados
             areasEnRegistros = filtros.ExtraerAreas((List<Accion>)(List<?>)accionesFiltradas);
             deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>)(List<?>)accionesFiltradas);
+            codificacionesEnRegistros = filtros.ExtraerCodificaciones((List<Accion>)(List<?>) accionesFiltradas);
         }
         
         // Cargar pagina
@@ -317,7 +360,9 @@ public class ListarCorrectivas implements Serializable{
         
         ResetListasEstado();
         estadosSeleccionados = estadosEnRegistros.clone();
-        codificacionesEnRegistros = filtros.ExtraerCodificaciones((List<Accion>)(List<?>) ListaCompletaAcciones);
+        
+        ResetListasCodificacion();
+        codificacionesSeleccionadas = codificacionesEnRegistros.keySet().toArray(new String[codificacionesEnRegistros.size()]);
     }
     
     /**
