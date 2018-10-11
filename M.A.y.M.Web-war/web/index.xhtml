@@ -32,16 +32,11 @@
     <h:body>
         
         <div id="loading-container" class="contenedor-carga" >
-            <div class="carga">
-                <img height="100px" src="#{facesContext.externalContext.requestContextPath}/Resources/Images/loading-wheel.gif"/>
-                <div>Cargando...</div>
-            </div>
-        </div>
-        
-        <div id="loading" class="carga" style="display: none;">
-            <img height="100px" src="#{facesContext.externalContext.requestContextPath}/Resources/Images/loading-wheel.gif"/>
+            <div id="loading" class="carga" style="display: none;">
+                <img height="100px" src="#{facesContext.externalContext.requestContextPath}/Resources/Images/loading-wheel.gif"/>                
+            </div>  
             <div>Cargando...</div>
-        </div>   
+        </div>        
         
         <div style="position: fixed;z-index: 999; width: 100%">
             <ui:include src="header.xhtml"/>

@@ -289,6 +289,7 @@ public class ListarCorrectivas implements Serializable{
         if(filtrosAplicados.contains("areas")){
             accionesFiltradas = (List<Correctiva>)(List<?>)filtrarPorArea(accionesFiltradas);
             // actualizar lista de fechas disponibles, detecciones, codificaciones
+            areasEnRegistros = filtros.ExtraerAreas((List<Accion>)(List<?>)accionesFiltradas);
             deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>)(List<?>)accionesFiltradas);            
             codificacionesEnRegistros = filtros.ExtraerCodificaciones((List<Accion>)(List<?>) accionesFiltradas);
             
@@ -299,6 +300,7 @@ public class ListarCorrectivas implements Serializable{
             accionesFiltradas = (List<Correctiva>)(List<?>) filtrarPorDeteccion(accionesFiltradas);
             // actualizar lista de fechas disponibles, areas, codificaciones
             areasEnRegistros = filtros.ExtraerAreas((List<Accion>)(List<?>)accionesFiltradas);
+             deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>)(List<?>)accionesFiltradas); 
             codificacionesEnRegistros = filtros.ExtraerCodificaciones((List<Accion>)(List<?>) accionesFiltradas);
         }
         
@@ -309,6 +311,7 @@ public class ListarCorrectivas implements Serializable{
             // actualizar lista de fechas disponibles, areas, detecciones y estados
             areasEnRegistros = filtros.ExtraerAreas((List<Accion>)(List<?>)accionesFiltradas);
             deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>)(List<?>)accionesFiltradas);
+            codificacionesEnRegistros = filtros.ExtraerCodificaciones((List<Accion>)(List<?>) accionesFiltradas);
         }
         
         // Filtro de Estados

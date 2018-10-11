@@ -6,9 +6,11 @@ $(window).load(function(){
 });
 function indicador(data){
     if(data.status==='begin'){
+        $("#loading-container").show();
        $("#loading").show();
     }
     if(data.status === 'complete'){
-        $("#loading").hide();
+         $("#loading-container").hide();
+        $("#loading").hide();        
     }
 };
