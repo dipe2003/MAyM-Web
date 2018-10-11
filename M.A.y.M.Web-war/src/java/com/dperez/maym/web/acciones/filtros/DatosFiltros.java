@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -50,13 +51,10 @@ public class DatosFiltros implements Serializable {
      * @return
      */
     public List<Accion> FiltrarAccionesPorArea(List<Accion> acciones, List<Integer> areas){
-        List<Accion> accionesFiltradas = new ArrayList<>();
-        for(Accion accion:acciones){
-            if(areas.contains(accion.getAreaSectorAccion().getId())){
-                accionesFiltradas.add(accion);
-            }
-        }
-        return accionesFiltradas;
+        return  acciones.stream()
+                .filter((accion)-> (areas.contains(accion.getAreaSectorAccion().getId())))
+                .sorted()
+                .collect(Collectors.toList());
     }
     
     //**********************************************************************
@@ -85,13 +83,10 @@ public class DatosFiltros implements Serializable {
      * @return
      */
     public List<Accion> FiltrarAccionesPorDeteccion(List<Accion> acciones, List<Integer> detecciones){
-        List<Accion> accionesFiltradas = new ArrayList<>();
-        for(Accion accion:acciones){
-            if(detecciones.contains(accion.getGeneradaPor().getId())){
-                accionesFiltradas.add(accion);
-            }
-        }
-        return accionesFiltradas;
+        return acciones.stream()
+                .filter((accion) -> (detecciones.contains(accion.getGeneradaPor().getId())))
+                .sorted()
+                .collect(Collectors.toList());
     }
     
     //**********************************************************************
@@ -120,32 +115,26 @@ public class DatosFiltros implements Serializable {
      * @return
      */
     public List<Accion> FiltrarAccionesPorCodificacion(List<Accion> acciones, List<Integer> codificaciones){
-        List<Accion> accionesFiltradas = new ArrayList<>();
-        for(Accion accion:acciones){
-            if(codificaciones.contains(accion.getCodificacionAccion().getId())){
-                accionesFiltradas.add(accion);
-            }
-        }
-        return accionesFiltradas;
+        return acciones.stream()
+                .filter((accion) -> (codificaciones.contains(accion.getCodificacionAccion().getId())))
+                .sorted()
+                .collect(Collectors.toList());
     }
     
     //**********************************************************************
     // Metodos de filtro de Estado
     //**********************************************************************
     
-        /**
+    /**
      * Devuelve una lista de acciones que contengan el mismo Estado
      * @param acciones
      * @param estados
      * @return
      */
     public List<Accion> FiltrarAccionesPorEstado(List<Accion> acciones, List<EnumEstado> estados){
-        List<Accion> accionesFiltradas = new ArrayList<>();
-        for(Accion accion:acciones){
-            if(estados.stream().anyMatch(e->e.equals(accion.getEstadoAccion()))){
-                accionesFiltradas.add(accion);
-            }
-        }
-        return accionesFiltradas;
+        return acciones.stream()
+                .filter((accion) -> (estados.contains(accion.getEstadoAccion())))
+                .sorted()
+                .collect(Collectors.toList());
     }
 }

@@ -150,7 +150,7 @@ public class ListarCorrectivas implements Serializable{
      * Llena la lista de acciones con todas las acciones.
      * Carga la pagina nuevamente.
      */
-    public void quitarFiltroPorDeteccion(){        
+    public void quitarFiltroPorDeteccion(){
         filtrosAplicados.remove("detecciones");
         ResetListasDeteccion();
         FiltrarAcciones();
@@ -181,7 +181,7 @@ public class ListarCorrectivas implements Serializable{
      * @return
      */
     private List<Accion> filtrarPorCodificacion(List<Correctiva> accionesAFiltrar){
-       return filtros.FiltrarAccionesPorCodificacion((List<Accion>)(List<?>) accionesAFiltrar, ObtenerIdsSeleccionados(codificacionesSeleccionadas));
+        return filtros.FiltrarAccionesPorCodificacion((List<Accion>)(List<?>) accionesAFiltrar, ObtenerIdsSeleccionados(codificacionesSeleccionadas));
     }
     
     /**
@@ -268,61 +268,58 @@ public class ListarCorrectivas implements Serializable{
     }
     
     /**
-     * Aplica los filtros uno sobre otro dependiendo de los que ya se encuentren seleccionados.
+     * Aplica los filtros uno sobre otro dependiendo de los que ya se encuentren seleccionados y el orden en que fueron seleccionados.
      * La variable FiltrosAplicados contienen los filtros seleccionados.
      * Sigue el orden predefinido: FECHAS, AREAS, DETECCIONES, CODIFICACIONES, ESTADO.
      *
      */
     private void FiltrarAcciones(){
         List<Correctiva> accionesFiltradas = ListaCompletaAcciones;
-        // Filtro de fechas
-        if(filtrosAplicados.contains("fechas")){
-            // aplicar filtro de fechas
-            // accionesFiltradas = filtrarPorFecha(accionesAFiltrar);
-            // actualizar lista de areas disponibles, detecciones, codificaciones y estados
-//            areasEnRegistros = filtros.ExtraerAreas((List<Accion>)(List<?>)accionesFiltradas);
-//            deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>)(List<?>)accionesFiltradas);
-//codificacionesEnRegistros = filtros.ExtraerCodificaciones((List<Accion>)(List<?>) accionesFiltradas);
-        }
-        
-        // Filtro de Areas
-        if(filtrosAplicados.contains("areas")){
-            accionesFiltradas = (List<Correctiva>)(List<?>)filtrarPorArea(accionesFiltradas);
-            // actualizar lista de fechas disponibles, detecciones, codificaciones
-            areasEnRegistros = filtros.ExtraerAreas((List<Accion>)(List<?>)accionesFiltradas);
-            deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>)(List<?>)accionesFiltradas);            
-            codificacionesEnRegistros = filtros.ExtraerCodificaciones((List<Accion>)(List<?>) accionesFiltradas);
-            
-        }
-        
-        // Filtro de Detecciones
-        if(filtrosAplicados.contains("detecciones")){
-            accionesFiltradas = (List<Correctiva>)(List<?>) filtrarPorDeteccion(accionesFiltradas);
-            // actualizar lista de fechas disponibles, areas, codificaciones
-            areasEnRegistros = filtros.ExtraerAreas((List<Accion>)(List<?>)accionesFiltradas);
-             deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>)(List<?>)accionesFiltradas); 
-            codificacionesEnRegistros = filtros.ExtraerCodificaciones((List<Accion>)(List<?>) accionesFiltradas);
-        }
-        
-        // Filtro de Codificaciones
-        if(filtrosAplicados.contains("codificaciones")){
-            // aplicar filtro de Codificaciones
-            accionesFiltradas = (List<Correctiva>)(List<?>)filtrarPorCodificacion(accionesFiltradas);           
-            // actualizar lista de fechas disponibles, areas, detecciones y estados
-            areasEnRegistros = filtros.ExtraerAreas((List<Accion>)(List<?>)accionesFiltradas);
-            deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>)(List<?>)accionesFiltradas);
-            codificacionesEnRegistros = filtros.ExtraerCodificaciones((List<Accion>)(List<?>) accionesFiltradas);
-        }
-        
-        // Filtro de Estados
-        if(filtrosAplicados.contains("estados")){
-            accionesFiltradas = (List<Correctiva>)(List<?>)filtrarPorEstado(accionesFiltradas);
-            // actualizar lista de fechas disponibles, detecciones, codificaciones y estados
-            areasEnRegistros = filtros.ExtraerAreas((List<Accion>)(List<?>)accionesFiltradas);
-            deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>)(List<?>)accionesFiltradas);
-            codificacionesEnRegistros = filtros.ExtraerCodificaciones((List<Accion>)(List<?>) accionesFiltradas);
-        }
-        
+        for (int i = 0; i < filtrosAplicados.size(); i++) {
+            String filtro = filtrosAplicados.get(i);
+            switch(filtro){
+                case "fechas":
+                    // aplicar filtro de fechas
+                    // accionesFiltradas = filtrarPorFecha(accionesAFiltrar);
+                    // actualizar lista de areas disponibles, detecciones, codificaciones y estados
+//                    areasEnRegistros = filtros.ExtraerAreas((List<Accion>)(List<?>)accionesFiltradas);
+//                    deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>)(List<?>)accionesFiltradas);
+//                    codificacionesEnRegistros = filtros.ExtraerCodificaciones((List<Accion>)(List<?>) accionesFiltradas);
+                    break;
+                    
+                case "areas":
+                    accionesFiltradas = (List<Correctiva>)(List<?>)filtrarPorArea(accionesFiltradas);
+                    // actualizar lista de fechas disponibles, detecciones, codificaciones
+                    deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>)(List<?>)accionesFiltradas);
+                    codificacionesEnRegistros = filtros.ExtraerCodificaciones((List<Accion>)(List<?>) accionesFiltradas);
+                    break;
+                    
+                case "detecciones":
+                    accionesFiltradas = (List<Correctiva>)(List<?>) filtrarPorDeteccion(accionesFiltradas);
+                    // actualizar lista de fechas disponibles, areas, codificaciones
+                    areasEnRegistros = filtros.ExtraerAreas((List<Accion>)(List<?>)accionesFiltradas);
+                    codificacionesEnRegistros = filtros.ExtraerCodificaciones((List<Accion>)(List<?>) accionesFiltradas);
+                    break;
+                    
+                case "codificaciones":
+                    // aplicar filtro de Codificaciones
+                    accionesFiltradas = (List<Correctiva>)(List<?>)filtrarPorCodificacion(accionesFiltradas);
+                    // actualizar lista de fechas disponibles, areas, detecciones y estados
+                    areasEnRegistros = filtros.ExtraerAreas((List<Accion>)(List<?>)accionesFiltradas);
+                    deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>)(List<?>)accionesFiltradas);
+                    break;
+                    
+                case "estados":
+                    accionesFiltradas = (List<Correctiva>)(List<?>)filtrarPorEstado(accionesFiltradas);
+                    // actualizar lista de fechas disponibles, detecciones, codificaciones y estados
+                    areasEnRegistros = filtros.ExtraerAreas((List<Accion>)(List<?>)accionesFiltradas);
+                    deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>)(List<?>)accionesFiltradas);
+                    codificacionesEnRegistros = filtros.ExtraerCodificaciones((List<Accion>)(List<?>) accionesFiltradas);
+                    break;
+                    
+                default: break;
+            }
+        }        
         // Cargar pagina
         cargarPagina(PaginaActual, (List<Accion>)(List<?>)accionesFiltradas);
         CantidadPaginas = calcularCantidadPaginas(accionesFiltradas.size());
