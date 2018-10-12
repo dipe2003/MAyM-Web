@@ -16,8 +16,12 @@ import com.dperez.maymweb.estado.EnumEstado;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +57,12 @@ public class ListarCorrectivas implements Serializable{
     private final DatosFiltros filtros = new DatosFiltros();
     private List<String> filtrosAplicados = new ArrayList<>();
     
+    // Filtros Fecha
+    private Date fechaInicial;
+    private String strFechaInicial;
+    private Date fechaFinal;
+    private String strFechaFinal;
+    
     // Filtros AREA
     private Map<String, Area> areasEnRegistros = new HashMap<>();
     private String[] areasSeleccionadas;
@@ -79,6 +89,24 @@ public class ListarCorrectivas implements Serializable{
     public String[] getDeteccionesSeleccionadas() {return deteccionesSeleccionadas;}
     public EnumEstado[] getEstadosSeleccionados() {return estadosSeleccionados;}
     public String[] getCodificacionesSeleccionadas() {return codificacionesSeleccionadas;}
+    public Date getFechaInicial() {return fechaInicial;}
+    public Date getFechaFinal() {return fechaFinal;}
+    public String getStrFechaInicial(){
+        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
+        if (fechaInicial == null) {
+            return this.strFechaFinal;
+        }else{
+            return fDate.format(fechaInicial);
+        }
+    }
+    public String getStrFechaFinal(){
+        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
+        if (fechaFinal == null) {
+            return this.strFechaFinal;
+        }else{
+            return fDate.format(fechaFinal);
+        }
+    }
     
     // Paginacion
     public static int getMAX_ITEMS() {return MAX_ITEMS;}
@@ -95,6 +123,54 @@ public class ListarCorrectivas implements Serializable{
     public void setDeteccionesSeleccionadas(String[] deteccionesSeleccionadas) {this.deteccionesSeleccionadas = deteccionesSeleccionadas;}
     public void setEstadosSeleccionados(EnumEstado[] estadosSeleccionados) {this.estadosSeleccionados = estadosSeleccionados;}
     public void setCodificacionesSeleccionadas(String[] codificacionesSeleccionadas) {this.codificacionesSeleccionadas = codificacionesSeleccionadas;}
+    public void setFechaInicial(Date fechaInicial) {this.fechaInicial = fechaInicial;}
+    public void setFechaFinal(Date fechaFinal) {this.fechaFinal = fechaFinal;}
+     public void setStrFechaInicial(String strFechaInicial) {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try{
+            cal.setTime(sdf.parse(strFechaInicial));
+        }catch(ParseException ex){}
+        this.strFechaInicial = strFechaInicial;
+        this.fechaInicial = cal.getTime();
+    }
+      public void setStrFechaFinal(String strFechaFinal) {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try{
+            cal.setTime(sdf.parse(strFechaFinal));
+        }catch(ParseException ex){}
+        this.strFechaFinal = strFechaFinal;
+        this.fechaFinal = cal.getTime();
+    }
+    
+    //**********************************************************************
+    // Metodos de filtro de Fechas
+    //**********************************************************************
+    
+    /**
+     * Llena la lista de acciones con las que contengan las areas seleccionadas.
+     * @param accionesAFiltrar
+     * @return
+     */
+    private List<Accion> filtrarPorFechas(List<Correctiva> accionesAFiltrar){
+        return  filtros.FiltrarAccionesPorFechas((List<Accion>)(List<?>) accionesAFiltrar, this.getFechaInicial(), this.getFechaFinal());
+    }
+    
+    /**
+     * Llena las listas para filtros con los valores originales.
+     */
+    private void ResetFechasAcciones(){
+        this.setFechaInicial(filtros.ExtraerFechas((List<Accion>)(List<?>) ListaCompletaAcciones)[0]);
+        this.setFechaFinal(filtros.ExtraerFechas((List<Accion>)(List<?>) ListaCompletaAcciones)[1]);
+    }
+    
+    public void filtrarPorFecha(AjaxBehaviorEvent event){
+        if(!filtrosAplicados.contains("fechas")){
+            filtrosAplicados.add("fechas");
+        }
+        FiltrarAcciones();
+    }
     
     //**********************************************************************
     // Metodos de filtro de Areas
@@ -280,11 +356,11 @@ public class ListarCorrectivas implements Serializable{
             switch(filtro){
                 case "fechas":
                     // aplicar filtro de fechas
-                    // accionesFiltradas = filtrarPorFecha(accionesAFiltrar);
+                    accionesFiltradas = (List<Correctiva>)(List<?>) filtrarPorFechas(accionesFiltradas);
                     // actualizar lista de areas disponibles, detecciones, codificaciones y estados
-//                    areasEnRegistros = filtros.ExtraerAreas((List<Accion>)(List<?>)accionesFiltradas);
-//                    deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>)(List<?>)accionesFiltradas);
-//                    codificacionesEnRegistros = filtros.ExtraerCodificaciones((List<Accion>)(List<?>) accionesFiltradas);
+                    areasEnRegistros = filtros.ExtraerAreas((List<Accion>)(List<?>)accionesFiltradas);
+                    deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>)(List<?>)accionesFiltradas);
+                    codificacionesEnRegistros = filtros.ExtraerCodificaciones((List<Accion>)(List<?>) accionesFiltradas);
                     break;
                     
                 case "areas":
@@ -319,7 +395,7 @@ public class ListarCorrectivas implements Serializable{
                     
                 default: break;
             }
-        }        
+        }
         // Cargar pagina
         cargarPagina(PaginaActual, (List<Accion>)(List<?>)accionesFiltradas);
         CantidadPaginas = calcularCantidadPaginas(accionesFiltradas.size());
@@ -352,6 +428,8 @@ public class ListarCorrectivas implements Serializable{
         cargarPagina(PaginaActual, (List<Accion>)(List<?>)ListaCompletaAcciones);
         
         // datos para filtros
+        ResetFechasAcciones();        
+        
         ResetListasAreas ();
         areasSeleccionadas = areasEnRegistros.keySet().toArray(new String[areasEnRegistros.size()]);
         

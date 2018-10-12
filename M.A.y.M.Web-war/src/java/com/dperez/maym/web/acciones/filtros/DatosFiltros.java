@@ -11,7 +11,8 @@ import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.estado.EnumEstado;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,39 @@ import java.util.stream.Collectors;
  */
 
 public class DatosFiltros implements Serializable {
+    
+    //**********************************************************************
+    // Metodos de filtro de Fechas
+    //**********************************************************************
+    
+    /**
+     *
+     * @param acciones
+     * @return Date[0] fechaDesde , Date[1] fechaHasta
+     */
+    public Date[] ExtraerFechas(List<Accion> acciones){
+        Date[] fechas = new Date[2];
+        fechas[0]  = acciones.stream()
+                .sorted().max(Comparator.naturalOrder()).get().getFechaDeteccion();
+        fechas[1]  = acciones.stream()
+                .sorted()
+                .min(Comparator.naturalOrder()).get().getFechaDeteccion();
+        return fechas;
+    }
+    
+    /**
+     * Devuelve una lista de acciones que fueron detectadas en el rango de fechas.
+     * @param acciones
+     * @param fechaDesde
+     * @param fechaHasta
+     * @return
+     */
+    public List<Accion> FiltrarAccionesPorFechas(List<Accion> acciones, Date fechaDesde, Date fechaHasta){
+        return  acciones.stream()
+                .filter((accion)-> (accion.getFechaDeteccion().after(fechaDesde) && accion.getFechaDeteccion().before(fechaHasta)))
+                .sorted()
+                .collect(Collectors.toList());
+    }
     
     //**********************************************************************
     // Metodos de filtro de Areas
