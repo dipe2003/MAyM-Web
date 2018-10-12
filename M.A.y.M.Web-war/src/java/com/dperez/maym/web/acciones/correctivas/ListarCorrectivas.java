@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -94,7 +95,7 @@ public class ListarCorrectivas implements Serializable{
     public String getStrFechaInicial(){
         SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
         if (fechaInicial == null) {
-            return this.strFechaFinal;
+            return this.strFechaInicial;
         }else{
             return fDate.format(fechaInicial);
         }
@@ -295,11 +296,7 @@ public class ListarCorrectivas implements Serializable{
      * @return
      */
     private List<Accion> filtrarPorEstado(List<Correctiva> accionesAFiltrar){
-        List<EnumEstado> estados = new ArrayList<>();
-        for (int i = 0; i < estadosSeleccionados.length; i++) {
-            estados.add(estadosSeleccionados[i]);
-        }
-        return filtros.FiltrarAccionesPorEstado((List<Accion>)(List<?>) accionesAFiltrar, estados);
+        return filtros.FiltrarAccionesPorEstado((List<Accion>)(List<?>) accionesAFiltrar, Arrays.asList(estadosSeleccionados));
     }
     
     /**
@@ -316,6 +313,7 @@ public class ListarCorrectivas implements Serializable{
      * Llena las listas para filtros con los valores originales.
      */
     private void ResetListasEstado(){
+        estadosEnRegistros = EnumEstado.values();
         estadosSeleccionados = estadosEnRegistros;
     }
     
@@ -431,16 +429,12 @@ public class ListarCorrectivas implements Serializable{
         ResetFechasAcciones();        
         
         ResetListasAreas ();
-        areasSeleccionadas = areasEnRegistros.keySet().toArray(new String[areasEnRegistros.size()]);
         
         ResetListasDeteccion();
-        deteccionesSeleccionadas = deteccionesEnRegistros.keySet().toArray(new String[deteccionesEnRegistros.size()]);
         
         ResetListasEstado();
-        estadosSeleccionados = estadosEnRegistros.clone();
         
         ResetListasCodificacion();
-        codificacionesSeleccionadas = codificacionesEnRegistros.keySet().toArray(new String[codificacionesEnRegistros.size()]);
     }
     
     /**

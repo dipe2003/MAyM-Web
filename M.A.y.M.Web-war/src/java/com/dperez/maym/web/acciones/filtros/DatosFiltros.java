@@ -170,5 +170,5 @@ public class DatosFiltros implements Serializable {
                 .filter((accion) -> (estados.contains(accion.getEstadoAccion())))
                 .sorted()
                 .collect(Collectors.toList());
-    }
+    }    
 }
