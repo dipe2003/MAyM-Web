@@ -203,10 +203,7 @@ public class Correctiva extends Accion implements Serializable {
         return (EstanImplementadasActividades(MedidasCorrectivas) && EstanImplementadasActividades(MedidasPreventivas)) == true;
     }
 
-    @Override
-    public int compareTo(Accion OtraAccion) {
-        return OtraAccion.getFechaDeteccion().compareTo(this.FechaDeteccion);
-    }
+
 
     @Override
     public Actividad GetActividad(int IdActividad) {

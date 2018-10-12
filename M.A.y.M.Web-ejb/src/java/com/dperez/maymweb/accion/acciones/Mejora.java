@@ -108,11 +108,6 @@ public class Mejora extends Accion implements Serializable {
         }
         return implementada;
     }
-    
-    @Override
-    public int compareTo(Accion OtraAccion) {        
-        return OtraAccion.getFechaDeteccion().compareTo(this.FechaDeteccion);
-    }
 
     @Override
     public Actividad GetActividad(int IdActividad) {

@@ -235,6 +235,10 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
         return ComprobacionEficacia != null && ComprobacionEficacia.getFechaComprobacion() != null;
     }
     
+    @Override
+    public int compareTo(Accion OtraAccion) {
+        return OtraAccion.getFechaDeteccion().compareTo(this.FechaDeteccion);
+    }
     /***
      * Chequea las Medidas y cambia el estado de la accion de acuerdo a su implementacion.
      */
