@@ -21,32 +21,34 @@
                                         <tbody style="font-size: 11px">
                                             <tr>
                                                 <td>
-                                                    <table>                                                        
-                                                        <thead>
+                                                    <table>
+                                                        <tbody>    
                                                             <tr>
                                                                 <td>
                                                                     Desde:
-                                                                </td>
-                                                                <td>
-                                                                    Hasta:
-                                                                </td>
+                                                                </td>                                                                
                                                             </tr>
-                                                        </thead>
-                                                        <tbody>                                                                
                                                             <tr>
                                                                 <td>  
                                                                     <h:panelGroup id="drop-filtro-fecha-inicial">
                                                                         <h:inputText id="fecha_inicial" class="form-control calendario" value="#{listarCorrectivas.strFechaInicial}" >
                                                                             <f:ajax execute="@this" event="change" onevent="indicador" listener="#{listarCorrectivas.filtrarPorFecha(event)}" 
-                                                                                    render="form_tabla_acciones drop-filtro-deteccion drop-filtro-codificacion drop-filtro-estado"/>
+                                                                                    render="form_tabla_acciones drop-filtro-areas drop-filtro-deteccion drop-filtro-codificacion drop-filtro-estado"/>
                                                                         </h:inputText>
                                                                     </h:panelGroup>
                                                                 </td>
+                                                            </tr>                                                            
+                                                            <tr>
+                                                                <td>
+                                                                    Hasta:
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
                                                                 <td>
                                                                     <h:panelGroup id="drop-filtro-fecha-final">
                                                                         <h:inputText id="fecha_final" class="form-control calendario" value="#{listarCorrectivas.strFechaFinal}" >
-                                                                            <f:ajax execute="@this" event="change" onevent="indicador" listener="#{listarCorrectivas.filtrarPorFecha(event)}" 
-                                                                                    render="form_tabla_acciones drop-filtro-deteccion drop-filtro-codificacion drop-filtro-estado"/>
+                                                                            <f:ajax execute="@this" event="valueChange" onevent="indicador" listener="#{listarCorrectivas.filtrarPorFecha(event)}" 
+                                                                                    render="form_tabla_acciones drop-filtro-areas drop-filtro-deteccion drop-filtro-codificacion drop-filtro-estado"/>
                                                                         </h:inputText>
                                                                     </h:panelGroup>
                                                                 </td>
@@ -63,7 +65,7 @@
                                                             <h:selectManyListbox value="#{listarCorrectivas.areasSeleccionadas}" style="height:100px" >
                                                                 <c:forEach var="entry" items="#{listarCorrectivas.areasEnRegistros}" >
                                                                     <f:selectItem itemLabel="#{entry.value.nombre}" itemValue="#{entry.key}" />
-                                                                    <f:ajax execute="@this" event="change" onevent="indicador" listener="#{listarCorrectivas.filtrarPorArea(event)}" 
+                                                                    <f:ajax execute="@this" event="valueChange" onevent="indicador" listener="#{listarCorrectivas.filtrarPorArea(event)}" 
                                                                             render="form_tabla_acciones drop-filtro-fecha-inicial drop-filtro-fecha-final drop-filtro-deteccion drop-filtro-codificacion drop-filtro-estado"/>
                                                                 </c:forEach>
                                                             </h:selectManyListbox>
