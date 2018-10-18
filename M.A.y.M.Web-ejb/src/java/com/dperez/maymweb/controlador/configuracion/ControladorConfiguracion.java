@@ -122,7 +122,7 @@ public class ControladorConfiguracion {
         }
         return mUsuario.ActualizarUsuario(usuario);
     }
-        
+    
     /**
      * Comprueba la validez del password ingresado con el correspondiente del usuario en la base de datos.
      * @param IdUsuario
@@ -179,7 +179,7 @@ public class ControladorConfiguracion {
             return null;
         }
     }
-        
+    
     /**
      * Elimina el usuario indicado por su id.
      * Si el usuario esta relacionado con comprobaciones o actividades no se elimina.
@@ -270,30 +270,26 @@ public class ControladorConfiguracion {
     
     /**
      * Comprueba si el nombre especificado para el area ya existe en la base de datos.
-     * Se ignoar las mayusculas y minusculas.
+     * Se ignoan las mayusculas y minusculas.
      * @param NombreArea
      * @param IdArea
      * @return <b>True</b> Si existe. <b>False</b> si no existe.
      */
     private boolean ExisteNombreArea(int IdArea, String NombreArea){
         List<Area> areas = mArea.ListarAreas();
-        for(Area area: areas){
-            if(area.getNombre().equalsIgnoreCase(NombreArea) && area.getId()!= IdArea) return true;
-        }
-        return false;
+        return areas.stream()
+                .anyMatch(area->area.getNombre().equalsIgnoreCase(NombreArea) && area.getId()!= IdArea);
     }
     /**
      * Comprueba si el nombre especificado para el area ya existe en la base de datos.
-     * Se ignoar las mayusculas y minusculas.
+     * Se ignoan las mayusculas y minusculas.
      * @param NombreArea
      * @return <b>True</b> Si existe. <b>False</b> si no existe.
      */
     private boolean ExisteNombreArea(String NombreArea){
         List<Area> areas = mArea.ListarAreas();
-        for(Area area: areas){
-            if(area.getNombre().equalsIgnoreCase(NombreArea)) return true;
-        }
-        return false;
+        return areas.stream()
+                .anyMatch(area->area.getNombre().equalsIgnoreCase(NombreArea));
     }
     
     /**
@@ -389,10 +385,8 @@ public class ControladorConfiguracion {
      */
     private boolean ExisteNombreCodificacion(int IdCodificacion, String NombreCodificacion){
         List<Codificacion> codificaciones = mCodificacion.ListarCodificaciones();
-        for(Codificacion cod: codificaciones){
-            if(cod.getNombre().equalsIgnoreCase(NombreCodificacion) && cod.getId()!= IdCodificacion) return true;
-        }
-        return false;
+        return codificaciones.stream()
+                .anyMatch(codificacion->codificacion.getNombre().equalsIgnoreCase(NombreCodificacion) && codificacion.getId()!=IdCodificacion);
     }
     /**
      * Comprueba si el nombre especificado para la codificacion ya existe en la base de datos.
@@ -402,10 +396,8 @@ public class ControladorConfiguracion {
      */
     private boolean ExisteNombreCodificacion(String NombreCodificacion){
         List<Codificacion> codificaciones = mCodificacion.ListarCodificaciones();
-        for(Codificacion cod: codificaciones){
-            if(cod.getNombre().equalsIgnoreCase(NombreCodificacion)) return true;
-        }
-        return false;
+        return codificaciones.stream()
+                .anyMatch(codificacion->codificacion.getNombre().equalsIgnoreCase(NombreCodificacion));
     }
     
     /**
@@ -467,12 +459,12 @@ public class ControladorConfiguracion {
     public int EditarDeteccion(int IdDteccion, String NombreDeteccion, EnumTipoDeteccion TipoDeteccion){
         if(!ExisteNombreDeteccion(IdDteccion, NombreDeteccion)){
             Deteccion deteccion = mDeteccion.GetDeteccion(IdDteccion);
-// comprobar si se cambia el tipo de deteccion para 'ahorrar' llamada a la base de datos.
-if(!deteccion.getTipo().equals(TipoDeteccion)){
-    deteccion.setTipo(TipoDeteccion);
-}
-deteccion.setNombre(NombreDeteccion);
-return mDeteccion.ActualizarDeteccion(deteccion);
+            // comprobar si se cambia el tipo de deteccion para 'ahorrar' llamada a la base de datos.
+            if(!deteccion.getTipo().equals(TipoDeteccion)){
+                deteccion.setTipo(TipoDeteccion);
+            }
+            deteccion.setNombre(NombreDeteccion);
+            return mDeteccion.ActualizarDeteccion(deteccion);
         }
         return -1;
     }
@@ -500,10 +492,8 @@ return mDeteccion.ActualizarDeteccion(deteccion);
      */
     private boolean ExisteNombreDeteccion(int IdDeteccion, String NombreDeteccion){
         List<Deteccion> detecciones = mDeteccion.ListarDetecciones();
-        for(Deteccion det: detecciones){
-            if(det.getNombre().equalsIgnoreCase(NombreDeteccion) && det.getId()!= IdDeteccion) return true;
-        }
-        return false;
+        return detecciones.stream()
+                .anyMatch(deteccion -> deteccion.getNombre().equalsIgnoreCase(NombreDeteccion) && deteccion.getId()!=IdDeteccion);
     }
     /**
      * Comprueba si el nombre especificado para la deteccion ya existe en la base de datos.
@@ -513,10 +503,8 @@ return mDeteccion.ActualizarDeteccion(deteccion);
      */
     private boolean ExisteNombreDeteccion(String NombreDeteccion){
         List<Deteccion> detecciones = mDeteccion.ListarDetecciones();
-        for(Deteccion det: detecciones){
-            if(det.getNombre().equalsIgnoreCase(NombreDeteccion)) return true;
-        }
-        return false;
+        return detecciones.stream()
+                .anyMatch(deteccion -> deteccion.getNombre().equalsIgnoreCase(NombreDeteccion));
     }
     
     /*
