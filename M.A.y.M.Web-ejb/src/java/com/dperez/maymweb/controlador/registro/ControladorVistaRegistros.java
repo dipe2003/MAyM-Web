@@ -23,6 +23,7 @@ import com.dperez.maymweb.usuario.ManejadorUsuario;
 import com.dperez.maymweb.usuario.Usuario;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -62,11 +63,9 @@ public class ControladorVistaRegistros {
         List<Accion> acciones;
         acciones = mAccion.ListarAcciones();
         if(EstadoAccion!=null){
-            Iterator it = acciones.iterator();
-            while(it.hasNext()){
-                if(((Accion)it.next()).getEstadoAccion() != EstadoAccion)
-                    it.remove();
-            }
+            acciones = acciones.stream()
+                    .filter(accion -> accion.getEstadoAccion() == EstadoAccion)
+                    .collect(Collectors.toList());
         }
         return acciones;
     }
@@ -83,19 +82,14 @@ public class ControladorVistaRegistros {
         List<Accion> acciones;
         acciones = mAccion.ListarAcciones();
         if(EstadoAccion!=null && TipoAccion !=null){
-            Iterator it = acciones.iterator();
-            while(it.hasNext()){
-                if(((Accion)it.next()).getEstadoAccion() != EstadoAccion && !((Accion)it.next()).getClass().getName().equals(TipoAccion.toString()))
-                    it.remove();
-            }
+            acciones = acciones.stream()
+                    .filter(accion -> accion.getEstadoAccion() == EstadoAccion && accion.getClass().getName().equals(TipoAccion.toString()))
+                    .collect(Collectors.toList());
         }else{
             if(EstadoAccion == null && TipoAccion != null){
-                Iterator it = acciones.iterator();
-                while(it.hasNext()){
-                    Accion accion = (Accion)it.next();
-                    if(!accion.getClass().getSimpleName().equalsIgnoreCase(TipoAccion.toString()))
-                        it.remove();
-                }
+                acciones = acciones.stream()
+                        .filter(accion -> accion.getClass().getSimpleName().equalsIgnoreCase(TipoAccion.toString()))
+                        .collect(Collectors.toList());
             }
         }
         return acciones;
@@ -105,7 +99,7 @@ public class ControladorVistaRegistros {
     /**
      * Devuelve la accion indicada por su id
      * @param IdAccion
-     * @return 
+     * @return
      */
     public Accion GetAccion(int IdAccion){
         return mAccion.GetAccion(IdAccion);
@@ -119,7 +113,7 @@ public class ControladorVistaRegistros {
     public Usuario GetUsuario(int IdUsuario){
         return mUsuario.GetUsuario(IdUsuario);
     }
-        
+    
     /**
      * Devuelve los usuarios de la empresa especificada segun su fecha de baja.
      * @param Vigente True: si no fueron dados de baja (FechaBaja == null).
@@ -129,19 +123,13 @@ public class ControladorVistaRegistros {
     public List<Usuario> GetUsuariosEmpresa(boolean Vigente, int IdEmpresa){
         List<Usuario> lstUsuarios = mUsuario.ListarUsuarios();
         if(IdEmpresa != -1){
-            Iterator it = lstUsuarios.iterator();
-            while(it.hasNext()){
-                Usuario usr = (Usuario) it.next();
-                if(usr.getEmpresaUsuario().getId() != IdEmpresa){
-                    it.remove();
-                }else{
-                    if(Vigente){
-                        if(usr.getFechaBaja() != null){
-                            it.remove();
-                        }
-                    }
-                }
-            }
+            lstUsuarios = lstUsuarios.stream()
+                    .filter(usuario -> usuario.getEmpresaUsuario().getId() == IdEmpresa && usuario.IsVigente()==Vigente)
+                    .collect(Collectors.toList());
+        }else{
+            lstUsuarios = lstUsuarios.stream()
+                    .filter(usuario -> usuario.IsVigente()==Vigente)
+                    .collect(Collectors.toList());
         }
         return lstUsuarios;
     }
@@ -162,13 +150,9 @@ public class ControladorVistaRegistros {
     public List<Codificacion> GetCodificaciones(int IdEmpresa){
         List<Codificacion> lstCodificaciones = mCodificaciones.ListarCodificaciones();
         if(IdEmpresa != -1){
-            Iterator<Codificacion> it = lstCodificaciones.iterator();
-            while(it.hasNext()){
-                Codificacion cod = it.next();
-                if(!cod.contieneEmpresa(IdEmpresa)){
-                    it.remove();
-                }
-            }
+            lstCodificaciones = lstCodificaciones.stream()
+                    .filter(codificacion -> codificacion.contieneEmpresa(IdEmpresa))
+                    .collect(Collectors.toList());
         }
         return lstCodificaciones;
     }
@@ -181,13 +165,9 @@ public class ControladorVistaRegistros {
     public List<Area> GetAreasEmpresa(int IdEmpresa){
         List<Area> lstAreas = mArea.ListarAreas();
         if(IdEmpresa != -1){
-            Iterator<Area> it = lstAreas.iterator();
-            while(it.hasNext()){
-                Area area = it.next();
-                if(!area.contieneEmpresa(IdEmpresa)){
-                    it.remove();
-                }
-            }
+            lstAreas = lstAreas.stream()
+                    .filter(area->area.contieneEmpresa(IdEmpresa))
+                    .collect(Collectors.toList());
         }
         return lstAreas;
     }
@@ -199,11 +179,9 @@ public class ControladorVistaRegistros {
      */
     public List<Usuario> ListarUsuarios(int IdEmpresa){
         List<Usuario> usuarios = mUsuario.ListarUsuarios();
-        Iterator<Usuario> it = usuarios.iterator();
-        while(it.hasNext()){
-            Usuario usuario = it.next();
-            if(usuario.getEmpresaUsuario().getId()!= IdEmpresa) it.remove();
-        }
+        usuarios = usuarios.stream()
+                .filter(usuario->usuario.getEmpresaUsuario().getId() == IdEmpresa)
+                .collect(Collectors.toList());
         return usuarios;
     }
     
@@ -236,18 +214,14 @@ public class ControladorVistaRegistros {
     /**
      * Lista todas las fortalezas registradas
      * @param IdEmpresa -1 para todas las empresas
-     * @return 
+     * @return
      */
     public List<Fortaleza> ListarFortalezas(int IdEmpresa){
         List<Fortaleza> lstFortalezas = mFortaleza.ListarFortalezas();
         if(IdEmpresa != -1){
-            Iterator<Fortaleza> it = lstFortalezas.iterator();
-            while(it.hasNext()){
-                Fortaleza fortaleza = it.next();
-                if(!(fortaleza.getEmpresaFortaleza().getId() == IdEmpresa)){
-                    it.remove();
-                }
-            }
+            lstFortalezas = lstFortalezas.stream()
+                    .filter(fortaleza->fortaleza.getEmpresaFortaleza().getId() == IdEmpresa)
+                    .collect(Collectors.toList());
         }
         return lstFortalezas;
     }

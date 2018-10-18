@@ -153,10 +153,11 @@ public class ControladorEdicionRegistro {
         Accion accion = mAccion.GetAccion(IdAccionCorrectiva);
         int IdProducto =0;
         List<Producto> productos = ((Correctiva)accion).getProductosAfectados();
-        for(Producto producto: productos){
-            if(producto.getNombre().equalsIgnoreCase(NombreProducto)) IdProducto=producto.getId();
-        }
-        ((Correctiva)accion).removeProducoAfectado(IdProducto);
+        IdProducto = productos.stream()
+                .filter(producto -> producto.getNombre().equalsIgnoreCase(NombreProducto))
+                .findFirst()
+                .get().getId();
+        ((Correctiva)accion).removeProductoAfectado(IdProducto);
         int res = mAccion.ActualizarAccion(accion);
         if(res!=-1){
             Producto producto = mProducto.GetProducto(IdProducto);

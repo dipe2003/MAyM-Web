@@ -155,7 +155,7 @@ public class Correctiva extends Accion implements Serializable {
         }
     }
 
-    public void removeProducoAfectado(int IdProductoAfectado) {
+    public void removeProductoAfectado(int IdProductoAfectado) {
         Iterator<Producto> it = this.ProductosAfectados.iterator();
         while (it.hasNext()) {
             Producto p = it.next();

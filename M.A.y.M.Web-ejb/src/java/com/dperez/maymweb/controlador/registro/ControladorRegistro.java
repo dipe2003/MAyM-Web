@@ -35,7 +35,6 @@ import com.dperez.maymweb.usuario.Usuario;
 import java.security.InvalidParameterException;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -103,11 +102,12 @@ public class ControladorRegistro {
             accion.setGeneradaPor(deteccion);
             accion.setEmpresaAccion(empresa);
             // codificacion
-            List<Codificacion> cods = mCodificacion.ListarCodificaciones();
+            List<Codificacion> codificaciones = mCodificacion.ListarCodificaciones();
             int existe = 0;
-            for(Codificacion cod: cods){
-                if(cod.getNombre().equalsIgnoreCase("Sin Codificar")) existe = cod.getId();
-            }
+            existe = codificaciones.stream()
+                    .filter(codificacion -> codificacion.getNombre().equalsIgnoreCase("Sin Codificar"))
+                    .findFirst()
+                    .get().getId();
             if(existe==0){
                 Codificacion codificacion = new Codificacion("Sin Codificar", "No se ha asignado codificacion aun.");
                 codificacion.setId(mCodificacion.CrearCodificacion(codificacion));

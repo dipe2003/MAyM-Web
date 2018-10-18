@@ -232,6 +232,14 @@ public class Usuario implements Serializable, Comparable<Usuario> {
             return this.Nombre + " " + this.Apellido;
         }
         
+        /**
+         * Comprueba si el usuario esta vigente.
+         * @return True: el usuario esta vigente, de lo contrario retorna False.
+         */
+        public boolean IsVigente(){
+            return this.FechaBaja == null;
+        }
+        
         @Override
         public int compareTo(Usuario OtroUsuario) {
             return this.Apellido.compareTo(OtroUsuario.Apellido);

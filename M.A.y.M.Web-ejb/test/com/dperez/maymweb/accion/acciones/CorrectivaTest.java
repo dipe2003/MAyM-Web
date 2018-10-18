@@ -206,7 +206,7 @@ public class CorrectivaTest {
     }
     
     /**
-     * Test of removeProducoAfectado method, of class Correctiva.
+     * Test of removeProductoAfectado method, of class Correctiva.
      */
     @Test
     public void testRemoveProducoAfectado() {
@@ -215,7 +215,7 @@ public class CorrectivaTest {
         int IdProductoAfectado = 1;
         Producto prodAfectado = instance.addProductoAfectado("nombre", "datos");
         prodAfectado.setId(IdProductoAfectado);
-        instance.removeProducoAfectado(IdProductoAfectado);
+        instance.removeProductoAfectado(IdProductoAfectado);
     }
     
 }
