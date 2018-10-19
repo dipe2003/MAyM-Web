@@ -203,7 +203,6 @@ public class Correctiva extends Accion implements Serializable {
         return (EstanImplementadasActividades(MedidasCorrectivas) && EstanImplementadasActividades(MedidasPreventivas)) == true;
     }
 
-
     @Override
     public Actividad GetActividad(int IdActividad) {
         Actividad actividad = MedidasCorrectivas.stream()

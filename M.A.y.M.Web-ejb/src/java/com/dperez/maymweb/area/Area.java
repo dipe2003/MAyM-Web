@@ -192,12 +192,8 @@ public class Area implements Serializable, Comparable<Area> {
      * @return Retorna True si la lista contiene a la empresa, de lo contrario false.
      */
     public boolean contieneEmpresa(int IdEmpresa){
-        for(Empresa empresa: this.EmpresasArea){
-            if(empresa.getId() == IdEmpresa){
-                return true;
-            }
-        }
-        return false;
+        return EmpresasArea.stream()
+                .anyMatch(empresa->empresa.getId() == IdEmpresa);
     }
     
     /*

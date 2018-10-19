@@ -185,63 +185,59 @@ public class Usuario implements Serializable, Comparable<Usuario> {
      * @return Actividad, null si no se encuentra.
      */
     public Actividad getActividad(int IdActividad){
-        Iterator<Actividad> it = this.MedidasResponsableImplementacion.iterator() ;
-        while(it.hasNext()){
-            Actividad m = it.next();
-            if(m.getIdActividad()== IdActividad){
-                return m;
-            }
-        }
-        return null;
+        return MedidasResponsableImplementacion.stream()
+                .filter(actividad->actividad.getIdActividad() == IdActividad)
+                .findFirst()
+                .orElse(null);
     }
-        
-        public void addComprobacion(Comprobacion comprobacion){
-            if(comprobacion != null){
-                this.Comprobaciones.add(comprobacion);
-                if(comprobacion.getResponsable() != null && !comprobacion.getResponsable().equals(this))
-                    comprobacion.setResponsable(this);
+    
+    public void addComprobacion(Comprobacion comprobacion){
+        if(comprobacion != null){
+            this.Comprobaciones.add(comprobacion);
+            if(comprobacion.getResponsable() != null && !comprobacion.getResponsable().equals(this))
+                comprobacion.setResponsable(this);
+        }
+    }
+    
+    public void removeComprobacion(Comprobacion comprobacion){
+        if(comprobacion != null){
+            this.Comprobaciones.remove(comprobacion);
+            if(comprobacion.getResponsable() != null && comprobacion.getResponsable().equals(this))
+                comprobacion.setResponsable(null);
+        }
+    }
+    
+    public void removeComprobacion(int IdComprobacion){
+        Iterator<Comprobacion> it = this.Comprobaciones.iterator();
+        while(it.hasNext()){
+            Comprobacion c = it.next();
+            if(c.getId() == IdComprobacion){
+                it.remove();
+                if(c.getResponsable() != null && c.getResponsable().equals(this))
+                    c.setResponsable(null);
             }
         }
-        
-        public void removeComprobacion(Comprobacion comprobacion){
-            if(comprobacion != null){
-                this.Comprobaciones.remove(comprobacion);
-                if(comprobacion.getResponsable() != null && comprobacion.getResponsable().equals(this))
-                    comprobacion.setResponsable(null);
-            }
-        }
-        
-        public void removeComprobacion(int IdComprobacion){
-            Iterator<Comprobacion> it = this.Comprobaciones.iterator();
-            while(it.hasNext()){
-                Comprobacion c = it.next();
-                if(c.getId() == IdComprobacion){
-                    it.remove();
-                    if(c.getResponsable() != null && c.getResponsable().equals(this))
-                        c.setResponsable(null);
-                }
-            }
-        }
-        
-        // Metodos
-        /***
-         * Devuelve el nombre completo del Usuario (Nombre+Apellido)
-         * @return
-         */
-        public String GetNombreCompleto(){
-            return this.Nombre + " " + this.Apellido;
-        }
-        
-        /**
-         * Comprueba si el usuario esta vigente.
-         * @return True: el usuario esta vigente, de lo contrario retorna False.
-         */
-        public boolean IsVigente(){
-            return this.FechaBaja == null;
-        }
-        
-        @Override
-        public int compareTo(Usuario OtroUsuario) {
-            return this.Apellido.compareTo(OtroUsuario.Apellido);
-        }
+    }
+    
+    // Metodos
+    /***
+     * Devuelve el nombre completo del Usuario (Nombre+Apellido)
+     * @return
+     */
+    public String GetNombreCompleto(){
+        return this.Nombre + " " + this.Apellido;
+    }
+    
+    /**
+     * Comprueba si el usuario esta vigente.
+     * @return True: el usuario esta vigente, de lo contrario retorna False.
+     */
+    public boolean IsVigente(){
+        return this.FechaBaja == null;
+    }
+    
+    @Override
+    public int compareTo(Usuario OtroUsuario) {
+        return this.Apellido.compareTo(OtroUsuario.Apellido);
+    }
 }

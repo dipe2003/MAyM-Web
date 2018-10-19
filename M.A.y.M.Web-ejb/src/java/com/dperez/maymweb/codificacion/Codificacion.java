@@ -123,12 +123,8 @@ public class Codificacion implements Serializable, Comparable<Codificacion>{
      * @return Retorna True si la lista contiene a la empresa, de lo contrario false.
      */
     public boolean contieneEmpresa(int IdEmpresa){
-        for(Empresa empresa: this.EmpresasCodificacion){
-            if(empresa.getId() == IdEmpresa){
-                return true;
-            }
-        }
-        return false;
+        return EmpresasCodificacion.stream()
+                .anyMatch(empresa->empresa.getId() == IdEmpresa);
     }
 
     @Override
