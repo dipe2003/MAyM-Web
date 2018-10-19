@@ -201,14 +201,8 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
      * @return
      */
     protected boolean EstanImplementadasActividades(List<Actividad> actividades){
-        boolean implementada = true;
-        for(Actividad medida: actividades){
-            if(!medida.EstaImplementada()){
-                implementada = false;
-                break;
-            }
-        }
-        return implementada;
+        return actividades.stream()
+                .allMatch(actividad->actividad.EstaImplementada());
     }
     
     /**
@@ -217,14 +211,8 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
      * @return 
      */
     protected boolean ExisteAlgunaActividadImplementada(List<Actividad> actividades){
-        boolean implementada = false;
-        for(Actividad medida: actividades){
-            if(medida.EstaImplementada()){
-                implementada = true;
-                break;
-            }
-        }
-        return implementada;
+        return actividades.stream()
+                .anyMatch(actividad->actividad.EstaImplementada());
     }
     
     public boolean SeComproboImplementacion(){

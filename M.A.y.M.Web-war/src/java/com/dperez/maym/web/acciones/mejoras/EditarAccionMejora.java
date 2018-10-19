@@ -61,7 +61,7 @@ public class EditarAccionMejora implements Serializable {
     private CargarArchivo cArchivo;
     @Inject
     private ProgramadorEventos pEventos;
-        
+    
     private int IdAccionSeleccionada;
     private Accion AccionSeleccionada;
     private Empresa EmpresaLogueada;
@@ -185,7 +185,7 @@ public class EditarAccionMejora implements Serializable {
     
     public void setListaCodificaciones(Map<Integer, String> ListaCodificaciones){this.ListaCodificaciones = ListaCodificaciones;}
     public void setCodificacionSeleccionada(Integer CodificacionSeleccionada) {this.CodificacionSeleccionada = CodificacionSeleccionada;}
- 
+    
     public void setTipoDeDeteccionSeleccionada(EnumTipoDeteccion TipoDeteccion){this.TipoDeDeteccionSeleccionada = TipoDeteccion;}
     public void setTiposDeteccion(EnumTipoDeteccion[] TiposDeteccion){this.TiposDeteccion = TiposDeteccion;}
     public void setListaDetecciones(Map<Integer, String> ListaDetecciones){this.ListaDetecciones = ListaDetecciones;}
@@ -257,7 +257,7 @@ public class EditarAccionMejora implements Serializable {
             ListaDetecciones = new TreeMap<>(modalDetecciones.getListaDetecciones());
             TiposDeteccion = EnumTipoDeteccion.values();
             TipoDeDeteccionSeleccionada = AccionSeleccionada.getGeneradaPor().getTipo();
-            DeteccionSeleccionada = AccionSeleccionada.getGeneradaPor().getId();            
+            DeteccionSeleccionada = AccionSeleccionada.getGeneradaPor().getId();
             
             // Actividades
             List<Actividad> actividades = ((Mejora)AccionSeleccionada).getActividades();
@@ -274,8 +274,10 @@ public class EditarAccionMejora implements Serializable {
             }
             ListaAreasSectores = new TreeMap<>(ListaAreasSectores);
             AreaSectorAccionSeleccionada = AccionSeleccionada.getAreaSectorAccion().getId();
-            actualizarListaAdjuntos();
+            
+            // Adjuntos
             MapAdjuntos = new HashMap<>();
+            actualizarListaAdjuntos();
             
             // Comprobaciones
             // llena la lista con los usuarios que no se hayan dado de baja.

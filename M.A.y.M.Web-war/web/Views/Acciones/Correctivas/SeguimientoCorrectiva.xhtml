@@ -365,9 +365,9 @@
                                             <c:if test="#{seguimientoCorrectiva.comprobacionSeleccionadaImplementacion == 'CORRECTA'}">
                                                 Correcto
                                             </c:if>
-                                            <c:if test="INCORRECTA">
+                                            <c:otherwise>
                                                 Incorrecto
-                                            </c:if>
+                                            </c:otherwise>
                                             Observaciones: #{seguimientoCorrectiva.observacionesImplementacion}
                                         </c:when> 
                                     </c:choose>
@@ -466,9 +466,9 @@
                                             <c:if test="#{seguimientoCorrectiva.comprobacionSeleccionadaEficacia == 'CORRECTA'}">
                                                 Correcto
                                             </c:if>
-                                            <c:if test="INCORRECTA">
+                                            <c:otherwise>
                                                 Incorrecto
-                                            </c:if>
+                                            </c:otherwise>
                                             Observaciones: #{seguimientoCorrectiva.observacionesEficacia}
                                         </c:when>
                                     </c:choose>                                    
