@@ -77,8 +77,6 @@ public class EditarActividadesAC implements Serializable {
      */
     public void editarActividad() throws IOException{
         if(!Descripcion.isEmpty() && FechaEstimadaImplementacion != null && ResponsableImplementacion != 0){
-            Usuario responsable = ListaUsuariosEmpresa.get(ResponsableImplementacion);
-            int id;
             // guardar los cambios y redirigir
             if(fDatos.EditarActividad(IdActividadSeleccionada, Descripcion, ResponsableImplementacion, FechaEstimadaImplementacion) == -1){
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo editar Medida Correctiva", 
