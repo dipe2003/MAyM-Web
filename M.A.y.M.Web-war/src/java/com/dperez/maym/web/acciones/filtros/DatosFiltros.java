@@ -70,11 +70,11 @@ public class DatosFiltros implements Serializable {
      */
     public Map<String, Area> ExtraerAreas(List<Accion> acciones){
         Map<String, Area> areas = new HashMap<>();
-        for(Accion accion:acciones){
-            if(!areas.containsKey(String.valueOf(accion.getAreaSectorAccion().getId()))){
-                areas.put(String.valueOf(accion.getAreaSectorAccion().getId()), accion.getAreaSectorAccion());
-            }
-        }
+        acciones.stream()
+                .filter((accion) -> !areas.containsKey(String.valueOf(accion.getAreaSectorAccion().getId())))
+                .forEach((accion)-> {
+                    areas.put(String.valueOf(accion.getAreaSectorAccion().getId()), accion.getAreaSectorAccion());
+                });
         return new TreeMap<>(areas);
     }
     
@@ -102,11 +102,11 @@ public class DatosFiltros implements Serializable {
      */
     public Map<String, Deteccion> ExtraerDetecciones(List<Accion> acciones){
         Map<String, Deteccion> detecciones = new HashMap<>();
-        for(Accion accion:acciones){
-            if(!detecciones.containsKey(String.valueOf(accion.getGeneradaPor().getId()))){
-                detecciones.put(String.valueOf(accion.getGeneradaPor().getId()), accion.getGeneradaPor());
-            }
-        }
+        acciones.stream()
+                .filter((accion) -> (!detecciones.containsKey(String.valueOf(accion.getGeneradaPor().getId()))))
+                .forEachOrdered((accion) -> {
+            detecciones.put(String.valueOf(accion.getGeneradaPor().getId()), accion.getGeneradaPor());
+        });
         return new TreeMap<>(detecciones);
     }
     
@@ -134,11 +134,11 @@ public class DatosFiltros implements Serializable {
      */
     public Map<String, Codificacion> ExtraerCodificaciones(List<Accion> acciones){
         Map<String, Codificacion> codificaciones = new HashMap<>();
-        for(Accion accion:acciones){
-            if(!codificaciones.containsKey(String.valueOf(accion.getCodificacionAccion().getId()))){
-                codificaciones.put(String.valueOf(accion.getCodificacionAccion().getId()), accion.getCodificacionAccion());
-            }
-        }
+        acciones.stream()
+                .filter((accion) -> (!codificaciones.containsKey(String.valueOf(accion.getCodificacionAccion().getId()))))
+                .forEachOrdered((accion) -> {
+            codificaciones.put(String.valueOf(accion.getCodificacionAccion().getId()), accion.getCodificacionAccion());
+        });
         return new TreeMap<>(codificaciones);
     }
     

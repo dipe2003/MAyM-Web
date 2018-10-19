@@ -314,8 +314,9 @@ public class EditarAccionCorrectiva implements Serializable {
             ListaAreasSectores = new TreeMap<>(ListaAreasSectores);
             AreaSectorAccionSeleccionada = AccionSeleccionada.getAreaSectorAccion().getId();
             
-            actualizarListaAdjuntos();
+            
             MapAdjuntos = new HashMap<>();
+            actualizarListaAdjuntos();
             
             // Comprobaciones
             // llenar la lista de usuarios de la empresa que no se hayan dado de baja.
@@ -392,11 +393,10 @@ public class EditarAccionCorrectiva implements Serializable {
      * @throws IOException
      */
     public void quitarAdjunto(int IdAdjunto) throws IOException{
-        if(cArchivo.BorrarArchivo(this.MapAdjuntos.get(IdAdjunto).getUbicacion())){
-            if((fDatos.RemoverAdjunto(IdAccionSeleccionada, IdAdjunto))!=-1){
+            if((fDatos.RemoverAdjunto(IdAccionSeleccionada, IdAdjunto))!=-1){                
+                cArchivo.BorrarArchivo(this.MapAdjuntos.get(IdAdjunto).getUbicacion());
                 this.MapAdjuntos.remove(IdAdjunto);
             }
-        }
     }
     
     /**
