@@ -99,26 +99,14 @@ public class Mejora extends Accion implements Serializable {
 
     @Override
     public boolean EstanImplementadaActividades() {
-        boolean implementada = true;
-        for(Actividad actividad: this.Actividades){
-            if(actividad.getFechaImplementacion() == null){
-                implementada = false;
-                break;
-            }
-        }
-        return implementada;
+        return super.EstanImplementadasActividades(Actividades);
     }
 
     @Override
     public Actividad GetActividad(int IdActividad) {
-        Iterator<Actividad> it = this.Actividades.iterator();
-        Actividad actividad = null;
-        while(it.hasNext()){
-            actividad = it.next();
-            if(actividad.getIdActividad() == IdActividad){
-                return actividad;
-            }
-        }
-        return null;
+       return Actividades.stream()
+                .filter(medida->medida.getIdActividad()==IdActividad)
+                .findFirst()
+                .orElse(null);
     }
 }

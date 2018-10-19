@@ -204,24 +204,18 @@ public class Correctiva extends Accion implements Serializable {
     }
 
 
-
     @Override
     public Actividad GetActividad(int IdActividad) {
-        Iterator<Actividad> it = this.MedidasCorrectivas.iterator();
-        Actividad actividad = null;
-        while (it.hasNext()) {
-            actividad = it.next();
-            if (actividad.getIdActividad() == IdActividad) {
-                return actividad;
-            }
+        Actividad actividad = MedidasCorrectivas.stream()
+                .filter(medida->medida.getIdActividad()== IdActividad)
+                .findFirst()
+                .orElse(null);
+        if(actividad == null){
+            actividad = MedidasPreventivas.stream()
+                .filter(medida->medida.getIdActividad()== IdActividad)
+                .findFirst()
+                .orElse(null);
         }
-        it = this.MedidasPreventivas.iterator();
-        while (it.hasNext()) {
-            actividad = it.next();
-            if (actividad.getIdActividad() == IdActividad) {
-                return actividad;
-            }
-        }
-        return null;
+        return actividad;
     }
 }
