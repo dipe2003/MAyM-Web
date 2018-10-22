@@ -78,7 +78,7 @@ public class SesionUsuario implements Serializable {
     public void init(){
         this.Usuarios = new HashMap<>();
         // llenar la lista de usuarios de todas las empresas que no se hayan dado de baja.
-        List<Usuario> usuarios = fLectura.GetUsuariosEmpresa(true, -1);
+        List<Usuario> usuarios = fLectura.GetUsuariosEmpresa(false, -1);
         Usuarios = usuarios.stream()
                 .sorted()
                 .collect(Collectors.toMap(Usuario::getId, usuario->usuario));

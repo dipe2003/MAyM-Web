@@ -26,7 +26,6 @@ import com.dperez.maymweb.fortaleza.Fortaleza;
 import com.dperez.maymweb.fortaleza.ManejadorFortaleza;
 import com.dperez.maymweb.producto.ManejadorProducto;
 import com.dperez.maymweb.producto.Producto;
-import com.dperez.maymweb.usuario.ControladorSeguridad;
 import com.dperez.maymweb.usuario.ManejadorUsuario;
 import com.dperez.maymweb.usuario.Usuario;
 import java.util.Date;
@@ -60,8 +59,6 @@ public class ControladorEdicionRegistro {
     private ManejadorUsuario mUsuario;
     @Inject
     private ManejadorFortaleza mFortaleza;
-    @Inject
-    private ControladorSeguridad cSeg;
     
     //  Constructores
     public ControladorEdicionRegistro(){}

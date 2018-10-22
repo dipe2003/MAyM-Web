@@ -116,11 +116,11 @@ public class ControladorVistaRegistros {
     
     /**
      * Devuelve los usuarios de la empresa especificada segun su fecha de baja.
-     * @param Vigente True: si no fueron dados de baja (FechaBaja == null).
+     * @param SoloVigente True: si no fueron dados de baja (FechaBaja == null).
      * @param IdEmpresa -1 para todas las empresas.
      * @return Lista de Usuarios.
      */
-    public List<Usuario> GetUsuariosEmpresa(boolean Vigente, int IdEmpresa){
+    public List<Usuario> GetUsuariosEmpresa(boolean SoloVigente, int IdEmpresa){
         List<Usuario> lstUsuarios = mUsuario.ListarUsuarios();
         if(IdEmpresa != -1){
             Iterator it = lstUsuarios.iterator();
@@ -129,7 +129,7 @@ public class ControladorVistaRegistros {
                 if(usr.getEmpresaUsuario().getId() != IdEmpresa){
                     it.remove();
                 }else{
-                    if(Vigente){
+                    if(SoloVigente){
                         if(usr.getFechaBaja() != null){
                             it.remove();
                         }
