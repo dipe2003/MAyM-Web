@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
@@ -172,9 +173,9 @@ public class ActividadesAM implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         // recuperar el id para llenar datos de la accion de mejora y el resto de las propiedades.
-        int idAccion = 0;
-        idAccion = Integer.parseInt(request.getParameter("id"));
+        int idAccion = 0;        
         try{
+            idAccion = Integer.parseInt(request.getParameter("id"));
             IdActividadEditar = Integer.parseInt(request.getParameter("editar"));
         }catch(Exception ex){
             IdActividadEditar = 0;
@@ -185,13 +186,13 @@ public class ActividadesAM implements Serializable {
                 //  Actividades de Mejora
                 if(!((Mejora)AccionSeleccionada).getActividades().isEmpty()){
                     List<Actividad> actividades = ((Mejora)AccionSeleccionada).getActividades();
-                    for(Actividad actividad: actividades ){
-                        if(actividad.getIdActividad() == IdActividadEditar){
-                            FechaEstimadaImplementacionActividad = actividad.getFechaEstimadaImplementacion();
-                            DescripcionActividad =  actividad.getDescripcion();
-                            ResponsableActividad = actividad.getResponsableImplementacion().getId();
-                        }
-                    }
+                    actividades.stream()
+                            .filter(actividad -> actividad.getIdActividad() == IdActividadEditar)
+                            .forEachOrdered(actividad -> {
+                                FechaEstimadaImplementacionActividad = actividad.getFechaEstimadaImplementacion();
+                                DescripcionActividad =  actividad.getDescripcion();
+                                ResponsableActividad = actividad.getResponsableImplementacion().getId();
+                            });
                 }
             }
             
@@ -201,9 +202,9 @@ public class ActividadesAM implements Serializable {
             // llenar lista de usuarios para responsables de implementacion que no se hayan dado de baja.
             if(empresa!=null) {
                 List<Usuario> tmpUsuarios = fLectura.GetUsuariosEmpresa(true, empresa.getId());
-                for(Usuario usuario: tmpUsuarios){
-                    ListaUsuariosEmpresa.put(usuario.getId(), usuario);
-                }
+                ListaUsuariosEmpresa = tmpUsuarios.stream()
+                        .sorted()
+                        .collect(Collectors.toMap(Usuario::getId, usuario->usuario));
             }
         }
     }

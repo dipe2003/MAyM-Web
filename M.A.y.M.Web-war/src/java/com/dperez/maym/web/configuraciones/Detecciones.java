@@ -5,7 +5,6 @@
 */
 package com.dperez.maym.web.configuraciones;
 
-import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
 import com.dperez.maymweb.empresa.Empresa;
@@ -93,20 +92,32 @@ public class Detecciones implements Serializable {
         ListaCompletaDetecciones = fLectura.ListarDetecciones();
         
         // Paginas
-        Double resto = (double) ListaCompletaDetecciones.size() / (double) MAX_ITEMS;
-        CantidadPaginas = resto.intValue();
-        resto = resto - resto.intValue();
-        if(resto > 0){
-            CantidadPaginas ++;
-        }
+        CantidadPaginas = calcularCantidadPaginas(ListaCompletaDetecciones.size());
+        
         TiposDeteccion =  EnumTipoDeteccion.values();
         // llenar la lista con todas las areas registradas.
+        
         cargarPagina(PaginaActual);
     }
     
     /**
+     * Calcula la cantidad de paginas necsarias para mostrar el total de acciones de acuerdo al maximo definido por cada una.
+     * @param cantidadAcciones
+     * @return
+     */
+    private int calcularCantidadPaginas(int cantidadAcciones){
+        Double resto = (double) cantidadAcciones / (double) MAX_ITEMS;
+        int cantidad = resto.intValue();
+        resto = resto - resto.intValue();
+        if(resto > 0){
+            cantidad ++;
+        }
+        return cantidad;
+    }
+    
+    /**
      * Carga la lista de areas para visualizar.
-     * @param pagina 
+     * @param pagina
      */
     public void cargarPagina(int pagina){
         int min = 0;
@@ -116,8 +127,8 @@ public class Detecciones implements Serializable {
             max = min + MAX_ITEMS;
         }
         if(max > ListaCompletaDetecciones.size()) max = ListaCompletaDetecciones.size();
-        ListaDetecciones.clear();        
-        Collections.sort(ListaCompletaDetecciones);        
+        ListaDetecciones.clear();
+        Collections.sort(ListaCompletaDetecciones);
         for(int i = min; i < max; i++){
             Deteccion deteccion = ListaCompletaDetecciones.get(i);
             ListaDetecciones.add(deteccion);
@@ -187,26 +198,19 @@ public class Detecciones implements Serializable {
             this.TipoDeDeteccionSeleccionada = EnumTipoDeteccion.INTERNA;
             this.IdDeteccionSeleccionada = -1;
         }else{
-            Deteccion deteccionSeleccionada = null;
-            for(Deteccion deteccion: ListaDetecciones){
-                if(deteccion.getId() == IdDeteccion) {
-                    deteccionSeleccionada = deteccion;
-                    break;
-                }
-            }
+            Deteccion deteccionSeleccionada = ListaDetecciones.stream()
+                    .filter(deteccion -> deteccion.getId() == IdDeteccion)
+                    .findFirst()
+                    .orElse(null);
+            
             this.NombreDeteccion = deteccionSeleccionada.getNombre();
             this.TipoDeDeteccionSeleccionada = deteccionSeleccionada.getTipo();
             this.IdDeteccionSeleccionada = IdDeteccion;
             
             // verifica que no tenga acciones con deteccion seleccioada
             // al encontrar la primer accion que pertenezca a la deteccion y empresa ContieneAcciones = true
-            ContieneAcciones = false;
-            for(Accion accion: deteccionSeleccionada.getAccionesDetectadas()){
-                if(accion.getEmpresaAccion().getId() == EmpresaLogueada.getId()){
-                    ContieneAcciones = true;
-                    break;
-                }
-            }
+            ContieneAcciones = deteccionSeleccionada.getAccionesDetectadas().stream()
+                    .anyMatch(deteccion -> deteccion.getEmpresaAccion().getId() == EmpresaLogueada.getId());
         }
     }
     
@@ -217,14 +221,7 @@ public class Detecciones implements Serializable {
      * @return
      */
     private boolean comprobarNombreDeteccion(String NombreDeteccion){
-        for(Deteccion deteccion: this.ListaDetecciones){
-            if(deteccion.getTipo() == TipoDeDeteccionSeleccionada){
-                if(deteccion.getNombre().equalsIgnoreCase(NombreDeteccion)){
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-    
+        return ListaDetecciones.stream()
+                .anyMatch(deteccion->deteccion.getNombre().equalsIgnoreCase(NombreDeteccion));
+    }    
 }

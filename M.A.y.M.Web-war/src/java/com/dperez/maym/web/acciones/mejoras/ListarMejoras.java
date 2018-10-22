@@ -6,7 +6,6 @@
 package com.dperez.maym.web.acciones.mejoras;
 
 import com.dperez.maymweb.accion.acciones.Mejora;
-import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.Serializable;
@@ -59,7 +58,6 @@ public class ListarMejoras implements Serializable{
         // recuperar Empresa para filtrar las acciones
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        Empresa empresa = (Empresa)request.getSession().getAttribute("Empresa");
         
         // Paginacion
         PaginaActual = 1;
@@ -73,15 +71,25 @@ public class ListarMejoras implements Serializable{
         ListaAcciones = new ArrayList<>();
         ListaCompletaAcciones = (List<Mejora>)(List<?>)fLectura.ListarAccionesMejoras();
         
-        Double resto = (double) ListaCompletaAcciones.size() / (double) MAX_ITEMS;
-        CantidadPaginas = resto.intValue();
-        resto = resto - resto.intValue();
-        if(resto > 0){
-            CantidadPaginas ++;
-        }
+        CantidadPaginas = calcularCantidadPaginas(ListaCompletaAcciones.size());
         
         // llenar la lista con todas las areas registradas.
         cargarPagina(PaginaActual);
+    }
+    
+    /**
+     * Calcula la cantidad de paginas necsarias para mostrar el total de acciones de acuerdo al maximo definido por cada una.
+     * @param cantidadAcciones
+     * @return
+     */
+    private int calcularCantidadPaginas(int cantidadAcciones){
+        Double resto = (double) cantidadAcciones / (double) MAX_ITEMS;
+        int cantidad = resto.intValue();
+        resto = resto - resto.intValue();
+        if(resto > 0){
+            cantidad ++;
+        }
+        return cantidad;
     }
     
     /**

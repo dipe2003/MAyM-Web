@@ -15,11 +15,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
-
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -79,9 +79,9 @@ public class SesionUsuario implements Serializable {
         this.Usuarios = new HashMap<>();
         // llenar la lista de usuarios de todas las empresas que no se hayan dado de baja.
         List<Usuario> usuarios = fLectura.GetUsuariosEmpresa(true, -1);
-        for(Usuario usr:usuarios){
-            this.Usuarios.put(usr.getId(), usr);
-        }
+        Usuarios = usuarios.stream()
+                .sorted()
+                .collect(Collectors.toMap(Usuario::getId, usuario->usuario));
     }
     public void ingresar() throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();

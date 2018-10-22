@@ -14,6 +14,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
@@ -84,9 +85,8 @@ public class ProductoInvolucrado implements Serializable {
             
             if(!((Correctiva)AccionSeleccionada).getProductosAfectados().isEmpty()){
                 List<Producto> ProductosAfectados = ((Correctiva)AccionSeleccionada).getProductosAfectados();
-                for(Producto producto: ProductosAfectados){
-                    ListaProductosAfectados.put(producto.getNombre(), producto.getDatos());
-                }
+                ListaProductosAfectados = ProductosAfectados.stream()
+                        .collect(Collectors.toMap(Producto::getNombre, producto->producto.getNombre()));
             }
         }
     }

@@ -5,7 +5,6 @@
 */
 package com.dperez.maym.web.configuraciones;
 
-import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeAdministrador;
@@ -96,20 +95,30 @@ public class Areas implements Serializable {
         ListaCompletaAreas = fLectura.ListarAreasSectores(-1);
         
         // Paginas
-        Double resto = (double) ListaCompletaAreas.size() / (double) MAX_ITEMS;
-        CantidadPaginas = resto.intValue();
-        resto = resto - resto.intValue();
-        if(resto > 0){
-            CantidadPaginas ++;
-        }
+        CantidadPaginas = calcularCantidadPaginas(ListaCompletaAreas.size());
         
         // llenar la lista con todas las areas registradas.
         cargarPagina(PaginaActual);
     }
     
     /**
+     * Calcula la cantidad de paginas necsarias para mostrar el total de acciones de acuerdo al maximo definido por cada una.
+     * @param cantidadAcciones
+     * @return
+     */
+    private int calcularCantidadPaginas(int cantidadAcciones){
+        Double resto = (double) cantidadAcciones / (double) MAX_ITEMS;
+        int cantidad = resto.intValue();
+        resto = resto - resto.intValue();
+        if(resto > 0){
+            cantidad ++;
+        }
+        return cantidad;
+    }
+    
+    /**
      * Carga la lista de areas para visualizar.
-     * @param pagina 
+     * @param pagina
      */
     public void cargarPagina(int pagina){
         int min = 0;
@@ -119,8 +128,8 @@ public class Areas implements Serializable {
             max = min + MAX_ITEMS;
         }
         if(max > ListaCompletaAreas.size()) max = ListaCompletaAreas.size();
-        ListaAreas.clear();        
-        Collections.sort(ListaCompletaAreas);        
+        ListaAreas.clear();
+        Collections.sort(ListaCompletaAreas);
         for(int i = min; i < max; i++){
             Area area = ListaCompletaAreas.get(i);
             ListaAreas.add(area);
@@ -204,12 +213,8 @@ public class Areas implements Serializable {
      * @return
      */
     private boolean comprobarNombreArea(String NombreArea){
-        for(Area area: this.ListaAreas){
-            if (area.getNombre().equalsIgnoreCase(NombreArea)){
-                return true;
-            }
-        }
-        return false;
+        return ListaAreas.stream()
+                .anyMatch(area->area.getNombre().equalsIgnoreCase(NombreArea));
     }
     
     /**
@@ -221,34 +226,24 @@ public class Areas implements Serializable {
             this.NombreArea = new String();
             this.CorreoArea = new String();
             this.IdAreaSeleccionada = -1;
-        }else{            
-            for(Area area: ListaAreas){
-                if(area.getId() == IdArea) {
-                    AreaSeleccionada = area;
-                    break;
-                }
-            }
+        }else{
+            AreaSeleccionada = ListaAreas.stream()
+                    .filter(area->area.getId() == IdArea)
+                    .findFirst()
+                    .orElse(null);
+            
             this.NombreArea = AreaSeleccionada.getNombre();
             this.CorreoArea = AreaSeleccionada.getCorreo();
             this.IdAreaSeleccionada = IdArea;
             
             // verifica si pertenece a la empresa del usuario logueado
-            if(AreaSeleccionada.contieneEmpresa(EmpresaLogueada.getId())){
-                this.AplicaEmpresa = true;
-            }else{
-                this.AplicaEmpresa = false;
-            }
+            AplicaEmpresa = AreaSeleccionada.contieneEmpresa(EmpresaLogueada.getId());
             
-            // verifica que no tenga acciones codificadas para esta emrpesa
+            // verifica que no tenga acciones codificadas para esta empresa
             // al encontrar la primer accion que pertenezca a la codificacion y empresa ContieneAcciones = true
             if(this.AplicaEmpresa == true){
-                ContieneAcciones = false;
-                for(Accion accion: AreaSeleccionada.getAccionesEnAreaSector()){
-                    if(accion.getEmpresaAccion().getId() == EmpresaLogueada.getId()){
-                        ContieneAcciones = true;
-                        break;
-                    }
-                }
+                ContieneAcciones = AreaSeleccionada.getAccionesEnAreaSector().stream()
+                        .anyMatch(accion->accion.getEmpresaAccion().getId() == EmpresaLogueada.getId());
             }
         }
     }

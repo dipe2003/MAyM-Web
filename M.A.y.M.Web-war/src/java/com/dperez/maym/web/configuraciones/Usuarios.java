@@ -18,6 +18,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
@@ -145,27 +146,37 @@ public class Usuarios implements Serializable {
         ListaUsuarios = new ArrayList<>();
         ListaCompletaUsuarios = fLectura.GetUsuariosEmpresa(false, -1);
         
-        Double resto = (double) ListaCompletaUsuarios.size() / (double) MAX_ITEMS;
-        CantidadPaginas = resto.intValue();
-        resto = resto - resto.intValue();
-        if(resto > 0){
-            CantidadPaginas ++;
-        }
         PermisosUsuario = EnumPermiso.values();
         // llenar la lista con todas las areas registradas.
+        
+        // Paginas
+        CantidadPaginas = calcularCantidadPaginas(ListaCompletaUsuarios.size());
         cargarPagina(PaginaActual);
         
         //Areas
         ListaAreas =  new ArrayList<>();
         // llenar la lista de areas con todas las areas registradas.
         List<Area> tmpAreas = fLectura.ListarAreasSectores(EmpresaLogueada.getId());
-        for(Area area: tmpAreas){
-            if(area.contieneEmpresa(EmpresaLogueada.getId())){
-                ListaAreas.add(area);
-            }
+        Collections.sort(tmpAreas);
+        ListaAreas = tmpAreas.stream()
+                .filter(area->area.contieneEmpresa(EmpresaLogueada.getId()))
+                .sorted()
+                .collect(Collectors.toList());
+    }
+    
+    /**
+     * Calcula la cantidad de paginas necsarias para mostrar el total de registros de acuerdo al maximo definido por cada una.
+     * @param cantidadRegistros
+     * @return
+     */
+    private int calcularCantidadPaginas(int cantidadRegistros){
+        Double resto = (double) cantidadRegistros / (double) MAX_ITEMS;
+        int cantidad = resto.intValue();
+        resto = resto - resto.intValue();
+        if(resto > 0){
+            cantidad ++;
         }
-        
-        
+        return cantidad;
     }
     
     /**
@@ -308,10 +319,8 @@ public class Usuarios implements Serializable {
     }
     
     private boolean ComprobarContieneNumeroUsuario(){
-        for(Usuario usr:ListaUsuarios){
-            if(usr.getId() == NumeroNuevoUsuario) return true;
-        }
-        return false;
+        return ListaUsuarios.stream()
+                .anyMatch(usuario->usuario.getId() == NumeroNuevoUsuario);
     }
     
     /**
@@ -332,13 +341,11 @@ public class Usuarios implements Serializable {
             this.PasswordConfirmacion= new String();
             this.AreaSeleccionada = -1;
         }else{
-            Usuario usrSeleccionado = null;
-            for(Usuario usr: ListaUsuarios){
-                if(usr.getId() == IdUsuario) {
-                    usrSeleccionado = usr;
-                    break;
-                }
-            }
+            Usuario usrSeleccionado = ListaUsuarios.stream()
+                    .filter(usuario->usuario.getId() == IdUsuario)
+                    .findFirst()
+                    .orElse(null);
+            
             this.Nombre  = usrSeleccionado.getNombre();
             this.Apellido  = usrSeleccionado.getApellido();
             this.CorreoElectronico  = usrSeleccionado.getCorreo();
@@ -353,11 +360,7 @@ public class Usuarios implements Serializable {
             
             // verifica que no tenga registros relacionados
             // la lista de comprobaciones y de actividades deben estar vacias => False
-            if(!usrSeleccionado.getComprobaciones().isEmpty() || !usrSeleccionado.getMedidasResponsableImplementacion().isEmpty()){
-                ContieneRegistros = true;
-            }else{
-                ContieneRegistros = false;
-            }
+            ContieneRegistros = !usrSeleccionado.getComprobaciones().isEmpty() || !usrSeleccionado.getMedidasResponsableImplementacion().isEmpty();
         }
     }
     

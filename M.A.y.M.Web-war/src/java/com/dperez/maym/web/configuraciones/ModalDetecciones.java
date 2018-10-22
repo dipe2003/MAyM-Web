@@ -11,10 +11,11 @@ import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_INFO;
@@ -23,7 +24,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
 
 @Named
 @ViewScoped
@@ -63,20 +63,16 @@ public class ModalDetecciones implements Serializable {
      */
     @PostConstruct
     public void init(){
-        // Empresa
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         //  Detecciones
         TiposDeteccion = EnumTipoDeteccion.values();
         TipoDeDeteccionSeleccionada = EnumTipoDeteccion.INTERNA;
         this.ListaDetecciones = new HashMap<>();
         List<Deteccion> tmpDetecciones = fLectura.ListarDetecciones();
-        for(Deteccion deteccion:tmpDetecciones){
-            if (deteccion.getTipo().equals(EnumTipoDeteccion.INTERNA)){
-                ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
-            }
-            ListaDetecciones = new TreeMap<>(ListaDetecciones);
-        }
+        Collections.sort(tmpDetecciones, Comparator.comparing(Deteccion::getNombre));
+        tmpDetecciones.stream()
+                .forEachOrdered(deteccion->{
+                    ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
+                });
     }
     
     /**
@@ -85,11 +81,11 @@ public class ModalDetecciones implements Serializable {
     public void actualizarDeteccion(){
         List<Deteccion> tmpDetecciones = fLectura.ListarDetecciones();
         this.ListaDetecciones.clear();
-        for(Deteccion deteccion:tmpDetecciones){
-            if (deteccion.getTipo().equals(TipoDeDeteccionSeleccionada)){
-                ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
-            }
-        }
+        Collections.sort(tmpDetecciones, Comparator.comparing(Deteccion::getNombre));
+        tmpDetecciones.stream()
+                .forEachOrdered(deteccion->{
+                    ListaDetecciones.put(deteccion.getId(), deteccion.getNombre());
+                });
     }
     
     /**
@@ -110,7 +106,7 @@ public class ModalDetecciones implements Serializable {
             FacesContext.getCurrentInstance().addMessage("form_accion_modal:btn_nueva_deteccion", new FacesMessage(SEVERITY_INFO, "No se pudo crear nueva deteccion", "No se pudo crear nueva deteccion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }
-    }    
+    }
     
     public void limpiarModalDeteccion(){
         this.NombreNuevaDeteccion = new String();

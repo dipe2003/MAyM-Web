@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
@@ -57,7 +58,7 @@ public class CrearFortaleza implements Serializable {
     
     private EnumTipoDeteccion[] TiposDeteccion;
     private EnumTipoDeteccion TipoDeDeteccionSeleccionada;
-
+    
     private Map<Integer, String> ListaDetecciones;
     private Integer DeteccionSeleccionada;
     
@@ -128,9 +129,9 @@ public class CrearFortaleza implements Serializable {
         // Areas Sectores
         ListaAreasSectores = new HashMap<>();
         List<Area> tmpAreas = fLectura.ListarAreasSectores(EmpresaLogueada.getId());
-        for(Area area:tmpAreas){
-            this.ListaAreasSectores.put(area.getId(), area);
-        }
+        ListaAreasSectores = tmpAreas.stream()
+                .sorted()
+                .collect(Collectors.toMap(Area::getId, area->area));
     }
     
     /**
@@ -139,7 +140,7 @@ public class CrearFortaleza implements Serializable {
     public void actualizarDeteccion(){
         ListaDetecciones = new TreeMap<>(modalDetecciones.getListaDetecciones());
     }
-        
+    
     /**
      * Crea la fortaleza con los datos ingresados.
      * Si no se creo se muestra mensaje de error.

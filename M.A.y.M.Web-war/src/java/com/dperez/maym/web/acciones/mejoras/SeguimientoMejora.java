@@ -18,12 +18,12 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
@@ -119,7 +119,7 @@ public class SeguimientoMejora implements Serializable {
     
     public Map<Integer, Usuario> getListaUsuarios(){return this.ListaUsuarios;}
     public int getIdUsuarioSeleccionado(){return this.IdUsuarioSeleccionado;}
-
+    
     public Empresa getEmpresaAccion() {return EmpresaAccion;}
     
     //  Setters
@@ -224,22 +224,22 @@ public class SeguimientoMejora implements Serializable {
         int IdAccion = Integer.parseInt(request.getParameter("id"));
         if(IdAccion != 0){
             AccionSeleccionada = (Mejora) fLectura.GetAccion(IdAccion);
-            List<Actividad> actividades = new ArrayList<>();
-            actividades = ((Mejora)AccionSeleccionada).getActividades();
+            List<Actividad> actividades = ((Mejora)AccionSeleccionada).getActividades();
             ListaActividades = new HashMap<>();
-            for(Actividad act: actividades){
-                ListaActividades.put(act.getIdActividad(), act);
-            }
+            ListaActividades = actividades.stream()
+                    .collect(Collectors.toMap(Actividad::getIdActividad, actividad->actividad));
+            
             //  Usuarios
             this.ListaUsuarios = new HashMap<>();
             Empresa empresa = (Empresa) request.getSession().getAttribute("Empresa");
             // llenar lista de usuarios para responsables de implementacion que no se hayan dado de baja.
             if(empresa!=null) {
                 List<Usuario> tmpUsuarios = fLectura.GetUsuariosEmpresa(true, empresa.getId());
-                for(Usuario usuario: tmpUsuarios){
-                    ListaUsuarios.put(usuario.getId(), usuario);
-                }
+                ListaUsuarios = tmpUsuarios.stream()
+                        .sorted()
+                        .collect(Collectors.toMap(Usuario::getId, usuario->usuario));
             }
+            
             EstaImplementada = AccionSeleccionada.EstanImplementadaActividades();
             EmpresaAccion = AccionSeleccionada.getEmpresaAccion();
         }
@@ -265,6 +265,4 @@ public class SeguimientoMejora implements Serializable {
             FechaComprobacionEficacia = AccionSeleccionada.getComprobacionEficacia().getFechaComprobacion();
         }
     }
-    
-    
 }

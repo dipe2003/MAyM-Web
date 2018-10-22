@@ -20,11 +20,13 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
@@ -153,12 +155,9 @@ public class CrearAccionCorrectiva implements Serializable {
         // Areas Sectores
         ListaAreasSectores = new HashMap<>();
         List<Area> tmpAreas = fLectura.ListarAreasSectores(EmpresaLogueada.getId());
-        for(Area area:tmpAreas){
-            this.ListaAreasSectores.put(area.getId(), area);
-        }
-        ListaAreasSectores = new TreeMap<>(ListaAreasSectores);
-        
-        ListaProductosAfectados = new HashMap<>();
+        ListaAreasSectores = tmpAreas.stream()
+                .sorted()
+                .collect(Collectors.toMap(Area::getId, area->area));
     }
     
     /**

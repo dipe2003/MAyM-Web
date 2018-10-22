@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
@@ -113,8 +114,8 @@ public class SeguimientoCorrectiva implements Serializable {
     
     public Map<Integer, Usuario> getListaUsuarios(){return this.ListaUsuarios;}
     public int getIdUsuarioSeleccionado(){return this.IdUsuarioSeleccionado;}
-
-    public Empresa getEmpresaAccion() {return EmpresaAccion;}    
+    
+    public Empresa getEmpresaAccion() {return EmpresaAccion;}
     
     //  Setters
     
@@ -257,24 +258,24 @@ public class SeguimientoCorrectiva implements Serializable {
             AccionSeleccionada = (Correctiva) fLectura.GetAccion(IdAccion);
             List<Actividad> actividades = ((Correctiva)AccionSeleccionada).getMedidasCorrectivas();
             MedidasCorrectivas = new HashMap<>();
-            for(Actividad act: actividades){
-                MedidasCorrectivas.put(act.getIdActividad(), act);
-            }
+            MedidasCorrectivas = actividades.stream()
+                    .collect(Collectors.toMap(Actividad::getIdActividad, actividad->actividad));
             actividades.clear();
+            
             actividades = ((Correctiva)AccionSeleccionada).getMedidasPreventivas();
             MedidasPreventivas = new HashMap<>();
-            for(Actividad act: actividades){
-                MedidasPreventivas.put(act.getIdActividad(), act);
-            }
+            MedidasPreventivas = actividades.stream()
+                    .collect(Collectors.toMap(Actividad::getIdActividad, actividad->actividad));
+            
             //  Usuarios
             this.ListaUsuarios = new HashMap<>();
             Empresa empresa = (Empresa) request.getSession().getAttribute("Empresa");
             // llenar lista de usuarios para responsables de implementacion que no se hayan dado de baja.
             if(empresa!=null) {
                 List<Usuario> tmpUsuarios = fLectura.GetUsuariosEmpresa(true, empresa.getId());
-                for(Usuario usuario: tmpUsuarios){
-                    ListaUsuarios.put(usuario.getId(), usuario);
-                }
+                ListaUsuarios = tmpUsuarios.stream()
+                        .sorted()
+                        .collect(Collectors.toMap(Usuario::getId, usuario->usuario));
             }
             TipoDesvio = ((Correctiva)AccionSeleccionada).getTipo();
             EstaImplementada = AccionSeleccionada.EstanImplementadaActividades();
@@ -295,12 +296,7 @@ public class SeguimientoCorrectiva implements Serializable {
                 ComprobacionSeleccionadaEficacia = AccionSeleccionada.getComprobacionEficacia().getResultado();
                 ObservacionesEficacia = AccionSeleccionada.getComprobacionEficacia().getObservaciones();
                 FechaComprobacionEficacia = AccionSeleccionada.getComprobacionEficacia().getFechaComprobacion();
-            }
-            
-        }
-        
-        
-    }
-    
-    
+            }            
+        }        
+    }    
 }

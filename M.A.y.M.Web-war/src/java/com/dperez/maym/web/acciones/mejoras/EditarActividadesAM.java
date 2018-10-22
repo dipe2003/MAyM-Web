@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
 import javax.faces.context.FacesContext;
@@ -77,8 +78,8 @@ public class EditarActividadesAM implements Serializable {
         if(!Descripcion.isEmpty() && FechaEstimadaImplementacion != null && ResponsableImplementacion != 0){
             // guardar los cambios y redirigir
             if(fDatos.EditarActividad(IdActividadSeleccionada, Descripcion, ResponsableImplementacion, FechaEstimadaImplementacion) == -1){
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo editar actividad", 
-                                                                                                    "No se pudo editar actividad" ));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(SEVERITY_FATAL, "No se pudo editar actividad",
+                        "No se pudo editar actividad" ));
                 FacesContext.getCurrentInstance().renderResponse();
             }else{
                 // regresar a la pagina de editar accion correctiva enviando el id de la accion como parametro
@@ -98,11 +99,11 @@ public class EditarActividadesAM implements Serializable {
         if(IdAccionMejoraSeleccionada != 0){
             Accion AccionMejora = (Mejora) fLectura.GetAccion(IdAccionMejoraSeleccionada);
             List<Actividad> actividades = ((Mejora)AccionMejora).getActividades();
-            for(Actividad act: actividades){
-                if(act.getIdActividad()== IdActividadSeleccionada){
-                    ActividadSeleccionada = act;
-                }
-            }
+            actividades.stream()
+                    .filter(act -> act.getIdActividad()== IdActividadSeleccionada)
+                    .forEachOrdered(act -> {
+                        ActividadSeleccionada = act;
+                    });
             if(ActividadSeleccionada!=null){
                 this.Descripcion = ActividadSeleccionada.getDescripcion();
                 this.FechaEstimadaImplementacion = ActividadSeleccionada.getFechaEstimadaImplementacion();
@@ -114,9 +115,9 @@ public class EditarActividadesAM implements Serializable {
             // llenar lista de usuarios para responsables de implementacion que no se hayan dado de baja.
             if(empresa!=null) {
                 List<Usuario> tmpUsuarios = fLectura.GetUsuariosEmpresa(true, empresa.getId());
-                for(Usuario usuario: tmpUsuarios){
-                    ListaUsuariosEmpresa.put(usuario.getId(), usuario);
-                }
+                ListaUsuariosEmpresa = tmpUsuarios.stream()
+                        .sorted()
+                        .collect(Collectors.toMap(Usuario::getId, usuario->usuario));
             }
         }
     }

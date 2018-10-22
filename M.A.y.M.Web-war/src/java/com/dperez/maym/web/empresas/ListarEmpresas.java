@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -40,9 +41,8 @@ public class ListarEmpresas implements Serializable{
     @PostConstruct
     public void init(){
         ListaEmpresas = new HashMap<>();
-        List<Empresa> empresas = fLectura.ListaEmpresasRegistradas();
-        for(Empresa empresa:empresas){
-            ListaEmpresas.put(empresa.getId(), empresa);
-        }
+        List<Empresa> empresas = fLectura.ListaEmpresasRegistradas();     
+        ListaEmpresas = empresas.stream()
+                .collect(Collectors.toMap(Empresa::getId, empresa->empresa));
     }
 }

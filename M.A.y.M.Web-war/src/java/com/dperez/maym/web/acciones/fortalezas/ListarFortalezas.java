@@ -5,7 +5,6 @@
 */
 package com.dperez.maym.web.acciones.fortalezas;
 
-import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.fortaleza.Fortaleza;
 import java.io.IOException;
@@ -58,7 +57,6 @@ public class ListarFortalezas implements Serializable{
         // recuperar Empresa para filtrar las fortalezas
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        Empresa empresa = (Empresa)request.getSession().getAttribute("Empresa");
         
         // Paginacion
         PaginaActual = 1;
@@ -71,16 +69,26 @@ public class ListarFortalezas implements Serializable{
         ListaFortalezas = new ArrayList<>();
         ListaCompletaFortalezas = fLectura.ListarFortalezas(-1);
         
-        Double resto = (double) ListaCompletaFortalezas.size() / (double) MAX_ITEMS;
-        CantidadPaginas = resto.intValue();
-        resto = resto - resto.intValue();
-        if(resto > 0){
-            CantidadPaginas ++;
-        }
+        CantidadPaginas = calcularCantidadPaginas(ListaCompletaFortalezas.size());
         
         // llenar la lista con todas las areas registradas.
         cargarPagina(PaginaActual);
         
+    }
+    
+    /**
+     * Calcula la cantidad de paginas necsarias para mostrar el total de acciones de acuerdo al maximo definido por cada una.
+     * @param cantidadAcciones
+     * @return
+     */
+    private int calcularCantidadPaginas(int cantidadAcciones){
+        Double resto = (double) cantidadAcciones / (double) MAX_ITEMS;
+        int cantidad = resto.intValue();
+        resto = resto - resto.intValue();
+        if(resto > 0){
+            cantidad ++;
+        }
+        return cantidad;
     }
     
     /**

@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
@@ -32,8 +33,6 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
-
-
 
 @Named
 @ViewScoped
@@ -136,9 +135,9 @@ public class EditarFortaleza implements Serializable {
             // Areas Sectores
             ListaAreasSectores = new HashMap<>();
             List<Area> tmpAreas = fLectura.ListarAreasSectores(EmpresaLogueada.getId());
-            for(Area area:tmpAreas){
-                this.ListaAreasSectores.put(area.getId(), area);
-            }
+            ListaAreasSectores = tmpAreas.stream()
+                    .sorted()
+                    .collect(Collectors.toMap(Area::getId, area->area));
             AreaSectorAccionSeleccionada = FortalezaSeleccionada.getAreaSectorFortaleza().getId();
         }
         

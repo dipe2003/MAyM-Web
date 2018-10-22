@@ -5,7 +5,6 @@
 */
 package com.dperez.maym.web.configuraciones;
 
-import com.dperez.maymweb.accion.Accion;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeAdministrador;
@@ -94,20 +93,30 @@ public class Codificaciones implements Serializable {
         ListaCompletaCodificaciones = fLectura.ListarCodificaciones(-1);
         
         // Paginas
-        Double resto = (double) ListaCompletaCodificaciones.size() / (double) MAX_ITEMS;
-        CantidadPaginas = resto.intValue();
-        resto = resto - resto.intValue();
-        if(resto > 0){
-            CantidadPaginas ++;
-        }
+        CantidadPaginas = calcularCantidadPaginas(ListaCompletaCodificaciones.size());
         
         // llenar la lista con todas las areas registradas.
         cargarPagina(PaginaActual);
     }
     
     /**
+     * Calcula la cantidad de paginas necsarias para mostrar el total de acciones de acuerdo al maximo definido por cada una.
+     * @param cantidadAcciones
+     * @return
+     */
+    private int calcularCantidadPaginas(int cantidadAcciones){
+        Double resto = (double) cantidadAcciones / (double) MAX_ITEMS;
+        int cantidad = resto.intValue();
+        resto = resto - resto.intValue();
+        if(resto > 0){
+            cantidad ++;
+        }
+        return cantidad;
+    }
+    
+    /**
      * Carga la lista de codificaciones para visualizar.
-     * @param pagina 
+     * @param pagina
      */
     public void cargarPagina(int pagina){
         int min = 0;
@@ -117,8 +126,8 @@ public class Codificaciones implements Serializable {
             max = min + MAX_ITEMS;
         }
         if(max > ListaCompletaCodificaciones.size()) max = ListaCompletaCodificaciones.size();
-        ListaCodificaciones.clear();        
-        Collections.sort(ListaCompletaCodificaciones);        
+        ListaCodificaciones.clear();
+        Collections.sort(ListaCompletaCodificaciones);
         for(int i = min; i < max; i++){
             Codificacion cod = ListaCompletaCodificaciones.get(i);
             ListaCodificaciones.add(cod);
@@ -176,12 +185,8 @@ public class Codificaciones implements Serializable {
      * @return
      */
     private boolean comprobarNombreCodificacion(String NombreCodificacion){
-        for(Codificacion cod: this.ListaCodificaciones){
-            if (cod.getNombre().equalsIgnoreCase(NombreCodificacion)){
-                return true;
-            }
-        }
-        return false;
+        return ListaCodificaciones.stream()
+                .anyMatch(codificacion->codificacion.getNombre().endsWith(NombreCodificacion));
     }
     
     /**
@@ -216,33 +221,23 @@ public class Codificaciones implements Serializable {
             this.DescripcionCodificacion = new String();
             this.IdCodificacionSeleccionada = -1;
         }else{
-            for(Codificacion cod: ListaCodificaciones){
-                if(cod.getId() == IdCodificacion) {
-                    CodificacionSeleccionada = cod;
-                    break;
-                }
-            }
+            CodificacionSeleccionada = ListaCodificaciones.stream()
+                    .filter(codificacion->codificacion.getId() == IdCodificacion)
+                    .findFirst()
+                    .orElse(null);
+            
             this.NombreCodificacion = CodificacionSeleccionada.getNombre();
             this.DescripcionCodificacion = CodificacionSeleccionada.getDescripcion();
             this.IdCodificacionSeleccionada = IdCodificacion;
             
             // verifica si pertenece a la empresa del usuario logueado
-            if(CodificacionSeleccionada.contieneEmpresa(EmpresaLogueada.getId())){
-                this.AplicaEmpresa = true;
-            }else{
-                this.AplicaEmpresa = false;
-            }
+            AplicaEmpresa = CodificacionSeleccionada.contieneEmpresa(EmpresaLogueada.getId());
             
             // verifica que no tenga acciones codificadas para esta emrpesa
             // al encontrar la primer accion que pertenezca a la codificacion y empresa ContieneAcciones = true
             if(this.AplicaEmpresa == true){
-                ContieneAcciones = false;
-                for(Accion accion: CodificacionSeleccionada.getAccionesConCodificacion()){
-                    if(accion.getEmpresaAccion().getId() == EmpresaLogueada.getId()){
-                        ContieneAcciones = true;
-                        break;
-                    }
-                }
+                ContieneAcciones = CodificacionSeleccionada.getAccionesConCodificacion().stream()
+                        .anyMatch(accion->accion.getEmpresaAccion().getId() == EmpresaLogueada.getId());
             }
         }
     }

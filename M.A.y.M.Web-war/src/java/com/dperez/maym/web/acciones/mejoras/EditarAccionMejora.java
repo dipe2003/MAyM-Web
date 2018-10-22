@@ -36,6 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
@@ -246,10 +247,9 @@ public class EditarAccionMejora implements Serializable {
             //  Codificaciones
             ListaCodificaciones = new TreeMap<>();
             List<Codificacion> tmpLista = fLectura.ListarCodificaciones(EmpresaLogueada.getId());
-            for (int i = 0; i < tmpLista.size(); i++) {
-                ListaCodificaciones.put(tmpLista.get(i).getId(), tmpLista.get(i).getNombre());
-            }
-            ListaCodificaciones = new TreeMap<>(ListaCodificaciones);
+            ListaCodificaciones = tmpLista.stream()
+                    .sorted()
+                    .collect(Collectors.toMap(Codificacion::getId, codificacion->codificacion.getNombre()));
             CodificacionSeleccionada = AccionSeleccionada.getCodificacionAccion().getId();
             
             //  Detecciones
@@ -262,17 +262,15 @@ public class EditarAccionMejora implements Serializable {
             // Actividades
             List<Actividad> actividades = ((Mejora)AccionSeleccionada).getActividades();
             this.ListaActividades = new HashMap<>();
-            for(Actividad act:actividades){
-                ListaActividades.put(act.getIdActividad(), act);
-            }
+            ListaActividades = actividades.stream()
+                    .collect(Collectors.toMap(Actividad::getIdActividad, actividad->actividad));
             
             // Areas Sectores
             ListaAreasSectores = new HashMap<>();
             List<Area> tmpAreas = fLectura.ListarAreasSectores(EmpresaLogueada.getId());
-            for(Area area:tmpAreas){
-                this.ListaAreasSectores.put(area.getId(), area);
-            }
-            ListaAreasSectores = new TreeMap<>(ListaAreasSectores);
+            ListaAreasSectores = tmpAreas.stream()
+                    .sorted()
+                    .collect(Collectors.toMap(Area::getId, area->area));
             AreaSectorAccionSeleccionada = AccionSeleccionada.getAreaSectorAccion().getId();
             
             // Adjuntos
@@ -306,10 +304,8 @@ public class EditarAccionMejora implements Serializable {
         Accion AccionMejora = (Mejora) fLectura.GetAccion(IdAccionSeleccionada);
         if(!AccionMejora.getAdjuntos().isEmpty()){
             List<Adjunto> listAdjuntos = AccionMejora.getAdjuntos();
-            this.MapAdjuntos = new HashMap<>();
-            for(Adjunto adjunto: listAdjuntos){
-                this.MapAdjuntos.put(adjunto.getId(), adjunto);
-            }
+            this.MapAdjuntos = listAdjuntos.stream()
+                    .collect(Collectors.toMap(Adjunto::getId, adjunto->adjunto));
         }
     }
     

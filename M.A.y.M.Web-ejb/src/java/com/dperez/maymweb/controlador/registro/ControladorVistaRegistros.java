@@ -123,13 +123,19 @@ public class ControladorVistaRegistros {
     public List<Usuario> GetUsuariosEmpresa(boolean Vigente, int IdEmpresa){
         List<Usuario> lstUsuarios = mUsuario.ListarUsuarios();
         if(IdEmpresa != -1){
-            lstUsuarios = lstUsuarios.stream()
-                    .filter(usuario -> usuario.getEmpresaUsuario().getId() == IdEmpresa && usuario.IsVigente()==Vigente)
-                    .collect(Collectors.toList());
-        }else{
-            lstUsuarios = lstUsuarios.stream()
-                    .filter(usuario -> usuario.IsVigente()==Vigente)
-                    .collect(Collectors.toList());
+            Iterator it = lstUsuarios.iterator();
+            while(it.hasNext()){
+                Usuario usr = (Usuario) it.next();
+                if(usr.getEmpresaUsuario().getId() != IdEmpresa){
+                    it.remove();
+                }else{
+                    if(Vigente){
+                        if(usr.getFechaBaja() != null){
+                            it.remove();
+                        }
+                    }
+                }
+            }
         }
         return lstUsuarios;
     }

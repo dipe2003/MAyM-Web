@@ -27,6 +27,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -70,7 +71,7 @@ public class VerCorrectiva implements Serializable {
     
     private Comprobacion ComprobacionImplementacion;
     private Comprobacion ComprobacionEficacia;
-
+    
     private Accion AccionSeleccionada;
     
     private Empresa EmpresaAccion;
@@ -126,7 +127,7 @@ public class VerCorrectiva implements Serializable {
     public void setListaProductos(List<Producto> ListaProductos) {this.ListaProductos = ListaProductos;}
     
     public void setTipoDesvio(EnumTipoDesvio TipoDesvio) {this.TipoDesvio = TipoDesvio;}
-
+    
     public void setMedidasCorrectivas(Map<Integer, Actividad> MedidasCorrectivas) {this.MedidasCorrectivas = MedidasCorrectivas;}
     public void setMedidasPreventivas(Map<Integer, Actividad> MedidasPreventivas) {this.MedidasPreventivas = MedidasPreventivas;}
     public void setFechaImplementacion(Date FechaImplementacion){this.FechaImplementacion = FechaImplementacion;}
@@ -145,7 +146,10 @@ public class VerCorrectiva implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         // recuperar el id para llenar datos de la accion y el resto de las propiedades.
-        int IdAccion = Integer.parseInt(request.getParameter("id"));
+        int IdAccion = 0;
+        try{
+            IdAccion = Integer.parseInt(request.getParameter("id"));
+        }catch(Exception nEx){}
         if(IdAccion != 0){
             AccionSeleccionada = (Correctiva) fLectura.GetAccion(IdAccion);
             FechaDeteccion = AccionSeleccionada.getFechaDeteccion();
@@ -156,17 +160,18 @@ public class VerCorrectiva implements Serializable {
             Estado = AccionSeleccionada.getEstadoAccion();
             ComprobacionImplementacion = AccionSeleccionada.getComprobacionImplementacion();
             ComprobacionEficacia = AccionSeleccionada.getComprobacionEficacia();
+            
             List<Actividad> actividades = ((Correctiva)AccionSeleccionada).getMedidasCorrectivas();
             MedidasCorrectivas = new HashMap<>();
-            for(Actividad act: actividades){
-                MedidasCorrectivas.put(act.getIdActividad(), act);
-            }
+            MedidasCorrectivas = actividades.stream()
+                    .collect(Collectors.toMap(Actividad::getIdActividad, actividad->actividad));
             actividades.clear();
+            
             actividades = ((Correctiva)AccionSeleccionada).getMedidasPreventivas();
             MedidasPreventivas = new HashMap<>();
-            for(Actividad act: actividades){
-                MedidasPreventivas.put(act.getIdActividad(), act);
-            }
+            MedidasPreventivas = actividades.stream()
+                    .collect(Collectors.toMap(Actividad::getIdActividad, actividad->actividad));
+            
             EmpresaAccion = AccionSeleccionada.getEmpresaAccion();
             
             ListaProductos = new ArrayList<>();
@@ -175,9 +180,6 @@ public class VerCorrectiva implements Serializable {
             }
             
             TipoDesvio = ((Correctiva)AccionSeleccionada).getTipo();
-            
         }
     }
-    
-    
 }

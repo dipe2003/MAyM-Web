@@ -20,12 +20,12 @@ import com.dperez.maymweb.usuario.Usuario;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -67,7 +67,7 @@ public class VerMejora implements Serializable {
     
     private Empresa EmpresaAccion;
     
-    private EnumEstado Estado;    
+    private EnumEstado Estado;
     
     //  Getters
     public Date getFechaDeteccion() {return FechaDeteccion;}
@@ -114,7 +114,7 @@ public class VerMejora implements Serializable {
     public void setEmpresaAccion(Empresa EmpresaAccion){this.EmpresaAccion = EmpresaAccion;}
     public void setEstado(EnumEstado Estado) {this.Estado = Estado;}
     public void setComprobacionImplementacion(Comprobacion ComprobacionImplementacion) {this.ComprobacionImplementacion = ComprobacionImplementacion;}
-    public void setComprobacionEficacia(Comprobacion ComprobacionEficacia) {this.ComprobacionEficacia = ComprobacionEficacia;}    
+    public void setComprobacionEficacia(Comprobacion ComprobacionEficacia) {this.ComprobacionEficacia = ComprobacionEficacia;}
     
     //  Metodos
     
@@ -124,7 +124,10 @@ public class VerMejora implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         // recuperar el id para llenar datos de la accion y el resto de las propiedades.
-        int IdAccion = Integer.parseInt(request.getParameter("id"));
+        int IdAccion = 0;
+        try{
+            IdAccion = Integer.parseInt(request.getParameter("id"));
+        }catch(Exception nEx){}
         if(IdAccion != 0){
             AccionSeleccionada = (Mejora) fLectura.GetAccion(IdAccion);
             FechaDeteccion = AccionSeleccionada.getFechaDeteccion();
@@ -132,18 +135,17 @@ public class VerMejora implements Serializable {
             AreaSector = AccionSeleccionada.getAreaSectorAccion();
             Descripcion = AccionSeleccionada.getDescripcion();
             AnalisisCausa = AccionSeleccionada.getAnalisisCausa();
+            
             Estado = AccionSeleccionada.getEstadoAccion();
             ComprobacionImplementacion = AccionSeleccionada.getComprobacionImplementacion();
             ComprobacionEficacia = AccionSeleccionada.getComprobacionEficacia();
-            List<Actividad> actividades = new ArrayList<>();
-            actividades = ((Mejora)AccionSeleccionada).getActividades();
+            
+            List<Actividad> actividades = ((Mejora)AccionSeleccionada).getActividades();
             ListaActividades = new HashMap<>();
-            for(Actividad act: actividades){
-                ListaActividades.put(act.getIdActividad(), act);
-            }
-            EmpresaAccion = AccionSeleccionada.getEmpresaAccion();
+            ListaActividades = actividades.stream()
+                    .collect(Collectors.toMap(Actividad::getIdActividad, actividad->actividad));
+            
+            EmpresaAccion = AccionSeleccionada.getEmpresaAccion();            
         }
     }
-    
-    
 }

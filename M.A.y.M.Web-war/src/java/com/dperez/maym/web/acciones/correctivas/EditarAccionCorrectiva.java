@@ -32,11 +32,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
@@ -199,7 +201,7 @@ public class EditarAccionCorrectiva implements Serializable {
     
     public void setListaCodificaciones(Map<Integer, String> ListaCodificaciones){this.ListaCodificaciones = ListaCodificaciones;}
     public void setCodificacionSeleccionada(Integer CodificacionSeleccionada) {this.CodificacionSeleccionada = CodificacionSeleccionada;}
-
+    
     public void setTipoDeDeteccionSeleccionada(EnumTipoDeteccion TipoDeteccion){this.TipoDeDeteccionSeleccionada = TipoDeteccion;}
     public void setTiposDeteccion(EnumTipoDeteccion[] TiposDeteccion){this.TiposDeteccion = TiposDeteccion;}
     public void setListaDetecciones(Map<Integer, String> ListaDetecciones){this.ListaDetecciones = ListaDetecciones;}
@@ -272,13 +274,12 @@ public class EditarAccionCorrectiva implements Serializable {
             
             EmpresaAccion = AccionSeleccionada.getEmpresaAccion();
             
-            //  Codificaciones   
+            //  Codificaciones
             ListaCodificaciones = new TreeMap<>();
             List<Codificacion> tmpLista = fLectura.ListarCodificaciones(EmpresaLogueada.getId());
-            for (int i = 0; i < tmpLista.size(); i++) {
-                ListaCodificaciones.put(tmpLista.get(i).getId(), tmpLista.get(i).getNombre());
-            }
-            ListaCodificaciones = new TreeMap<>(ListaCodificaciones);
+            ListaCodificaciones = tmpLista.stream()
+                    .sorted()
+                    .collect(Collectors.toMap(Codificacion::getId, codificacion->codificacion.getNombre()));
             CodificacionSeleccionada = AccionSeleccionada.getCodificacionAccion().getId();
             
             //  Detecciones
@@ -294,26 +295,20 @@ public class EditarAccionCorrectiva implements Serializable {
             
             // Actividades: Medidas Correctivas y Preventivas
             List<Actividad> actividades = ((Correctiva)AccionSeleccionada).getMedidasCorrectivas();
-            MedidasCorrectivas = new HashMap<>();
-            for(Actividad act: actividades){
-                MedidasCorrectivas.put(act.getIdActividad(), act);
-            }
+            MedidasCorrectivas = MedidasCorrectivas = actividades.stream()
+                    .collect(Collectors.toMap(Actividad::getIdActividad, actividad->actividad));
+            
             actividades.clear();
             actividades = ((Correctiva)AccionSeleccionada).getMedidasPreventivas();
-            MedidasPreventivas = new HashMap<>();
-            for(Actividad act: actividades){
-                MedidasPreventivas.put(act.getIdActividad(), act);
-            }
-            
+            MedidasPreventivas = actividades.stream()
+                    .collect(Collectors.toMap(Actividad::getIdActividad, actividad->actividad));            
             // Areas Sectores
             ListaAreasSectores = new HashMap<>();
             List<Area> tmpAreas = fLectura.ListarAreasSectores(EmpresaLogueada.getId());
-            for(Area area:tmpAreas){
-                this.ListaAreasSectores.put(area.getId(), area);
-            }
-            ListaAreasSectores = new TreeMap<>(ListaAreasSectores);
+            ListaAreasSectores = tmpAreas.stream()
+                    .sorted()
+                    .collect(Collectors.toMap(Area::getId, area->area));            
             AreaSectorAccionSeleccionada = AccionSeleccionada.getAreaSectorAccion().getId();
-            
             
             MapAdjuntos = new HashMap<>();
             actualizarListaAdjuntos();
@@ -345,10 +340,8 @@ public class EditarAccionCorrectiva implements Serializable {
         Accion AccionCorrectiva = (Correctiva) fLectura.GetAccion(IdAccionSeleccionada);
         if(!AccionCorrectiva.getAdjuntos().isEmpty()){
             List<Adjunto> listAdjuntos = AccionCorrectiva.getAdjuntos();
-            this.MapAdjuntos = new HashMap<>();
-            for(Adjunto adjunto: listAdjuntos){
-                this.MapAdjuntos.put(adjunto.getId(), adjunto);
-            }
+            MapAdjuntos = listAdjuntos.stream()
+                    .collect(Collectors.toMap(Adjunto::getId, adjunto->adjunto));
         }
     }
     
@@ -393,10 +386,10 @@ public class EditarAccionCorrectiva implements Serializable {
      * @throws IOException
      */
     public void quitarAdjunto(int IdAdjunto) throws IOException{
-            if((fDatos.RemoverAdjunto(IdAccionSeleccionada, IdAdjunto))!=-1){                
-                cArchivo.BorrarArchivo(this.MapAdjuntos.get(IdAdjunto).getUbicacion());
-                this.MapAdjuntos.remove(IdAdjunto);
-            }
+        if((fDatos.RemoverAdjunto(IdAccionSeleccionada, IdAdjunto))!=-1){
+            cArchivo.BorrarArchivo(this.MapAdjuntos.get(IdAdjunto).getUbicacion());
+            this.MapAdjuntos.remove(IdAdjunto);
+        }
     }
     
     /**
@@ -524,9 +517,9 @@ public class EditarAccionCorrectiva implements Serializable {
         }else{
             // Eliminar todos los archivos adjuntos del disco.
             if(!MapAdjuntos.isEmpty()){
-                for(Adjunto adjunto: MapAdjuntos.values()){
+                MapAdjuntos.values().forEach((adjunto) -> {
                     cArchivo.BorrarArchivo(adjunto.getUbicacion());
-                }
+                });
             }
             // Eliminar Eventos
             pEventos.RemoverEventos(IdAccionSeleccionada);

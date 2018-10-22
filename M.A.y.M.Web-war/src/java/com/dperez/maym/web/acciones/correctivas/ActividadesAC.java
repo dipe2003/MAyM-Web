@@ -20,10 +20,12 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
@@ -275,9 +277,9 @@ public class ActividadesAC implements Serializable {
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         // recuperar el id para llenar datos de la accion y el resto de las propiedades.
         int idAccion = 0;
-        idAccion = Integer.parseInt(request.getParameter("id"));
         TipoActividad = (String)request.getParameter("tipo");
         try{
+            idAccion = Integer.parseInt(request.getParameter("id"));
             IdActividadEditar = Integer.parseInt(request.getParameter("editar"));
         }catch(Exception ex){
             IdActividadEditar = 0;
@@ -289,23 +291,25 @@ public class ActividadesAC implements Serializable {
                     //  Medidas Correctivas
                     if(!((Correctiva)AccionSeleccionada).getMedidasCorrectivas().isEmpty()){
                         List<Actividad> medidas = ((Correctiva)AccionSeleccionada).getMedidasCorrectivas();
-                        for(Actividad medida: medidas ){
-                            if(medida.getIdActividad() == IdActividadEditar){
-                                FechaEstimadaImplementacionMedidaCorrectiva = medida.getFechaEstimadaImplementacion();
-                                DescripcionMedidaCorrectiva =  medida.getDescripcion();
-                                ResponsableMedidaCorrectiva = medida.getResponsableImplementacion().getId();
-                            }
-                        }
+                        medidas.stream()
+                                .filter(medida->medida.getIdActividad() == IdActividadEditar)
+                                .forEach(medida->{
+                                    FechaEstimadaImplementacionMedidaCorrectiva = medida.getFechaEstimadaImplementacion();
+                                    DescripcionMedidaCorrectiva =  medida.getDescripcion();
+                                    ResponsableMedidaCorrectiva = medida.getResponsableImplementacion().getId();
+                                });
                     }
                 }else{
                     //  Medidas Preventivas
                     if(!((Correctiva)AccionSeleccionada).getMedidasPreventivas().isEmpty()){
                         List<Actividad> medidas = ((Correctiva)AccionSeleccionada).getMedidasPreventivas();
-                        for(Actividad medida: medidas ){
-                            FechaEstimadaImplementacionMedidaPreventiva = medida.getFechaEstimadaImplementacion();
-                            DescripcionMedidaPreventiva =  medida.getDescripcion();
-                            ResponsableMedidaPreventiva = medida.getResponsableImplementacion().getId();
-                        }
+                        medidas.stream()
+                                .filter(medida->medida.getIdActividad() == IdActividadEditar)
+                                .forEach(medida->{
+                                    FechaEstimadaImplementacionMedidaPreventiva = medida.getFechaEstimadaImplementacion();
+                                    DescripcionMedidaPreventiva =  medida.getDescripcion();
+                                    ResponsableMedidaPreventiva = medida.getResponsableImplementacion().getId();
+                                });
                     }
                 }
             }
@@ -315,9 +319,9 @@ public class ActividadesAC implements Serializable {
             // llenar lista de usuarios para responsables de implementacion que no se hayan dado de baja.
             if(empresa!=null) {
                 List<Usuario> tmpUsuarios = fLectura.GetUsuariosEmpresa(true, empresa.getId());
-                for(Usuario usuario: tmpUsuarios){
-                    ListaUsuariosEmpresa.put(usuario.getId(), usuario);
-                }
+                ListaUsuariosEmpresa = tmpUsuarios.stream()
+                        .sorted()
+                        .collect(Collectors.toMap(Usuario::getId, usuario->usuario));
             }
         }
     }

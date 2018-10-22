@@ -11,7 +11,6 @@ import com.dperez.maymweb.accion.acciones.Correctiva;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
-import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.estado.EnumEstado;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeLectura;
@@ -406,7 +405,6 @@ public class ListarCorrectivas implements Serializable{
         // recuperar Empresa para filtrar las acciones
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        Empresa empresa = (Empresa)request.getSession().getAttribute("Empresa");
         
         // Paginacion
         PaginaActual = 1;
