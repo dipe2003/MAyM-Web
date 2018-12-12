@@ -5,6 +5,7 @@
 */
 package com.dperez.maym.web.configuraciones;
 
+import com.dperez.maym.web.herramientas.Presentacion;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeAdministrador;
@@ -12,7 +13,6 @@ import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -29,7 +29,7 @@ public class Areas implements Serializable {
     @Inject
     private FacadeAdministrador fAdmin;
     @Inject
-    private FacadeLectura fLectura;
+    private FacadeLectura fLectura;    
     
     private Empresa EmpresaLogueada;
     
@@ -95,48 +95,13 @@ public class Areas implements Serializable {
         ListaCompletaAreas = fLectura.ListarAreasSectores(-1);
         
         // Paginas
-        CantidadPaginas = calcularCantidadPaginas(ListaCompletaAreas.size());
+        CantidadPaginas = Presentacion.calcularCantidadPaginas(ListaCompletaAreas.size(), MAX_ITEMS);
         
         // llenar la lista con todas las areas registradas.
-        cargarPagina(PaginaActual);
+        ListaAreas = new Presentacion().cargarPagina(PaginaActual, MAX_ITEMS, ListaCompletaAreas);
+        ListaAreas.stream().sorted();
     }
-    
-    /**
-     * Calcula la cantidad de paginas necsarias para mostrar el total de acciones de acuerdo al maximo definido por cada una.
-     * @param cantidadAcciones
-     * @return
-     */
-    private int calcularCantidadPaginas(int cantidadAcciones){
-        Double resto = (double) cantidadAcciones / (double) MAX_ITEMS;
-        int cantidad = resto.intValue();
-        resto = resto - resto.intValue();
-        if(resto > 0){
-            cantidad ++;
-        }
-        return cantidad;
-    }
-    
-    /**
-     * Carga la lista de areas para visualizar.
-     * @param pagina
-     */
-    public void cargarPagina(int pagina){
-        int min = 0;
-        int max = MAX_ITEMS;
-        if(pagina!= 1) {
-            min = (pagina-1) * MAX_ITEMS;
-            max = min + MAX_ITEMS;
-        }
-        if(max > ListaCompletaAreas.size()) max = ListaCompletaAreas.size();
-        ListaAreas.clear();
-        Collections.sort(ListaCompletaAreas);
-        for(int i = min; i < max; i++){
-            Area area = ListaCompletaAreas.get(i);
-            ListaAreas.add(area);
-        }
-        Collections.sort(ListaAreas);
-    }
-    
+
     /**
      * Crea el area con los datos ingresados.
      * Muestra un mensaje de error si no se creo.

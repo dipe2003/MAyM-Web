@@ -5,6 +5,7 @@
 */
 package com.dperez.maym.web.acciones.fortalezas;
 
+import com.dperez.maym.web.herramientas.Presentacion;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.fortaleza.Fortaleza;
 import java.io.IOException;
@@ -69,48 +70,13 @@ public class ListarFortalezas implements Serializable{
         ListaFortalezas = new ArrayList<>();
         ListaCompletaFortalezas = fLectura.ListarFortalezas(-1);
         
-        CantidadPaginas = calcularCantidadPaginas(ListaCompletaFortalezas.size());
+        CantidadPaginas =  Presentacion.calcularCantidadPaginas(ListaCompletaFortalezas.size(), MAX_ITEMS);
         
         // llenar la lista con todas las areas registradas.
-        cargarPagina(PaginaActual);
-        
+       ListaFortalezas = new Presentacion().cargarPagina(PaginaActual, MAX_ITEMS, ListaCompletaFortalezas);
+       ListaFortalezas.stream().sorted();
     }
-    
-    /**
-     * Calcula la cantidad de paginas necsarias para mostrar el total de acciones de acuerdo al maximo definido por cada una.
-     * @param cantidadAcciones
-     * @return
-     */
-    private int calcularCantidadPaginas(int cantidadAcciones){
-        Double resto = (double) cantidadAcciones / (double) MAX_ITEMS;
-        int cantidad = resto.intValue();
-        resto = resto - resto.intValue();
-        if(resto > 0){
-            cantidad ++;
-        }
-        return cantidad;
-    }
-    
-    /**
-     * Carga la lista de fortalezas para visualizar.
-     * @param pagina
-     */
-    public void cargarPagina(int pagina){
-        int min = 0;
-        int max = MAX_ITEMS;
-        if(pagina!= 1) {
-            min = (pagina-1) * MAX_ITEMS;
-            max = min + MAX_ITEMS;
-        }
-        if(max > ListaCompletaFortalezas.size()) max = ListaCompletaFortalezas.size();
-        ListaFortalezas.clear();
-        Collections.sort(ListaCompletaFortalezas);
-        for(int i = min; i < max; i++){
-            Fortaleza fortaleza = ListaCompletaFortalezas.get(i);
-            ListaFortalezas.add(fortaleza);
-        }
-        Collections.sort(ListaFortalezas);
-    }
+ 
     
     /**
      * Redirige a la vista para realizar la edicion de la accion seleccionada.

@@ -5,6 +5,7 @@
 */
 package com.dperez.maym.web.configuraciones;
 
+import com.dperez.maym.web.herramientas.Presentacion;
 import com.dperez.maym.web.inicio.SesionUsuario;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.empresa.Empresa;
@@ -150,8 +151,9 @@ public class Usuarios implements Serializable {
         // llenar la lista con todas las areas registradas.
         
         // Paginas
-        CantidadPaginas = calcularCantidadPaginas(ListaCompletaUsuarios.size());
-        cargarPagina(PaginaActual);
+        CantidadPaginas = Presentacion.calcularCantidadPaginas(ListaCompletaUsuarios.size(), MAX_ITEMS);
+        ListaUsuarios = new Presentacion().cargarPagina(PaginaActual, MAX_ITEMS, ListaCompletaUsuarios);
+        ListaUsuarios.stream().sorted();
         
         //Areas
         ListaAreas =  new ArrayList<>();
@@ -163,43 +165,8 @@ public class Usuarios implements Serializable {
                 .sorted()
                 .collect(Collectors.toList());
     }
-    
-    /**
-     * Calcula la cantidad de paginas necsarias para mostrar el total de registros de acuerdo al maximo definido por cada una.
-     * @param cantidadRegistros
-     * @return
-     */
-    private int calcularCantidadPaginas(int cantidadRegistros){
-        Double resto = (double) cantidadRegistros / (double) MAX_ITEMS;
-        int cantidad = resto.intValue();
-        resto = resto - resto.intValue();
-        if(resto > 0){
-            cantidad ++;
-        }
-        return cantidad;
-    }
-    
-    /**
-     * Carga la lista de usuarios para visualizar.
-     * @param pagina
-     */
-    public void cargarPagina(int pagina){
-        int min = 0;
-        int max = MAX_ITEMS;
-        if(pagina!= 1) {
-            min = (pagina-1) * MAX_ITEMS;
-            max = min + MAX_ITEMS;
-        }
-        if(max > ListaCompletaUsuarios.size()) max = ListaCompletaUsuarios.size();
-        ListaUsuarios.clear();
-        Collections.sort(ListaCompletaUsuarios);
-        for(int i = min; i < max; i++){
-            Usuario usuario = ListaCompletaUsuarios.get(i);
-            ListaUsuarios.add(usuario);
-        }
-        Collections.sort(ListaUsuarios);
-    }
-    
+   
+     
     /**
      * Crea nuevo usuario con el permiso seleccionado.
      * Muestra un mensaje de errror si no se creo, se agrega el usuario a la empres logueada y redirige a la misma pagina para ver los resultados.

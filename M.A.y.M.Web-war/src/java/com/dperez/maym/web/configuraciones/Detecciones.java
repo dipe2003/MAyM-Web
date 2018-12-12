@@ -5,6 +5,7 @@
 */
 package com.dperez.maym.web.configuraciones;
 
+import com.dperez.maym.web.herramientas.Presentacion;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
 import com.dperez.maymweb.empresa.Empresa;
@@ -13,7 +14,6 @@ import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -92,49 +92,15 @@ public class Detecciones implements Serializable {
         ListaCompletaDetecciones = fLectura.ListarDetecciones();
         
         // Paginas
-        CantidadPaginas = calcularCantidadPaginas(ListaCompletaDetecciones.size());
+        CantidadPaginas = Presentacion.calcularCantidadPaginas(ListaCompletaDetecciones.size(), MAX_ITEMS);
         
         TiposDeteccion =  EnumTipoDeteccion.values();
         // llenar la lista con todas las areas registradas.
-        
-        cargarPagina(PaginaActual);
+        ListaDetecciones = new Presentacion().cargarPagina(PaginaActual, MAX_ITEMS, ListaCompletaDetecciones);
+        ListaDetecciones.stream().sorted();
     }
     
-    /**
-     * Calcula la cantidad de paginas necsarias para mostrar el total de acciones de acuerdo al maximo definido por cada una.
-     * @param cantidadAcciones
-     * @return
-     */
-    private int calcularCantidadPaginas(int cantidadAcciones){
-        Double resto = (double) cantidadAcciones / (double) MAX_ITEMS;
-        int cantidad = resto.intValue();
-        resto = resto - resto.intValue();
-        if(resto > 0){
-            cantidad ++;
-        }
-        return cantidad;
-    }
-    
-    /**
-     * Carga la lista de areas para visualizar.
-     * @param pagina
-     */
-    public void cargarPagina(int pagina){
-        int min = 0;
-        int max = MAX_ITEMS;
-        if(pagina!= 1) {
-            min = (pagina-1) * MAX_ITEMS;
-            max = min + MAX_ITEMS;
-        }
-        if(max > ListaCompletaDetecciones.size()) max = ListaCompletaDetecciones.size();
-        ListaDetecciones.clear();
-        Collections.sort(ListaCompletaDetecciones);
-        for(int i = min; i < max; i++){
-            Deteccion deteccion = ListaCompletaDetecciones.get(i);
-            ListaDetecciones.add(deteccion);
-        }
-        Collections.sort(ListaDetecciones);
-    }
+   
     
     /**
      * Crea nueva deteccion con el tipo interna/externa seleccionado.

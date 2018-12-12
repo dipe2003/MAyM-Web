@@ -14,13 +14,13 @@ import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.estado.EnumEstado;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeLectura;
+import com.dperez.maym.web.herramientas.Presentacion;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -394,8 +394,9 @@ public class ListarCorrectivas implements Serializable{
             }
         }
         // Cargar pagina
-        cargarPagina(PaginaActual, (List<Accion>)(List<?>)accionesFiltradas);
-        CantidadPaginas = calcularCantidadPaginas(accionesFiltradas.size());
+        ListaAcciones = new Presentacion().cargarPagina(PaginaActual, MAX_ITEMS, accionesFiltradas);
+        ListaAcciones.stream().sorted();
+        CantidadPaginas = Presentacion.calcularCantidadPaginas(accionesFiltradas.size(), MAX_ITEMS);
     }
     
     
@@ -418,12 +419,13 @@ public class ListarCorrectivas implements Serializable{
         ListaAcciones = new ArrayList<>();
         ListaCompletaAcciones = (List<Correctiva>)(List<?>)fLectura.ListarAccionesCorrectivas();
         
-        CantidadPaginas = calcularCantidadPaginas(ListaCompletaAcciones.size());
+        CantidadPaginas = Presentacion.calcularCantidadPaginas(ListaCompletaAcciones.size(), MAX_ITEMS);
         
-        // llenar la lista con todas las areas registradas.
-        cargarPagina(PaginaActual, (List<Accion>)(List<?>)ListaCompletaAcciones);
+        // llenar la lista con todas las areas registradas.  
+        ListaAcciones = new Presentacion().cargarPagina(PaginaActual, MAX_ITEMS, ListaCompletaAcciones);
+        ListaAcciones.stream().sorted();
         
-        // datos para filtros
+// datos para filtros
         ResetFechasAcciones();        
         
         ResetListasAreas ();
@@ -434,42 +436,4 @@ public class ListarCorrectivas implements Serializable{
         
         ResetListasCodificacion();
     }
-    
-    /**
-     * Calcula la cantidad de paginas necsarias para mostrar el total de acciones de acuerdo al maximo definido por cada una.
-     * @param cantidadAcciones
-     * @return
-     */
-    private int calcularCantidadPaginas(int cantidadAcciones){
-        Double resto = (double) cantidadAcciones / (double) MAX_ITEMS;
-        int cantidad = resto.intValue();
-        resto = resto - resto.intValue();
-        if(resto > 0){
-            cantidad ++;
-        }
-        return cantidad;
-    }
-    
-    /**
-     * Carga la lista de acciones para visualizar.
-     * @param pagina
-     * @param acciones
-     */
-    public void cargarPagina(int pagina, List<Accion> acciones){
-        int min = 0;
-        int max = MAX_ITEMS;
-        if(pagina!= 1) {
-            min = (pagina-1) * MAX_ITEMS;
-            max = min + MAX_ITEMS;
-        }
-        if(max > acciones.size()) max = acciones.size();
-        ListaAcciones.clear();
-        Collections.sort(acciones);
-        for(int i = min; i < max; i++){
-            Correctiva accion = (Correctiva) acciones.get(i);
-            ListaAcciones.add(accion);
-        }
-        Collections.sort(ListaAcciones);
-    }
-    
 }

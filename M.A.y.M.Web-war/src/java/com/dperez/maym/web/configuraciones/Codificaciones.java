@@ -5,6 +5,7 @@
 */
 package com.dperez.maym.web.configuraciones;
 
+import com.dperez.maym.web.herramientas.Presentacion;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeAdministrador;
@@ -12,7 +13,6 @@ import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -93,48 +93,14 @@ public class Codificaciones implements Serializable {
         ListaCompletaCodificaciones = fLectura.ListarCodificaciones(-1);
         
         // Paginas
-        CantidadPaginas = calcularCantidadPaginas(ListaCompletaCodificaciones.size());
+        CantidadPaginas = Presentacion.calcularCantidadPaginas(ListaCompletaCodificaciones.size(), MAX_ITEMS);
         
         // llenar la lista con todas las areas registradas.
-        cargarPagina(PaginaActual);
+        ListaCodificaciones = new Presentacion().cargarPagina(PaginaActual, MAX_ITEMS, ListaCompletaCodificaciones);
+        ListaCodificaciones.stream().sorted();
     }
     
-    /**
-     * Calcula la cantidad de paginas necsarias para mostrar el total de acciones de acuerdo al maximo definido por cada una.
-     * @param cantidadAcciones
-     * @return
-     */
-    private int calcularCantidadPaginas(int cantidadAcciones){
-        Double resto = (double) cantidadAcciones / (double) MAX_ITEMS;
-        int cantidad = resto.intValue();
-        resto = resto - resto.intValue();
-        if(resto > 0){
-            cantidad ++;
-        }
-        return cantidad;
-    }
-    
-    /**
-     * Carga la lista de codificaciones para visualizar.
-     * @param pagina
-     */
-    public void cargarPagina(int pagina){
-        int min = 0;
-        int max = MAX_ITEMS;
-        if(pagina!= 1) {
-            min = (pagina-1) * MAX_ITEMS;
-            max = min + MAX_ITEMS;
-        }
-        if(max > ListaCompletaCodificaciones.size()) max = ListaCompletaCodificaciones.size();
-        ListaCodificaciones.clear();
-        Collections.sort(ListaCompletaCodificaciones);
-        for(int i = min; i < max; i++){
-            Codificacion cod = ListaCompletaCodificaciones.get(i);
-            ListaCodificaciones.add(cod);
-        }
-        Collections.sort(ListaCodificaciones);
-    }
-    /**
+       /**
      * Crea la codificacion con los datos ingresados.
      * Muestra un mensaje de errror si no se creo, se agrega la codificacion a la empres logueada y redirige a la misma pagina para ver los resultados.
      * @throws java.io.IOException
