@@ -117,6 +117,7 @@ public class CrearAccionMejora implements Serializable {
         EmpresaLogueada = (Empresa) request.getSession().getAttribute("Empresa");
         
         //  Detecciones
+        modalDetecciones = context.getApplication().evaluateExpressionGet(context, "#{modalDetecciones}", ModalDetecciones.class);
         TiposDeteccion = EnumTipoDeteccion.values();
         TipoDeDeteccionSeleccionada = EnumTipoDeteccion.INTERNA;
         ListaDetecciones = new TreeMap<>(modalDetecciones.getListaDetecciones());
