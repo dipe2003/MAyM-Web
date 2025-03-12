@@ -356,7 +356,7 @@ public class EditarAccionCorrectiva implements Serializable {
      * Deja vacios los campos para un nuevo adjunto.
      */
     public void agregarAdjunto(){
-        String datosAdjunto[] = cArchivo.guardarArchivo("Correctiva_"+ String.valueOf(IdAccionSeleccionada), ArchivoAdjunto, TituloAdjunto, "Nombre Empresa");
+        String datosAdjunto[] = cArchivo.guardarArchivo("Correctiva_"+ String.valueOf(IdAccionSeleccionada), ArchivoAdjunto, TituloAdjunto, EmpresaLogueada.getNombreEmpresa());
         // datosAdjunto[0]: ubicacion | datosAdjunto[1]: extension
         if(!datosAdjunto[0].isEmpty()){
             EnumTipoAdjunto tipoAdjunto = EnumTipoAdjunto.IMAGEN;

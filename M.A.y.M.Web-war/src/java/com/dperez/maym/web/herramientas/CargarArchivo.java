@@ -52,7 +52,7 @@ public class CargarArchivo implements Serializable{
                 NombreArchivo = NombreArchivo + "."+extensionArchivo;
                 //String baseDatos = "/img/"+DirectorioArchivo+"/"+NombreArchivo;
                 realPath[0] = homeDir+separator+resPath+NombreArchivo;                
-                String[] baseDatos = {"/adjuntos/"+NombreEmpresa+"/"+DirectorioArchivo+"/"+NombreArchivo, extensionArchivo};
+                String[] baseDatos =  {separator+"adjuntos"+separator+NombreEmpresa+separator+DirectorioArchivo+separator+NombreArchivo, extensionArchivo};
                 Archivo.write(realPath[0]);
                 return baseDatos;
             }catch(FileNotFoundException ex){

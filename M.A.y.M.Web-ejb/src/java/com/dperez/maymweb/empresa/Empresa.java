@@ -82,6 +82,10 @@ public class Empresa implements Serializable, Comparable<Empresa> {
     //  Getters
     public int getId() {return Id;}
     public String getNombreEmpresa() {return NombreEmpresa;}
+    // Define un nombre para el directorio eliminando espacios y caracteres invalidos
+    public String getNombreDeArchivo() {
+        return this.NombreEmpresa.replaceAll("(\\W)", "_");
+    }
     public String getDireccionEmpresa() {return DireccionEmpresa;}
     public String getTelefonoEmpresa() {return TelefonoEmpresa;}
     public String getCorreoEmpresa() {return CorreoEmpresa;}
