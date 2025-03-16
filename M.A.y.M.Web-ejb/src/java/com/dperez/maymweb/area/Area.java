@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -47,8 +48,7 @@ public class Area implements Serializable, Comparable<Area> {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Empresa> EmpresasArea;
     
-    @ManyToMany(mappedBy = "AreaSectorUsuario")
-    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy="AreaSectorUsuario",cascade = CascadeType.ALL)
     private List<Usuario> UsuariosEnAreaSector;
     
     // Constructores

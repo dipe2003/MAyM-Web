@@ -9,7 +9,161 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 >
     <ui:define name="page_content">
-        
+        <div class="row">
+            <h:form id="listado-mejoras">
+                <div class="col-md-12">
+                    <div class="container-fluid">            
+                        <div class="panel panel-info">
+                            <div class="panel-heading">Filtrar y Ordenar</div>
+                            <div class="panel-body">
+                                <div class="table-responsive-sm">
+                                    <table class="table table-hover">                        
+                                        <tbody style="font-size: 11px">
+                                            <tr>
+                                                <td>
+                                                    <table>
+                                                        <tbody>    
+                                                            <tr>
+                                                                <td>
+                                                                    Desde:
+                                                                </td>                                                                
+                                                            </tr>
+                                                            <tr>
+                                                                <td>  
+                                                                    <h:panelGroup id="drop-filtro-fecha-inicial">
+                                                                        <h:inputText id="fecha_inicial" class="form-control calendario" value="#{listarMejoras.strFechaInicial}" >
+                                                                            <f:ajax execute="@this" event="change" onevent="indicador" listener="#{listarMejoras.filtrarPorFecha(event)}" 
+                                                                                    render="form_tabla_acciones drop-filtro-areas drop-filtro-deteccion drop-filtro-codificacion drop-filtro-estado"/>
+                                                                        </h:inputText>
+                                                                    </h:panelGroup>
+                                                                </td>
+                                                            </tr>                                                            
+                                                            <tr>
+                                                                <td>
+                                                                    Hasta:
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <h:panelGroup id="drop-filtro-fecha-final">
+                                                                        <h:inputText id="fecha_final" class="form-control calendario" value="#{listarMejoras.strFechaFinal}" >
+                                                                            <f:ajax execute="@this" event="valueChange" onevent="indicador" listener="#{listarMejoras.filtrarPorFecha(event)}" 
+                                                                                    render="form_tabla_acciones drop-filtro-areas drop-filtro-deteccion drop-filtro-codificacion drop-filtro-estado"/>
+                                                                        </h:inputText>
+                                                                    </h:panelGroup>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>                                                    
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-primary" type="button" id="combo-filtro-area" data-toggle="collapse" data-target="#collapse-filtro-areas">
+                                                        Areas<span class="caret"></span></button>
+                                                    <div class="collapse" id="collapse-filtro-areas">
+                                                        <h:panelGroup id="drop-filtro-areas">
+                                                            
+                                                            <h:selectManyListbox value="#{listarMejoras.areasSeleccionadas}" style="height:100px" >
+                                                                <c:forEach var="entry" items="#{listarMejoras.areasEnRegistros}" >
+                                                                    <f:selectItem itemLabel="#{entry.value.nombre}" itemValue="#{entry.key}" />
+                                                                    <f:ajax execute="@this" event="valueChange" onevent="indicador" listener="#{listarMejoras.filtrarPorArea(event)}" 
+                                                                            render="form_tabla_acciones drop-filtro-fecha-inicial drop-filtro-fecha-final drop-filtro-deteccion drop-filtro-codificacion drop-filtro-estado"/>
+                                                                </c:forEach>
+                                                            </h:selectManyListbox>
+                                                            
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <h:commandLink class="btn btn-primary" role="menuitem" tabindex="-1" action="#{listarMejoras.quitarFiltroPorArea()}" value="Quitar Filtro">
+                                                                        <f:ajax delay="10" render="form_tabla_acciones drop-filtro-fecha-inicial drop-filtro-fecha-final drop-filtro-areas drop-filtro-deteccion drop-filtro-codificacion drop-filtro-estado"  onevent="indicador" />                                                                           
+                                                                    </h:commandLink>
+                                                                </div>
+                                                            </div>
+                                                        </h:panelGroup>
+                                                    </div>
+                                                </td> 
+                                                <td>
+                                                    <button class="btn btn-primary" type="button" id="combo-filtro-deteccion" data-toggle="collapse" data-target="#collapse-filtro-deteccion">
+                                                        Detecciones<span class="caret"></span></button>
+                                                    <div class="collapse" id="collapse-filtro-deteccion">
+                                                        <h:panelGroup id="drop-filtro-deteccion">
+                                                            
+                                                            <h:selectManyListbox value="#{listarMejoras.deteccionesSeleccionadas}" style="height:100px" >
+                                                                <c:forEach var="entry" items="#{listarMejoras.deteccionesEnRegistros}" >
+                                                                    <f:selectItem itemLabel="#{entry.value.nombre}" itemValue="#{entry.key}"/>
+                                                                    <f:ajax execute="@this" event="change" onevent="indicador"  listener="#{listarMejoras.filtrarPorDeteccion(event)}" 
+                                                                            render="form_tabla_acciones drop-filtro-fecha-inicial drop-filtro-fecha-final drop-filtro-areas drop-filtro-deteccion drop-filtro-codificacion drop-filtro-estado"/>
+                                                                </c:forEach>
+                                                            </h:selectManyListbox>
+                                                            
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <h:commandLink class="btn btn-primary" role="menuitem" tabindex="-1" action="#{listarMejoras.quitarFiltroPorDeteccion()}" value="Quitar Filtro">
+                                                                        <f:ajax delay="10" render="form_tabla_acciones drop-filtro-fecha-inicial drop-filtro-fecha-final drop-filtro-areas drop-filtro-deteccion drop-filtro-codificacion drop-filtro-estado"  onevent="indicador" />                                                                           
+                                                                    </h:commandLink>
+                                                                </div>
+                                                            </div>
+                                                        </h:panelGroup>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-primary dropdown-toggle" type="button" id="combo-filtro-codificacion" data-toggle="collapse" data-target="#collapse-filtro-codificacion">
+                                                        Codificacion<span class="caret"></span></button>
+                                                    <div class="collapse" id="collapse-filtro-codificacion">
+                                                        <h:panelGroup id="drop-filtro-codificacion">
+                                                            
+                                                            <h:selectManyListbox value="#{listarMejoras.codificacionesSeleccionadas}" style="height:100px" >
+                                                                <c:forEach var="entry" items="#{listarMejoras.codificacionesEnRegistros}" >
+                                                                    <f:selectItem itemLabel="#{entry.value.nombre}" itemValue="#{entry.key}"/>
+                                                                    <f:ajax execute="@this" event="change" onevent="indicador"  listener="#{listarMejoras.filtrarPorCodificacion(event)}" 
+                                                                            render="form_tabla_acciones drop-filtro-fecha-inicial drop-filtro-fecha-final drop-filtro-areas drop-filtro-deteccion drop-filtro-codificacion drop-filtro-estado"/>
+                                                                </c:forEach>
+                                                            </h:selectManyListbox>
+                                                            
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <h:commandLink class="btn btn-primary" role="menuitem" tabindex="-1" action="#{listarMejoras.quitarFiltroPorCodificacion()}" value="Quitar Filtro">
+                                                                        <f:ajax delay="10" render="form_tabla_acciones drop-filtro-fecha-inicial drop-filtro-fecha-final drop-filtro-areas drop-filtro-deteccion drop-filtro-codificacion drop-filtro-estado"  onevent="indicador" />                                                                           
+                                                                    </h:commandLink>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </h:panelGroup>
+                                                    </div>
+                                                    
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-primary dropdown-toggle" type="button" id="combo-filtro-estado" data-toggle="collapse" data-target="#collapse-filtro-estados">
+                                                        Estados <span class="caret"></span></button>
+                                                    <div class="collapse" id="collapse-filtro-estados">
+                                                        <h:panelGroup id="drop-filtro-estado">
+                                                            
+                                                            <h:selectManyListbox value="#{listarMejoras.estadosSeleccionados}" style="height:100px" >
+                                                                <c:forEach var="entry" items="#{listarMejoras.estadosEnRegistros}" >
+                                                                    <f:selectItem itemLabel="#{entry.descripcion}" itemValue="#{entry}"/>
+                                                                    <f:ajax execute="@this" event="change" onevent="indicador"  listener="#{listarMejoras.filtrarPorEstado(event)}" 
+                                                                            render="form_tabla_acciones drop-filtro-fecha-inicial drop-filtro-fecha-final drop-filtro-areas drop-filtro-deteccion drop-filtro-codificacion drop-filtro-estado"/>
+                                                                </c:forEach>
+                                                            </h:selectManyListbox>
+                                                            
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <h:commandLink class="btn btn-primary" role="menuitem" tabindex="-1" action="#{listarMejoras.quitarFiltroPorEstado()}" value="Quitar Filtro">
+                                                                        <f:ajax delay="10" render="form_tabla_acciones drop-filtro-fecha-inicial drop-filtro-fecha-final drop-filtro-estado drop-filtro-deteccion drop-filtro-codificacion drop-filtro-areas"  onevent="indicador" />                                                                           
+                                                                    </h:commandLink>
+                                                                </div>
+                                                            </div>
+                                                        </h:panelGroup>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </h:form>
+        </div>
         <div class="container-fluid">
             <div class="panel panel-info">
                 <div class="panel-heading">Listado</div>

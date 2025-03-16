@@ -81,15 +81,17 @@ public class ControladorVistaRegistros {
     public List<Accion> ListarAccionesSegunEstado(EnumEstado EstadoAccion, EnumAccion TipoAccion){
         List<Accion> acciones;
         acciones = mAccion.ListarAcciones();
-        if(EstadoAccion!=null && TipoAccion !=null){
-            acciones = acciones.stream()
-                    .filter(accion -> accion.getEstadoAccion() == EstadoAccion && accion.getClass().getName().equals(TipoAccion.toString()))
-                    .collect(Collectors.toList());
-        }else{
-            if(EstadoAccion == null && TipoAccion != null){
+        if (!acciones.isEmpty()){
+            if (EstadoAccion != null && TipoAccion != null) {
                 acciones = acciones.stream()
-                        .filter(accion -> accion.getClass().getSimpleName().equalsIgnoreCase(TipoAccion.toString()))
+                        .filter(accion -> accion.getEstadoAccion() == EstadoAccion && accion.getClass().getName().equals(TipoAccion.toString()))
                         .collect(Collectors.toList());
+            } else {
+                if (EstadoAccion == null && TipoAccion != null) {
+                    acciones = acciones.stream()
+                            .filter(accion -> accion.getClass().getSimpleName().equalsIgnoreCase(TipoAccion.toString()))
+                            .collect(Collectors.toList());
+                }
             }
         }
         return acciones;
